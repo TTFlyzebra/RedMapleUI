@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">ITTHON</string>
+	<string name="home">ITTHON</string>
 	<string name="tv_str_sunday">vasárnap</string>
 	<string name="tv_str_monday">hétfő</string>
 	<string name="tv_str_tuesday">kedd</string>

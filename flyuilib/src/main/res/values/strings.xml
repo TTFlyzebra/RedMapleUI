@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HOME</string>
+    <string name="home">HOME</string>
 
     <string name="tv_str_sunday">Sunday</string>
     <string name="tv_str_monday">Monday</string>

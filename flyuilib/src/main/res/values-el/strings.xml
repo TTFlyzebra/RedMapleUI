@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">ΣΠΙΤΙ</string>
+	<string name="home">ΣΠΙΤΙ</string>
 	<string name="tv_str_sunday">Κυριακή</string>
 	<string name="tv_str_monday">Δευτέρα</string>
 	<string name="tv_str_tuesday">Τρίτη</string>

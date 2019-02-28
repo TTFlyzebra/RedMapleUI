@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HOME</string>
+    <string name="app_name">Test</string>
 
     <string name="tv_str_sunday">Sunday</string>
     <string name="tv_str_monday">Monday</string>
@@ -8,6 +8,5 @@
     <string name="tv_str_thursday">Thursday</string>
     <string name="tv_str_friday">Friday</string>
     <string name="tv_str_saturday">Saturday</string>
-
     <string name="switchui">Switch UI</string>
 </resources>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">ГОЛОВНА</string>
+	<string name="home">ГОЛОВНА</string>
 	<string name="tv_str_sunday">Неділя</string>
 	<string name="tv_str_monday">Понеділок</string>
 	<string name="tv_str_tuesday">Вівторок</string>

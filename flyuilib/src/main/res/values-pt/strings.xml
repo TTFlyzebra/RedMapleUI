@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">CASA</string>
+	<string name="home">CASA</string>
 	<string name="tv_str_sunday">domingo</string>
 	<string name="tv_str_monday">Segunda-feira</string>
 	<string name="tv_str_tuesday">terça</string>

@@ -33,7 +33,7 @@ public class MainActivity extends Activity implements IHttp.HttpResult {
     private NavForViewPager navForViewPager;
     private IHttp iHttp = FlyOkHttp.getInstance();
     private String HTTPTAG = "MANIACTIVITY";
-    private String URL = "http://192.168.1.119:801/uiweb/api/app?appname=Launcher-AP1";
+    private String URL = "http://192.168.1.119:801/uiweb/api/app?appname=Launcher-AP4";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +45,6 @@ public class MainActivity extends Activity implements IHttp.HttpResult {
         launcherView.setOffscreenPageLimit(10);
         navForViewPager = (NavForViewPager) findViewById(R.id.ac_main_navforviewpager);
         iHttp.getString(URL, HTTPTAG, this);
-    }
-
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
     }
 
     private void showUI(String jsonStr) {
@@ -99,19 +93,15 @@ public class MainActivity extends Activity implements IHttp.HttpResult {
             }
 
             //设置壁纸
-            if (!TextUtils.isEmpty(themeBean.imageurl))
-                setBackGround(themeBean.imageurl);
-        }
-    }
-
-    private void setBackGround(String bkimg) {
-        Glide.with(this).load(bkimg).into(new SimpleTarget<GlideDrawable>() {
-            @Override
-            public void onResourceReady(GlideDrawable glideDrawable, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                getWindow().getDecorView().setBackground(glideDrawable);
+            if (!TextUtils.isEmpty(themeBean.imageurl)) {
+                Glide.with(this).load(themeBean.imageurl).override(themeBean.width, themeBean.height).into(new SimpleTarget<GlideDrawable>() {
+                    @Override
+                    public void onResourceReady(GlideDrawable glideDrawable, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                        getWindow().getDecorView().setBackground(glideDrawable);
+                    }
+                });
             }
-        });
-
+        }
     }
 
     @Override
@@ -122,7 +112,7 @@ public class MainActivity extends Activity implements IHttp.HttpResult {
 
     @Override
     public void succeed(Object object) {
-        FlyLog.d(""+object);
+        FlyLog.d("" + object);
         if (object != null) {
             showUI((String) object);
         }

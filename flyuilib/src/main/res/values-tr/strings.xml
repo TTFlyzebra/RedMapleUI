@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">EV</string>
+	<string name="home">EV</string>
 	<string name="tv_str_sunday">Pazar</string>
 	<string name="tv_str_monday">Pazartesi</string>
 	<string name="tv_str_tuesday">Salı</string>
