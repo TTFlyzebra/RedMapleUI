@@ -12,7 +12,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.PageBean;
-import com.flyzebra.flyui.bean.TemplateBean;
+import com.flyzebra.flyui.bean.ThemeBean;
 import com.flyzebra.flyui.http.FlyOkHttp;
 import com.flyzebra.flyui.http.IHttp;
 import com.flyzebra.flyui.utils.FlyLog;
@@ -54,34 +54,34 @@ public class MainActivity extends Activity implements IHttp.HttpResult {
     }
 
     private void showUI(String jsonStr) {
-        TemplateBean templateBean = GsonUtils.json2Object(jsonStr, TemplateBean.class);
-        if (templateBean != null) {
-            List<PageBean> pageBeans = templateBean.pageList;
-            if (templateBean.x != 0 || templateBean.y != 0 || templateBean.width != 0 || templateBean.height != 0) {
+        ThemeBean themeBean = GsonUtils.json2Object(jsonStr, ThemeBean.class);
+        if (themeBean != null) {
+            List<PageBean> pageBeans = themeBean.pageList;
+            if (themeBean.x != 0 || themeBean.y != 0 || themeBean.width != 0 || themeBean.height != 0) {
                 FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) pagesView.getLayoutParams();
-                lp.setMargins(templateBean.x, templateBean.y, 0, 0);
-                lp.setMarginStart(templateBean.x);
-                lp.width = templateBean.width;
-                lp.height = templateBean.height;
+                lp.setMargins(themeBean.x, themeBean.y, 0, 0);
+                lp.setMarginStart(themeBean.x);
+                lp.width = themeBean.width;
+                lp.height = themeBean.height;
                 pagesView.setLayoutParams(lp);
                 for (PageBean pageBean : pageBeans) {
                     if (pageBean.cellList == null || pageBean.cellList.isEmpty()) continue;
                     for (CellBean cellBean : pageBean.cellList) {
-                        cellBean.x = cellBean.x - templateBean.x;
-                        cellBean.y = cellBean.y - templateBean.y;
+                        cellBean.x = cellBean.x - themeBean.x;
+                        cellBean.y = cellBean.y - themeBean.y;
                     }
                 }
             } else {
                 FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) pagesView.getLayoutParams();
-                lp.setMargins(templateBean.x, templateBean.y, 0, 0);
-                lp.setMarginStart(templateBean.x);
+                lp.setMargins(themeBean.x, themeBean.y, 0, 0);
+                lp.setMarginStart(themeBean.x);
                 lp.width = -1;
                 lp.height = -1;
                 pagesView.setLayoutParams(lp);
             }
 
             if (pageBeans != null && !pageBeans.isEmpty()) {
-                switch (templateBean.animtor) {
+                switch (themeBean.animType) {
                     case 1:
                         launcherView.setPageTransformer(true, new Switch3DPageTransformer());
                         break;
@@ -89,18 +89,18 @@ public class MainActivity extends Activity implements IHttp.HttpResult {
                         launcherView.setPageTransformer(true, null);
                         break;
                 }
-                launcherView.setData(templateBean);
+                launcherView.setData(themeBean);
                 navForViewPager.setViewPager(launcherView);
             }
 
             topView.removeAllViews();
-            if (templateBean.topPage != null && templateBean.topPage.cellList != null && !templateBean.topPage.cellList.isEmpty()) {
-                topView.setData(templateBean.topPage);
+            if (themeBean.topPage != null && themeBean.topPage.cellList != null && !themeBean.topPage.cellList.isEmpty()) {
+                topView.setData(themeBean.topPage);
             }
 
             //设置壁纸
-            if (!TextUtils.isEmpty(templateBean.imageurl))
-                setBackGround(templateBean.imageurl);
+            if (!TextUtils.isEmpty(themeBean.imageurl))
+                setBackGround(themeBean.imageurl);
         }
     }
 

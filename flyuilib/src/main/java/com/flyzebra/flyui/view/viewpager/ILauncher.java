@@ -1,8 +1,8 @@
 package com.flyzebra.flyui.view.viewpager;
 
 
-import com.flyzebra.flyui.bean.TemplateBean;
+import com.flyzebra.flyui.bean.ThemeBean;
 
 public interface ILauncher {
-    void setData(TemplateBean templateBean);
+    void setData(ThemeBean themeBean);
 }

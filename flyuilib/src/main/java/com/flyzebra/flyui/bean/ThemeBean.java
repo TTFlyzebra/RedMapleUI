@@ -7,7 +7,7 @@ import java.util.List;
  * 2018/12/25 15:01
  * Describ:
  **/
-public class TemplateBean {
+public class ThemeBean {
     public String imageurl = "";
     public List<PageBean> pageList;
     public PageBean topPage;
@@ -15,6 +15,6 @@ public class TemplateBean {
     public int y = 0;
     public int width = 0;
     public int height = 0;
-    public int animtor = 0;
-    public int mirror = 0;
+    public int animType = 0;
+    public int isMirror = 0;
 }

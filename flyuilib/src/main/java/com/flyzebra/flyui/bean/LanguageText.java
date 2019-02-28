@@ -4,7 +4,7 @@ import android.text.TextUtils;
 
 import java.util.Locale;
 
-public class Language {
+public class LanguageText {
     public String zh;
     public String zh_TW;
     public String zh_HK;
@@ -28,10 +28,25 @@ public class Language {
     @Override
     public String toString() {
         return "Language{" +
-                "zh_CN='" + zh + '\'' +
+                "zh='" + zh + '\'' +
                 ", zh_TW='" + zh_TW + '\'' +
                 ", zh_HK='" + zh_HK + '\'' +
-                ", en_US='" + en + '\'' +
+                ", en='" + en + '\'' +
+                ", ru='" + ru + '\'' +
+                ", el='" + el + '\'' +
+                ", pl='" + pl + '\'' +
+                ", tr='" + tr + '\'' +
+                ", ar='" + ar + '\'' +
+                ", fa='" + fa + '\'' +
+                ", ro='" + ro + '\'' +
+                ", fr='" + fr + '\'' +
+                ", hu='" + hu + '\'' +
+                ", it='" + it + '\'' +
+                ", th='" + th + '\'' +
+                ", de='" + de + '\'' +
+                ", uk='" + uk + '\'' +
+                ", es='" + es + '\'' +
+                ", pt='" + pt + '\'' +
                 '}';
     }
 
@@ -82,6 +97,6 @@ public class Language {
             text = en;
         }
 
-        return TextUtils.isEmpty(text)?"":text;
+        return TextUtils.isEmpty(text)?zh:text;
     }
 }

@@ -7,9 +7,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 import com.flyzebra.flyui.bean.PageBean;
-import com.flyzebra.flyui.bean.TemplateBean;
+import com.flyzebra.flyui.bean.ThemeBean;
 import com.flyzebra.flyui.view.pageview.SimplePageView;
 
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ import java.util.List;
 
 public class LauncherView extends ViewPager implements ILauncher {
     private List<PageBean> pageList = new ArrayList<>();
-    private TemplateBean templateBean;
+    private ThemeBean themeBean;
     private MyPgaeAdapter myPgaeAdapter = new MyPgaeAdapter();
 
     public LauncherView(Context context) {
@@ -40,12 +39,12 @@ public class LauncherView extends ViewPager implements ILauncher {
     }
 
     @Override
-    public void setData(TemplateBean templateBean) {
-        if (templateBean == null || templateBean.pageList == null || templateBean.pageList.isEmpty()) {
+    public void setData(ThemeBean themeBean) {
+        if (themeBean == null || themeBean.pageList == null || themeBean.pageList.isEmpty()) {
             return;
         }
-        this.templateBean = templateBean;
-        List<PageBean> mPageBeanList = templateBean.pageList;
+        this.themeBean = themeBean;
+        List<PageBean> mPageBeanList = themeBean.pageList;
         pageList.clear();
         if (mPageBeanList.size() > 1) {
             pageList.add(mPageBeanList.get(mPageBeanList.size() - 1));
@@ -86,7 +85,7 @@ public class LauncherView extends ViewPager implements ILauncher {
         public Object instantiateItem(ViewGroup container, int position) {
             SimplePageView simplePageView = new SimplePageView(getContext());
             simplePageView.setTag(position);
-            simplePageView.setMirror(templateBean.mirror != 0);
+            simplePageView.setMirror(themeBean.isMirror != 0);
             simplePageView.setData(pageList.get(position));
             container.addView(simplePageView);
             return simplePageView;

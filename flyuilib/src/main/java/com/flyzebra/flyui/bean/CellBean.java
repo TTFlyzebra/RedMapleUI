@@ -9,7 +9,7 @@ public class CellBean implements Cloneable{
     public String imageurl1 = "";
     public String imageurl2 ="";
     public int celltype = 0;
-    public Language textTitle;
+    public LanguageText textTitle;
     public int textSize = 0;
     public String textColor = "";
     public int textLeft = 0;
