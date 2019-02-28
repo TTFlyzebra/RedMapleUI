@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.MainActivity">
+
+    <RelativeLayout
+        android:id="@+id/ac_main_pages"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.flyzebra.flyui.view.viewpager.LauncherView
+            android:id="@+id/ac_main_launcherview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.flyzebra.flyui.view.viewpager.NavForViewPager
+            android:id="@+id/ac_main_navforviewpager"
+            android:layout_width="match_parent"
+            android:layout_height="80px"
+            android:layout_alignParentBottom="true" />
+    </RelativeLayout>
+
+    <com.flyzebra.flyui.view.pageview.SimplePageView
+        android:id="@+id/ac_main_topview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</FrameLayout>
