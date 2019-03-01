@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.flyzebra.flyui.bean.PageBean;
 import com.flyzebra.flyui.bean.ThemeBean;
+import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.pageview.SimplePageView;
 
 import java.util.ArrayList;
@@ -93,21 +94,26 @@ public class LauncherView extends ViewPager implements ILauncher {
 
         @Override
         public void setPrimaryItem(ViewGroup container, int position, Object object) {
-            if (position == 0 && pageList != null && pageList.size() > 1) {
-                setCurrentItem(pageList.size() - 2, false);
-                for (int i = 0; i < getCount(); i++) {
-                    View view = getChildAt(i);
-                    view.setTranslationX(0);
-                    view.setRotation(0);
+            //循环滚动
+            try {
+                if (position == 0 && pageList != null && pageList.size() > 1) {
+                    setCurrentItem(pageList.size() - 2, false);
+                    for (int i = 0; i < getCount(); i++) {
+                        View view = getChildAt(i);
+                        view.setTranslationX(0);
+                        view.setRotation(0);
+                    }
                 }
-            }
-            if (position == pageList.size() - 1 && pageList != null && pageList.size() > 1) {
-                setCurrentItem(1, false);
-                for (int i = 0; i < getCount(); i++) {
-                    View view = getChildAt(i);
-                    view.setTranslationX(0);
-                    view.setRotation(0);
+                if (position == pageList.size() - 1 && pageList != null && pageList.size() > 1) {
+                    setCurrentItem(1, false);
+                    for (int i = 0; i < getCount(); i++) {
+                        View view = getChildAt(i);
+                        view.setTranslationX(0);
+                        view.setRotation(0);
+                    }
                 }
+            }catch (Exception e){
+                FlyLog.e(e.toString());
             }
         }
 

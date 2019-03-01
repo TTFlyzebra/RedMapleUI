@@ -11,6 +11,7 @@ import android.view.View;
 public class Switch3DPageTransformer implements ViewPager.PageTransformer {
     @Override
     public void transformPage(View view, float position) {
+//        FlyLog.d("%d:position="+position,view.getTag());
         float rotation = 45f * position;
         if (position >= 0) {
             view.setPivotX(0);
@@ -19,7 +20,7 @@ public class Switch3DPageTransformer implements ViewPager.PageTransformer {
         }
         view.setPivotY(view.getHeight() * 0.5f);
         view.setRotationY(rotation);
-        if (position > -1.0f || position < 1.0f) {
+        if (position > -1.0f && position < 1.0f) {
             view.setVisibility(View.VISIBLE);
         } else {
             view.setTranslationX(0);

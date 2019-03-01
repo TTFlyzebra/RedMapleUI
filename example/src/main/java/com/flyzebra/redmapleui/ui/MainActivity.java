@@ -15,7 +15,6 @@ import com.flyzebra.flyui.bean.PageBean;
 import com.flyzebra.flyui.bean.ThemeBean;
 import com.flyzebra.flyui.http.FlyOkHttp;
 import com.flyzebra.flyui.http.IHttp;
-import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.utils.GsonUtils;
 import com.flyzebra.flyui.view.pageview.SimplePageView;
 import com.flyzebra.flyui.view.viewpager.LauncherView;
@@ -33,7 +32,7 @@ public class MainActivity extends Activity implements IHttp.HttpResult {
     private NavForViewPager navForViewPager;
     private IHttp iHttp = FlyOkHttp.getInstance();
     private String HTTPTAG = "MANIACTIVITY";
-    private String URL = "http://192.168.1.119:801/uiweb/api/app?appname=Launcher-AP4";
+    private String URL = "http://192.168.1.119:801/uiweb/api/app?appname=Launcher-AP1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +111,6 @@ public class MainActivity extends Activity implements IHttp.HttpResult {
 
     @Override
     public void succeed(Object object) {
-        FlyLog.d("" + object);
         if (object != null) {
             showUI((String) object);
         }
