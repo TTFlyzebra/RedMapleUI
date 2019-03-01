@@ -31,7 +31,7 @@ public class MainActivity extends Activity implements IHttp.HttpResult {
     private RelativeLayout pagesView;
     private NavForViewPager navForViewPager;
     private IHttp iHttp = FlyOkHttp.getInstance();
-    private String HTTPTAG = "MANIACTIVITY";
+    private String HTTPTAG = getPackageName() + hashCode();
     private String URL = "http://192.168.1.119:801/uiweb/api/app?appname=Launcher-AP1";
 
     @Override
