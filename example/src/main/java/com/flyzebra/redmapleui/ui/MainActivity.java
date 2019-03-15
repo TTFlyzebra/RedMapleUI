@@ -3,6 +3,7 @@ package com.flyzebra.redmapleui.ui;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
@@ -15,6 +16,7 @@ import com.flyzebra.flyui.bean.PageBean;
 import com.flyzebra.flyui.bean.ThemeBean;
 import com.flyzebra.flyui.http.FlyOkHttp;
 import com.flyzebra.flyui.http.IHttp;
+import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.utils.GsonUtils;
 import com.flyzebra.flyui.view.pageview.SimplePageView;
 import com.flyzebra.flyui.view.viewpager.LauncherView;
@@ -119,5 +121,11 @@ public class MainActivity extends Activity implements IHttp.HttpResult {
     @Override
     public void failed(Object object) {
 
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        FlyLog.d(event.toString());
+        return super.onTouchEvent(event);
     }
 }

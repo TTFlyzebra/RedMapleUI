@@ -35,10 +35,6 @@ import okhttp3.TlsVersion;
  * Created by FlyZebra on 2016/3/30.
  */
 public class FlyOkHttp implements IHttp {
-    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-    //TODO:以下请求网址将使用EncodedRequestBody编码
-    public static final String URL_REGEXP = "http://192.168.*/boafrm/get_parameter";
-    //初始化OkHttpClient
     private static OkHttpClient mOkHttpClient;
     private final int OK = 1;
     private final int FAIL = 2;
