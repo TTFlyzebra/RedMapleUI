@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.PageBean;
 import com.flyzebra.flyui.bean.ThemeBean;
 import com.flyzebra.flyui.utils.FlyLog;
@@ -46,6 +47,16 @@ public class LauncherView extends ViewPager implements ILauncher {
         }
         this.themeBean = themeBean;
         List<PageBean> mPageBeanList = themeBean.pageList;
+
+        for(PageBean pageBean:mPageBeanList){
+            for(CellBean cellBean:pageBean.cellList){
+                cellBean.x = cellBean.x*1280/1024;
+                cellBean.y = cellBean.y*1280/1024;
+                cellBean.width = cellBean.width*1280/1024;
+                cellBean.height = cellBean.height*1280/1024;
+            }
+        }
+
         pageList.clear();
         if (mPageBeanList.size() > 1) {
             pageList.add(mPageBeanList.get(mPageBeanList.size() - 1));

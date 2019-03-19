@@ -34,7 +34,7 @@ public class MainActivity extends Activity implements IHttp.HttpResult {
     private NavForViewPager navForViewPager;
     private IHttp iHttp = FlyOkHttp.getInstance();
     private String HTTPTAG = "MainActivity" + hashCode();
-    private String URL = "http://192.168.1.119:801/uiweb/api/app?appname=Launcher-AP1";
+    private String URL = "http://192.168.1.88/uiweb/api/app?appname=Launcher-AP1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +51,10 @@ public class MainActivity extends Activity implements IHttp.HttpResult {
     private void showUI(String jsonStr) {
         ThemeBean themeBean = GsonUtils.json2Object(jsonStr, ThemeBean.class);
         if (themeBean != null) {
+            themeBean.x = themeBean.x*1280/1024;
+            themeBean.y = themeBean.y*1280/1024;
+            themeBean.width = themeBean.width*1280/1024;
+            themeBean.height = themeBean.height*1280/1024;
             List<PageBean> pageBeans = themeBean.pageList;
             if (themeBean.x != 0 || themeBean.y != 0 || themeBean.width != 0 || themeBean.height != 0) {
                 FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) pagesView.getLayoutParams();
