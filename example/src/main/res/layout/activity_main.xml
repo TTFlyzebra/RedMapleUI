@@ -10,12 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.flyzebra.flyui.view.viewpager.LauncherView
+        <com.flyzebra.flyui.view.themeview.ViewPagerTheme
             android:id="@+id/ac_main_launcherview"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <com.flyzebra.flyui.view.viewpager.NavForViewPager
+        <com.flyzebra.flyui.view.customview.NavForViewPager
             android:id="@+id/ac_main_navforviewpager"
             android:layout_width="match_parent"
             android:layout_height="80px"

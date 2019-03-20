@@ -1,6 +1,5 @@
 package com.flyzebra.flyui.view.carcellview;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,9 +17,9 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.flyzebra.flyui.R;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.utils.FlyLog;
-import com.flyzebra.flyui.view.cellview.ICellView;
-import com.flyzebra.flyui.view.flyview.FlyImageView;
-import com.flyzebra.flyui.view.flyview.MirrorView;
+import com.flyzebra.flyui.view.cellview.ICell;
+import com.flyzebra.flyui.view.customview.FlyImageView;
+import com.flyzebra.flyui.view.customview.MirrorView;
 import com.jancar.JancarServer;
 import com.jancar.media.JacMediaController;
 import com.jancar.source.Page;
@@ -28,7 +27,7 @@ import com.jancar.source.Page;
 import java.util.Locale;
 import java.util.Objects;
 
-public class MediaInfoCellView extends FrameLayout implements ICellView, View.OnClickListener {
+public class MediaInfoCellView extends FrameLayout implements ICell, View.OnClickListener {
     private CellBean appInfo;
     private FlyImageView imageView;
     private MirrorView mirrorView;

@@ -13,7 +13,7 @@ import com.flyzebra.flyui.R;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.utils.SPUtil;
 import com.flyzebra.flyui.view.cellview.SimpeCellView;
-import com.flyzebra.flyui.view.flyview.NumTextView;
+import com.flyzebra.flyui.view.customview.NumTextView;
 import com.jancar.media.JacMediaController;
 
 public class RadioCellView extends SimpeCellView {

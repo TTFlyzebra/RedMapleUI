@@ -1,6 +1,8 @@
 package com.flyzebra.redmapleui.network;
 
 
+import com.flyzebra.flyui.utils.FlyLog;
+
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -8,16 +10,13 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
- * Retrofit管理类
- * Created by Tan on 2018/7/26.
- */
-public class ServiceGenerator {
-    public static String API_BASE_URL = "http://192.168.10.154/";
+public class HttpService {
+    public static String API_BASE_URL = "http://192.168.1.119:801/uiweb/";
     private static final int DEFAULT_TIMEOUT = 10;
-    private NetService mNetService;
+    private Api mNetService;
     private static boolean isWork = false;
-    public ServiceGenerator() {
+
+    public HttpService() {
         OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
         httpClientBuilder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
         try {
@@ -27,17 +26,19 @@ public class ServiceGenerator {
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .baseUrl(API_BASE_URL)
                     .build();
-            mNetService = retrofit.create(NetService.class);
+            mNetService = retrofit.create(Api.class);
             isWork = true;
-        }catch (Exception e){
-            e.printStackTrace();
+        } catch (Exception e) {
+            FlyLog.d(e.toString());
             isWork = false;
         }
     }
-    public NetService getInspectionService() {
+
+    public Api getInspectionService() {
         return mNetService;
     }
-    public static boolean getConfigStatus(){
+
+    public static boolean getConfigStatus() {
         return isWork;
     }
 }

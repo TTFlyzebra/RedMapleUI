@@ -16,45 +16,47 @@ import com.flyzebra.flyui.bean.PageBean;
 import com.flyzebra.flyui.bean.ThemeBean;
 import com.flyzebra.flyui.http.FlyOkHttp;
 import com.flyzebra.flyui.http.IHttp;
+import com.flyzebra.flyui.module.Switch3DPageTransformer;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.utils.GsonUtils;
+import com.flyzebra.flyui.view.customview.NavForViewPager;
 import com.flyzebra.flyui.view.pageview.SimplePageView;
-import com.flyzebra.flyui.view.viewpager.LauncherView;
-import com.flyzebra.flyui.view.viewpager.NavForViewPager;
-import com.flyzebra.flyui.view.viewpager.Switch3DPageTransformer;
+import com.flyzebra.flyui.view.themeview.ViewPagerTheme;
 import com.flyzebra.redmapleui.R;
 
 import java.util.List;
 
 
 public class MainActivity extends Activity implements IHttp.HttpResult {
-    private LauncherView launcherView;
+    private ViewPagerTheme launcherView;
     private SimplePageView topView;
     private RelativeLayout pagesView;
     private NavForViewPager navForViewPager;
     private IHttp iHttp = FlyOkHttp.getInstance();
     private String HTTPTAG = "MainActivity" + hashCode();
-    private String URL = "http://192.168.1.88/uiweb/api/app?appname=Launcher-AP1";
+    private String URL = "http://192.168.1.119:801/uiweb/api/app?appname=Launcher-AP1";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        launcherView = (LauncherView) findViewById(R.id.ac_main_launcherview);
+        launcherView = (ViewPagerTheme) findViewById(R.id.ac_main_launcherview);
         topView = (SimplePageView) findViewById(R.id.ac_main_topview);
         pagesView = (RelativeLayout) findViewById(R.id.ac_main_pages);
         launcherView.setOffscreenPageLimit(10);
         navForViewPager = (NavForViewPager) findViewById(R.id.ac_main_navforviewpager);
         iHttp.getString(URL, HTTPTAG, this);
+
     }
 
     private void showUI(String jsonStr) {
         ThemeBean themeBean = GsonUtils.json2Object(jsonStr, ThemeBean.class);
         if (themeBean != null) {
-            themeBean.x = themeBean.x*1280/1024;
-            themeBean.y = themeBean.y*1280/1024;
-            themeBean.width = themeBean.width*1280/1024;
-            themeBean.height = themeBean.height*1280/1024;
+//            themeBean.x = themeBean.x*1280/1024;
+//            themeBean.y = themeBean.y*1280/1024;
+//            themeBean.width = themeBean.width*1280/1024;
+//            themeBean.height = themeBean.height*1280/1024;
             List<PageBean> pageBeans = themeBean.pageList;
             if (themeBean.x != 0 || themeBean.y != 0 || themeBean.width != 0 || themeBean.height != 0) {
                 FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) pagesView.getLayoutParams();

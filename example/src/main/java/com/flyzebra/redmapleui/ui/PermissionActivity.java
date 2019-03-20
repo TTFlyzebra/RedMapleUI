@@ -9,8 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.flyzebra.redmapleui.R;
 
-import java.util.List;
-
 public class PermissionActivity extends AppCompatActivity {
 
     //读写权限
@@ -40,48 +38,4 @@ public class PermissionActivity extends AppCompatActivity {
         }
     }
 
-    ((RankListActivity)getActivity()).mAppAction.doGoddessRanking(new Subscriber<HttpResult<ListBean<GoddessRank>>>() {
-
-        @Override
-        public void onStart() {
-            super.onStart();
-        }
-
-        @Override
-        public void onCompleted() {
-
-        }
-
-        @Override
-        public void onError(Throwable e) {
-
-        }
-
-        @Override
-        public void onNext(HttpResult<ListBean<GoddessRank>> listBeanHttpResult) {
-            if (listBeanHttpResult.errno == 0) {
-
-                List<GoddessRank> list = listBeanHttpResult.data.items;
-                List<GoddessRank> headerList = list.subList(0,3) ;
-                for(int i = 0 ;i < headerList.size() ;i++){
-                    if(i == 0){
-                        RoundedImageView iv = (RoundedImageView) mHeaderView.findViewById(R.id.iv_one) ;
-                        iv.setOval(true);
-                        ImageTools.loadImage(getActivity(),headerList.get(i).getAvatar(),iv);
-                    }else if(i == 1){
-                        RoundedImageView iv = (RoundedImageView) mHeaderView.findViewById(R.id.iv_two) ;
-                        iv.setOval(true);
-                        ImageTools.loadImage(getActivity(),headerList.get(i).getAvatar(),iv);
-                    }else if(i == 2){
-                        RoundedImageView iv = (RoundedImageView) mHeaderView.findViewById(R.id.iv_three) ;
-                        iv.setOval(true);
-                        ImageTools.loadImage(getActivity(),headerList.get(i).getAvatar(),iv);
-                    }
-                }
-                mGoddnessBankAdapter.notifyGoddessAdapter(list.subList(4,list.size()));
-
-                mRecyclerView.refreshComplete();
-            }
-        }
-    });
 }

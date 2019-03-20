@@ -19,11 +19,11 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.utils.CommondUtils;
-import com.flyzebra.flyui.view.flyview.FlyImageView;
-import com.flyzebra.flyui.view.flyview.FlyTextView;
-import com.flyzebra.flyui.view.flyview.MirrorView;
+import com.flyzebra.flyui.view.customview.FlyImageView;
+import com.flyzebra.flyui.view.customview.FlyTextView;
+import com.flyzebra.flyui.view.customview.MirrorView;
 
-public class MirrorCellView extends FrameLayout implements ICellView, View.OnTouchListener, View.OnClickListener {
+public class MirrorCellView extends FrameLayout implements ICell, View.OnTouchListener, View.OnClickListener {
     private CellBean appInfo;
     private FlyImageView imageView;
     private MirrorView mirrorView;

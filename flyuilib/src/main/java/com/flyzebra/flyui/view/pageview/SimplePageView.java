@@ -12,8 +12,8 @@ import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.PageBean;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.cellview.CellViewFactory;
-import com.flyzebra.flyui.view.cellview.ICellView;
-import com.flyzebra.flyui.view.flyview.MirrorView;
+import com.flyzebra.flyui.view.cellview.ICell;
+import com.flyzebra.flyui.view.customview.MirrorView;
 
 import java.util.List;
 
@@ -79,7 +79,7 @@ public class SimplePageView extends FrameLayout implements IPage {
                 if (i > pageBean.columns * pageBean.rows) break;
             }
             CellBean cellBean = appInfoList.get(i);
-            ICellView iCellView = CellViewFactory.createView(getContext(), cellBean);
+            ICell iCellView = CellViewFactory.createView(getContext(), cellBean);
             LayoutParams lp;
 
             if (autoSize) {

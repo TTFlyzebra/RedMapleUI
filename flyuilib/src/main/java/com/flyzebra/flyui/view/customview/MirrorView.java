@@ -1,4 +1,4 @@
-package com.flyzebra.flyui.view.flyview;
+package com.flyzebra.flyui.view.customview;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
 import android.widget.ImageView;
-
 
 import com.flyzebra.flyui.utils.BitmapUtils;
 import com.flyzebra.flyui.utils.FlyLog;

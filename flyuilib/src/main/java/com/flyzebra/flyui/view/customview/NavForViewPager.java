@@ -1,4 +1,4 @@
-package com.flyzebra.flyui.view.viewpager;
+package com.flyzebra.flyui.view.customview;
 
 import android.content.Context;
 import android.graphics.Bitmap;

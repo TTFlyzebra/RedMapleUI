@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Handler;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -21,11 +20,11 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.utils.CommondUtils;
 import com.flyzebra.flyui.utils.FlyLog;
-import com.flyzebra.flyui.view.flyview.FlyImageView;
-import com.flyzebra.flyui.view.flyview.FlyTextView;
-import com.flyzebra.flyui.view.flyview.MirrorView;
+import com.flyzebra.flyui.view.customview.FlyImageView;
+import com.flyzebra.flyui.view.customview.FlyTextView;
+import com.flyzebra.flyui.view.customview.MirrorView;
 
-public class SimpeCellView extends FrameLayout implements ICellView, View.OnTouchListener, View.OnClickListener {
+public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchListener, View.OnClickListener {
     private CellBean mCellBean;
     private FlyImageView imageView;
     private MirrorView mirrorView;
@@ -101,16 +100,23 @@ public class SimpeCellView extends FrameLayout implements ICellView, View.OnTouc
                 .skipMemoryCache(false)
                 .dontAnimate()
                 .into(new SimpleTarget<Bitmap>() {
-            @Override
-            public void onResourceReady(final Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
-                imageView.setImageBitmap(bitmap);
-                if (mirrorView != null) {
-                    setDrawingCacheEnabled(true);
-                    Bitmap bmp = getDrawingCache();
-                    mirrorView.showImage(bmp);
-                }
-            }
-        });
+                    @Override
+                    public void onResourceReady(final Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
+                        imageView.setImageBitmap(bitmap);
+                        if (mirrorView != null) {
+                            setDrawingCacheEnabled(true);
+                            Bitmap bmp = getDrawingCache();
+                            if (bmp == null) {
+                                measure(MeasureSpec.makeMeasureSpec(mCellBean.width, MeasureSpec.EXACTLY),
+                                        MeasureSpec.makeMeasureSpec(mCellBean.height, MeasureSpec.EXACTLY));
+                                layout(0, 0, getMeasuredWidth(), getMeasuredHeight());
+                                buildDrawingCache();
+                                bmp = getDrawingCache();
+                            }
+                            mirrorView.showImage(bmp);
+                        }
+                    }
+                });
     }
 
     /**

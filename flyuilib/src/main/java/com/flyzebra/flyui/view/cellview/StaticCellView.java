@@ -10,10 +10,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.flyzebra.flyui.bean.CellBean;
-import com.flyzebra.flyui.view.flyview.FlyImageView;
-import com.flyzebra.flyui.view.flyview.MirrorView;
+import com.flyzebra.flyui.view.customview.FlyImageView;
+import com.flyzebra.flyui.view.customview.MirrorView;
 
-public class StaticCellView extends FrameLayout implements ICellView{
+public class StaticCellView extends FrameLayout implements ICell {
     protected CellBean appInfo;
     private FlyImageView imageView;
     private MirrorView mirrorView;

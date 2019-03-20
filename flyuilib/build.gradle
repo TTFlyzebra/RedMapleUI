@@ -34,4 +34,5 @@ dependencies {
     implementation files('libs/glide-3.7.0.jar')
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     compileOnly files('libs/framework.jar')
+
 }

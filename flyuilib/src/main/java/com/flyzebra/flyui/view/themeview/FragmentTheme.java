@@ -1,4 +1,4 @@
-package com.flyzebra.flyui.view.viewpager;
+package com.flyzebra.flyui.view.themeview;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
@@ -16,19 +16,18 @@ import com.flyzebra.flyui.view.pageview.SimplePageView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LauncherView extends ViewPager implements ILauncher {
+public class FragmentTheme extends ViewPager implements ITheme{
     private List<PageBean> pageList = new ArrayList<>();
     private ThemeBean themeBean;
     private MyPgaeAdapter myPgaeAdapter = new MyPgaeAdapter();
 
-    public LauncherView(Context context) {
+    public FragmentTheme(Context context) {
         this(context, null);
     }
 
-    public LauncherView(Context context, AttributeSet attrs) {
+    public FragmentTheme(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
-//        setPageTransformer(true, new Switch3DPageTransformer());
     }
 
     private void init(Context context) {
@@ -40,22 +39,12 @@ public class LauncherView extends ViewPager implements ILauncher {
         super.setPageTransformer(reverseDrawingOrder, transformer);
     }
 
-    @Override
     public void setData(ThemeBean themeBean) {
         if (themeBean == null || themeBean.pageList == null || themeBean.pageList.isEmpty()) {
             return;
         }
         this.themeBean = themeBean;
         List<PageBean> mPageBeanList = themeBean.pageList;
-
-        for(PageBean pageBean:mPageBeanList){
-            for(CellBean cellBean:pageBean.cellList){
-                cellBean.x = cellBean.x*1280/1024;
-                cellBean.y = cellBean.y*1280/1024;
-                cellBean.width = cellBean.width*1280/1024;
-                cellBean.height = cellBean.height*1280/1024;
-            }
-        }
 
         pageList.clear();
         if (mPageBeanList.size() > 1) {
@@ -68,6 +57,16 @@ public class LauncherView extends ViewPager implements ILauncher {
             pageList.addAll(mPageBeanList);
             myPgaeAdapter.notifyDataSetChanged();
         }
+
+    }
+
+    @Override
+    public void selectPage(int page) {
+
+    }
+
+    @Override
+    public void selectCell(CellBean cell) {
 
     }
 

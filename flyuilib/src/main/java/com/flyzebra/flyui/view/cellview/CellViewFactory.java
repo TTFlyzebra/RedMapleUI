@@ -17,8 +17,8 @@ public class CellViewFactory {
      *
      * @param context
      */
-    public static ICellView createView(Context context, CellBean appInfo) {
-        ICellView iCellView;
+    public static ICell createView(Context context, CellBean appInfo) {
+        ICell iCellView;
         switch (appInfo.celltype) {
             case CellType.TYPE_BACKGROUND:
                 iCellView = new StaticCellView(context);

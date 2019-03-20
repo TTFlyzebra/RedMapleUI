@@ -1,4 +1,4 @@
-package com.flyzebra.flyui.view.viewpager;
+package com.flyzebra.flyui.module;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;

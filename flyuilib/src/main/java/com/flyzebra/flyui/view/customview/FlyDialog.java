@@ -1,4 +1,4 @@
-package com.flyzebra.flyui.view.flyview;
+package com.flyzebra.flyui.view.customview;
 
 import android.app.Activity;
 import android.app.Dialog;
