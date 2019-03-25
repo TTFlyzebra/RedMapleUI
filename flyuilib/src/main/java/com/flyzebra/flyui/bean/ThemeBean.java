@@ -13,10 +13,10 @@ public class ThemeBean {
     public String imageurl = "";
     public List<PageBean> pageList;
     public PageBean topPage;
-    public int x = 0;
-    public int y = 0;
-    public int width = 0;
-    public int height = 0;
+    public int left = 0;
+    public int top = 0;
+    public int right = 0;
+    public int bottom = 0;
     public int screenWidth = 1024;
     public int screenHeight = 600;
     public int animType = 0;

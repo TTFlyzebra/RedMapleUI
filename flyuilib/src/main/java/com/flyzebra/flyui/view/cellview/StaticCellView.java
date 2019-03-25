@@ -77,9 +77,4 @@ public class StaticCellView extends FrameLayout implements ICell {
         this.mirrorView = mirrorView;
     }
 
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-    }
-
 }

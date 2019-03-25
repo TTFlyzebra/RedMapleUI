@@ -10,13 +10,14 @@ import android.view.ViewGroup;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.PageBean;
 import com.flyzebra.flyui.bean.ThemeBean;
+import com.flyzebra.flyui.module.FlyFindClass;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.pageview.SimplePageView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PagesViewPager extends ViewPager implements ITheme {
+public class PagesViewPager extends ViewPager{
     private List<PageBean> pageList = new ArrayList<>();
     private ThemeBean themeBean;
     private MyPgaeAdapter myPgaeAdapter = new MyPgaeAdapter();
@@ -31,6 +32,7 @@ public class PagesViewPager extends ViewPager implements ITheme {
     }
 
     private void init(Context context) {
+        FlyFindClass.register(PagesViewPager.class,this);
         setAdapter(myPgaeAdapter);
     }
 
@@ -60,12 +62,10 @@ public class PagesViewPager extends ViewPager implements ITheme {
 
     }
 
-    @Override
     public void selectPage(int page) {
 
     }
 
-    @Override
     public void selectCell(CellBean cell) {
 
     }

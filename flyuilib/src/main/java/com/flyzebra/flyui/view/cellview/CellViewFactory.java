@@ -35,6 +35,9 @@ public class CellViewFactory {
             case CellType.TYPE_APP_MIRRORIMG:
                 iCellView = new MirrorCellView(context);
                 break;
+            case CellType.TYPE_APP_NAV:
+                iCellView = new NavCellView(context);
+                break;
             case CellType.TYPE_APP_NORMAL:
             default:
                 iCellView = new SimpeCellView(context);

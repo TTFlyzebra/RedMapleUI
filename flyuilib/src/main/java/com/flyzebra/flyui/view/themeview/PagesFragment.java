@@ -16,7 +16,7 @@ import com.flyzebra.flyui.view.pageview.SimplePageView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PagesFragment extends ViewPager implements ITheme {
+public class PagesFragment extends ViewPager {
     private List<PageBean> pageList = new ArrayList<>();
     private ThemeBean themeBean;
     private MyPgaeAdapter myPgaeAdapter = new MyPgaeAdapter();
@@ -60,12 +60,10 @@ public class PagesFragment extends ViewPager implements ITheme {
 
     }
 
-    @Override
     public void selectPage(int page) {
 
     }
 
-    @Override
     public void selectCell(CellBean cell) {
 
     }

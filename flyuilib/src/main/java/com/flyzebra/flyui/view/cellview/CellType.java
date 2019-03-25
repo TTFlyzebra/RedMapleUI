@@ -25,4 +25,8 @@ public interface CellType {
      * 可镜像的小部件
      */
     int TYPE_APP_MIRRORIMG = 5;
+    /**
+     * 导航条
+     */
+    int TYPE_APP_NAV = 6;
 }
