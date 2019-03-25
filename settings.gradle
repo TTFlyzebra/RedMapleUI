@@ -1,1 +1,1 @@
-include ':example', ':flyuilib'
+include ':app', ':flyuilib'

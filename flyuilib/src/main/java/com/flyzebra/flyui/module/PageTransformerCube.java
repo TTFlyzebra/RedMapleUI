@@ -8,7 +8,7 @@ import android.view.View;
  * Created by  Rex on 2016/9/28.
  * 给ViewPager加上3d旋转过度动画
  */
-public class Switch3DPageTransformer implements ViewPager.PageTransformer {
+public class PageTransformerCube implements ViewPager.PageTransformer {
     @Override
     public void transformPage(View view, float position) {
 //        FlyLog.d("%d:position="+position,view.getTag());

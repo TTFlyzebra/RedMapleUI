@@ -40,7 +40,7 @@ public class CellViewFactory {
                 iCellView = new SimpeCellView(context);
                 break;
         }
-        iCellView.setData(appInfo);
+        iCellView.upData(appInfo);
         return iCellView;
     }
 

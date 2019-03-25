@@ -63,7 +63,7 @@ public class MirrorCellView extends FrameLayout implements ICell, View.OnTouchLi
     }
 
     @Override
-    public void setData(CellBean appInfo) {
+    public void upData(CellBean appInfo) {
         this.appInfo = appInfo;
         if (appInfo.width > 0 || appInfo.height > 0) {
             LayoutParams params1 = (LayoutParams) imageView.getLayoutParams();
@@ -98,7 +98,7 @@ public class MirrorCellView extends FrameLayout implements ICell, View.OnTouchLi
     }
 
     @Override
-    public void notifyView() {
+    public void upView() {
         if (textView != null && appInfo != null && appInfo.textTitle != null) {
             textView.setText(appInfo.textTitle.getText());
         }
@@ -126,7 +126,7 @@ public class MirrorCellView extends FrameLayout implements ICell, View.OnTouchLi
      * 启动优先级，包名+类名>Action>包名
      */
     @Override
-    public void runAction() {
+    public void doEvent() {
 //        if (!TextUtils.isEmpty(appInfo.flyAction) && jancarManager != null) {
 //            if (jancarManager.requestPage(appInfo.flyAction)) {
 //                FlyLog.d("start app by jancarManager id=%s", appInfo.flyAction);
@@ -144,7 +144,7 @@ public class MirrorCellView extends FrameLayout implements ICell, View.OnTouchLi
     }
 
     @Override
-    public void setMirrorView(MirrorView mirrorView) {
+    public void bindMirrorView(MirrorView mirrorView) {
         this.mirrorView = mirrorView;
     }
 
@@ -186,7 +186,7 @@ public class MirrorCellView extends FrameLayout implements ICell, View.OnTouchLi
 
     @Override
     public void onClick(View v) {
-        runAction();
+        doEvent();
     }
 
     @Override

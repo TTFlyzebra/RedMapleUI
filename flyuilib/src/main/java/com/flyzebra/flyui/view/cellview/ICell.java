@@ -8,13 +8,31 @@ import com.flyzebra.flyui.view.customview.MirrorView;
 
 public interface ICell {
 
+    /**
+     * 初始化布局
+     * @param context
+     */
     void initView(Context context);
 
-    void setData(CellBean appInfo);
+    /**
+     * 更新数据
+     * @param cellBean
+     */
+    void upData(CellBean cellBean);
 
-    void notifyView();
+    /**
+     * 更新界面
+     */
+    void upView();
 
-    void runAction();
+    /**
+     * 执行事件
+     */
+    void doEvent();
 
-    void setMirrorView(MirrorView mirrorView);
+    /**
+     * 绑定设置镜像图片
+     * @param mirrorView
+     */
+    void bindMirrorView(MirrorView mirrorView);
 }

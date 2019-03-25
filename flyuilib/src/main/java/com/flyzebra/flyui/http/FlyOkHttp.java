@@ -24,7 +24,6 @@ import okhttp3.CipherSuite;
 import okhttp3.ConnectionSpec;
 import okhttp3.FormBody;
 import okhttp3.Interceptor;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -250,7 +249,6 @@ public class FlyOkHttp implements IHttp {
     /**
      * 使用反射读取磁盘缓存
      * 实现缓存需服务器配合HTTP缓存机制实现
-     *
      * @param url
      * @return
      */

@@ -168,8 +168,8 @@ public class RadioCellView extends SimpeCellView {
     };
 
     @Override
-    public void notifyView() {
-        super.notifyView();
+    public void upView() {
+        super.upView();
     }
 
 }

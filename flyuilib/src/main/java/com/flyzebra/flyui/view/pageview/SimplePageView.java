@@ -52,7 +52,7 @@ public class SimplePageView extends FrameLayout implements IPage {
 
 
     @Override
-    public void setData(PageBean pageBean) {
+    public void upData(PageBean pageBean) {
         this.pageBean = pageBean;
         List<CellBean> appInfoList = pageBean.cellList;
         if (appInfoList == null || appInfoList.isEmpty()) return;
@@ -112,17 +112,17 @@ public class SimplePageView extends FrameLayout implements IPage {
                 }
                 MirrorView mirrorView = new MirrorView(getContext());
                 mirrorView.setScaleType(ImageView.ScaleType.FIT_XY);
-                iCellView.setMirrorView(mirrorView);
+                iCellView.bindMirrorView(mirrorView);
                 mirrorView.setRefHeight(MirrorView.MIRRORHIGHT);
                 addView(mirrorView, lpMirror);
             }
 
-            iCellView.notifyView();
+            iCellView.upView();
         }
     }
 
     @Override
-    public void setMirror(boolean flag) {
+    public void showMirror(boolean flag) {
         isMirror = flag;
     }
 }

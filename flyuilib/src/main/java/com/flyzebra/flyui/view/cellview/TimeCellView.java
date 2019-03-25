@@ -10,7 +10,6 @@ import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-
 import com.flyzebra.flyui.R;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.utils.FlyLog;
@@ -70,7 +69,7 @@ public class TimeCellView extends StaticCellView {
     }
 
     @Override
-    public void setData(CellBean appInfo) {
+    public void upData(CellBean appInfo) {
         this.appInfo = appInfo;
 
         rootLayout.setPadding(appInfo.textLeft, appInfo.textTop, appInfo.textRight, appInfo.textBottom);

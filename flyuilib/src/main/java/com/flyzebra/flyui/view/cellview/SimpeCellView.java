@@ -59,7 +59,7 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
     }
 
     @Override
-    public void setData(CellBean cellBean) {
+    public void upData(CellBean cellBean) {
         FlyLog.d(cellBean.toString());
         this.mCellBean = cellBean;
         if (cellBean.width > 0 || cellBean.height > 0) {
@@ -89,7 +89,7 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
     }
 
     @Override
-    public void notifyView() {
+    public void upView() {
         if (textView != null && mCellBean != null && mCellBean.textTitle != null) {
             textView.setText(mCellBean.textTitle.getText());
         }
@@ -123,7 +123,7 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
      * 启动优先级，包名+类名>Action>包名
      */
     @Override
-    public void runAction() {
+    public void doEvent() {
 //        if (!TextUtils.isEmpty(mCellBean.flyAction) && jancarManager != null) {
 //            if (jancarManager.requestPage(mCellBean.flyAction)) {
 //                FlyLog.d("start app by jancarManager id=%s", mCellBean.flyAction);
@@ -141,7 +141,7 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
     }
 
     @Override
-    public void setMirrorView(MirrorView mirrorView) {
+    public void bindMirrorView(MirrorView mirrorView) {
         this.mirrorView = mirrorView;
     }
 
@@ -183,7 +183,7 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
 
     @Override
     public void onClick(View v) {
-        runAction();
+        doEvent();
     }
 
     @Override

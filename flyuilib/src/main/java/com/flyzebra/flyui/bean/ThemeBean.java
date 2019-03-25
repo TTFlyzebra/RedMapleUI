@@ -8,6 +8,8 @@ import java.util.List;
  * Describ:
  **/
 public class ThemeBean {
+    public String themeName;
+    public String themeType;
     public String imageurl = "";
     public List<PageBean> pageList;
     public PageBean topPage;
@@ -15,6 +17,8 @@ public class ThemeBean {
     public int y = 0;
     public int width = 0;
     public int height = 0;
+    public int screenWidth = 1024;
+    public int screenHeight = 600;
     public int animType = 0;
     public int isMirror = 0;
 }

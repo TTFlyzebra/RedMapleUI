@@ -4,51 +4,46 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.view.View;
 import android.widget.FrameLayout;
 
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.PageBean;
 import com.flyzebra.flyui.bean.ThemeBean;
-import com.flyzebra.flyui.module.Switch3DPageTransformer;
-import com.flyzebra.flyui.view.customview.NavForViewPager;
-import com.flyzebra.flyui.view.pageview.SimplePageView;
+import com.flyzebra.flyui.module.PageTransformerCube;
 
 /**
  * Author FlyZebra
  * 2019/3/20 14:26
  * Describ:
  **/
-public class ThemeView extends FrameLayout implements ITheme {
+public class SimpleThemeView extends FrameLayout implements ITheme {
     private Context mContext;
     private ThemeBean mThemeBean;
     private float screenWidth = 1024;
     private float screenHeigh = 600;
     private float screenScacle = 1.0f;
-    private ViewPagerTheme iTheme;
-    private NavForViewPager navView;
-    private SimplePageView topView;
+    private PagesViewPager pagesView;
+    private NavForPages navView;
 
-    public ThemeView(Context context) {
+    public SimpleThemeView(Context context) {
         super(context);
         init(context);
     }
 
-    public ThemeView(Context context, AttributeSet attrs) {
+    public SimpleThemeView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    public ThemeView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SimpleThemeView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public ThemeView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public SimpleThemeView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context);
     }
@@ -63,7 +58,7 @@ public class ThemeView extends FrameLayout implements ITheme {
     }
 
     @Override
-    public void setData(ThemeBean themeBean) {
+    public void upData(ThemeBean themeBean) {
         if (themeBean == null || themeBean.pageList == null || themeBean.pageList.isEmpty()) {
             return;
         }
@@ -72,11 +67,11 @@ public class ThemeView extends FrameLayout implements ITheme {
         /**
          * 适应多分辨率
          */
-        float wScale = screenWidth / (float) mThemeBean.width;
-        float hScale = screenHeigh / (float) mThemeBean.height;
+        float wScale = screenWidth / (float) mThemeBean.screenWidth;
+        float hScale = screenHeigh / (float) mThemeBean.screenHeight;
         screenScacle = Math.min(wScale, hScale);
-        int moveX = (int) ((screenWidth / screenScacle - mThemeBean.width) / 2);
-        int moveY = (int) ((screenHeigh / screenScacle - mThemeBean.height) / 2);
+        int moveX = (int) ((screenWidth / screenScacle - mThemeBean.screenWidth) / 2);
+        int moveY = (int) ((screenHeigh / screenScacle - mThemeBean.screenHeight) / 2);
         for (PageBean pageBean : mThemeBean.pageList) {
             for (CellBean cellBean : pageBean.cellList) {
                 cellBean.x = (int) (cellBean.x * screenScacle) + moveX;
@@ -85,37 +80,31 @@ public class ThemeView extends FrameLayout implements ITheme {
                 cellBean.height = (int) (cellBean.height * screenScacle);
             }
         }
-
-        iTheme = new ViewPagerTheme(mContext);
-        addView((View) iTheme);
+        pagesView = new PagesViewPager(mContext);
+        addView(pagesView);
         switch (themeBean.animType) {
             case 1:
-                iTheme.setPageTransformer(true, new Switch3DPageTransformer());
+                pagesView.setPageTransformer(true, new PageTransformerCube());
                 break;
             default:
-                iTheme.setPageTransformer(true, null);
+                pagesView.setPageTransformer(true, null);
                 break;
         }
-
-        iTheme.setData(mThemeBean);
-        navView = new NavForViewPager(mContext);
-        addView(navView);
-        navView.setViewPager((ViewPager) iTheme);
-
-
+        pagesView.setOffscreenPageLimit(10);
+        pagesView.upData(mThemeBean);
     }
 
     @Override
     public void selectPage(int page) {
-        if (iTheme != null) {
-            iTheme.selectPage(page);
+        if (pagesView != null) {
+            pagesView.selectPage(page);
         }
     }
 
     @Override
     public void selectCell(CellBean cell) {
-        if (iTheme != null) {
-            iTheme.selectCell(cell);
+        if (pagesView != null) {
+            pagesView.selectCell(cell);
         }
     }
 }

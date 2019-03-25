@@ -16,16 +16,16 @@ import com.flyzebra.flyui.view.pageview.SimplePageView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewPagerTheme extends ViewPager implements ITheme{
+public class PagesFragment extends ViewPager implements ITheme {
     private List<PageBean> pageList = new ArrayList<>();
     private ThemeBean themeBean;
     private MyPgaeAdapter myPgaeAdapter = new MyPgaeAdapter();
 
-    public ViewPagerTheme(Context context) {
+    public PagesFragment(Context context) {
         this(context, null);
     }
 
-    public ViewPagerTheme(Context context, AttributeSet attrs) {
+    public PagesFragment(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
@@ -39,7 +39,7 @@ public class ViewPagerTheme extends ViewPager implements ITheme{
         super.setPageTransformer(reverseDrawingOrder, transformer);
     }
 
-    public void setData(ThemeBean themeBean) {
+    public void upData(ThemeBean themeBean) {
         if (themeBean == null || themeBean.pageList == null || themeBean.pageList.isEmpty()) {
             return;
         }
@@ -96,8 +96,8 @@ public class ViewPagerTheme extends ViewPager implements ITheme{
         public Object instantiateItem(ViewGroup container, int position) {
             SimplePageView simplePageView = new SimplePageView(getContext());
             simplePageView.setTag(position);
-            simplePageView.setMirror(themeBean.isMirror != 0);
-            simplePageView.setData(pageList.get(position));
+            simplePageView.showMirror(themeBean.isMirror != 0);
+            simplePageView.upData(pageList.get(position));
             container.addView(simplePageView);
             return simplePageView;
         }

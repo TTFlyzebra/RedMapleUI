@@ -1,4 +1,4 @@
-package com.flyzebra.flyui.view.customview;
+package com.flyzebra.flyui.view.themeview;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -16,7 +16,7 @@ import com.flyzebra.flyui.R;
  * ViewPager轮播用的导航条用来指示ViewPager当前显示的页面ViewPager
  * Created by FlyZebra on 2016/3/1.
  */
-public class NavForViewPager extends View {
+public class NavForPages extends View {
     //    private final String TAG = "com.flyzebra";
     private Paint paint;
     private int width;
@@ -30,15 +30,15 @@ public class NavForViewPager extends View {
     private Bitmap nav_on;
     private Bitmap nav_off;
 
-    public NavForViewPager(Context context) {
+    public NavForPages(Context context) {
         this(context, null);
     }
 
-    public NavForViewPager(Context context, AttributeSet attrs) {
+    public NavForPages(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public NavForViewPager(Context context, AttributeSet attrs, int defStyleAttr) {
+    public NavForPages(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initPaint();
         nav_off = BitmapFactory.decodeResource(getResources(), R.drawable.nav_off);

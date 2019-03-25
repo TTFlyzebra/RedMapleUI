@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.flyzebra.flyui.bean.ThemeBean;
 import com.flyzebra.flyui.utils.FlyLog;
-import com.flyzebra.flyui.view.themeview.ThemeView;
+import com.flyzebra.flyui.view.themeview.SimpleThemeView;
 import com.flyzebra.redmapleui.network.ApiAction;
 import com.flyzebra.redmapleui.network.ApiActionlmpl;
 
@@ -18,18 +18,18 @@ import rx.Subscriber;
  **/
 public class MainActivity extends Activity {
 
-    private ThemeView mThemeView;
+    private SimpleThemeView mThemeView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mThemeView = new ThemeView(this);
+        mThemeView = new SimpleThemeView(this);
         setContentView(mThemeView);
 
         ApiAction apiActionlmpl = new ApiActionlmpl();
 
-        apiActionlmpl.doTheme("Launcher-AP1", new Subscriber<ThemeBean>() {
+        apiActionlmpl.doTheme("Music-AP1", new Subscriber<ThemeBean>() {
             @Override
             public void onCompleted() {
                 FlyLog.d();
@@ -43,7 +43,7 @@ public class MainActivity extends Activity {
             @Override
             public void onNext(ThemeBean themeBean) {
                 FlyLog.d("ThemeBean=%s", themeBean);
-                mThemeView.setData(themeBean);
+                mThemeView.upData(themeBean);
             }
         });
     }

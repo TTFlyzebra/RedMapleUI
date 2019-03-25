@@ -16,16 +16,16 @@ import com.flyzebra.flyui.view.pageview.SimplePageView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentTheme extends ViewPager implements ITheme{
+public class PagesViewPager extends ViewPager implements ITheme {
     private List<PageBean> pageList = new ArrayList<>();
     private ThemeBean themeBean;
     private MyPgaeAdapter myPgaeAdapter = new MyPgaeAdapter();
 
-    public FragmentTheme(Context context) {
+    public PagesViewPager(Context context) {
         this(context, null);
     }
 
-    public FragmentTheme(Context context, AttributeSet attrs) {
+    public PagesViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
@@ -39,7 +39,7 @@ public class FragmentTheme extends ViewPager implements ITheme{
         super.setPageTransformer(reverseDrawingOrder, transformer);
     }
 
-    public void setData(ThemeBean themeBean) {
+    public void upData(ThemeBean themeBean) {
         if (themeBean == null || themeBean.pageList == null || themeBean.pageList.isEmpty()) {
             return;
         }
@@ -96,8 +96,8 @@ public class FragmentTheme extends ViewPager implements ITheme{
         public Object instantiateItem(ViewGroup container, int position) {
             SimplePageView simplePageView = new SimplePageView(getContext());
             simplePageView.setTag(position);
-            simplePageView.setMirror(themeBean.isMirror != 0);
-            simplePageView.setData(pageList.get(position));
+            simplePageView.showMirror(themeBean.isMirror != 0);
+            simplePageView.upData(pageList.get(position));
             container.addView(simplePageView);
             return simplePageView;
         }
@@ -114,7 +114,7 @@ public class FragmentTheme extends ViewPager implements ITheme{
                         view.setRotation(0);
                     }
                 }
-                if (position == pageList.size() - 1 && pageList != null && pageList.size() > 1) {
+                if (pageList != null && position == pageList.size() - 1 && pageList.size() > 1) {
                     setCurrentItem(1, false);
                     for (int i = 0; i < getCount(); i++) {
                         View view = getChildAt(i);
@@ -122,7 +122,7 @@ public class FragmentTheme extends ViewPager implements ITheme{
                         view.setRotation(0);
                     }
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 FlyLog.e(e.toString());
             }
         }

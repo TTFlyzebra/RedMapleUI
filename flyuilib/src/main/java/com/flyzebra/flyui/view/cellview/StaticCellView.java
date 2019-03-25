@@ -39,12 +39,12 @@ public class StaticCellView extends FrameLayout implements ICell {
     }
 
     @Override
-    public void setData(CellBean appInfo) {
+    public void upData(CellBean appInfo) {
         this.appInfo = appInfo;
     }
 
     @Override
-    public void notifyView() {
+    public void upView() {
         if (imageView == null) return;
         Glide.with(getContext())
                 .load(appInfo.imageurl1)
@@ -65,7 +65,7 @@ public class StaticCellView extends FrameLayout implements ICell {
     }
 
     @Override
-    public void runAction() {
+    public void doEvent() {
     }
 
     @Override
@@ -73,7 +73,7 @@ public class StaticCellView extends FrameLayout implements ICell {
     }
 
     @Override
-    public void setMirrorView(MirrorView mirrorView) {
+    public void bindMirrorView(MirrorView mirrorView) {
         this.mirrorView = mirrorView;
     }
 
