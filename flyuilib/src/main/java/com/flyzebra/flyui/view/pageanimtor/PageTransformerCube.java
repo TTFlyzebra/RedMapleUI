@@ -1,4 +1,4 @@
-package com.flyzebra.flyui.module;
+package com.flyzebra.flyui.view.pageanimtor;
 
 import android.support.v4.view.ViewPager;
 import android.view.View;

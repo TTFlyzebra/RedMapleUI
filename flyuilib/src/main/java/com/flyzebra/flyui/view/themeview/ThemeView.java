@@ -12,8 +12,9 @@ import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.PageBean;
 import com.flyzebra.flyui.bean.ThemeBean;
 import com.flyzebra.flyui.module.FlyFindClass;
-import com.flyzebra.flyui.module.PageTransformerCube;
 import com.flyzebra.flyui.view.cellview.NavCellView;
+import com.flyzebra.flyui.view.pageanimtor.PageTransformerCube;
+import com.flyzebra.flyui.view.pageanimtor.PageTransformerPage;
 import com.flyzebra.flyui.view.pageview.SimplePageView;
 
 /**
@@ -90,7 +91,7 @@ public class ThemeView extends FrameLayout implements ITheme {
                     for (CellBean cellBean : pageBean.cellList) {
                         //有效显示区域FitCenter，只显示位于指定区域中的内容
                         cellBean.x = cellBean.x - mThemeBean.left;
-                        cellBean.y = cellBean.y - mThemeBean.right;
+                        cellBean.y = cellBean.y - mThemeBean.top;
                     }
                 }
             }
@@ -111,7 +112,7 @@ public class ThemeView extends FrameLayout implements ITheme {
                 for (CellBean cellBean : pageBean.cellList) {
                     //有效显示区域FitCenter，只显示位于指定区域中的内容
                     cellBean.x = (int) (cellBean.x * screenScacle) + moveX - mThemeBean.left;
-                    cellBean.y = (int) (cellBean.y * screenScacle) + moveY - mThemeBean.right;
+                    cellBean.y = (int) (cellBean.y * screenScacle) + moveY - mThemeBean.top;
                     cellBean.width = (int) (cellBean.width * screenScacle);
                     cellBean.height = (int) (cellBean.height * screenScacle);
                 }
@@ -141,6 +142,9 @@ public class ThemeView extends FrameLayout implements ITheme {
             switch (mThemeBean.animType) {
                 case 1:
                     pagesView.setPageTransformer(true, new PageTransformerCube());
+                    break;
+                case 2:
+                    pagesView.setPageTransformer(true, new PageTransformerPage());
                     break;
                 default:
                     pagesView.setPageTransformer(true, null);
