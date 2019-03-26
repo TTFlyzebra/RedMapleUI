@@ -9,16 +9,16 @@ import com.flyzebra.flyui.utils.FlyLog;
  * 2019/3/25 14:36
  * Describ:
  **/
-public class FlyFindClass {
-    private final ArrayMap<Object, Object> clsMap = new ArrayMap<>();
+public class FlyClass {
+    private static final ArrayMap<Object, Object> clsMap = new ArrayMap<>();
 
 
-    public static FlyFindClass getInstance() {
-        return FlyFindClass.FindThemeClassHolder.sInstance;
+    public static FlyClass getInstance() {
+        return FlyClass.FlyClassHolder.sInstance;
     }
 
-    private static class FindThemeClassHolder {
-        public static final FlyFindClass sInstance = new FlyFindClass();
+    private static class FlyClassHolder {
+        public static final FlyClass sInstance = new FlyClass();
     }
 
 

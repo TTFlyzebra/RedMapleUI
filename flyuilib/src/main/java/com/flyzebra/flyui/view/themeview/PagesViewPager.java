@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.PageBean;
 import com.flyzebra.flyui.bean.ThemeBean;
-import com.flyzebra.flyui.module.FlyFindClass;
+import com.flyzebra.flyui.module.FlyClass;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.base.BaseViewPager;
 import com.flyzebra.flyui.view.cellview.PagesNavCellView;
@@ -73,7 +73,7 @@ public class PagesViewPager extends BaseViewPager {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        PagesNavCellView navCellView = FlyFindClass.get(PagesNavCellView.class);
+        PagesNavCellView navCellView = FlyClass.get(PagesNavCellView.class);
         if (navCellView != null) {
             navCellView.setViewPager(this);
         }

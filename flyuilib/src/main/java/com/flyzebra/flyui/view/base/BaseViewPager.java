@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 
-import com.flyzebra.flyui.module.FlyFindClass;
+import com.flyzebra.flyui.module.FlyClass;
 
 /**
  * Author FlyZebra
@@ -23,13 +23,13 @@ public class BaseViewPager extends ViewPager {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        FlyFindClass.register(getClass(),this);
+        FlyClass.register(getClass(),this);
     }
 
 
     @Override
     protected void onDetachedFromWindow() {
-        FlyFindClass.unregister(getClass());
+        FlyClass.unregister(getClass());
         super.onDetachedFromWindow();
     }
 }

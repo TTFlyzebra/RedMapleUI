@@ -8,10 +8,12 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.widget.FrameLayout;
 
+import com.flyzebra.flyui.FlyuiAction;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.PageBean;
 import com.flyzebra.flyui.bean.ThemeBean;
-import com.flyzebra.flyui.module.FlyFindClass;
+import com.flyzebra.flyui.module.FlyAction;
+import com.flyzebra.flyui.module.FlyClass;
 import com.flyzebra.flyui.view.pageanimtor.PageTransformerCube;
 import com.flyzebra.flyui.view.pageanimtor.PageTransformerPage;
 import com.flyzebra.flyui.view.pageview.SimplePageView;
@@ -168,17 +170,23 @@ public class ThemeView extends FrameLayout implements ITheme {
 
     @Override
     public void onCreate(Context context) {
-
+        if(context instanceof FlyuiAction){
+            FlyAction.register((FlyuiAction) context);
+        }
     }
 
     @Override
     public void onDestory() {
-        FlyFindClass.clear();
+        if(mContext instanceof FlyuiAction){
+            FlyAction.unregister((FlyuiAction) mContext);
+        }
+        FlyClass.clear();
     }
+
 
     @Override
     public void upData(ThemeBean themeBean) {
-        FlyFindClass.clear();
+        FlyClass.clear();
         mThemeBean = themeBean;
         matchResolution();
         upView();

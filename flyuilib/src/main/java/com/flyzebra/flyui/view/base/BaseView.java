@@ -6,7 +6,7 @@ import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.flyzebra.flyui.module.FlyFindClass;
+import com.flyzebra.flyui.module.FlyClass;
 
 /**
  * Author FlyZebra
@@ -34,13 +34,13 @@ public class BaseView extends View{
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        FlyFindClass.register(getClass(),this);
+        FlyClass.register(getClass(),this);
     }
 
 
     @Override
     protected void onDetachedFromWindow() {
-        FlyFindClass.unregister(getClass());
+        FlyClass.unregister(getClass());
         super.onDetachedFromWindow();
     }
 }

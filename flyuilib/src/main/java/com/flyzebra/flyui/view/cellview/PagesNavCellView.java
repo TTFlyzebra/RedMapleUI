@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.flyzebra.flyui.bean.CellBean;
-import com.flyzebra.flyui.module.FlyFindClass;
+import com.flyzebra.flyui.module.FlyClass;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.base.BaseView;
 import com.flyzebra.flyui.view.customview.MirrorView;
@@ -170,7 +170,7 @@ public class PagesNavCellView extends BaseView implements ICell, ViewPager.OnPag
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (mViewPger == null) {
-            setViewPager(FlyFindClass.get(PagesViewPager.class));
+            setViewPager(FlyClass.get(PagesViewPager.class));
         }
     }
 
