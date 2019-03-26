@@ -14,6 +14,7 @@ import com.flyzebra.flyui.bean.PageBean;
 import com.flyzebra.flyui.bean.ThemeBean;
 import com.flyzebra.flyui.module.FlyAction;
 import com.flyzebra.flyui.module.FlyClass;
+import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.pageanimtor.PageTransformerCube;
 import com.flyzebra.flyui.view.pageanimtor.PageTransformerPage;
 import com.flyzebra.flyui.view.pageview.SimplePageView;
@@ -151,7 +152,7 @@ public class ThemeView extends FrameLayout implements ITheme {
                     pagesView.setPageTransformer(true, null);
                     break;
             }
-            pagesView.setOffscreenPageLimit(10);
+//            pagesView.setOffscreenPageLimit(10);
             pagesView.upData(mThemeBean);
         }
 
@@ -186,6 +187,7 @@ public class ThemeView extends FrameLayout implements ITheme {
 
     @Override
     public void upData(ThemeBean themeBean) {
+        FlyLog.d();
         FlyClass.clear();
         mThemeBean = themeBean;
         matchResolution();

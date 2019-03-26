@@ -60,7 +60,7 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
 
     @Override
     public void upData(CellBean cellBean) {
-        FlyLog.d(cellBean.toString());
+        FlyLog.v(cellBean.toString());
         this.mCellBean = cellBean;
         if (cellBean.width > 0 || cellBean.height > 0) {
             LayoutParams params = (LayoutParams) imageView.getLayoutParams();
