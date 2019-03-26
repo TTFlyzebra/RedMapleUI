@@ -1,10 +1,17 @@
 package com.flyzebra.flyui.view.themeview;
 
 
+import android.content.Context;
+
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.ThemeBean;
 
 public interface ITheme {
+
+    void onCreate(Context context);
+
+
+    void onDestory();
     /**
      * 更新数据
      * @param themeBean

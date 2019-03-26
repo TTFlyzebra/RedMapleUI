@@ -2,14 +2,14 @@ package com.flyzebra.flyui.module;
 
 import android.util.ArrayMap;
 
+import com.flyzebra.flyui.utils.FlyLog;
+
 /**
  * Author FlyZebra
  * 2019/3/25 14:36
  * Describ:
  **/
 public class FlyFindClass {
-    public static final String TOP_NAV = "THEME_TOP_NAV";
-    public static final String PAGES = "THEME_PAGES";
     private final ArrayMap<Object, Object> clsMap = new ArrayMap<>();
 
 
@@ -22,11 +22,11 @@ public class FlyFindClass {
     }
 
 
-    public static void relese() {
-        getInstance().freeMap();
+    public static void clear() {
+        getInstance().clearMap();
     }
 
-    private void freeMap() {
+    private void clearMap() {
         clsMap.clear();
     }
 
@@ -43,11 +43,13 @@ public class FlyFindClass {
     }
 
     private void putClass(Class<?> key, Object cls) {
+        FlyLog.d("add class="+key);
         clsMap.put(key, cls);
     }
 
 
     private void removeClass(Class<?> key) {
+        FlyLog.d("remove class="+key);
         clsMap.remove(key);
     }
 

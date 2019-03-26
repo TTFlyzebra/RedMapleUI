@@ -12,7 +12,6 @@ import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.PageBean;
 import com.flyzebra.flyui.bean.ThemeBean;
 import com.flyzebra.flyui.module.FlyFindClass;
-import com.flyzebra.flyui.view.cellview.NavCellView;
 import com.flyzebra.flyui.view.pageanimtor.PageTransformerCube;
 import com.flyzebra.flyui.view.pageanimtor.PageTransformerPage;
 import com.flyzebra.flyui.view.pageview.SimplePageView;
@@ -164,16 +163,22 @@ public class ThemeView extends FrameLayout implements ITheme {
     }
 
     private void bindViewEvent() {
-        NavCellView navCellView = FlyFindClass.get(NavCellView.class);
-        if (navCellView != null) {
-            navCellView.setViewPager(FlyFindClass.get(PagesViewPager.class));
-        }
     }
 
 
     @Override
+    public void onCreate(Context context) {
+
+    }
+
+    @Override
+    public void onDestory() {
+        FlyFindClass.clear();
+    }
+
+    @Override
     public void upData(ThemeBean themeBean) {
-        FlyFindClass.relese();
+        FlyFindClass.clear();
         mThemeBean = themeBean;
         matchResolution();
         upView();

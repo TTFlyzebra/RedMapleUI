@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -14,14 +13,16 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.module.FlyFindClass;
 import com.flyzebra.flyui.utils.FlyLog;
+import com.flyzebra.flyui.view.base.BaseView;
 import com.flyzebra.flyui.view.customview.MirrorView;
+import com.flyzebra.flyui.view.themeview.PagesViewPager;
 
 /**
  * Author FlyZebra
  * 2019/3/25 12:08
  * Describ:
  **/
-public class NavCellView extends View implements ICell, ViewPager.OnPageChangeListener {
+public class PagesNavCellView extends BaseView implements ICell, ViewPager.OnPageChangeListener {
     private CellBean mCellBean;
     private ViewPager mViewPger;
     private Paint paint;
@@ -32,18 +33,17 @@ public class NavCellView extends View implements ICell, ViewPager.OnPageChangeLi
     private Bitmap nav_on;
     private Bitmap nav_off;
 
-    public NavCellView(Context context) {
-        this(context,null);
+    public PagesNavCellView(Context context) {
+        this(context, null);
     }
 
-    public NavCellView(Context context, AttributeSet attrs) {
+    public PagesNavCellView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public NavCellView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public PagesNavCellView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initView(context);
-        FlyFindClass.register(NavCellView.class,this);
     }
 
     @Override
@@ -152,12 +152,15 @@ public class NavCellView extends View implements ICell, ViewPager.OnPageChangeLi
 
     public void setViewPager(final ViewPager viewPager) {
         if (viewPager == null) return;
+        if (mViewPger != null) {
+            mViewPger.removeOnPageChangeListener(this);
+        }
         mViewPger = viewPager;
         setCurrentItem(mViewPger.getCurrentItem());
         if (viewPager.getAdapter() != null) {
             setSumItem(mViewPger.getAdapter().getCount());
         }
-        if(mViewPger!=null){
+        if (mViewPger != null) {
             mViewPger.removeOnPageChangeListener(this);
             mViewPger.addOnPageChangeListener(this);
         }
@@ -166,15 +169,14 @@ public class NavCellView extends View implements ICell, ViewPager.OnPageChangeLi
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        if(mViewPger!=null){
-            mViewPger.removeOnPageChangeListener(this);
-            mViewPger.addOnPageChangeListener(this);
+        if (mViewPger == null) {
+            setViewPager(FlyFindClass.get(PagesViewPager.class));
         }
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        if(mViewPger!=null) {
+        if (mViewPger != null) {
             mViewPger.removeOnPageChangeListener(this);
         }
         super.onDetachedFromWindow();

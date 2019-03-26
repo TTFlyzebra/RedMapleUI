@@ -21,4 +21,23 @@ public class ThemeBean {
     public int screenHeight = 600;
     public int animType = 0;
     public int isMirror = 0;
+
+    @Override
+    public String toString() {
+        return "ThemeBean{" +
+                "themeName='" + themeName + '\'' +
+                ", themeType='" + themeType + '\'' +
+                ", imageurl='" + imageurl + '\'' +
+                ", pageList=" + pageList +
+                ", topPage=" + topPage +
+                ", left=" + left +
+                ", top=" + top +
+                ", right=" + right +
+                ", bottom=" + bottom +
+                ", screenWidth=" + screenWidth +
+                ", screenHeight=" + screenHeight +
+                ", animType=" + animType +
+                ", isMirror=" + isMirror +
+                '}';
+    }
 }

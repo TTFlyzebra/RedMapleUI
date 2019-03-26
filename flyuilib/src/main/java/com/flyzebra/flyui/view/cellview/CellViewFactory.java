@@ -36,7 +36,7 @@ public class CellViewFactory {
                 iCellView = new MirrorCellView(context);
                 break;
             case CellType.TYPE_APP_NAV:
-                iCellView = new NavCellView(context);
+                iCellView = new PagesNavCellView(context);
                 break;
             case CellType.TYPE_APP_NORMAL:
             default:

@@ -17,4 +17,18 @@ public class PageBean implements Cloneable{
         newPageBean.cellList = new ArrayList<>();
         return newPageBean;
     }
+
+    @Override
+    public String toString() {
+        return "PageBean{" +
+                "columns=" + columns +
+                ", rows=" + rows +
+                ", itemPadding=" + itemPadding +
+                ", itemWidth=" + itemWidth +
+                ", itemHeight=" + itemHeight +
+                ", x=" + x +
+                ", y=" + y +
+                ", cellList=" + cellList +
+                '}';
+    }
 }

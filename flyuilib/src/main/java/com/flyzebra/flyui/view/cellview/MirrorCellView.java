@@ -135,10 +135,10 @@ public class MirrorCellView extends FrameLayout implements ICell, View.OnTouchLi
 //                FlyLog.d("start app by jancarManager failed!");
 //            }
 //        }
-        if (CommondUtils.execStartPackage(getContext(), appInfo.packName, appInfo.className))
+        if (CommondUtils.execStartPackage(getContext(), appInfo.launchAction, appInfo.acceptAction))
             return;
-        if (CommondUtils.execStartActivity(getContext(), appInfo.action)) return;
-        if (!CommondUtils.execStartPackage(getContext(), appInfo.packName)) {
+        if (CommondUtils.execStartActivity(getContext(), appInfo.event)) return;
+        if (!CommondUtils.execStartPackage(getContext(), appInfo.launchAction)) {
 //            Toast.makeText(getContext(), getContext().getResources().getString(R.string.startAppFailed), Toast.LENGTH_SHORT).show();
         }
     }

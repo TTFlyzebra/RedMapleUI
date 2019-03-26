@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 
 import com.flyzebra.flyui.bean.ThemeBean;
-import com.flyzebra.flyui.module.FlyFindClass;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.themeview.ThemeView;
 import com.flyzebra.redmapleui.network.ApiAction;
@@ -26,6 +25,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         mThemeView = new ThemeView(this);
         setContentView(mThemeView);
+        mThemeView.onCreate(this);
 
         ApiAction apiActionlmpl = new ApiActionlmpl();
 
@@ -50,7 +50,7 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        FlyFindClass.relese();
+        mThemeView.onDestory();
         super.onDestroy();
     }
 }

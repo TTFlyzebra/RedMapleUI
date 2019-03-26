@@ -2,10 +2,9 @@ package com.flyzebra.flyui.bean;
 
 public class CellBean implements Cloneable{
     public String flyAction = "";
-    public String packName = "";
-    public String className = "";
-    public String action = "";
-    public String intentFlag = "";
+    public String launchAction = "";
+    public String acceptAction = "";
+    public String event = "";
     public String imageurl1 = "";
     public String imageurl2 ="";
     public int celltype = 0;
@@ -31,13 +30,12 @@ public class CellBean implements Cloneable{
     public String toString() {
         return "CellBean{" +
                 "flyAction='" + flyAction + '\'' +
-                ", packName='" + packName + '\'' +
-                ", className='" + className + '\'' +
-                ", action='" + action + '\'' +
-                ", intentFlag='" + intentFlag + '\'' +
+                ", packName='" + launchAction + '\'' +
+                ", className='" + acceptAction + '\'' +
+                ", action='" + event + '\'' +
                 ", imageurl1='" + imageurl1 + '\'' +
                 ", imageurl2='" + imageurl2 + '\'' +
-                ", type=" + celltype +
+                ", celltype=" + celltype +
                 ", textTitle=" + textTitle +
                 ", textSize=" + textSize +
                 ", textColor='" + textColor + '\'' +
