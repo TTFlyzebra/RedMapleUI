@@ -70,7 +70,7 @@ public class TimeCellView extends StaticCellView {
 
     @Override
     public void upData(CellBean appInfo) {
-        this.appInfo = appInfo;
+        this.mCellBean = appInfo;
 
         rootLayout.setPadding(appInfo.textLeft, appInfo.textTop, appInfo.textRight, appInfo.textBottom);
 

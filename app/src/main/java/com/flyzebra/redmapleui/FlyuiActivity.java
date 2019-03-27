@@ -47,6 +47,7 @@ public class FlyuiActivity extends Activity implements FlyuiAction,IUpdataVersio
     protected void onDestroy() {
         FlyLog.d();
         mThemeView.onDestory();
+        iUpDataVersion.cancelAllTasks();
         super.onDestroy();
     }
 

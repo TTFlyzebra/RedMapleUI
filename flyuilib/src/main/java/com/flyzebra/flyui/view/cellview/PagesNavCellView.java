@@ -8,9 +8,11 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.flyzebra.flyui.bean.CellBean;
+import com.flyzebra.flyui.chache.UpdataVersion;
 import com.flyzebra.flyui.module.FlyClass;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.base.BaseView;
@@ -118,25 +120,35 @@ public class PagesNavCellView extends BaseView implements ICell, ViewPager.OnPag
         if (mCellBean == null) {
             return;
         }
-        Glide.with(getContext()).load(mCellBean.imageurl1).asBitmap().into(new SimpleTarget<Bitmap>() {
-            @Override
-            public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
-                nav_on = bitmap;
-                if (nav_on != null) {
-                    postInvalidate();
-                }
-            }
-        });
+        Glide.with(getContext())
+                .load(UpdataVersion.getNativeFilePath(mCellBean.imageurl1))
+                .asBitmap()
+                .override(mCellBean.width,mCellBean.height)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
+                        nav_on = bitmap;
+                        if (nav_on != null) {
+                            postInvalidate();
+                        }
+                    }
+                });
 
-        Glide.with(getContext()).load(mCellBean.imageurl2).asBitmap().into(new SimpleTarget<Bitmap>() {
-            @Override
-            public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
-                nav_off = bitmap;
-                if (nav_off != null) {
-                    postInvalidate();
-                }
-            }
-        });
+        Glide.with(getContext())
+                .load(UpdataVersion.getNativeFilePath(mCellBean.imageurl2))
+                .asBitmap()
+                .override(mCellBean.width,mCellBean.height)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
+                        nav_off = bitmap;
+                        if (nav_off != null) {
+                            postInvalidate();
+                        }
+                    }
+                });
         postInvalidate();
     }
 

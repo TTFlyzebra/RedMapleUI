@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -15,9 +16,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.flyzebra.flyui.bean.CellBean;
+import com.flyzebra.flyui.chache.UpdataVersion;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.utils.IntentUtils;
 import com.flyzebra.flyui.view.customview.FlyImageView;
@@ -93,12 +96,14 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
         if (textView != null && mCellBean != null && mCellBean.textTitle != null) {
             textView.setText(mCellBean.textTitle.getText());
         }
-        if (imageView == null) return;
+        if (imageView == null||TextUtils.isEmpty(mCellBean.imageurl1)) return;
+        String imageurl = UpdataVersion.getNativeFilePath(mCellBean.imageurl1);
+        FlyLog.d("glide image url="+imageurl);
         Glide.with(getContext())
-                .load(mCellBean.imageurl1)
+                .load(imageurl)
                 .asBitmap()
-                .skipMemoryCache(false)
-                .dontAnimate()
+                .override(mCellBean.width,mCellBean.height)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(final Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
@@ -124,19 +129,10 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
      */
     @Override
     public void doEvent() {
-//        if (!TextUtils.isEmpty(mCellBean.flyAction) && jancarManager != null) {
-//            if (jancarManager.requestPage(mCellBean.flyAction)) {
-//                FlyLog.d("start app by jancarManager id=%s", mCellBean.flyAction);
-//                return;
-//            } else {
-//                FlyLog.d("start app by jancarManager failed!");
-//            }
-//        }
         if (IntentUtils.execStartPackage(getContext(), mCellBean.launchAction, mCellBean.acceptAction))
             return;
         if (IntentUtils.execStartActivity(getContext(), mCellBean.event)) return;
         if (!IntentUtils.execStartPackage(getContext(), mCellBean.launchAction)) {
-//            Toast.makeText(getContext(), getContext().getResources().getString(R.string.startAppFailed), Toast.LENGTH_SHORT).show();
         }
     }
 

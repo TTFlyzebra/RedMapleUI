@@ -22,13 +22,6 @@ public interface IUpdataVersion {
     IUpdataVersion setDiskCache(IDiskCache iDiskCache);
 
     /**
-     * 获取TemplateBean
-     *
-     * @return
-     */
-    ThemeBean getThemeBean();
-
-    /**
      * 启动更线线程
      *
      * @param upResult 更新结果的回调通知
@@ -39,17 +32,6 @@ public interface IUpdataVersion {
      * 强制更新，不用检测版本
      */
     void forceUpVersion(UpResult upResult);
-
-    /**
-     * 设置默认加载模板
-     * @param mode
-     */
-    void setDefualtTemplate(String mode);
-
-    /**
-     * 更换模板
-     */
-    void switchTemplate();
 
     /**
      * 返回更新状态

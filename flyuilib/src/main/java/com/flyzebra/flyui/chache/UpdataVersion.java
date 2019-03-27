@@ -1,5 +1,6 @@
 package com.flyzebra.flyui.chache;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -44,9 +45,6 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
     private List<String> mDownImageList = new ArrayList<>();
     private int mDownImageSum = 0;
     private AtomicInteger mAtomicImgCount = new AtomicInteger(0);
-    /**
-     * 当前模板所有页面Cell数据列表
-     */
     private String mThemeJson;
     private ThemeBean mThemeBean;
     private String HTTPTAG = "UpdataVersion" + hashCode();
@@ -66,18 +64,12 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
      * 对应请求API接口
      */
     protected String ApiUrl = "http://192.168.1.119:801/uiweb";
-
-    //token
     protected String token = "";
     protected String tokenFromat = "&token=%s";
-    //版本号
     protected String ApiVersion = "/api/version?areaCode=%s&type=launcher&version=%s&versionSw=%s&devCode=%s&versionHw=%s&userId=%s";
-    //Template更新地址
     protected String ApiTheme = "/api/app?areaCode=%s&type=launcher&version=%s&versionSw=%s&devCode=%s&versionHw=%s&userId=%s";
-
     protected String VERSION_KEY = "/api/version";
     protected String TEMPLATE_KEY = "/api/app";
-    private String templateCode;
 
     public UpdataVersion(Context context) {
         this.mContext = context;
@@ -135,11 +127,13 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
         });
     }
 
-    @Override
-    public ThemeBean getThemeBean() {
+    private ThemeBean getThemeBean() {
         String mThemeBeanJson = iDiskCache.getString(TEMPLATE_KEY);
         if (TextUtils.isEmpty(mThemeBeanJson)) {
             mThemeBeanJson = getAssetsFileString(TEMPLATE_KEY);
+            SAVE_PATH = "file:///android_asset/zebra";
+        } else {
+            SAVE_PATH = "file://" + iDiskCache.getSavePath();
         }
         mThemeBean = GsonUtils.json2Object(mThemeBeanJson, ThemeBean.class);
         return mThemeBean;
@@ -148,9 +142,9 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
 
     @Override
     public void startUpVersion(UpResult upResult) {
-        FlyLog.d();
+        FlyLog.d("startUpVersion");
         if (!checkUrl()) {
-            FlyLog.d("invalid url! url=%s", ApiUrl);
+            FlyLog.e("invalid url! url=%s", ApiUrl);
             return;
         }
         this.upResult = upResult;
@@ -163,7 +157,7 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
 
     @Override
     public void forceUpVersion(UpResult upResult) {
-        FlyLog.d();
+        FlyLog.d("forceUpVersion");
         FlyOkHttp.getInstance().cancelAll(HTTPTAG);
         if (taskCollection != null) {
             for (AsyncTask task : taskCollection) {
@@ -174,7 +168,7 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
         isUPVeriosnRunning = false;
 
         if (!checkUrl()) {
-            FlyLog.d("invalid url! url=%s", ApiUrl);
+            FlyLog.e("invalid url! url=%s", ApiUrl);
             return;
         }
 
@@ -185,16 +179,6 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
             isUpSuccess = true;
             getThemeBean(ApiUrl + ApiTheme + String.format(tokenFromat, token));
         }
-    }
-
-    @Override
-    public void setDefualtTemplate(String templateCode) {
-        this.templateCode = templateCode;
-    }
-
-    @Override
-    public void switchTemplate() {
-        getCacheData(checkCacheResult);
     }
 
     /**
@@ -367,13 +351,14 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
         });
         mAtomicImgCount.set(imageList.size());
         mDownImageSum = imageList.size();
-        for (String imagurl: imageList) {
+        for (String imagurl : imageList) {
             DownloadResourceImgTask task = new DownloadResourceImgTask();
             taskCollection.add(task);
             task.execute(imagurl);
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class DownloadResourceImgTask extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
@@ -474,7 +459,6 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
         FlyLog.d("开始删除不用的缓存文件");
         Set<String> files = new HashSet<>();
         files.add("journal");
-        mThemeBean = getThemeBean();
         if (mThemeBean == null) return;
         files.add(EncodeHelper.md5(VERSION_KEY) + ".0");
         files.add(EncodeHelper.md5(TEMPLATE_KEY) + ".0");
@@ -483,7 +467,7 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
         for (PageBean pageBean : mThemeBean.pageList) {
             files.add(EncodeHelper.md5(pageBean.imageurl) + ".0");
             for (CellBean cellBean : pageBean.cellList) {
-                files.add(EncodeHelper.md5(cellBean.imageurl1)+ ".0");
+                files.add(EncodeHelper.md5(cellBean.imageurl1) + ".0");
                 files.add(EncodeHelper.md5(cellBean.imageurl2) + ".0");
                 if (cellBean.subCells != null) {
                     for (CellBean subCell : cellBean.subCells) {
@@ -502,8 +486,8 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
 //                realFile = realFile.substring(0,realFile.lastIndexOf(".")-1);
             if (!files.contains(realFile)) {
                 FlyLog.d("删除多余文件：" + realFile);
-                if(!f.delete()){
-                   FlyLog.e("Delete file failed! file=%s",f.getAbsolutePath());
+                if (!f.delete()) {
+                    FlyLog.e("Delete file failed! file=%s", f.getAbsolutePath());
                 }
                 DiskCache.deleteFileSafely(f);
             }
@@ -542,6 +526,11 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
         }
 
         return value;
+    }
+
+    private static String SAVE_PATH = "file:///android_asset/zebra";
+    public static String getNativeFilePath(String imgUrl) {
+        return SAVE_PATH +File.separator+ EncodeHelper.md5(imgUrl) + ".0";
     }
 
 }
