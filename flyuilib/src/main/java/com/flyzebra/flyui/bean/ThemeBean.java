@@ -40,4 +40,8 @@ public class ThemeBean {
                 ", isMirror=" + isMirror +
                 '}';
     }
+
+    public boolean isValid() {
+        return true;
+    }
 }

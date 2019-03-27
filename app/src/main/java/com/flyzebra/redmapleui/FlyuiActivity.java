@@ -6,22 +6,24 @@ import android.os.Bundle;
 import com.flyzebra.flyui.FlyuiAction;
 import com.flyzebra.flyui.bean.Action;
 import com.flyzebra.flyui.bean.ThemeBean;
+import com.flyzebra.flyui.chache.DiskCache;
+import com.flyzebra.flyui.chache.IDiskCache;
+import com.flyzebra.flyui.chache.IUpdataVersion;
+import com.flyzebra.flyui.chache.UpdataVersion;
 import com.flyzebra.flyui.module.FlyAction;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.themeview.ThemeView;
-import com.flyzebra.redmapleui.network.ApiAction;
-import com.flyzebra.redmapleui.network.ApiActionlmpl;
-
-import rx.Subscriber;
 
 /**
  * Author FlyZebra
  * 2019/3/20 10:55
  * Describ:
  **/
-public class FlyuiActivity extends Activity implements FlyuiAction {
+public class FlyuiActivity extends Activity implements FlyuiAction,IUpdataVersion.CheckCacheResult, IUpdataVersion.UpResult {
 
     private ThemeView mThemeView;
+    public IUpdataVersion iUpDataVersion;
+    public IDiskCache iDiskCache;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,26 +32,9 @@ public class FlyuiActivity extends Activity implements FlyuiAction {
         mThemeView = new ThemeView(this);
         setContentView(mThemeView);
         mThemeView.onCreate(this);
-
-        ApiAction apiActionlmpl = new ApiActionlmpl();
-
-        apiActionlmpl.doTheme("Launcher-AP1", new Subscriber<ThemeBean>() {
-            @Override
-            public void onCompleted() {
-                FlyLog.d();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                FlyLog.d(e.toString());
-            }
-
-            @Override
-            public void onNext(ThemeBean themeBean) {
-                FlyLog.v("ThemeBean=%s", themeBean);
-                mThemeView.upData(themeBean);
-            }
-        });
+        iDiskCache = new DiskCache().init(this);
+        iUpDataVersion = new UpdataVersion(getApplicationContext(), iDiskCache);
+        iUpDataVersion.getCacheData(this);
     }
 
     @Override
@@ -71,5 +56,31 @@ public class FlyuiActivity extends Activity implements FlyuiAction {
             default:
                 break;
         }
+    }
+
+    @Override
+    public void upVersionOK(ThemeBean themeBean) {
+        mThemeView.upData(themeBean);
+    }
+
+    @Override
+    public void upVesionProgress(String msg, int sum, int progress) {
+
+    }
+
+    @Override
+    public void upVersionFaile(String error) {
+
+    }
+
+    @Override
+    public void getCacheDataOK(ThemeBean themeBean) {
+        mThemeView.upData(themeBean);
+        iUpDataVersion.forceUpVersion(this);
+    }
+
+    @Override
+    public void getCacheDataFaile(String error) {
+        iUpDataVersion.forceUpVersion(this);
     }
 }

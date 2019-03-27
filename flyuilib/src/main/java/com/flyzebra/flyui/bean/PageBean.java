@@ -5,6 +5,7 @@ import java.util.List;
 
 public class PageBean implements Cloneable{
     public int columns = 0;
+    public String imageurl;
     public int rows = 0;
     public int itemPadding = 0;
     public int itemWidth= 0;

@@ -18,7 +18,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.flyzebra.flyui.bean.CellBean;
-import com.flyzebra.flyui.utils.CommondUtils;
+import com.flyzebra.flyui.utils.IntentUtils;
 import com.flyzebra.flyui.view.customview.FlyImageView;
 import com.flyzebra.flyui.view.customview.FlyTextView;
 import com.flyzebra.flyui.view.customview.MirrorView;
@@ -135,10 +135,10 @@ public class MirrorCellView extends FrameLayout implements ICell, View.OnTouchLi
 //                FlyLog.d("start app by jancarManager failed!");
 //            }
 //        }
-        if (CommondUtils.execStartPackage(getContext(), appInfo.launchAction, appInfo.acceptAction))
+        if (IntentUtils.execStartPackage(getContext(), appInfo.launchAction, appInfo.acceptAction))
             return;
-        if (CommondUtils.execStartActivity(getContext(), appInfo.event)) return;
-        if (!CommondUtils.execStartPackage(getContext(), appInfo.launchAction)) {
+        if (IntentUtils.execStartActivity(getContext(), appInfo.event)) return;
+        if (!IntentUtils.execStartPackage(getContext(), appInfo.launchAction)) {
 //            Toast.makeText(getContext(), getContext().getResources().getString(R.string.startAppFailed), Toast.LENGTH_SHORT).show();
         }
     }

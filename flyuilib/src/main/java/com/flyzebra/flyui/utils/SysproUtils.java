@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 
 /**
  */
-public class SystemProperties {
+public class SysproUtils {
 
     /**
      * 系统属性相关常量

@@ -152,7 +152,7 @@ public class ThemeView extends FrameLayout implements ITheme {
                     pagesView.setPageTransformer(true, null);
                     break;
             }
-//            pagesView.setOffscreenPageLimit(10);
+            pagesView.setOffscreenPageLimit(10);
             pagesView.upData(mThemeBean);
         }
 
@@ -187,8 +187,10 @@ public class ThemeView extends FrameLayout implements ITheme {
 
     @Override
     public void upData(ThemeBean themeBean) {
-        FlyLog.d();
+        FlyLog.d("upData");
+        removeAllViews();
         FlyClass.clear();
+        FlyAction.clear();
         mThemeBean = themeBean;
         matchResolution();
         upView();

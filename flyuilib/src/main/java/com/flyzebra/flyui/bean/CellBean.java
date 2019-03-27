@@ -1,5 +1,7 @@
 package com.flyzebra.flyui.bean;
 
+import java.util.List;
+
 public class CellBean implements Cloneable{
     public String flyAction = "";
     public String launchAction = "";
@@ -20,6 +22,7 @@ public class CellBean implements Cloneable{
     public int y = 0;
     public int width = 0;
     public int height = 0;
+    public List<CellBean> subCells;
 
     @Override
     protected Object clone() throws CloneNotSupportedException {

@@ -1,4 +1,4 @@
-package com.flyzebra.flyui.utils;
+package com.flyzebra.flyui.module;
 
 import android.annotation.TargetApi;
 import android.app.Activity;

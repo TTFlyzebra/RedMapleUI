@@ -15,7 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.flyzebra.flyui.R;
-import com.flyzebra.flyui.utils.BlurDrawable;
+import com.flyzebra.flyui.module.BlurDrawable;
 
 import java.util.List;
 

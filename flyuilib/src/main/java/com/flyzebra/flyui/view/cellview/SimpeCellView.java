@@ -18,8 +18,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.flyzebra.flyui.bean.CellBean;
-import com.flyzebra.flyui.utils.CommondUtils;
 import com.flyzebra.flyui.utils.FlyLog;
+import com.flyzebra.flyui.utils.IntentUtils;
 import com.flyzebra.flyui.view.customview.FlyImageView;
 import com.flyzebra.flyui.view.customview.FlyTextView;
 import com.flyzebra.flyui.view.customview.MirrorView;
@@ -132,10 +132,10 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
 //                FlyLog.d("start app by jancarManager failed!");
 //            }
 //        }
-        if (CommondUtils.execStartPackage(getContext(), mCellBean.launchAction, mCellBean.acceptAction))
+        if (IntentUtils.execStartPackage(getContext(), mCellBean.launchAction, mCellBean.acceptAction))
             return;
-        if (CommondUtils.execStartActivity(getContext(), mCellBean.event)) return;
-        if (!CommondUtils.execStartPackage(getContext(), mCellBean.launchAction)) {
+        if (IntentUtils.execStartActivity(getContext(), mCellBean.event)) return;
+        if (!IntentUtils.execStartPackage(getContext(), mCellBean.launchAction)) {
 //            Toast.makeText(getContext(), getContext().getResources().getString(R.string.startAppFailed), Toast.LENGTH_SHORT).show();
         }
     }

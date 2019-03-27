@@ -124,16 +124,20 @@ public class PagesViewPager extends BaseViewPager {
                     setCurrentItem(pageList.size() - 2, false);
                     for (int i = 0; i < getCount(); i++) {
                         View view = getChildAt(i);
-                        view.setTranslationX(0);
-                        view.setRotation(0);
+                        if (view != null) {
+                            view.setTranslationX(0);
+                            view.setRotation(0);
+                        }
                     }
                 }
                 if (pageList != null && position == pageList.size() - 1 && pageList.size() > 1) {
                     setCurrentItem(1, false);
                     for (int i = 0; i < getCount(); i++) {
                         View view = getChildAt(i);
-                        view.setTranslationX(0);
-                        view.setRotation(0);
+                        if (view != null) {
+                            view.setTranslationX(0);
+                            view.setRotation(0);
+                        }
                     }
                 }
             } catch (Exception e) {
