@@ -314,6 +314,18 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
         final List<PageBean> pageList = themeBean.pageList;
         mDownImageList.clear();
         addDownImageUrl(mThemeBean.imageurl);
+        if(mThemeBean.topPage!=null&&mThemeBean.topPage.cellList!=null){
+            for(CellBean cellBean:mThemeBean.topPage.cellList){
+                addDownImageUrl(cellBean.imageurl1);
+                addDownImageUrl(cellBean.imageurl2);
+                if (cellBean.subCells != null) {
+                    for (CellBean subCell : cellBean.subCells) {
+                        addDownImageUrl(subCell.imageurl1);
+                        addDownImageUrl(subCell.imageurl2);
+                    }
+                }
+            }
+        }
         for (PageBean pageBean : pageList) {
             addDownImageUrl(pageBean.imageurl);
             for (CellBean cellBean : pageBean.cellList) {
@@ -465,6 +477,18 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
 
         if (mThemeBean.pageList == null) return;
         files.add(EncodeHelper.md5(mThemeBean.imageurl) + ".0");
+        if(mThemeBean.topPage!=null&&mThemeBean.topPage.cellList!=null){
+            for(CellBean cellBean:mThemeBean.topPage.cellList){
+                files.add(EncodeHelper.md5(cellBean.imageurl1) + ".0");
+                files.add(EncodeHelper.md5(cellBean.imageurl2) + ".0");
+                if (cellBean.subCells != null) {
+                    for (CellBean subCell : cellBean.subCells) {
+                        files.add(EncodeHelper.md5(subCell.imageurl1) + ".0");
+                        files.add(EncodeHelper.md5(subCell.imageurl2) + ".0");
+                    }
+                }
+            }
+        }
         for (PageBean pageBean : mThemeBean.pageList) {
             files.add(EncodeHelper.md5(pageBean.imageurl) + ".0");
             for (CellBean cellBean : pageBean.cellList) {

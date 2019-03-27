@@ -222,8 +222,12 @@ public class MediaInfoCellView extends FrameLayout implements ICell, View.OnClic
     }
 
     private void upWidgetView() {
+        if(mSession==null){
+            FlyLog.e("mSession is null");
+            return;
+        }
         switch (mSession) {
-            case Page.PAGE_FM:
+            case "fm":
                 mViewMusic.setVisibility(View.GONE);
                 mViewFm.setVisibility(View.VISIBLE);
                 fmTv01.setText(fmText);
@@ -231,8 +235,8 @@ public class MediaInfoCellView extends FrameLayout implements ICell, View.OnClic
                 fmTv03.setText(fmKz);
                 FlyLog.d("upWidgetView fm");
                 break;
-            case Page.PAGE_A2DP:
-            case Page.PAGE_MUSIC:
+            case "a2dp":
+            case "music":
                 mViewMusic.setVisibility(View.VISIBLE);
                 mViewFm.setVisibility(View.GONE);
                 //更新标题
