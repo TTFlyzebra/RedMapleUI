@@ -56,8 +56,6 @@ public class HttpDownFile {
                 }
                 out.flush();
                 flag = true;
-            } else {
-                flag = false;
             }
         } catch (final IOException e) {
             flag = false;
@@ -165,7 +163,6 @@ public class HttpDownFile {
 
                             //FlyLog.d("downloadImg: read data continue");
                             readRetryCount = 0;
-                            continue;
                         }else{
                             //所有数据读取成功
                             FlyLog.d("downloadImg: read data success");
@@ -182,7 +179,6 @@ public class HttpDownFile {
                             }catch (Exception ee){
                                 FlyLog.d("downloadImg: sleep error");
                             }
-                            continue;
                         }else{
                             FlyLog.e("downloadImg: read data Exception");
                             e.printStackTrace();
@@ -197,7 +193,6 @@ public class HttpDownFile {
                 FlyLog.e("downloadImg: response is error");
             }
         } catch (Exception e) {
-            flag = false;
             e.printStackTrace();
             FlyLog.e("downloadImg: Exception %s", e);
         } finally {

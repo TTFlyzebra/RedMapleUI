@@ -464,6 +464,7 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
         files.add(EncodeHelper.md5(TEMPLATE_KEY) + ".0");
 
         if (mThemeBean.pageList == null) return;
+        files.add(EncodeHelper.md5(mThemeBean.imageurl) + ".0");
         for (PageBean pageBean : mThemeBean.pageList) {
             files.add(EncodeHelper.md5(pageBean.imageurl) + ".0");
             for (CellBean cellBean : pageBean.cellList) {

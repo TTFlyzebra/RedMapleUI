@@ -146,7 +146,7 @@ public class DiskCache implements IDiskCache {
                 return false;
             }
             outputStream = editor.newOutputStream(0);
-            if (HttpDownFile.downUrlToStream(task, imgUrl, outputStream, 512 * 1024)) {
+            if (HttpDownFile.downUrlToStream(task, imgUrl, outputStream, 1024 * 1024)) {
                 editor.commit();
             } else {
                 editor.abort();

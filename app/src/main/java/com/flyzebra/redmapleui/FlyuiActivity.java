@@ -2,6 +2,7 @@ package com.flyzebra.redmapleui;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import com.flyzebra.flyui.FlyuiAction;
 import com.flyzebra.flyui.bean.Action;
@@ -11,7 +12,9 @@ import com.flyzebra.flyui.chache.IDiskCache;
 import com.flyzebra.flyui.chache.IUpdataVersion;
 import com.flyzebra.flyui.chache.UpdataVersion;
 import com.flyzebra.flyui.module.FlyAction;
+import com.flyzebra.flyui.utils.AppUtil;
 import com.flyzebra.flyui.utils.FlyLog;
+import com.flyzebra.flyui.utils.SysproUtils;
 import com.flyzebra.flyui.view.themeview.ThemeView;
 
 /**
@@ -33,7 +36,18 @@ public class FlyuiActivity extends Activity implements FlyuiAction,IUpdataVersio
         setContentView(mThemeView);
         mThemeView.onCreate(this);
         iDiskCache = new DiskCache().init(this);
-        iUpDataVersion = new UpdataVersion(getApplicationContext(), iDiskCache);
+        iUpDataVersion = new UpdataVersion(getApplicationContext(), iDiskCache){
+            @Override
+            public void initApi() {
+                String url = SysproUtils.get(FlyuiActivity.this, SysproUtils.Property.URL_BASE, "http://192.168.1.119:801/uiweb");
+                String areaCode = SysproUtils.get(FlyuiActivity.this, SysproUtils.Property.AREA_CODE, "0");
+                String version = AppUtil.getVersionName(FlyuiActivity.this);
+                token = "12345678";
+                ApiUrl = TextUtils.isEmpty(url) ? "http://192.168.1.119:801/uiweb" : url;
+                ApiVersion = "/api/version?areaCode=" + areaCode + "&type=launcher&version=" + version;
+                ApiTheme = "/api/app?areaCode=" + areaCode + "&type=launcher&version=" + version;
+            }
+        };
         iUpDataVersion.getCacheData(this);
     }
 
