@@ -80,8 +80,8 @@ public class ThemeView extends FrameLayout implements ITheme {
         if (mThemeBean.right <= mThemeBean.left || mThemeBean.bottom <= mThemeBean.top) {
             mThemeBean.left = 0;
             mThemeBean.top = 0;
-            mThemeBean.right = (int) screenWidth;
-            mThemeBean.bottom = (int) screenHeigh;
+            mThemeBean.right = mThemeBean.screenWidth;
+            mThemeBean.bottom = mThemeBean.screenHeight;
         }
 
         //如果设置的有效区域无效，设置有效区域为全屏
@@ -148,7 +148,7 @@ public class ThemeView extends FrameLayout implements ITheme {
 
             }
             LayoutParams lp = new LayoutParams(mThemeBean.right - mThemeBean.left, mThemeBean.bottom - mThemeBean.top);
-            lp.leftMargin = mThemeBean.left;
+            lp.setMarginStart(mThemeBean.left);
             lp.topMargin = mThemeBean.top;
             addView(pagesView, lp);
             switch (mThemeBean.animType) {
