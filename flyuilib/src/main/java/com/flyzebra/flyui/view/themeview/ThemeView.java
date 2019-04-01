@@ -101,8 +101,8 @@ public class ThemeView extends FrameLayout implements ITheme {
         }
 
         screenScacle = Math.min(wScale, hScale);
-        int moveX = (int) ((screenWidth / screenScacle - mThemeBean.screenWidth) / 2);
-        int moveY = (int) ((screenHeigh / screenScacle - mThemeBean.screenHeight) / 2);
+        int moveX = (int) ((screenWidth - mThemeBean.screenWidth * screenScacle) / 2);
+        int moveY = (int) ((screenHeigh - mThemeBean.screenHeight * screenScacle) / 2);
 
         mThemeBean.left = (int) (mThemeBean.left * screenScacle) + moveX;
         mThemeBean.top = (int) (mThemeBean.top * screenScacle) + moveY;
@@ -117,6 +117,11 @@ public class ThemeView extends FrameLayout implements ITheme {
                     cellBean.y = (int) (cellBean.y * screenScacle) + moveY - mThemeBean.top;
                     cellBean.width = (int) (cellBean.width * screenScacle);
                     cellBean.height = (int) (cellBean.height * screenScacle);
+                    cellBean.textSize = (int) (cellBean.textSize * screenScacle);
+                    cellBean.textLeft = (int) (cellBean.textLeft * screenScacle);
+                    cellBean.textTop = (int) (cellBean.textTop * screenScacle);
+                    cellBean.textRight = (int) (cellBean.textRight * screenScacle);
+                    cellBean.textBottom = (int) (cellBean.textBottom * screenScacle);
                 }
             }
             if (mThemeBean.topPage != null && mThemeBean.topPage.cellList != null) {
@@ -125,6 +130,11 @@ public class ThemeView extends FrameLayout implements ITheme {
                     cellBean.y = (int) (cellBean.y * screenScacle) + moveY;
                     cellBean.width = (int) (cellBean.width * screenScacle);
                     cellBean.height = (int) (cellBean.height * screenScacle);
+                    cellBean.textSize = (int) (cellBean.textSize * screenScacle);
+                    cellBean.textLeft = (int) (cellBean.textLeft * screenScacle);
+                    cellBean.textTop = (int) (cellBean.textTop * screenScacle);
+                    cellBean.textRight = (int) (cellBean.textRight * screenScacle);
+                    cellBean.textBottom = (int) (cellBean.textBottom * screenScacle);
                 }
             }
         }
@@ -171,14 +181,14 @@ public class ThemeView extends FrameLayout implements ITheme {
 
     @Override
     public void onCreate(Context context) {
-        if(context instanceof FlyuiAction){
+        if (context instanceof FlyuiAction) {
             FlyAction.register((FlyuiAction) context);
         }
     }
 
     @Override
     public void onDestory() {
-        if(mContext instanceof FlyuiAction){
+        if (mContext instanceof FlyuiAction) {
             FlyAction.unregister((FlyuiAction) mContext);
         }
         FlyClass.clear();

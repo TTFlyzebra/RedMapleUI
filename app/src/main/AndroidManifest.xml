@@ -17,6 +17,7 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity android:name=".FlyuiActivity"
             android:launchMode="singleInstance"
+            android:screenOrientation="landscape"
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
             <intent-filter>
