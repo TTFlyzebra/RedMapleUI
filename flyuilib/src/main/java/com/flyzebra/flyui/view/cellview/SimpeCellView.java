@@ -36,16 +36,7 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
 
 
     public SimpeCellView(Context context) {
-        this(context, null);
-    }
-
-    public SimpeCellView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
-    }
-
-    @SuppressLint("WrongConstant")
-    public SimpeCellView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+        super(context);
         initView(context);
         focusChange(false);
     }
@@ -72,7 +63,6 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
             imageView.setLayoutParams(params);
         }
 
-        textView.setGravity(Gravity.CENTER);
         try {
             textView.setTextColor(Color.parseColor(cellBean.textColor));
         } catch (Exception e) {
@@ -93,16 +83,27 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
 
     @Override
     public void upView() {
-        if (textView != null && mCellBean != null && mCellBean.textTitle != null) {
+        if (mCellBean == null) {
+            FlyLog.e("error! beacuse cellBean is empey!");
+            return;
+        }
+        if (textView != null && mCellBean.textTitle != null) {
             textView.setText(mCellBean.textTitle.getText());
         }
-        if (imageView == null||TextUtils.isEmpty(mCellBean.imageurl1)) return;
+        if (imageView == null || TextUtils.isEmpty(mCellBean.imageurl1)) {
+            try {
+                setBackgroundColor(Color.parseColor(mCellBean.backcolor));
+            } catch (Exception e) {
+                FlyLog.e("error! parseColor exception!"+e.toString());
+            }
+            return;
+        }
         String imageurl = UpdataVersion.getNativeFilePath(mCellBean.imageurl1);
-        FlyLog.d("glide image url="+imageurl);
+        FlyLog.d("glide image url=" + imageurl);
         Glide.with(getContext())
                 .load(imageurl)
                 .asBitmap()
-                .override(mCellBean.width,mCellBean.height)
+                .override(mCellBean.width, mCellBean.height)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
@@ -169,10 +170,8 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
         if (flag) {
             mHandler.removeCallbacks(show);
             mHandler.postDelayed(show, 300);
-//            imageView.setAlpha(clickAlpha);
             imageView.setColorFilter(0x3FFFFFFF);
         } else {
-//            imageView.setAlpha(normalAlphe);
             imageView.clearColorFilter();
         }
     }
@@ -198,8 +197,7 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
         int top = location[1];
         int right = left + view.getMeasuredWidth();
         int bottom = top + view.getMeasuredHeight();
-        if (y >= top && y <= bottom && x >= left
-                && x <= right) {
+        if (y >= top && y <= bottom && x >= left && x <= right) {
             return true;
         }
         return false;

@@ -11,8 +11,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.flyzebra.flyui.ActionKey;
+import com.flyzebra.flyui.FlyuiAction;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.chache.UpdataVersion;
+import com.flyzebra.flyui.module.FlyAction;
 import com.flyzebra.flyui.module.FlyClass;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.base.BaseView;
@@ -36,17 +39,11 @@ public class PagesNavCellView extends BaseView implements ICell, ViewPager.OnPag
     private Bitmap nav_off;
 
     public PagesNavCellView(Context context) {
-        this(context, null);
-    }
-
-    public PagesNavCellView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
-    }
-
-    public PagesNavCellView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+        super(context);
         initView(context);
     }
+
+
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -123,7 +120,7 @@ public class PagesNavCellView extends BaseView implements ICell, ViewPager.OnPag
         Glide.with(getContext())
                 .load(UpdataVersion.getNativeFilePath(mCellBean.imageurl1))
                 .asBitmap()
-                .override(mCellBean.width,mCellBean.height)
+                .override(mCellBean.width, mCellBean.height)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
@@ -138,7 +135,7 @@ public class PagesNavCellView extends BaseView implements ICell, ViewPager.OnPag
         Glide.with(getContext())
                 .load(UpdataVersion.getNativeFilePath(mCellBean.imageurl2))
                 .asBitmap()
-                .override(mCellBean.width,mCellBean.height)
+                .override(mCellBean.width, mCellBean.height)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
@@ -216,4 +213,5 @@ public class PagesNavCellView extends BaseView implements ICell, ViewPager.OnPag
     public void onPageScrollStateChanged(int i) {
 
     }
+
 }

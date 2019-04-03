@@ -8,5 +8,5 @@ import com.flyzebra.flyui.bean.Action;
  * Describ:
  **/
 public interface FlyuiAction {
-    void onAction(Action action);
+    void onAction(int key,Object obj);
 }

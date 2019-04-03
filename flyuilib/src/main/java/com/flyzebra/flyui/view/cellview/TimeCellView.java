@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.LinearLayout;
@@ -13,6 +12,7 @@ import android.widget.TextView;
 import com.flyzebra.flyui.R;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.utils.FlyLog;
+import com.flyzebra.flyui.view.base.BaseImageCellView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -21,20 +21,12 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class TimeCellView extends StaticCellView {
+public class TimeCellView extends BaseImageCellView {
     private TextView timeView, dateView, weekView;
     private LinearLayout rootLayout;
 
     public TimeCellView(Context context) {
         super(context);
-    }
-
-    public TimeCellView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public TimeCellView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
     }
 
     @Override

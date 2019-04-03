@@ -41,7 +41,7 @@ public class FlyOkHttp implements IHttp {
     /**
      * 跟主线程通信用
      */
-    private Context mContext;
+//    private Context mContext;
     private Handler mHandler = new Handler(Looper.getMainLooper());
     /**
      * SSL
@@ -61,18 +61,11 @@ public class FlyOkHttp implements IHttp {
         return MyOkHttpHolder.sInstance;
     }
 
-    /**
-     * @param context
-     */
-    public void init(Context context) {
-        mContext = context;
-    }
 
     public OkHttpClient getHttpClient() {
         if (mOkHttpClient == null) {
             synchronized (FlyOkHttp.class) {
                 OkHttpClient.Builder builder = new OkHttpClient.Builder()
-                        .cache(new Cache(getDiskCacheDir("okhttp"), 50 * 1024 * 1024))
                         .connectTimeout(30, TimeUnit.SECONDS)
                         .readTimeout(30, TimeUnit.SECONDS);
 //                builder.connectionSpecs(Collections.singletonList(spec));
@@ -206,20 +199,6 @@ public class FlyOkHttp implements IHttp {
         if (set != null) {
             set.remove(call);
         }
-    }
-
-    public File getDiskCacheDir(String uniqueName) {
-        String cachePath;
-        try {
-            if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) || !Environment.isExternalStorageRemovable()) {
-                cachePath = mContext.getExternalCacheDir().getPath();
-            } else {
-                cachePath = mContext.getCacheDir().getPath();
-            }
-        } catch (Exception e) {
-            cachePath = mContext.getCacheDir().getPath();
-        }
-        return new File(cachePath + File.separator + uniqueName);
     }
 
     public void sendResult(final HttpResult result, final Object object, int type) {

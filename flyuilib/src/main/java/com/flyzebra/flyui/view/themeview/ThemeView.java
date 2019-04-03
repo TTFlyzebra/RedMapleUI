@@ -192,6 +192,7 @@ public class ThemeView extends FrameLayout implements ITheme {
             FlyAction.unregister((FlyuiAction) mContext);
         }
         FlyClass.clear();
+        FlyAction.clear();
     }
 
 

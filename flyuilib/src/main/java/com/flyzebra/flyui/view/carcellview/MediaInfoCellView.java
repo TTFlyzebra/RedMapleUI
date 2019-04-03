@@ -54,15 +54,7 @@ public class MediaInfoCellView extends FrameLayout implements ICell, View.OnClic
     private ImageView musicId3img,fmimg;
 
     public MediaInfoCellView(Context context) {
-        this(context, null);
-    }
-
-    public MediaInfoCellView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
-    }
-
-    public MediaInfoCellView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+        super(context);
         initView(context);
     }
 

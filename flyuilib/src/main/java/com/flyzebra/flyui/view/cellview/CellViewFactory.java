@@ -3,8 +3,6 @@ package com.flyzebra.flyui.view.cellview;
 import android.content.Context;
 
 import com.flyzebra.flyui.bean.CellBean;
-import com.flyzebra.flyui.view.carcellview.MediaInfoCellView;
-import com.flyzebra.flyui.view.carcellview.RadioCellView;
 
 
 /**
@@ -20,23 +18,35 @@ public class CellViewFactory {
     public static ICell createView(Context context, CellBean appInfo) {
         ICell iCellView;
         switch (appInfo.celltype) {
-            case CellType.TYPE_BACKGROUND:
-                iCellView = new StaticCellView(context);
+            case CellType.TYPE_IMAGE:
+                iCellView = new ImageCellView(context);
                 break;
             case CellType.TYPE_APP_RADIO:
-                iCellView = new RadioCellView(context);
+                iCellView = new SimpeCellView(context);
                 break;
             case CellType.TYPE_APP_TIME:
                 iCellView = new TimeCellView(context);
                 break;
             case CellType.TYPE_APP_MEDIA:
-                iCellView = new MediaInfoCellView(context);
+                iCellView = new SimpeCellView(context);
                 break;
             case CellType.TYPE_APP_MIRRORIMG:
                 iCellView = new MirrorCellView(context);
                 break;
             case CellType.TYPE_APP_NAV:
                 iCellView = new PagesNavCellView(context);
+                break;
+            case CellType.TYPE_KEY_VIEW:
+                iCellView = new SimpeCellView(context);
+                break;
+            case CellType.TYPE_POP_MENU:
+                iCellView = new PopmenuCellView(context);
+                break;
+            case CellType.TYPE_SWITH_MENU:
+                iCellView = new SimpeCellView(context);
+                break;
+            case CellType.TYPE_TEXT:
+                iCellView = new TextCellView(context);
                 break;
             case CellType.TYPE_APP_NORMAL:
             default:

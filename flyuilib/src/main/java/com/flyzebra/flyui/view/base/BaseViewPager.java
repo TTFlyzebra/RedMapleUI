@@ -16,10 +16,6 @@ public class BaseViewPager extends ViewPager {
         super(context);
     }
 
-    public BaseViewPager( Context context,  AttributeSet attrs) {
-        super(context, attrs);
-    }
-
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();

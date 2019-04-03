@@ -24,11 +24,7 @@ public class PagesViewPager extends BaseViewPager {
     private MyPgaeAdapter myPgaeAdapter = new MyPgaeAdapter();
 
     public PagesViewPager(Context context) {
-        this(context, null);
-    }
-
-    public PagesViewPager(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        super(context);
         init(context);
     }
 

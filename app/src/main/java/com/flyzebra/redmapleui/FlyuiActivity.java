@@ -57,7 +57,7 @@ public class FlyuiActivity extends Activity implements FlyuiAction, IUpdataVersi
 
     @Override
     protected void onStart() {
-        FlyAction.notifyAction(new Action());
+        FlyAction.notifyAction(1, null);
         super.onStart();
     }
 
@@ -70,8 +70,8 @@ public class FlyuiActivity extends Activity implements FlyuiAction, IUpdataVersi
     }
 
     @Override
-    public void onAction(Action action) {
-        switch (action.key) {
+    public void onAction(int key, Object object) {
+        switch (key) {
             default:
                 break;
         }
@@ -106,14 +106,17 @@ public class FlyuiActivity extends Activity implements FlyuiAction, IUpdataVersi
     private void upView(ThemeBean themeBean) {
         mThemeView.upData(themeBean);
         if (TextUtils.isEmpty(themeBean.imageurl)) {
-           getWindow().getDecorView().setBackground(null);
+            getWindow().getDecorView().setBackground(null);
         } else {
-            Glide.with(this).load(themeBean.imageurl).override(1024,600).into(new SimpleTarget<GlideDrawable>() {
-                @Override
-                public void onResourceReady(GlideDrawable glideDrawable, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                    getWindow().getDecorView().setBackground(glideDrawable);
-                }
-            });
+            Glide.with(this)
+                    .load(themeBean.imageurl)
+                    .override(1024, 600)
+                    .into(new SimpleTarget<GlideDrawable>() {
+                        @Override
+                        public void onResourceReady(GlideDrawable glideDrawable, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                            getWindow().getDecorView().setBackground(glideDrawable);
+                        }
+                    });
         }
     }
 }

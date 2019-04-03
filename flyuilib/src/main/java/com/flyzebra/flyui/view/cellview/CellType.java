@@ -4,7 +4,7 @@ public interface CellType {
     /**
      *背景图片
      */
-    int TYPE_BACKGROUND = 0;
+    int TYPE_IMAGE = 0;
     /**
      * 普通应用
      */
@@ -29,4 +29,21 @@ public interface CellType {
      * 导航条
      */
     int TYPE_APP_NAV = 6;
+    /**
+     * 可产生按键事件
+     */
+    int TYPE_KEY_VIEW = 7;
+    /**
+     * 弹出菜单
+     */
+    int TYPE_POP_MENU = 8;
+    /**
+     * 可根据条件变化的控件
+     */
+    int TYPE_SWITH_MENU = 9;
+
+    /**
+     * 可根据条件变化的控件
+     */
+    int TYPE_TEXT = 10;
 }

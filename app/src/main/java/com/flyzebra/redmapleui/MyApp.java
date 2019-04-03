@@ -13,6 +13,5 @@ public class MyApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        FlyOkHttp.getInstance().init(this);
     }
 }

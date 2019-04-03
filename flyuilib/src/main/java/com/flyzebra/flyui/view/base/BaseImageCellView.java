@@ -1,4 +1,4 @@
-package com.flyzebra.flyui.view.cellview;
+package com.flyzebra.flyui.view.base;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -13,26 +13,20 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.chache.UpdataVersion;
+import com.flyzebra.flyui.view.cellview.ICell;
 import com.flyzebra.flyui.view.customview.FlyImageView;
 import com.flyzebra.flyui.view.customview.MirrorView;
 
-public class StaticCellView extends FrameLayout implements ICell {
+public class BaseImageCellView extends FrameLayout implements ICell {
     protected CellBean mCellBean;
     private FlyImageView imageView;
     private MirrorView mirrorView;
 
-    public StaticCellView(Context context) {
-        this(context, null);
-    }
-
-    public StaticCellView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
-    }
-
-    public StaticCellView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    public BaseImageCellView(Context context) {
+        super(context);
         initView(context);
     }
+
 
     @Override
     public void initView(Context context) {

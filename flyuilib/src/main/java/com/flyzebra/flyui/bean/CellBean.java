@@ -3,16 +3,17 @@ package com.flyzebra.flyui.bean;
 import java.util.List;
 
 public class CellBean implements Cloneable{
-    public String flyAction = "";
-    public String launchAction = "";
-    public String acceptAction = "";
-    public String event = "";
-    public String imageurl1 = "";
-    public String imageurl2 ="";
+    public String flyAction;
+    public String launchAction;
+    public String acceptAction;
+    public String event;
+    public String imageurl1;
+    public String imageurl2;
+    public String backcolor;
     public int celltype = 0;
     public LanguageText textTitle;
     public int textSize = 0;
-    public String textColor = "";
+    public String textColor;
     public int textLeft = 0;
     public int textRight = 0;
     public int textTop = 0;

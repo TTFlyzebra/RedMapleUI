@@ -36,19 +36,11 @@ public class MirrorCellView extends FrameLayout implements ICell, View.OnTouchLi
 
 
     public MirrorCellView(Context context) {
-        this(context, null);
-    }
-
-    public MirrorCellView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
-    }
-
-    @SuppressLint("WrongConstant")
-    public MirrorCellView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+        super(context);
         initView(context);
         focusChange(false);
     }
+
 
     @Override
     public void initView(Context context) {
@@ -131,14 +123,6 @@ public class MirrorCellView extends FrameLayout implements ICell, View.OnTouchLi
      */
     @Override
     public void doEvent() {
-//        if (!TextUtils.isEmpty(appInfo.flyAction) && jancarManager != null) {
-//            if (jancarManager.requestPage(appInfo.flyAction)) {
-//                FlyLog.d("start app by jancarManager id=%s", appInfo.flyAction);
-//                return;
-//            } else {
-//                FlyLog.d("start app by jancarManager failed!");
-//            }
-//        }
         if (IntentUtils.execStartPackage(getContext(), mCellBean.launchAction, mCellBean.acceptAction))
             return;
         if (IntentUtils.execStartActivity(getContext(), mCellBean.event)) return;

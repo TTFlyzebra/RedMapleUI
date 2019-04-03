@@ -53,14 +53,14 @@ public class FlyAction {
         flyuiEvents.clear();
     }
 
-    public static void notifyAction(Action action) {
-        getInstance().notifyAll(action);
+    public static void notifyAction(int key,Object obj) {
+        getInstance().notifyAll(key,obj);
     }
 
-    private void notifyAll(Action action) {
+    private void notifyAll(int key,Object obj) {
         FlyLog.d("flyuiEvents size=%d",flyuiEvents.size());
         for (FlyuiAction flyuiAction : flyuiEvents) {
-            flyuiAction.onAction(action);
+            flyuiAction.onAction(key,null);
         }
     }
 

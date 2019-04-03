@@ -30,14 +30,6 @@ public class RadioCellView extends SimpeCellView {
         super(context);
     }
 
-    public RadioCellView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public RadioCellView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-    }
-
     @Override
     public void initView(Context context) {
         super.initView(context);
