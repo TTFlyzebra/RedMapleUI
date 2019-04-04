@@ -122,6 +122,15 @@ public class ThemeView extends FrameLayout implements ITheme {
                     cellBean.textTop = (int) (cellBean.textTop * screenScacle);
                     cellBean.textRight = (int) (cellBean.textRight * screenScacle);
                     cellBean.textBottom = (int) (cellBean.textBottom * screenScacle);
+                    if (cellBean.subCells != null && cellBean.subCells.size() > 0) {
+                        for (CellBean subCellBean : cellBean.subCells) {
+                            subCellBean.x = (int) (subCellBean.x * screenScacle);
+                            subCellBean.y = (int) (subCellBean.y * screenScacle);
+                            subCellBean.width = (int) (subCellBean.width * screenScacle);
+                            subCellBean.height = (int) (subCellBean.height * screenScacle);
+                            subCellBean.textSize = (int) (subCellBean.textSize * screenScacle);
+                        }
+                    }
                 }
             }
             if (mThemeBean.topPage != null && mThemeBean.topPage.cellList != null) {
@@ -135,6 +144,15 @@ public class ThemeView extends FrameLayout implements ITheme {
                     cellBean.textTop = (int) (cellBean.textTop * screenScacle);
                     cellBean.textRight = (int) (cellBean.textRight * screenScacle);
                     cellBean.textBottom = (int) (cellBean.textBottom * screenScacle);
+                    if (cellBean.subCells != null && cellBean.subCells.size() > 0) {
+                        for (CellBean subCellBean : cellBean.subCells) {
+                            subCellBean.x = (int) (subCellBean.x * screenScacle);
+                            subCellBean.y = (int) (subCellBean.y * screenScacle);
+                            subCellBean.width = (int) (subCellBean.width * screenScacle);
+                            subCellBean.height = (int) (subCellBean.height * screenScacle);
+                            subCellBean.textSize = (int) (subCellBean.textSize * screenScacle);
+                        }
+                    }
                 }
             }
         }

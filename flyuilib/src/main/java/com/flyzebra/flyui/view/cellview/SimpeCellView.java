@@ -99,7 +99,7 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
             return;
         }
         String imageurl = UpdataVersion.getNativeFilePath(mCellBean.imageurl1);
-        FlyLog.d("glide image url=" + imageurl);
+        FlyLog.v("glide image url=" + imageurl);
         Glide.with(getContext())
                 .load(imageurl)
                 .asBitmap()

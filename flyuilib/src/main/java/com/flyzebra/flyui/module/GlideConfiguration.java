@@ -17,7 +17,7 @@ public class GlideConfiguration implements GlideModule {
     public void applyOptions(Context context, GlideBuilder builder) {
         // Apply options to the builder here.
         //设置图片显示格式
-        builder.setDecodeFormat(DecodeFormat.PREFER_ARGB_8888);
+//        builder.setDecodeFormat(DecodeFormat.PREFER_ARGB_8888);
         //设置内存缓存大小
 //        builder.setMemoryCache(new LruResourceCache(50*1024*1024));
         //设置对像池大小

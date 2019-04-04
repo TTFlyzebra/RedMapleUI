@@ -5,16 +5,21 @@ import android.graphics.Color;
 import android.util.TypedValue;
 import android.view.Gravity;
 
+import com.flyzebra.flyui.FlyuiAction;
 import com.flyzebra.flyui.bean.CellBean;
+import com.flyzebra.flyui.module.FlyAction;
+import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.customview.FlyTextView;
 import com.flyzebra.flyui.view.customview.MirrorView;
+
+import java.util.Map;
 
 /**
  * Author FlyZebra
  * 2019/4/3 16:22
  * Describ:
  **/
-public class TextCellView extends FlyTextView implements ICell {
+public class TextCellView extends FlyTextView implements ICell,FlyuiAction {
     public CellBean mCellBean;
     public TextCellView(Context context) {
         super(context);
@@ -50,5 +55,27 @@ public class TextCellView extends FlyTextView implements ICell {
     @Override
     public void bindMirrorView(MirrorView mirrorView) {
 
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        FlyAction.register(this);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        FlyAction.unregister(this);
+        super.onDetachedFromWindow();
+    }
+
+    @Override
+    public void onAction(int key, Object obj) {
+        FlyLog.d("key=%d,obj="+obj,key);
+        switch (key){
+            case 1:
+                setText((String)obj);
+                break;
+        }
     }
 }

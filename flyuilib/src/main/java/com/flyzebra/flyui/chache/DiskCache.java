@@ -296,7 +296,7 @@ public class DiskCache implements IDiskCache {
                 e.printStackTrace();
             }
         }
-        FlyLog.d("保存磁盘缓存数据key=" + key + ",成功=" + flag + ",jsonStr" + str);
+        FlyLog.v("保存磁盘缓存数据key=" + key + ",成功=" + flag + ",jsonStr" + str);
         return flag;
     }
 

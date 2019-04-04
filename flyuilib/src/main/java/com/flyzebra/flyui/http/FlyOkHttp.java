@@ -100,7 +100,7 @@ public class FlyOkHttp implements IHttp {
                     removeCallSet(call, tag);
                     String res = response.body().string();
                     sendResult(result, res, OK);
-                    FlyLog.d("getString->onResponse:res=" + res);
+                    FlyLog.v("getString->onResponse:res=" + res);
                 }
             });
         } catch (Exception e) {
