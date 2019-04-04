@@ -3,6 +3,7 @@ package com.flyzebra.music;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.flyzebra.flyui.Flyui;
@@ -46,8 +47,15 @@ public class MusicActivity extends BaseActivity implements FlyuiAction,IMusicPla
 
     @Override
     public void onAction(int key, Object obj) {
+        FlyLog.d("onAction key=%d",key);
         switch (key) {
-            case 0:
+            case 11:
+                if(musicPlayer.isPlaying()){
+                    musicPlayer.pause();
+                }else{
+                    musicPlayer.start();
+                }
+                break;
             default:
                 break;
         }
@@ -131,7 +139,6 @@ public class MusicActivity extends BaseActivity implements FlyuiAction,IMusicPla
         switch (statu) {
             case MusicPlayer.STATUS_COMPLETED:
             case MusicPlayer.STATUS_STARTPLAY:
-                FlyAction.notifyAction(1,musicPlayer.getPlayUrl());
                 break;
             case MusicPlayer.STATUS_PLAYING:
                 break;
@@ -140,10 +147,19 @@ public class MusicActivity extends BaseActivity implements FlyuiAction,IMusicPla
             case MusicPlayer.STATUS_IDLE:
                 break;
         }
+        FlyAction.notifyAction(1,musicPlayer.getPlayUrl());
     }
 
     @Override
     public void loopStatusChange(int staut) {
 
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction()==MotionEvent.ACTION_DOWN){
+            FlyLog.d("dispatchTouchEvent");
+        }
+        return super.dispatchTouchEvent(ev);
     }
 }

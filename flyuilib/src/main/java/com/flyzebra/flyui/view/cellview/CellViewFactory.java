@@ -3,6 +3,7 @@ package com.flyzebra.flyui.view.cellview;
 import android.content.Context;
 
 import com.flyzebra.flyui.bean.CellBean;
+import com.flyzebra.flyui.view.base.BaseImageCellView;
 
 
 /**

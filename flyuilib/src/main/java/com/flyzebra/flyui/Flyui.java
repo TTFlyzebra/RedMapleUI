@@ -9,6 +9,7 @@ import com.flyzebra.flyui.chache.DiskCache;
 import com.flyzebra.flyui.chache.IDiskCache;
 import com.flyzebra.flyui.chache.IUpdataVersion;
 import com.flyzebra.flyui.chache.UpdataVersion;
+import com.flyzebra.flyui.module.FlyAction;
 import com.flyzebra.flyui.utils.AppUtil;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.utils.SysproUtils;
@@ -33,6 +34,7 @@ public class Flyui implements FlyuiAction, IUpdataVersion.CheckCacheResult, IUpd
         mThemeView = new ThemeView(activity);
         activity.setContentView(mThemeView);
         mThemeView.onCreate(activity);
+        FlyAction.register(this);
         iDiskCache = new DiskCache().init(activity);
         iUpDataVersion = new UpdataVersion(activity.getApplicationContext(), iDiskCache) {
             @Override
@@ -51,12 +53,14 @@ public class Flyui implements FlyuiAction, IUpdataVersion.CheckCacheResult, IUpd
 
     public void onDestroy() {
         FlyLog.d();
+        FlyAction.unregister(this);
         mThemeView.onDestory();
         iUpDataVersion.cancelAllTasks();
     }
 
     @Override
     public void onAction(int key, Object object) {
+        FlyLog.d("onAction key=%d",key);
         if(activity instanceof FlyuiAction){
             ((FlyuiAction) activity).onAction(key,object);
         }

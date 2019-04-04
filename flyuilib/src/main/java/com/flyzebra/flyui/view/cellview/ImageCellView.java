@@ -18,12 +18,13 @@ import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.customview.FlyImageView;
 import com.flyzebra.flyui.view.customview.MirrorView;
 
-public class ImageCellView extends FlyImageView implements ICell {
+public class ImageCellView extends FlyImageView implements ICell,View.OnClickListener {
     protected CellBean mCellBean;
     private MirrorView mirrorView;
 
     public ImageCellView(Context context) {
         super(context);
+        setOnClickListener(this);
     }
 
 
@@ -35,7 +36,7 @@ public class ImageCellView extends FlyImageView implements ICell {
     public void upData(CellBean appInfo) {
         this.mCellBean = appInfo;
         if(!TextUtils.isEmpty(mCellBean.event)){
-            this.setOnClickListener(new OnClickListener() {
+            setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     doEvent();
@@ -85,4 +86,9 @@ public class ImageCellView extends FlyImageView implements ICell {
         this.mirrorView = mirrorView;
     }
 
+    @Override
+    public void onClick(View v) {
+        FlyLog.d("test iamge onclick-----------------");
+        doEvent();
+    }
 }

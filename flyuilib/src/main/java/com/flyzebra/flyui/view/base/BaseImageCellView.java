@@ -3,7 +3,7 @@ package com.flyzebra.flyui.view.base;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
-import android.util.AttributeSet;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -13,6 +13,8 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.chache.UpdataVersion;
+import com.flyzebra.flyui.module.FlyAction;
+import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.cellview.ICell;
 import com.flyzebra.flyui.view.customview.FlyImageView;
 import com.flyzebra.flyui.view.customview.MirrorView;
@@ -33,11 +35,17 @@ public class BaseImageCellView extends FrameLayout implements ICell {
         imageView = new FlyImageView(context);
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
         addView(imageView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+        setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                doEvent();
+            }
+        });
     }
 
     @Override
-    public void upData(CellBean appInfo) {
-        this.mCellBean = appInfo;
+    public void upData(CellBean cellBean) {
+        this.mCellBean = cellBean;
     }
 
     @Override
@@ -64,6 +72,12 @@ public class BaseImageCellView extends FrameLayout implements ICell {
 
     @Override
     public void doEvent() {
+        FlyLog.d("doEvent event="+mCellBean.event);
+        switch (mCellBean.event) {
+            case "PLAY":
+                FlyAction.notifyAction(10, null);
+                break;
+        }
     }
 
     @Override

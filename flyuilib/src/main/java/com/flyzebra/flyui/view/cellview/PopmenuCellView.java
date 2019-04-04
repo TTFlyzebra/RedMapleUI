@@ -3,6 +3,7 @@ package com.flyzebra.flyui.view.cellview;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import com.flyzebra.flyui.bean.CellBean;

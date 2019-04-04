@@ -61,36 +61,36 @@ public class TimeCellView extends BaseImageCellView {
     }
 
     @Override
-    public void upData(CellBean appInfo) {
-        this.mCellBean = appInfo;
+    public void upData(CellBean cellBean) {
+        this.mCellBean = cellBean;
 
-        rootLayout.setPadding(appInfo.textLeft, appInfo.textTop, appInfo.textRight, appInfo.textBottom);
+        rootLayout.setPadding(cellBean.textLeft, cellBean.textTop, cellBean.textRight, cellBean.textBottom);
 
         int color = 0xFFFFFFFF;
         try {
-            color = Color.parseColor(appInfo.textColor);
+            color = Color.parseColor(cellBean.textColor);
         } catch (Exception e) {
             color = 0xFFFFFFFF;
         }
-        int margin = (appInfo.height - appInfo.textSize * 3 - appInfo.textBottom - appInfo.textTop) / 6;
+        int margin = (cellBean.height - cellBean.textSize * 3 - cellBean.textBottom - cellBean.textTop) / 6;
         LinearLayout.LayoutParams tlp = (LinearLayout.LayoutParams) timeView.getLayoutParams();
-        tlp.height = (int) (appInfo.textSize * 1.5f);
+        tlp.height = (int) (cellBean.textSize * 1.5f);
         tlp.setMargins(0, margin, 0, margin);
         timeView.setLayoutParams(tlp);
         LinearLayout.LayoutParams wlp = (LinearLayout.LayoutParams) weekView.getLayoutParams();
-        wlp.height = (int) (appInfo.textSize / 2 * 1.5f);
+        wlp.height = (int) (cellBean.textSize / 2 * 1.5f);
         wlp.setMargins(0, margin, 0, margin);
         weekView.setLayoutParams(wlp);
         LinearLayout.LayoutParams dlp = (LinearLayout.LayoutParams) dateView.getLayoutParams();
-        dlp.height = (int) (appInfo.textSize / 2 * 1.5f);
+        dlp.height = (int) (cellBean.textSize / 2 * 1.5f);
         dlp.setMargins(0, margin, 0, margin);
         dateView.setLayoutParams(dlp);
         timeView.setTextColor(color);
-        timeView.setTextSize(TypedValue.COMPLEX_UNIT_PX, appInfo.textSize);
+        timeView.setTextSize(TypedValue.COMPLEX_UNIT_PX, cellBean.textSize);
         weekView.setTextColor(color);
-        weekView.setTextSize(TypedValue.COMPLEX_UNIT_PX, appInfo.textSize * 32 / 64);
+        weekView.setTextSize(TypedValue.COMPLEX_UNIT_PX, cellBean.textSize * 32 / 64);
         dateView.setTextColor(color);
-        dateView.setTextSize(TypedValue.COMPLEX_UNIT_PX, appInfo.textSize * 32 / 64);
+        dateView.setTextSize(TypedValue.COMPLEX_UNIT_PX, cellBean.textSize * 32 / 64);
     }
 
     private static String getCurrentDate(String dateFormat) {

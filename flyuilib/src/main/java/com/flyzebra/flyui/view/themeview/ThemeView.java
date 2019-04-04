@@ -24,7 +24,7 @@ import com.flyzebra.flyui.view.pageview.SimplePageView;
  * 2019/3/20 14:26
  * Describ:
  **/
-public class ThemeView extends FrameLayout implements ITheme {
+public class ThemeView extends FrameLayout implements ITheme,FlyuiAction {
     private Context mContext;
     private ThemeBean mThemeBean;
     private float screenWidth = 1024;
@@ -218,8 +218,6 @@ public class ThemeView extends FrameLayout implements ITheme {
     public void upData(ThemeBean themeBean) {
         FlyLog.d("upData");
         removeAllViews();
-        FlyClass.clear();
-        FlyAction.clear();
         mThemeBean = themeBean;
         matchResolution();
         upView();
@@ -238,5 +236,10 @@ public class ThemeView extends FrameLayout implements ITheme {
         if (pagesView != null) {
             pagesView.selectCell(cell);
         }
+    }
+
+    @Override
+    public void onAction(int key, Object obj) {
+
     }
 }
