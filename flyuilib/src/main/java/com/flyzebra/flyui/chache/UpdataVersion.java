@@ -131,7 +131,11 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
         String mThemeBeanJson = iDiskCache.getString(TEMPLATE_KEY);
         if (TextUtils.isEmpty(mThemeBeanJson)) {
             mThemeBeanJson = getAssetsFileString(TEMPLATE_KEY);
-            SAVE_PATH = "file:///android_asset/zebra";
+            if(TextUtils.isEmpty(mThemeBeanJson)){
+                SAVE_PATH = "file://" + iDiskCache.getSavePath();
+            }else{
+                SAVE_PATH = "file:///android_asset/zebra";
+            }
         } else {
             SAVE_PATH = "file://" + iDiskCache.getSavePath();
         }
@@ -539,7 +543,7 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
             is = mContext.getAssets().open(ASSETS_PATH + EncodeHelper.md5(key) + ".0");
             value = FileUtil.readFile(is);
         } catch (IOException e) {
-            e.printStackTrace();
+            FlyLog.e("getAssets failed!");
         } finally {
             if (is != null) {
                 try {

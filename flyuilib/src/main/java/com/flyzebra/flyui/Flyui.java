@@ -1,7 +1,6 @@
 package com.flyzebra.flyui;
 
 import android.app.Activity;
-import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.flyzebra.flyui.bean.ThemeBean;
@@ -10,6 +9,7 @@ import com.flyzebra.flyui.chache.IDiskCache;
 import com.flyzebra.flyui.chache.IUpdataVersion;
 import com.flyzebra.flyui.chache.UpdataVersion;
 import com.flyzebra.flyui.module.FlyAction;
+import com.flyzebra.flyui.module.FlyClass;
 import com.flyzebra.flyui.utils.AppUtil;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.utils.SysproUtils;
@@ -20,7 +20,7 @@ import com.flyzebra.flyui.view.themeview.ThemeView;
  * 2019/4/4 11:31
  * Describ:
  **/
-public class Flyui implements FlyuiAction, IUpdataVersion.CheckCacheResult, IUpdataVersion.UpResult {
+public class Flyui implements IUpdataVersion.CheckCacheResult, IUpdataVersion.UpResult {
     private Activity activity;
     private ThemeView mThemeView;
     private IUpdataVersion iUpDataVersion;
@@ -30,11 +30,14 @@ public class Flyui implements FlyuiAction, IUpdataVersion.CheckCacheResult, IUpd
         this.activity = activity;
     }
 
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate() {
+        FlyLog.d("onCreate");
         mThemeView = new ThemeView(activity);
         activity.setContentView(mThemeView);
         mThemeView.onCreate(activity);
-        FlyAction.register(this);
+        if(activity instanceof FlyuiAction){
+            FlyAction.register((FlyuiAction) activity);
+        }
         iDiskCache = new DiskCache().init(activity);
         iUpDataVersion = new UpdataVersion(activity.getApplicationContext(), iDiskCache) {
             @Override
@@ -52,19 +55,16 @@ public class Flyui implements FlyuiAction, IUpdataVersion.CheckCacheResult, IUpd
     }
 
     public void onDestroy() {
-        FlyLog.d();
-        FlyAction.unregister(this);
+        FlyLog.d("onDestroy");
+        if(activity instanceof FlyuiAction){
+            FlyAction.unregister((FlyuiAction) activity);
+        }
         mThemeView.onDestory();
         iUpDataVersion.cancelAllTasks();
+        FlyClass.clear();
+        FlyAction.clear();
     }
 
-    @Override
-    public void onAction(int key, Object object) {
-        FlyLog.d("onAction key=%d",key);
-        if(activity instanceof FlyuiAction){
-            ((FlyuiAction) activity).onAction(key,object);
-        }
-    }
 
     @Override
     public void upVersionOK(ThemeBean themeBean) {

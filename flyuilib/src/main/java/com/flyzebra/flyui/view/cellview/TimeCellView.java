@@ -64,7 +64,7 @@ public class TimeCellView extends BaseImageCellView {
     public void upData(CellBean cellBean) {
         this.mCellBean = cellBean;
 
-        rootLayout.setPadding(cellBean.textLeft, cellBean.textTop, cellBean.textRight, cellBean.textBottom);
+        rootLayout.setPadding(cellBean.mLeft, cellBean.mTop, cellBean.mRight, cellBean.mBottom);
 
         int color = 0xFFFFFFFF;
         try {
@@ -72,7 +72,7 @@ public class TimeCellView extends BaseImageCellView {
         } catch (Exception e) {
             color = 0xFFFFFFFF;
         }
-        int margin = (cellBean.height - cellBean.textSize * 3 - cellBean.textBottom - cellBean.textTop) / 6;
+        int margin = (cellBean.height - cellBean.textSize * 3 - cellBean.mBottom - cellBean.mTop) / 6;
         LinearLayout.LayoutParams tlp = (LinearLayout.LayoutParams) timeView.getLayoutParams();
         tlp.height = (int) (cellBean.textSize * 1.5f);
         tlp.setMargins(0, margin, 0, margin);

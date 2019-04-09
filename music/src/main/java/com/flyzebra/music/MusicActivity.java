@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MotionEvent;
-import android.view.View;
 
+import com.flyzebra.flyui.ActionKey;
 import com.flyzebra.flyui.Flyui;
 import com.flyzebra.flyui.FlyuiAction;
 import com.flyzebra.flyui.module.FlyAction;
@@ -33,7 +33,7 @@ public class MusicActivity extends BaseActivity implements FlyuiAction,IMusicPla
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         flyui = new Flyui(this);
-        flyui.onCreate(savedInstanceState);
+        flyui.onCreate();
         musicPlayer.addListener(this);
     }
 
@@ -49,12 +49,18 @@ public class MusicActivity extends BaseActivity implements FlyuiAction,IMusicPla
     public void onAction(int key, Object obj) {
         FlyLog.d("onAction key=%d",key);
         switch (key) {
-            case 11:
+            case ActionKey.KEY_PLAY:
                 if(musicPlayer.isPlaying()){
                     musicPlayer.pause();
                 }else{
                     musicPlayer.start();
                 }
+                break;
+            case ActionKey.KEY_NEXT:
+                musicPlayer.playNext();
+                break;
+            case ActionKey.KEY_PREV:
+                musicPlayer.playPrev();
                 break;
             default:
                 break;
@@ -92,6 +98,17 @@ public class MusicActivity extends BaseActivity implements FlyuiAction,IMusicPla
         FlyLog.d("scanFinish path=%s", path);
         if (isStop) return;
         super.scanFinish(path);
+        try{
+            final int i = musicPlayer.getPlayPos();
+            if(i>=0&&i<musicList.size()){
+                Music music = musicList.get(i);
+                FlyAction.notifyAction(ActionKey.MUSIC_NAME,music.name);
+                FlyAction.notifyAction(ActionKey.MUSIC_ALBUM,music.album);
+                FlyAction.notifyAction(ActionKey.MUSIC_ARTIST,music.artist);
+            }
+        }catch (Exception e){
+            FlyLog.e(e.toString());
+        }
     }
 
     @Override
@@ -147,7 +164,17 @@ public class MusicActivity extends BaseActivity implements FlyuiAction,IMusicPla
             case MusicPlayer.STATUS_IDLE:
                 break;
         }
-        FlyAction.notifyAction(1,musicPlayer.getPlayUrl());
+        try{
+            final int i = musicPlayer.getPlayPos();
+            if(i>=0&&i<musicList.size()){
+                Music music = musicList.get(i);
+                FlyAction.notifyAction(ActionKey.MUSIC_NAME,music.name);
+                FlyAction.notifyAction(ActionKey.MUSIC_ALBUM,music.album);
+                FlyAction.notifyAction(ActionKey.MUSIC_ARTIST,music.artist);
+            }
+        }catch (Exception e){
+            FlyLog.e(e.toString());
+        }
     }
 
     @Override

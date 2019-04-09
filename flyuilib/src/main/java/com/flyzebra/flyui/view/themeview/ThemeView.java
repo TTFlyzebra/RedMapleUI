@@ -12,8 +12,6 @@ import com.flyzebra.flyui.FlyuiAction;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.PageBean;
 import com.flyzebra.flyui.bean.ThemeBean;
-import com.flyzebra.flyui.module.FlyAction;
-import com.flyzebra.flyui.module.FlyClass;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.pageanimtor.PageTransformerCube;
 import com.flyzebra.flyui.view.pageanimtor.PageTransformerPage;
@@ -118,10 +116,10 @@ public class ThemeView extends FrameLayout implements ITheme,FlyuiAction {
                     cellBean.width = (int) (cellBean.width * screenScacle);
                     cellBean.height = (int) (cellBean.height * screenScacle);
                     cellBean.textSize = (int) (cellBean.textSize * screenScacle);
-                    cellBean.textLeft = (int) (cellBean.textLeft * screenScacle);
-                    cellBean.textTop = (int) (cellBean.textTop * screenScacle);
-                    cellBean.textRight = (int) (cellBean.textRight * screenScacle);
-                    cellBean.textBottom = (int) (cellBean.textBottom * screenScacle);
+                    cellBean.mLeft = (int) (cellBean.mLeft * screenScacle);
+                    cellBean.mTop = (int) (cellBean.mTop * screenScacle);
+                    cellBean.mRight = (int) (cellBean.mRight * screenScacle);
+                    cellBean.mBottom = (int) (cellBean.mBottom * screenScacle);
                     if (cellBean.subCells != null && cellBean.subCells.size() > 0) {
                         for (CellBean subCellBean : cellBean.subCells) {
                             subCellBean.x = (int) (subCellBean.x * screenScacle);
@@ -140,10 +138,10 @@ public class ThemeView extends FrameLayout implements ITheme,FlyuiAction {
                     cellBean.width = (int) (cellBean.width * screenScacle);
                     cellBean.height = (int) (cellBean.height * screenScacle);
                     cellBean.textSize = (int) (cellBean.textSize * screenScacle);
-                    cellBean.textLeft = (int) (cellBean.textLeft * screenScacle);
-                    cellBean.textTop = (int) (cellBean.textTop * screenScacle);
-                    cellBean.textRight = (int) (cellBean.textRight * screenScacle);
-                    cellBean.textBottom = (int) (cellBean.textBottom * screenScacle);
+                    cellBean.mLeft = (int) (cellBean.mLeft * screenScacle);
+                    cellBean.mTop = (int) (cellBean.mTop * screenScacle);
+                    cellBean.mRight = (int) (cellBean.mRight * screenScacle);
+                    cellBean.mBottom = (int) (cellBean.mBottom * screenScacle);
                     if (cellBean.subCells != null && cellBean.subCells.size() > 0) {
                         for (CellBean subCellBean : cellBean.subCells) {
                             subCellBean.x = (int) (subCellBean.x * screenScacle);
@@ -199,18 +197,10 @@ public class ThemeView extends FrameLayout implements ITheme,FlyuiAction {
 
     @Override
     public void onCreate(Context context) {
-        if (context instanceof FlyuiAction) {
-            FlyAction.register((FlyuiAction) context);
-        }
     }
 
     @Override
     public void onDestory() {
-        if (mContext instanceof FlyuiAction) {
-            FlyAction.unregister((FlyuiAction) mContext);
-        }
-        FlyClass.clear();
-        FlyAction.clear();
     }
 
 

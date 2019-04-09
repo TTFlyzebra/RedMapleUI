@@ -1,12 +1,10 @@
 package com.flyzebra.flyui.view.cellview;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -35,7 +33,6 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
     private TextView textView;
     private Handler mHandler = new Handler();
 
-
     public SimpeCellView(Context context) {
         super(context);
         initView(context);
@@ -49,8 +46,6 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
         addView(imageView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         textView = new FlyTextView(context);
         addView(textView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        setOnClickListener(this);
-        setOnTouchListener(this);
     }
 
     @Override
@@ -72,14 +67,16 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
         textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, cellBean.textSize);
         LayoutParams params2 = (LayoutParams) textView.getLayoutParams();
         params2.gravity = Gravity.BOTTOM;
-        params2.leftMargin = cellBean.textLeft;
-        params2.topMargin = cellBean.textTop;
-        params2.rightMargin = cellBean.textRight;
-        params2.bottomMargin = Math.max(0, cellBean.textBottom);
+        params2.leftMargin = cellBean.mLeft;
+        params2.topMargin = cellBean.mTop;
+        params2.rightMargin = cellBean.mRight;
+        params2.bottomMargin = Math.max(0, cellBean.mBottom);
         params2.height = (int) (cellBean.textSize * 2.5f);
         textView.setLayoutParams(params2);
         textView.setGravity(Gravity.CENTER);
         textView.setLines(2);
+        setOnClickListener(this);
+        setOnTouchListener(this);
     }
 
     @Override
@@ -133,7 +130,7 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
     public void doEvent() {
         if (IntentUtils.execStartPackage(getContext(), mCellBean.launchAction, mCellBean.acceptAction))
             return;
-        if (IntentUtils.execStartActivity(getContext(), mCellBean.event)) return;
+        if (IntentUtils.execStartActivity(getContext(), mCellBean.clickevent)) return;
         if (!IntentUtils.execStartPackage(getContext(), mCellBean.launchAction)) {
         }
     }
@@ -152,7 +149,7 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        switch (mCellBean.event){
+        switch (mCellBean.clickevent){
             case "PLAY":
                 FlyAction.notifyAction(11,null);
                 break;

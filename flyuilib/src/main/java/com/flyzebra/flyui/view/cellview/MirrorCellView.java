@@ -1,12 +1,10 @@
 package com.flyzebra.flyui.view.cellview;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -58,35 +56,35 @@ public class MirrorCellView extends FrameLayout implements ICell, View.OnTouchLi
     }
 
     @Override
-    public void upData(CellBean appInfo) {
-        this.mCellBean = appInfo;
-        if (appInfo.width > 0 || appInfo.height > 0) {
+    public void upData(CellBean cellBean) {
+        this.mCellBean = cellBean;
+        if (cellBean.width > 0 || cellBean.height > 0) {
             LayoutParams params1 = (LayoutParams) imageView.getLayoutParams();
-            params1.width = appInfo.width;
-            params1.height = appInfo.height;
+            params1.width = cellBean.width;
+            params1.height = cellBean.height;
             imageView.setLayoutParams(params1);
 
             LayoutParams params2 = (LayoutParams) mirrorImageView.getLayoutParams();
-            params2.width = appInfo.width;
-            params2.height = (int) (appInfo.height/2.5);
-            params2.topMargin = appInfo.height;
+            params2.width = cellBean.width;
+            params2.height = (int) (cellBean.height/2.5);
+            params2.topMargin = cellBean.height;
             mirrorImageView.setLayoutParams(params2);
         }
 
         textView.setGravity(Gravity.CENTER);
         try {
-            textView.setTextColor(Color.parseColor(appInfo.textColor));
+            textView.setTextColor(Color.parseColor(cellBean.textColor));
         } catch (Exception e) {
             textView.setTextColor(0xffffffff);
         }
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, appInfo.textSize);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, cellBean.textSize);
         LayoutParams params2 = (LayoutParams) textView.getLayoutParams();
         params2.gravity = Gravity.BOTTOM;
-        params2.leftMargin = appInfo.textLeft;
-        params2.topMargin = appInfo.textTop;
-        params2.rightMargin = appInfo.textRight;
-        params2.bottomMargin = Math.max(0, appInfo.textBottom);
-        params2.height = (int) (appInfo.textSize * 2.5f);
+        params2.leftMargin = cellBean.mLeft;
+        params2.topMargin = cellBean.mTop;
+        params2.rightMargin = cellBean.mRight;
+        params2.bottomMargin = Math.max(0, cellBean.mBottom);
+        params2.height = (int) (cellBean.textSize * 2.5f);
         textView.setLayoutParams(params2);
         textView.setGravity(Gravity.CENTER);
         textView.setLines(2);
@@ -125,7 +123,7 @@ public class MirrorCellView extends FrameLayout implements ICell, View.OnTouchLi
     public void doEvent() {
         if (IntentUtils.execStartPackage(getContext(), mCellBean.launchAction, mCellBean.acceptAction))
             return;
-        if (IntentUtils.execStartActivity(getContext(), mCellBean.event)) return;
+        if (IntentUtils.execStartActivity(getContext(), mCellBean.clickevent)) return;
         if (!IntentUtils.execStartPackage(getContext(), mCellBean.launchAction)) {
 //            Toast.makeText(getContext(), getContext().getResources().getString(R.string.startAppFailed), Toast.LENGTH_SHORT).show();
         }

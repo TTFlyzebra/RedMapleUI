@@ -1,7 +1,6 @@
 package com.flyzebra.flyui.module;
 
 import com.flyzebra.flyui.FlyuiAction;
-import com.flyzebra.flyui.bean.Action;
 import com.flyzebra.flyui.utils.FlyLog;
 
 import java.util.ArrayList;
@@ -25,9 +24,9 @@ public class FlyAction {
     }
 
     private void add(FlyuiAction flyuiAction) {
-        FlyLog.d("add action="+flyuiAction);
+        FlyLog.d("add action=" + flyuiAction);
         flyuiEvents.add(flyuiAction);
-        FlyLog.d("flyuiEvents size=%d",flyuiEvents.size());
+        FlyLog.d("flyuiEvents size=%d", flyuiEvents.size());
     }
 
     public static void unregister(FlyuiAction flyuiAction) {
@@ -35,9 +34,9 @@ public class FlyAction {
     }
 
     private void remove(FlyuiAction flyuiAction) {
-        FlyLog.d("remove action="+flyuiAction);
+        FlyLog.d("remove action=" + flyuiAction);
         flyuiEvents.remove(flyuiAction);
-        FlyLog.d("flyuiEvents size=%d",flyuiEvents.size());
+        FlyLog.d("flyuiEvents size=%d", flyuiEvents.size());
     }
 
     private static class FlyActionHolder {
@@ -53,14 +52,16 @@ public class FlyAction {
         flyuiEvents.clear();
     }
 
-    public static void notifyAction(int key,Object obj) {
-        getInstance().notifyAll(key,obj);
+    public static void notifyAction(int key, Object obj) {
+        getInstance().notifyAll(key, obj);
     }
 
-    private void notifyAll(int key,Object obj) {
-        FlyLog.d("flyuiEvents size=%d",flyuiEvents.size());
+    private void notifyAll(int key, Object obj) {
+        FlyLog.d("flyuiEvents size=%d", flyuiEvents.size());
+        FlyLog.d("notify key=%d,obj=%s,flyuiEvents size=%d", key,""+obj,flyuiEvents.size());
         for (FlyuiAction flyuiAction : flyuiEvents) {
-            flyuiAction.onAction(key,null);
+            FlyLog.d("flyuiEvents flyuiAction=" + flyuiAction);
+            flyuiAction.onAction(key, obj);
         }
     }
 

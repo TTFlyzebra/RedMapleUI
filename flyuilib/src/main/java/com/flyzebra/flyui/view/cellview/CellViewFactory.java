@@ -3,7 +3,6 @@ package com.flyzebra.flyui.view.cellview;
 import android.content.Context;
 
 import com.flyzebra.flyui.bean.CellBean;
-import com.flyzebra.flyui.view.base.BaseImageCellView;
 
 
 /**
@@ -16,9 +15,9 @@ public class CellViewFactory {
      *
      * @param context
      */
-    public static ICell createView(Context context, CellBean appInfo) {
+    public static ICell createView(Context context, CellBean cellBean) {
         ICell iCellView;
-        switch (appInfo.celltype) {
+        switch (cellBean.celltype) {
             case CellType.TYPE_IMAGE:
                 iCellView = new ImageCellView(context);
                 break;
@@ -54,7 +53,7 @@ public class CellViewFactory {
                 iCellView = new SimpeCellView(context);
                 break;
         }
-        iCellView.upData(appInfo);
+        iCellView.upData(cellBean);
         return iCellView;
     }
 

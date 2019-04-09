@@ -9,7 +9,6 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.flyzebra.flyui.FlyuiAction;
-import com.flyzebra.flyui.bean.Action;
 import com.flyzebra.flyui.bean.ThemeBean;
 import com.flyzebra.flyui.chache.DiskCache;
 import com.flyzebra.flyui.chache.IDiskCache;
@@ -49,7 +48,7 @@ public class FlyuiActivity extends Activity implements FlyuiAction, IUpdataVersi
                 token = "12345678";
                 ApiUrl = TextUtils.isEmpty(url) ? "http://192.168.1.119:801/uiweb" : url;
                 ApiVersion = "/api/version?areaCode=" + areaCode + "&type=launcher&version=" + version;
-                ApiTheme = "/api/app?areaCode=" + areaCode + "&type=launcher&version=" + version;
+                ApiTheme = "/api/app?appname=Launcher-AP1&areaCode=" + areaCode + "&type=launcher&version=" + version;
             }
         };
         iUpDataVersion.getCacheData(this);
@@ -100,6 +99,7 @@ public class FlyuiActivity extends Activity implements FlyuiAction, IUpdataVersi
 
     @Override
     public void getCacheDataFaile(String error) {
+        FlyLog.d("getCacheDataFaile");
         iUpDataVersion.forceUpVersion(this);
     }
 

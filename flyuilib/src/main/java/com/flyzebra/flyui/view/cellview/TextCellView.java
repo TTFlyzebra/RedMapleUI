@@ -12,15 +12,14 @@ import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.customview.FlyTextView;
 import com.flyzebra.flyui.view.customview.MirrorView;
 
-import java.util.Map;
-
 /**
  * Author FlyZebra
  * 2019/4/3 16:22
  * Describ:
  **/
-public class TextCellView extends FlyTextView implements ICell,FlyuiAction {
+public class TextCellView extends FlyTextView implements ICell, FlyuiAction {
     public CellBean mCellBean;
+
     public TextCellView(Context context) {
         super(context);
     }
@@ -39,7 +38,8 @@ public class TextCellView extends FlyTextView implements ICell,FlyuiAction {
             setTextColor(0xffffffff);
         }
         setTextSize(TypedValue.COMPLEX_UNIT_PX, cellBean.textSize);
-        setGravity(Gravity.START|Gravity.CENTER);
+        setGravity(Gravity.START | Gravity.CENTER);
+        setSingleLine();
     }
 
     @Override
@@ -71,11 +71,9 @@ public class TextCellView extends FlyTextView implements ICell,FlyuiAction {
 
     @Override
     public void onAction(int key, Object obj) {
-        FlyLog.d("key=%d,obj="+obj,key);
-        switch (key){
-            case 1:
-                setText((String)obj);
-                break;
+        FlyLog.d("key=%d,obj=" + obj, key);
+        if (key == mCellBean.recvAction) {
+            setText("" + obj);
         }
     }
 }

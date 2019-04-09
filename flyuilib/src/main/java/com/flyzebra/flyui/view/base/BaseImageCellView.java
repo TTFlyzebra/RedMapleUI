@@ -72,8 +72,8 @@ public class BaseImageCellView extends FrameLayout implements ICell {
 
     @Override
     public void doEvent() {
-        FlyLog.d("doEvent event="+mCellBean.event);
-        switch (mCellBean.event) {
+        FlyLog.d("doEvent event="+mCellBean.clickevent);
+        switch (mCellBean.clickevent) {
             case "PLAY":
                 FlyAction.notifyAction(10, null);
                 break;

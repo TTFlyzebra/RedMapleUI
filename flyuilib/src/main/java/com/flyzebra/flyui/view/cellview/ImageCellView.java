@@ -3,9 +3,8 @@ package com.flyzebra.flyui.view.cellview;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -18,31 +17,24 @@ import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.customview.FlyImageView;
 import com.flyzebra.flyui.view.customview.MirrorView;
 
-public class ImageCellView extends FlyImageView implements ICell,View.OnClickListener {
+public class ImageCellView extends FlyImageView implements ICell, View.OnTouchListener, View.OnClickListener {
     protected CellBean mCellBean;
     private MirrorView mirrorView;
 
     public ImageCellView(Context context) {
         super(context);
-        setOnClickListener(this);
+        initView(context);
     }
-
 
     @Override
     public void initView(Context context) {
     }
 
     @Override
-    public void upData(CellBean appInfo) {
-        this.mCellBean = appInfo;
-        if(!TextUtils.isEmpty(mCellBean.event)){
-            setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    doEvent();
-                }
-            });
-        }
+    public void upData(CellBean cellBean) {
+        this.mCellBean = cellBean;
+        setOnClickListener(this);
+        setOnTouchListener(this);
     }
 
     @Override
@@ -69,16 +61,10 @@ public class ImageCellView extends FlyImageView implements ICell,View.OnClickLis
 
     @Override
     public void doEvent() {
-        FlyLog.d("doEvent event="+mCellBean.event);
-        switch (mCellBean.event) {
-            case "PLAY":
-                FlyAction.notifyAction(10, null);
-                break;
+        FlyLog.d("doEvent event=" + mCellBean.clickevent);
+        if(mCellBean.sendAction>0){
+            FlyAction.notifyAction(mCellBean.sendAction, null);
         }
-    }
-
-    @Override
-    public void setOnClickListener(OnClickListener l) {
     }
 
     @Override
@@ -88,7 +74,12 @@ public class ImageCellView extends FlyImageView implements ICell,View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        FlyLog.d("test iamge onclick-----------------");
+        FlyLog.d("test image onclick-----------------");
         doEvent();
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        return false;
     }
 }
