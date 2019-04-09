@@ -47,7 +47,7 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
     private AtomicInteger mAtomicImgCount = new AtomicInteger(0);
     private String mThemeJson;
     private ThemeBean mThemeBean;
-    private String HTTPTAG = "UpdataVersion" + hashCode();
+    private String HTTPTAG = "UpdataVersion" + Math.random();
     private boolean isUpSuccess = true;
     private Handler mHandler = new Handler(Looper.getMainLooper());
 

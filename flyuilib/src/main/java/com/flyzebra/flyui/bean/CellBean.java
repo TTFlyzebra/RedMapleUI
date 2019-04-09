@@ -38,23 +38,23 @@ public class CellBean implements Cloneable{
     @Override
     public String toString() {
         return "CellBean{" +
-                "launchAction='" + launchAction + '\'' +
-                ", acceptAction='" + acceptAction + '\'' +
-                ", sendAction=" + sendAction +
-                ", recvAction=" + recvAction +
-                ", clickEvent='" + clickevent + '\'' +
-                ", imageurl1='" + imageurl1 + '\'' +
+                "imageurl1='" + imageurl1 + '\'' +
                 ", imageurl2='" + imageurl2 + '\'' +
                 ", backcolor='" + backcolor + '\'' +
                 ", celltype=" + celltype +
                 ", textTitle=" + textTitle +
                 ", textSize=" + textSize +
                 ", textColor='" + textColor + '\'' +
-                ", left=" + mLeft +
-                ", right=" + mRight +
-                ", top=" + mTop +
-                ", bottom=" + mBottom +
+                ", mLeft=" + mLeft +
+                ", mRight=" + mRight +
+                ", mTop=" + mTop +
+                ", mBottom=" + mBottom +
                 ", gravity=" + gravity +
+                ", launchAction='" + launchAction + '\'' +
+                ", acceptAction='" + acceptAction + '\'' +
+                ", sendAction=" + sendAction +
+                ", recvAction=" + recvAction +
+                ", clickevent='" + clickevent + '\'' +
                 ", x=" + x +
                 ", y=" + y +
                 ", width=" + width +

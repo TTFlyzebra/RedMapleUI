@@ -35,6 +35,7 @@ public class MusicActivity extends BaseActivity implements FlyuiAction,IMusicPla
         flyui = new Flyui(this);
         flyui.onCreate();
         musicPlayer.addListener(this);
+        getWindow().getDecorView().setBackgroundColor(0xFF000000);
     }
 
     @Override
@@ -50,19 +51,13 @@ public class MusicActivity extends BaseActivity implements FlyuiAction,IMusicPla
         FlyLog.d("onAction key=%d",key);
         switch (key) {
             case ActionKey.KEY_PLAY:
-                if(musicPlayer.isPlaying()){
-                    musicPlayer.pause();
-                }else{
-                    musicPlayer.start();
-                }
+                musicPlayer.playPause();
                 break;
             case ActionKey.KEY_NEXT:
                 musicPlayer.playNext();
                 break;
             case ActionKey.KEY_PREV:
                 musicPlayer.playPrev();
-                break;
-            default:
                 break;
         }
     }

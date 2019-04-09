@@ -2,6 +2,7 @@ package com.flyzebra.flyui.view.cellview;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,6 +29,7 @@ public class ImageCellView extends FlyImageView implements ICell, View.OnTouchLi
 
     @Override
     public void initView(Context context) {
+        focusChange(false);
     }
 
     @Override
@@ -35,6 +37,12 @@ public class ImageCellView extends FlyImageView implements ICell, View.OnTouchLi
         this.mCellBean = cellBean;
         setOnClickListener(this);
         setOnTouchListener(this);
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        focusChange(!enabled);
     }
 
     @Override
@@ -80,6 +88,60 @@ public class ImageCellView extends FlyImageView implements ICell, View.OnTouchLi
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                focusChange(true);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                focusChange(isTouchPointInView(v, (int) event.getRawX(), (int) event.getRawY()));
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                focusChange(false);
+                break;
+        }
         return false;
     }
+
+    private void focusChange(boolean flag) {
+        if (flag) {
+            mHandler.removeCallbacks(show);
+            mHandler.postDelayed(show, 300);
+            setColorFilter(0xFF0000FF);
+        } else {
+            clearColorFilter();
+        }
+    }
+
+    private boolean isTouchPointInView(View view, int x, int y) {
+        if (view == null) {
+            return false;
+        }
+        int[] location = new int[2];
+        view.getLocationOnScreen(location);
+        int left = location[0];
+        int top = location[1];
+        int right = left + view.getMeasuredWidth();
+        int bottom = top + view.getMeasuredHeight();
+        if (y >= top && y <= bottom && x >= left && x <= right) {
+            return true;
+        }
+        return false;
+    }
+
+    private Handler mHandler = new Handler();
+    private Runnable show = new Runnable() {
+        @Override
+        public void run() {
+            focusChange(false);
+        }
+    };
+
+    @Override
+    protected void onDetachedFromWindow() {
+        mHandler.removeCallbacksAndMessages(null);
+        focusChange(false);
+        super.onDetachedFromWindow();
+    }
+
 }

@@ -415,6 +415,15 @@ public class MusicPlayer implements IMusicPlayer,
         }
     }
 
+    @Override
+    public void playPause() {
+        if(isPlaying()){
+            pause();
+        }else{
+            start();
+        }
+    }
+
 
     @Override
     public void playSaveUrlByPath(String path) {

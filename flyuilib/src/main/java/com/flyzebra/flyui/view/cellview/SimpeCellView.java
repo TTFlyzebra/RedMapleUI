@@ -19,7 +19,6 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.chache.UpdataVersion;
-import com.flyzebra.flyui.module.FlyAction;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.utils.IntentUtils;
 import com.flyzebra.flyui.view.customview.FlyImageView;
@@ -149,11 +148,6 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        switch (mCellBean.clickevent){
-            case "PLAY":
-                FlyAction.notifyAction(11,null);
-                break;
-        }
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 focusChange(true);
