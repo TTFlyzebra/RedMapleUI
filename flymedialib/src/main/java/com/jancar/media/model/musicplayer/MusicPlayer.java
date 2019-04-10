@@ -424,6 +424,11 @@ public class MusicPlayer implements IMusicPlayer,
         }
     }
 
+    @Override
+    public int getPlayStatus() {
+        return mPlayStatus;
+    }
+
 
     @Override
     public void playSaveUrlByPath(String path) {

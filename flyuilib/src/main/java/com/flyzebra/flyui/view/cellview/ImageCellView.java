@@ -11,14 +11,17 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.flyzebra.flyui.ActionKey;
+import com.flyzebra.flyui.FlyuiAction;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.chache.UpdataVersion;
 import com.flyzebra.flyui.module.FlyAction;
+import com.flyzebra.flyui.status.PlayStatus;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.customview.FlyImageView;
 import com.flyzebra.flyui.view.customview.MirrorView;
 
-public class ImageCellView extends FlyImageView implements ICell, View.OnTouchListener, View.OnClickListener {
+public class ImageCellView extends FlyImageView implements ICell, FlyuiAction, View.OnTouchListener, View.OnClickListener {
     protected CellBean mCellBean;
     private MirrorView mirrorView;
 
@@ -30,13 +33,17 @@ public class ImageCellView extends FlyImageView implements ICell, View.OnTouchLi
     @Override
     public void initView(Context context) {
         focusChange(false);
+        setScaleType(ScaleType.CENTER);
     }
 
     @Override
     public void upData(CellBean cellBean) {
         this.mCellBean = cellBean;
-        setOnClickListener(this);
-        setOnTouchListener(this);
+        if (mCellBean.sendAction > 0) {
+            setOnClickListener(this);
+            setOnTouchListener(this);
+        }
+
     }
 
     @Override
@@ -47,10 +54,14 @@ public class ImageCellView extends FlyImageView implements ICell, View.OnTouchLi
 
     @Override
     public void upView() {
-        if (TextUtils.isEmpty(mCellBean.imageurl1)) return;
-        String imageurl = UpdataVersion.getNativeFilePath(mCellBean.imageurl1);
+        showImageUrl(mCellBean.imageurl1);
+    }
+
+    private void showImageUrl(String imageurl) {
+        if (TextUtils.isEmpty(imageurl)) return;
+        String url = UpdataVersion.getNativeFilePath(imageurl);
         Glide.with(getContext())
-                .load(imageurl)
+                .load(url)
                 .asBitmap()
                 .override(mCellBean.width, mCellBean.height)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -70,7 +81,7 @@ public class ImageCellView extends FlyImageView implements ICell, View.OnTouchLi
     @Override
     public void doEvent() {
         FlyLog.d("doEvent event=" + mCellBean.clickevent);
-        if(mCellBean.sendAction>0){
+        if (mCellBean.sendAction > 0) {
             FlyAction.notifyAction(mCellBean.sendAction, null);
         }
     }
@@ -82,8 +93,9 @@ public class ImageCellView extends FlyImageView implements ICell, View.OnTouchLi
 
     @Override
     public void onClick(View v) {
-        FlyLog.d("test image onclick-----------------");
+        setEnabled(false);
         doEvent();
+        setEnabled(true);
     }
 
     @Override
@@ -107,7 +119,7 @@ public class ImageCellView extends FlyImageView implements ICell, View.OnTouchLi
         if (flag) {
             mHandler.removeCallbacks(show);
             mHandler.postDelayed(show, 300);
-            setColorFilter(0xFF0000FF);
+            setColorFilter(0xFF0370E5);
         } else {
             clearColorFilter();
         }
@@ -137,11 +149,43 @@ public class ImageCellView extends FlyImageView implements ICell, View.OnTouchLi
         }
     };
 
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        FlyAction.register(this);
+    }
+
     @Override
     protected void onDetachedFromWindow() {
         mHandler.removeCallbacksAndMessages(null);
         focusChange(false);
+        FlyAction.unregister(this);
         super.onDetachedFromWindow();
     }
 
+    @Override
+    public void onAction(int key, Object obj) {
+        if (mCellBean.recvAction != key) return;
+        switch (mCellBean.recvAction) {
+            case ActionKey.STATUS_PLAY:
+                if (obj instanceof Integer) {
+                    int status = (int) obj;
+                    switchImage(status);
+                }
+                break;
+        }
+    }
+
+    private void switchImage(int status) {
+        switch (status) {
+            case PlayStatus.STATUS_STARTPLAY:
+            case PlayStatus.STATUS_PLAYING:
+                showImageUrl(mCellBean.imageurl2);
+                break;
+            default:
+                showImageUrl(mCellBean.imageurl1);
+                break;
+        }
+    }
 }

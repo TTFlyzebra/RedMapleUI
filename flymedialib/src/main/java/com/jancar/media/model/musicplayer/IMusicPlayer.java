@@ -59,4 +59,6 @@ public interface IMusicPlayer {
     void savePathUrl(String path);
 
     void playPause();
+
+    int getPlayStatus();
 }

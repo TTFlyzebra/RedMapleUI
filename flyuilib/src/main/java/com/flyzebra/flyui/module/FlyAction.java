@@ -52,6 +52,10 @@ public class FlyAction {
         flyuiEvents.clear();
     }
 
+    public static void notifyAction(int key) {
+        getInstance().notifyAll(key, null);
+    }
+
     public static void notifyAction(int key, Object obj) {
         getInstance().notifyAll(key, obj);
     }

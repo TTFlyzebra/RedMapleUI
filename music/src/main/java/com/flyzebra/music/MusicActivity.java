@@ -24,7 +24,7 @@ import java.util.List;
  * 2019/3/20 10:55
  * Describ:
  **/
-public class MusicActivity extends BaseActivity implements FlyuiAction,IMusicPlayerListener {
+public class MusicActivity extends BaseActivity implements FlyuiAction, IMusicPlayerListener {
     public Flyui flyui;
     protected IMusicPlayer musicPlayer = MusicPlayer.getInstance();
     public List<Music> musicList = new ArrayList<>();
@@ -48,7 +48,7 @@ public class MusicActivity extends BaseActivity implements FlyuiAction,IMusicPla
 
     @Override
     public void onAction(int key, Object obj) {
-        FlyLog.d("onAction key=%d",key);
+        FlyLog.d("onAction key=%d", key);
         switch (key) {
             case ActionKey.KEY_PLAY:
                 musicPlayer.playPause();
@@ -58,6 +58,20 @@ public class MusicActivity extends BaseActivity implements FlyuiAction,IMusicPla
                 break;
             case ActionKey.KEY_PREV:
                 musicPlayer.playPrev();
+                break;
+            case ActionKey.REFRESH:
+                try {
+                    final int i = musicPlayer.getPlayPos();
+                    if (i >= 0 && i < musicList.size()) {
+                        Music music = musicList.get(i);
+                        FlyAction.notifyAction(ActionKey.MUSIC_NAME, music.name);
+                        FlyAction.notifyAction(ActionKey.MUSIC_ALBUM, music.album);
+                        FlyAction.notifyAction(ActionKey.MUSIC_ARTIST, music.artist);
+                    }
+                    FlyAction.notifyAction(ActionKey.STATUS_PLAY, musicPlayer.getPlayStatus());
+                } catch (Exception e) {
+                    FlyLog.e(e.toString());
+                }
                 break;
         }
     }
@@ -93,15 +107,15 @@ public class MusicActivity extends BaseActivity implements FlyuiAction,IMusicPla
         FlyLog.d("scanFinish path=%s", path);
         if (isStop) return;
         super.scanFinish(path);
-        try{
+        try {
             final int i = musicPlayer.getPlayPos();
-            if(i>=0&&i<musicList.size()){
+            if (i >= 0 && i < musicList.size()) {
                 Music music = musicList.get(i);
-                FlyAction.notifyAction(ActionKey.MUSIC_NAME,music.name);
-                FlyAction.notifyAction(ActionKey.MUSIC_ALBUM,music.album);
-                FlyAction.notifyAction(ActionKey.MUSIC_ARTIST,music.artist);
+                FlyAction.notifyAction(ActionKey.MUSIC_NAME, music.name);
+                FlyAction.notifyAction(ActionKey.MUSIC_ALBUM, music.album);
+                FlyAction.notifyAction(ActionKey.MUSIC_ARTIST, music.artist);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             FlyLog.e(e.toString());
         }
     }
@@ -125,19 +139,15 @@ public class MusicActivity extends BaseActivity implements FlyuiAction,IMusicPla
     @Override
     public void musicID3UrlList(List<Music> musicUrlList) {
         if (isStop) return;
+        if (musicUrlList == null || musicUrlList.isEmpty()) {
+            return;
+        }
         try {
-            if (musicUrlList == null || musicUrlList.isEmpty()) {
-                return;
-            }
-            try {
-                for (int i = 0; i < musicUrlList.size(); i++) {
-                    int sort = musicUrlList.get(i).sort;
-                    musicList.get(sort).artist = musicUrlList.get(i).artist;
-                    musicList.get(sort).album = musicUrlList.get(i).album;
-                    musicList.get(sort).name = musicUrlList.get(i).name;
-                }
-            } catch (Exception e) {
-                FlyLog.e(e.toString());
+            for (int i = 0; i < musicUrlList.size(); i++) {
+                int sort = musicUrlList.get(i).sort;
+                musicList.get(sort).artist = musicUrlList.get(i).artist;
+                musicList.get(sort).album = musicUrlList.get(i).album;
+                musicList.get(sort).name = musicUrlList.get(i).name;
             }
         } catch (Exception e) {
             FlyLog.e(e.toString());
@@ -147,7 +157,7 @@ public class MusicActivity extends BaseActivity implements FlyuiAction,IMusicPla
 
     @Override
     public void playStatusChange(int statu) {
-        FlyLog.d("statu=%d",statu);
+        FlyLog.d("statu=%d", statu);
         switch (statu) {
             case MusicPlayer.STATUS_COMPLETED:
             case MusicPlayer.STATUS_STARTPLAY:
@@ -159,15 +169,16 @@ public class MusicActivity extends BaseActivity implements FlyuiAction,IMusicPla
             case MusicPlayer.STATUS_IDLE:
                 break;
         }
-        try{
+        try {
+            FlyAction.notifyAction(ActionKey.STATUS_PLAY, musicPlayer.getPlayStatus());
             final int i = musicPlayer.getPlayPos();
-            if(i>=0&&i<musicList.size()){
+            if (i >= 0 && i < musicList.size()) {
                 Music music = musicList.get(i);
-                FlyAction.notifyAction(ActionKey.MUSIC_NAME,music.name);
-                FlyAction.notifyAction(ActionKey.MUSIC_ALBUM,music.album);
-                FlyAction.notifyAction(ActionKey.MUSIC_ARTIST,music.artist);
+                FlyAction.notifyAction(ActionKey.MUSIC_NAME, music.name);
+                FlyAction.notifyAction(ActionKey.MUSIC_ALBUM, music.album);
+                FlyAction.notifyAction(ActionKey.MUSIC_ARTIST, music.artist);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             FlyLog.e(e.toString());
         }
     }
@@ -179,7 +190,7 @@ public class MusicActivity extends BaseActivity implements FlyuiAction,IMusicPla
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (ev.getAction()==MotionEvent.ACTION_DOWN){
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
             FlyLog.d("dispatchTouchEvent");
         }
         return super.dispatchTouchEvent(ev);
