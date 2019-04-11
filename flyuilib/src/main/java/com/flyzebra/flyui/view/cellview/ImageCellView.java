@@ -12,7 +12,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.flyzebra.flyui.ActionKey;
-import com.flyzebra.flyui.FlyuiAction;
+import com.flyzebra.flyui.IAction;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.chache.UpdataVersion;
 import com.flyzebra.flyui.module.FlyAction;
@@ -21,7 +21,7 @@ import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.customview.FlyImageView;
 import com.flyzebra.flyui.view.customview.MirrorView;
 
-public class ImageCellView extends FlyImageView implements ICell, FlyuiAction, View.OnTouchListener, View.OnClickListener {
+public class ImageCellView extends FlyImageView implements ICell, IAction, View.OnTouchListener, View.OnClickListener {
     protected CellBean mCellBean;
     private MirrorView mirrorView;
 
@@ -153,7 +153,7 @@ public class ImageCellView extends FlyImageView implements ICell, FlyuiAction, V
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        FlyAction.register(this);
+        FlyAction.register(this,mCellBean.recvAction);
     }
 
     @Override

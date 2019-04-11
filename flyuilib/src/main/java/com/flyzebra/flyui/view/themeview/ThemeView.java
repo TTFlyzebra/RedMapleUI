@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.widget.FrameLayout;
 
-import com.flyzebra.flyui.FlyuiAction;
+import com.flyzebra.flyui.IAction;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.PageBean;
 import com.flyzebra.flyui.bean.ThemeBean;
@@ -22,7 +22,7 @@ import com.flyzebra.flyui.view.pageview.SimplePageView;
  * 2019/3/20 14:26
  * Describ:
  **/
-public class ThemeView extends FrameLayout implements ITheme,FlyuiAction {
+public class ThemeView extends FrameLayout implements ITheme,IAction {
     private Context mContext;
     private ThemeBean mThemeBean;
     private float screenWidth = 1024;
@@ -191,9 +191,6 @@ public class ThemeView extends FrameLayout implements ITheme,FlyuiAction {
 
     }
 
-    private void bindViewEvent() {
-    }
-
 
     @Override
     public void onCreate(Context context) {
@@ -211,7 +208,6 @@ public class ThemeView extends FrameLayout implements ITheme,FlyuiAction {
         mThemeBean = themeBean;
         matchResolution();
         upView();
-        bindViewEvent();
     }
 
     @Override

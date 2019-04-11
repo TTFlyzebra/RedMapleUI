@@ -2,7 +2,6 @@ package com.flyzebra.flyui.view.themeview;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
-import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -12,7 +11,7 @@ import com.flyzebra.flyui.bean.ThemeBean;
 import com.flyzebra.flyui.module.FlyClass;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.base.BaseViewPager;
-import com.flyzebra.flyui.view.cellview.PagesNavCellView;
+import com.flyzebra.flyui.view.cellview.NavCellView;
 import com.flyzebra.flyui.view.pageview.SimplePageView;
 
 import java.util.ArrayList;
@@ -69,7 +68,7 @@ public class PagesViewPager extends BaseViewPager {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        PagesNavCellView navCellView = FlyClass.get(PagesNavCellView.class);
+        NavCellView navCellView = FlyClass.get(NavCellView.class);
         if (navCellView != null) {
             navCellView.setViewPager(this);
         }

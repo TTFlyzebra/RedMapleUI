@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
-import android.util.AttributeSet;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -158,10 +157,5 @@ public class RadioCellView extends SimpeCellView {
             SPUtil.set(getContext(), "FM_CHANNEL", fmText + "##" + fmKz + "##" + fmName);
         }
     };
-
-    @Override
-    public void upView() {
-        super.upView();
-    }
 
 }

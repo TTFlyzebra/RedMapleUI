@@ -41,21 +41,156 @@ public class MusicPlayer implements IMusicPlayer,
     private String mPlayPath = "";
     private Map<String, Integer> mPosMap = new HashMap<>();
     private boolean isPlayNext = true;
-
-
     private static final HandlerThread sWorkerThread = new HandlerThread("music-thread");
 
     static {
         sWorkerThread.start();
     }
 
-    private static final Handler sWorker = new Handler(sWorkerThread.getLooper());
+    private static final Handler tHandler = new Handler(sWorkerThread.getLooper());
     private Handler mHandler = new Handler(Looper.getMainLooper());
+
+    private int cretTime = 0, totalTime = 0;
+    private Runnable timeTask = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                int c = getCurrentPosition();
+                int t = getDuration();
+                if (c != cretTime || t != totalTime) {
+                    for (IMusicPlayerListener listener : listeners) {
+                        try {
+                            listener.playtime(getCurrentPosition(), getDuration());
+                        }catch (Exception e){
+                            FlyLog.e(e.toString());
+                        }
+                    }
+                    cretTime = c;
+                    totalTime = t;
+                }
+            } catch (Exception e) {
+                FlyLog.e(e.toString());
+            }
+            mHandler.postDelayed(this, 1000);
+        }
+    };
+
+    private Runnable playPosTask = new Runnable() {
+        @Override
+        public void run() {
+            synchronized (mPlayUrls) {
+                if (mPlayPos >= 0 && mPlayUrls.size() > mPlayPos) {
+                    play(mPlayUrls.get(mPlayPos).url);
+                } else {
+                    play(mPlayUrl);
+                }
+            }
+        }
+    };
+
+    private Runnable nextTask = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                synchronized (mPlayUrls) {
+                    switch (mLoopStatus) {
+                        case LOOP_RAND:
+                            mPlayPos = (int) (Math.random() * mPlayUrls.size());
+                            break;
+                        case LOOP_ALL:
+                        case LOOP_ONE:
+                            if (!mPlayUrls.isEmpty()) {
+                                mPlayPos = (mPlayPos + 1) % (mPlayUrls.size());
+                            } else {
+                                mPlayPos = -1;
+                            }
+                            break;
+                        case LOOP_SINGER:
+                            if (!mPlayUrls.isEmpty()) {
+                                String artist = mPlayUrls.get(mPlayPos).artist;
+                                int i = 0;
+                                while (i < mPlayUrls.size()) {
+                                    int num = (mPlayPos + i + 1) % (mPlayUrls.size());
+                                    if (TextUtils.isEmpty(mPlayUrls.get(num).artist)) {
+                                        i++;
+                                        continue;
+                                    }
+                                    if (mPlayUrls.get(num).artist.equals(artist)) {
+                                        mPlayPos = num;
+                                        break;
+                                    }
+                                    i++;
+                                }
+                            } else {
+                                mPlayPos = -1;
+                            }
+                            break;
+                    }
+                }
+            } catch (Exception e) {
+                mPlayPos = -1;
+                FlyLog.e(e.toString());
+            }
+            mHandler.removeCallbacks(playPosTask);
+            mHandler.post(playPosTask);
+        }
+    };
+
+    private Runnable prevTask = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                synchronized (mPlayUrls) {
+                    switch (mLoopStatus) {
+                        case LOOP_RAND:
+                            mPlayPos = (int) (Math.random() * mPlayUrls.size());
+                            break;
+                        case LOOP_ALL:
+                        case LOOP_ONE:
+                            if (!mPlayUrls.isEmpty()) {
+                                mPlayPos = (mPlayPos - 1 + mPlayUrls.size()) % mPlayUrls.size();
+                            } else {
+                                mPlayPos = -1;
+                            }
+                            break;
+                        case LOOP_SINGER:
+                            if (!mPlayUrls.isEmpty()) {
+                                String artist = mPlayUrls.get(mPlayPos).artist;
+                                int i = mPlayUrls.size();
+                                int count = 0;
+                                while (i > 0) {
+                                    count++;
+                                    int num = (mPlayPos + mPlayUrls.size() - count) % (mPlayUrls.size());
+                                    if (TextUtils.isEmpty(mPlayUrls.get(num).artist)) {
+                                        i--;
+                                        continue;
+                                    }
+                                    if (mPlayUrls.get(num).artist.equals(artist)) {
+                                        mPlayPos = num;
+                                        break;
+                                    }
+                                    i--;
+                                }
+                            } else {
+                                mPlayPos = -1;
+                            }
+                            break;
+                    }
+                }
+            } catch (Exception e) {
+                mPlayPos = -1;
+                FlyLog.e(e.toString());
+            }
+            mHandler.removeCallbacks(playPosTask);
+            mHandler.post(playPosTask);
+        }
+    };
 
     private MusicPlayer() {
     }
 
     public void onPrepared(MediaPlayer mp) {
+        totalTime = mp.getDuration();
         if (saveSeek > 0) {
             seekTo(saveSeek);
             saveSeek = 0;
@@ -97,6 +232,8 @@ public class MusicPlayer implements IMusicPlayer,
         mMediaPlayer.setOnPreparedListener(this);
         mMediaPlayer.setOnErrorListener(this);
 //        mMediaPlayer.setOnInfoListener(this);
+        mHandler.removeCallbacks(timeTask);
+        mHandler.post(timeTask);
     }
 
     @Override
@@ -171,8 +308,6 @@ public class MusicPlayer implements IMusicPlayer,
     @Override
     public void stop() {
         FlyLog.d("player stop");
-        sWorker.removeCallbacksAndMessages(null);
-        mHandler.removeCallbacksAndMessages(null);
         synchronized (mPlayUrls) {
             mPlayUrls.clear();
         }
@@ -180,12 +315,18 @@ public class MusicPlayer implements IMusicPlayer,
         mPlayPos = -1;
         mPlayUrl = "";
         mPlayStatus = STATUS_IDLE;
+        releaseMediaPlay();
+        notifyStatus();
+    }
+
+    private void releaseMediaPlay() {
+        tHandler.removeCallbacksAndMessages(null);
+        mHandler.removeCallbacksAndMessages(null);
         if (mMediaPlayer != null) {
             mMediaPlayer.stop();
             mMediaPlayer.release();
             mMediaPlayer = null;
         }
-        notifyStatus();
     }
 
     @Override
@@ -201,9 +342,10 @@ public class MusicPlayer implements IMusicPlayer,
 
     @Override
     public int getDuration() {
-        int time = mMediaPlayer == null ? 0 : mMediaPlayer.getDuration();
+        int time = mMediaPlayer == null ? 0 : totalTime;
         return Math.min(Math.max(time, 0), 359999000);
     }
+
 
     @Override
     public void setPlayUrls(List<Music> urls) {
@@ -230,132 +372,18 @@ public class MusicPlayer implements IMusicPlayer,
     @Override
     public void playNext() {
         isPlayNext = true;
-//        FlyLog.d("playNext");
-//        sWorker.removeCallbacksAndMessages(null);
-        sWorker.post(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    synchronized (mPlayUrls) {
-                        switch (mLoopStatus) {
-                            case LOOP_RAND:
-                                mPlayPos = (int) (Math.random() * mPlayUrls.size());
-                                break;
-                            case LOOP_ALL:
-                            case LOOP_ONE:
-                                if (!mPlayUrls.isEmpty()) {
-                                    mPlayPos = (mPlayPos + 1) % (mPlayUrls.size());
-                                } else {
-                                    mPlayPos = -1;
-                                }
-                                break;
-                            case LOOP_SINGER:
-                                if (!mPlayUrls.isEmpty()) {
-                                    String artist = mPlayUrls.get(mPlayPos).artist;
-                                    int i = 0;
-                                    while (i < mPlayUrls.size()) {
-                                        int num = (mPlayPos + i + 1) % (mPlayUrls.size());
-                                        if (TextUtils.isEmpty(mPlayUrls.get(num).artist)) {
-                                            i++;
-                                            continue;
-                                        }
-                                        if (mPlayUrls.get(num).artist.equals(artist)) {
-                                            mPlayPos = num;
-                                            break;
-                                        }
-                                        i++;
-                                    }
-                                } else {
-                                    mPlayPos = -1;
-                                }
-                                break;
-                        }
-                    }
-                } catch (Exception e) {
-                    mPlayPos = -1;
-                    FlyLog.e(e.toString());
-                }
-                mHandler.removeCallbacksAndMessages(null);
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        synchronized (mPlayUrls) {
-                            if (mPlayPos >= 0 && mPlayUrls.size() > mPlayPos) {
-                                play(mPlayUrls.get(mPlayPos).url);
-                            } else {
-                                play(mPlayUrl);
-                            }
-                        }
-                    }
-                });
-            }
-        });
+        FlyLog.d("playNext");
+        tHandler.removeCallbacks(nextTask);
+        tHandler.post(nextTask);
     }
+
 
     @Override
     public void playPrev() {
         isPlayNext = false;
-//        FlyLog.d("playPrev");
-        sWorker.post(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    synchronized (mPlayUrls) {
-                        switch (mLoopStatus) {
-                            case LOOP_RAND:
-                                mPlayPos = (int) (Math.random() * mPlayUrls.size());
-                                break;
-                            case LOOP_ALL:
-                            case LOOP_ONE:
-                                if (!mPlayUrls.isEmpty()) {
-                                    mPlayPos = (mPlayPos - 1 + mPlayUrls.size()) % mPlayUrls.size();
-                                } else {
-                                    mPlayPos = -1;
-                                }
-                                break;
-                            case LOOP_SINGER:
-                                if (!mPlayUrls.isEmpty()) {
-                                    String artist = mPlayUrls.get(mPlayPos).artist;
-                                    int i = mPlayUrls.size();
-                                    int count = 0;
-                                    while (i > 0) {
-                                        count++;
-                                        int num = (mPlayPos + mPlayUrls.size() - count) % (mPlayUrls.size());
-                                        if (TextUtils.isEmpty(mPlayUrls.get(num).artist)) {
-                                            i--;
-                                            continue;
-                                        }
-                                        if (mPlayUrls.get(num).artist.equals(artist)) {
-                                            mPlayPos = num;
-                                            break;
-                                        }
-                                        i--;
-                                    }
-                                } else {
-                                    mPlayPos = -1;
-                                }
-                                break;
-                        }
-                    }
-                } catch (Exception e) {
-                    mPlayPos = -1;
-                    FlyLog.e(e.toString());
-                }
-                mHandler.removeCallbacksAndMessages(null);
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        synchronized (mPlayUrls) {
-                            if (mPlayPos >= 0 && mPlayUrls.size() > mPlayPos) {
-                                play(mPlayUrls.get(mPlayPos).url);
-                            } else {
-                                play(mPlayUrl);
-                            }
-                        }
-                    }
-                });
-            }
-        });
+        FlyLog.d("playPrev");
+        tHandler.removeCallbacks(prevTask);
+        tHandler.post(prevTask);
     }
 
     @Override
@@ -417,9 +445,9 @@ public class MusicPlayer implements IMusicPlayer,
 
     @Override
     public void playPause() {
-        if(isPlaying()){
+        if (isPlaying()) {
             pause();
-        }else{
+        } else {
             start();
         }
     }
@@ -495,6 +523,7 @@ public class MusicPlayer implements IMusicPlayer,
         /**
          * 拔掉U盘停止播放
          */
+        totalTime = 0;
 
         if (mPlayStatus == STATUS_ERROR) {
             if (isPlayNext) {

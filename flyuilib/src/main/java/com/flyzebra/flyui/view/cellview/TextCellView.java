@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.util.TypedValue;
 import android.view.Gravity;
 
-import com.flyzebra.flyui.FlyuiAction;
+import com.flyzebra.flyui.IAction;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.module.FlyAction;
 import com.flyzebra.flyui.utils.FlyLog;
@@ -17,7 +17,7 @@ import com.flyzebra.flyui.view.customview.MirrorView;
  * 2019/4/3 16:22
  * Describ:
  **/
-public class TextCellView extends FlyTextView implements ICell, FlyuiAction {
+public class TextCellView extends FlyTextView implements ICell, IAction {
     public CellBean mCellBean;
 
     public TextCellView(Context context) {
@@ -44,7 +44,6 @@ public class TextCellView extends FlyTextView implements ICell, FlyuiAction {
 
     @Override
     public void upView() {
-        setText(mCellBean.textTitle.getText());
     }
 
     @Override
@@ -60,7 +59,7 @@ public class TextCellView extends FlyTextView implements ICell, FlyuiAction {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        FlyAction.register(this);
+        FlyAction.register(this, mCellBean.recvAction);
     }
 
     @Override
@@ -75,5 +74,13 @@ public class TextCellView extends FlyTextView implements ICell, FlyuiAction {
         if (key == mCellBean.recvAction) {
             setText("" + obj);
         }
+    }
+
+    @Override
+    public void setText(CharSequence text, BufferType type) {
+        if (text==null) {
+            text="";
+        }
+        super.setText(text, type);
     }
 }

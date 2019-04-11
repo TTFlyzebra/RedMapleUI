@@ -46,7 +46,6 @@ public class TimeCellView extends BaseImageCellView {
         dateView = new TextView(context);
         dateView.setGravity(Gravity.CENTER);
         rootLayout.addView(dateView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        upView();
     }
 
     public void upView() {

@@ -34,13 +34,13 @@ public class CellViewFactory {
                 iCellView = new MirrorCellView(context);
                 break;
             case CellType.TYPE_APP_NAV:
-                iCellView = new PagesNavCellView(context);
+                iCellView = new NavCellView(context);
                 break;
-            case CellType.TYPE_KEY_VIEW:
-                iCellView = new SimpeCellView(context);
+            case CellType.TYPE_SEEKBAR:
+                iCellView = new SeekbarCellView(context);
                 break;
-            case CellType.TYPE_POP_MENU:
-                iCellView = new PopmenuCellView(context);
+            case CellType.TYPE_CELLS:
+                iCellView = new PageCellView(context);
                 break;
             case CellType.TYPE_SWITH_MENU:
                 iCellView = new SimpeCellView(context);

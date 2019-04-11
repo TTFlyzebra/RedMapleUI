@@ -1,9 +1,8 @@
 package com.flyzebra.flyui.chache;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.Looper;
 import android.text.TextUtils;
 
@@ -38,7 +37,6 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
     private static final String ASSETS_PATH = "zebra/";
     private Context mContext;
     private IDiskCache iDiskCache;
-    private Set<AsyncTask> taskCollection = new HashSet<>();
     private UpResult upResult;
     private CheckCacheResult checkCacheResult;
     private String localVersion = "0.00";
@@ -50,9 +48,12 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
     private String HTTPTAG = "UpdataVersion" + Math.random();
     private boolean isUpSuccess = true;
     private Handler mHandler = new Handler(Looper.getMainLooper());
-
     private static ExecutorService executor = Executors.newFixedThreadPool(1);
-
+    private static final HandlerThread sWorkerThread = new HandlerThread("flyui-task");
+    static {
+        sWorkerThread.start();
+    }
+    private static final Handler tHandler = new Handler(sWorkerThread.getLooper());
     private boolean isUPVeriosnRunning = false;
 
     public static int UPDATE_IINTERVAL = 15 * 60 * 1000;//3 * 60 *
@@ -131,9 +132,9 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
         String mThemeBeanJson = iDiskCache.getString(TEMPLATE_KEY);
         if (TextUtils.isEmpty(mThemeBeanJson)) {
             mThemeBeanJson = getAssetsFileString(TEMPLATE_KEY);
-            if(TextUtils.isEmpty(mThemeBeanJson)){
+            if (TextUtils.isEmpty(mThemeBeanJson)) {
                 SAVE_PATH = "file://" + iDiskCache.getSavePath();
-            }else{
+            } else {
                 SAVE_PATH = "file:///android_asset/zebra";
             }
         } else {
@@ -163,12 +164,8 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
     public void forceUpVersion(UpResult upResult) {
         FlyLog.d("forceUpVersion");
         FlyOkHttp.getInstance().cancelAll(HTTPTAG);
-        if (taskCollection != null) {
-            for (AsyncTask task : taskCollection) {
-                task.cancel(true);
-            }
-            taskCollection.clear();
-        }
+        tHandler.removeCallbacksAndMessages(null);
+        mHandler.removeCallbacksAndMessages(null);
         isUPVeriosnRunning = false;
 
         if (!checkUrl()) {
@@ -318,8 +315,8 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
         final List<PageBean> pageList = themeBean.pageList;
         mDownImageList.clear();
         addDownImageUrl(mThemeBean.imageurl);
-        if(mThemeBean.topPage!=null&&mThemeBean.topPage.cellList!=null){
-            for(CellBean cellBean:mThemeBean.topPage.cellList){
+        if (mThemeBean.topPage != null && mThemeBean.topPage.cellList != null) {
+            for (CellBean cellBean : mThemeBean.topPage.cellList) {
                 addDownImageUrl(cellBean.imageurl1);
                 addDownImageUrl(cellBean.imageurl2);
                 if (cellBean.subCells != null) {
@@ -367,55 +364,43 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
         });
         mAtomicImgCount.set(imageList.size());
         mDownImageSum = imageList.size();
-        for (String imagurl : imageList) {
-            DownloadResourceImgTask task = new DownloadResourceImgTask();
-            taskCollection.add(task);
-            task.execute(imagurl);
-        }
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private class DownloadResourceImgTask extends AsyncTask<String, String, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            final boolean flag = iDiskCache.saveBitmapFromImgurl(this, params[0]);
-            if (!flag) {
-                isUpSuccess = false;
-            }
-            final String imgUrl = params[0];
-
-            if (mAtomicImgCount.getAndDecrement() == 1) {
-                //所有更新已经完毕
-                upVersion();
-            } else {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (flag) {
-                            if (upResult != null)
-                                if (0 == mAtomicImgCount.get()) {
-                                    upResult.upVesionProgress("tv_up_version_ok", mDownImageSum, mDownImageSum - mAtomicImgCount.get());
-                                } else {
-                                    upResult.upVesionProgress("tv_up_version_image_ok", mDownImageSum, mDownImageSum - mAtomicImgCount.get());
-                                }
-                        } else {
-                            if (upResult != null)
-                                upResult.upVesionProgress(imgUrl + "tv_up_version_image_faile", mDownImageSum, mDownImageSum - mAtomicImgCount.get());
-                        }
+        for (final String imagurl : imageList) {
+            tHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    final boolean flag = iDiskCache.saveBitmapFromImgurl(imagurl);
+                    if (!flag) {
+                        isUpSuccess = false;
                     }
-                });
-            }
-            return null;
+                    if (mAtomicImgCount.getAndDecrement() == 1) {
+                        //所有更新已经完毕
+                        upVersion();
+                    } else {
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (flag) {
+                                    if (upResult != null)
+                                        if (0 == mAtomicImgCount.get()) {
+                                            upResult.upVesionProgress("tv_up_version_ok", mDownImageSum, mDownImageSum - mAtomicImgCount.get());
+                                        } else {
+                                            upResult.upVesionProgress("tv_up_version_image_ok", mDownImageSum, mDownImageSum - mAtomicImgCount.get());
+                                        }
+                                } else {
+                                    if (upResult != null)
+                                        upResult.upVesionProgress(imagurl + "tv_up_version_image_faile", mDownImageSum, mDownImageSum - mAtomicImgCount.get());
+                                }
+                            }
+                        });
+                    }
+                }
+            });
         }
     }
+
 
     private void upVersion() {
+        SAVE_PATH = "file://" + iDiskCache.getSavePath();
         if (!isUpSuccess) {
             FlyLog.d("upVersion Failed!");
             mHandler.post(new Runnable() {
@@ -454,12 +439,7 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
 
     public void cancelAllTasks() {
         FlyOkHttp.getInstance().cancelAll(HTTPTAG);
-        if (taskCollection != null) {
-            for (AsyncTask task : taskCollection) {
-                task.cancel(true);
-            }
-            taskCollection.clear();
-        }
+        tHandler.removeCallbacksAndMessages(null);
         mHandler.removeCallbacksAndMessages(null);
         upResult = null;
         checkCacheResult = null;
@@ -481,8 +461,8 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
 
         if (mThemeBean.pageList == null) return;
         files.add(EncodeHelper.md5(mThemeBean.imageurl) + ".0");
-        if(mThemeBean.topPage!=null&&mThemeBean.topPage.cellList!=null){
-            for(CellBean cellBean:mThemeBean.topPage.cellList){
+        if (mThemeBean.topPage != null && mThemeBean.topPage.cellList != null) {
+            for (CellBean cellBean : mThemeBean.topPage.cellList) {
                 files.add(EncodeHelper.md5(cellBean.imageurl1) + ".0");
                 files.add(EncodeHelper.md5(cellBean.imageurl2) + ".0");
                 if (cellBean.subCells != null) {
@@ -558,8 +538,9 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
     }
 
     private static String SAVE_PATH = "file:///android_asset/zebra";
+
     public static String getNativeFilePath(String imgUrl) {
-        return SAVE_PATH +File.separator+ EncodeHelper.md5(imgUrl) + ".0";
+        return SAVE_PATH + File.separator + EncodeHelper.md5(imgUrl) + ".0";
     }
 
 }

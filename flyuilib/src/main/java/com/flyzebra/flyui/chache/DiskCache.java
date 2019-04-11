@@ -5,7 +5,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.text.TextUtils;
 
 import com.flyzebra.flyui.http.HttpDownFile;
@@ -130,7 +129,7 @@ public class DiskCache implements IDiskCache {
      * NOTE:多线程不安全
      */
     @Override
-    public synchronized boolean saveBitmapFromImgurl(AsyncTask task, String imgUrl) {
+    public synchronized boolean saveBitmapFromImgurl( String imgUrl) {
         if (checkFileExist(imgUrl)) {
             FlyLog.d("图片文件已经存在：" + imgUrl);
             return true;
@@ -146,7 +145,7 @@ public class DiskCache implements IDiskCache {
                 return false;
             }
             outputStream = editor.newOutputStream(0);
-            if (HttpDownFile.downUrlToStream(task, imgUrl, outputStream, 1024 * 1024)) {
+            if (HttpDownFile.downUrlToStream(imgUrl, outputStream, 1024 * 1024)) {
                 editor.commit();
             } else {
                 editor.abort();

@@ -35,8 +35,8 @@ public class Flyui implements IUpdataVersion.CheckCacheResult, IUpdataVersion.Up
         mThemeView = new ThemeView(activity);
         activity.setContentView(mThemeView);
         mThemeView.onCreate(activity);
-        if(activity instanceof FlyuiAction){
-            FlyAction.register((FlyuiAction) activity);
+        if(activity instanceof IAction){
+            FlyAction.register((IAction) activity);
         }
         iDiskCache = new DiskCache().init(activity);
         iUpDataVersion = new UpdataVersion(activity.getApplicationContext(), iDiskCache) {
@@ -51,13 +51,13 @@ public class Flyui implements IUpdataVersion.CheckCacheResult, IUpdataVersion.Up
                 ApiTheme = "/api/app?areaCode=" + areaCode + "&type=launcher&version=" + version;
             }
         };
-        iUpDataVersion.getCacheData(this);
+        iUpDataVersion.forceUpVersion(this);
     }
 
     public void onDestroy() {
         FlyLog.d("onDestroy");
-        if(activity instanceof FlyuiAction){
-            FlyAction.unregister((FlyuiAction) activity);
+        if(activity instanceof IAction){
+            FlyAction.unregister((IAction) activity);
         }
         mThemeView.onDestory();
         iUpDataVersion.cancelAllTasks();
@@ -73,23 +73,20 @@ public class Flyui implements IUpdataVersion.CheckCacheResult, IUpdataVersion.Up
 
     @Override
     public void upVesionProgress(String msg, int sum, int progress) {
-
     }
 
     @Override
     public void upVersionFaile(String error) {
-
+        iUpDataVersion.getCacheData(this);
     }
 
     @Override
     public void getCacheDataOK(ThemeBean themeBean) {
         upView(themeBean);
-        iUpDataVersion.forceUpVersion(this);
     }
 
     @Override
     public void getCacheDataFaile(String error) {
-        iUpDataVersion.forceUpVersion(this);
     }
 
     private void upView(ThemeBean themeBean) {

@@ -3,11 +3,10 @@ package com.flyzebra.music;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.MotionEvent;
 
 import com.flyzebra.flyui.ActionKey;
 import com.flyzebra.flyui.Flyui;
-import com.flyzebra.flyui.FlyuiAction;
+import com.flyzebra.flyui.IAction;
 import com.flyzebra.flyui.module.FlyAction;
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Music;
@@ -24,7 +23,7 @@ import java.util.List;
  * 2019/3/20 10:55
  * Describ:
  **/
-public class MusicActivity extends BaseActivity implements FlyuiAction, IMusicPlayerListener {
+public class MusicActivity extends BaseActivity implements IAction, IMusicPlayerListener {
     public Flyui flyui;
     protected IMusicPlayer musicPlayer = MusicPlayer.getInstance();
     public List<Music> musicList = new ArrayList<>();
@@ -64,9 +63,9 @@ public class MusicActivity extends BaseActivity implements FlyuiAction, IMusicPl
                     final int i = musicPlayer.getPlayPos();
                     if (i >= 0 && i < musicList.size()) {
                         Music music = musicList.get(i);
-                        FlyAction.notifyAction(ActionKey.MUSIC_NAME, music.name);
-                        FlyAction.notifyAction(ActionKey.MUSIC_ALBUM, music.album);
-                        FlyAction.notifyAction(ActionKey.MUSIC_ARTIST, music.artist);
+                        FlyAction.notifyAction(ActionKey.MEDIA_NAME, music.name);
+                        FlyAction.notifyAction(ActionKey.MEDIA_ALBUM, music.album);
+                        FlyAction.notifyAction(ActionKey.MEDIA_ARTIST, music.artist);
                     }
                     FlyAction.notifyAction(ActionKey.STATUS_PLAY, musicPlayer.getPlayStatus());
                 } catch (Exception e) {
@@ -111,9 +110,9 @@ public class MusicActivity extends BaseActivity implements FlyuiAction, IMusicPl
             final int i = musicPlayer.getPlayPos();
             if (i >= 0 && i < musicList.size()) {
                 Music music = musicList.get(i);
-                FlyAction.notifyAction(ActionKey.MUSIC_NAME, music.name);
-                FlyAction.notifyAction(ActionKey.MUSIC_ALBUM, music.album);
-                FlyAction.notifyAction(ActionKey.MUSIC_ARTIST, music.artist);
+                FlyAction.notifyAction(ActionKey.MEDIA_NAME, music.name);
+                FlyAction.notifyAction(ActionKey.MEDIA_ALBUM, music.album);
+                FlyAction.notifyAction(ActionKey.MEDIA_ARTIST, music.artist);
             }
         } catch (Exception e) {
             FlyLog.e(e.toString());
@@ -174,9 +173,9 @@ public class MusicActivity extends BaseActivity implements FlyuiAction, IMusicPl
             final int i = musicPlayer.getPlayPos();
             if (i >= 0 && i < musicList.size()) {
                 Music music = musicList.get(i);
-                FlyAction.notifyAction(ActionKey.MUSIC_NAME, music.name);
-                FlyAction.notifyAction(ActionKey.MUSIC_ALBUM, music.album);
-                FlyAction.notifyAction(ActionKey.MUSIC_ARTIST, music.artist);
+                FlyAction.notifyAction(ActionKey.MEDIA_NAME, music.name);
+                FlyAction.notifyAction(ActionKey.MEDIA_ALBUM, music.album);
+                FlyAction.notifyAction(ActionKey.MEDIA_ARTIST, music.artist);
             }
         } catch (Exception e) {
             FlyLog.e(e.toString());
@@ -189,10 +188,8 @@ public class MusicActivity extends BaseActivity implements FlyuiAction, IMusicPl
     }
 
     @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            FlyLog.d("dispatchTouchEvent");
-        }
-        return super.dispatchTouchEvent(ev);
+    public void playtime(long current, long total) {
+        FlyAction.notifyAction(ActionKey.MEDIA_TIME,new long[]{current,total});
     }
+
 }

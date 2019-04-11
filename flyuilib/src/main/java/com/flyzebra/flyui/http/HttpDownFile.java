@@ -1,8 +1,6 @@
 package com.flyzebra.flyui.http;
 
 
-import android.os.AsyncTask;
-
 import com.flyzebra.flyui.utils.FlyLog;
 
 import java.io.BufferedInputStream;
@@ -87,12 +85,11 @@ public class HttpDownFile {
     /**
      * 建立HTTP请求，并获取Bitmap对象。
      *
-     * @param task
      * @param imgUrl 图片的URL地址
      * @outputStream 保存图像的文件流
      * @speed 下载限速
      */
-    public static boolean downUrlToStream(AsyncTask task, String imgUrl, OutputStream outputStream, int speed) {
+    public static boolean downUrlToStream(String imgUrl, OutputStream outputStream, int speed) {
         HttpURLConnection urlConnection = null;
         BufferedOutputStream out = null;
         BufferedInputStream in = null;
@@ -126,10 +123,6 @@ public class HttpDownFile {
                 while (true) {
                     if(readRetryCount > READ_RETRY_MAX) {
                         FlyLog.e("downloadImg: break, readRetryCount" + readRetryCount);
-                        break;
-                    }
-                    if(task.isCancelled()){
-                        FlyLog.d("downloadImg: break, task cancelled");
                         break;
                     }
 

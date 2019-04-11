@@ -2,7 +2,6 @@ package com.flyzebra.flyui.chache;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
 
 /**
  * 图片磁盘缓存定义接口
@@ -58,7 +57,7 @@ public interface IDiskCache {
      * @param imgUrl 图片地址
      * @return
      */
-    boolean saveBitmapFromImgurl(AsyncTask task, String imgUrl);
+    boolean saveBitmapFromImgurl( String imgUrl);
 
 
     /**

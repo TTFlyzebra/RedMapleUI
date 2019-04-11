@@ -32,11 +32,11 @@ public interface CellType {
     /**
      * 可产生按键事件
      */
-    int TYPE_KEY_VIEW = 7;
+    int TYPE_SEEKBAR = 7;
     /**
      * 弹出菜单
      */
-    int TYPE_POP_MENU = 8;
+    int TYPE_CELLS = 8;
     /**
      * 可根据条件变化的控件
      */

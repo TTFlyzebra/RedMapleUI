@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.flyzebra.flyui.FlyuiAction;
+import com.flyzebra.flyui.IAction;
 import com.flyzebra.flyui.bean.ThemeBean;
 import com.flyzebra.flyui.chache.DiskCache;
 import com.flyzebra.flyui.chache.IDiskCache;
@@ -25,7 +25,7 @@ import com.flyzebra.flyui.view.themeview.ThemeView;
  * 2019/3/20 10:55
  * Describ:
  **/
-public class FlyuiActivity extends Activity implements FlyuiAction, IUpdataVersion.CheckCacheResult, IUpdataVersion.UpResult {
+public class FlyuiActivity extends Activity implements IAction, IUpdataVersion.CheckCacheResult, IUpdataVersion.UpResult {
 
     private ThemeView mThemeView;
     public IUpdataVersion iUpDataVersion;

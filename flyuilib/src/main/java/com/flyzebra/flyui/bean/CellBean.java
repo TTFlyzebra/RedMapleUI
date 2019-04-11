@@ -30,6 +30,8 @@ public class CellBean implements Cloneable{
     public int height = 0;
     public List<CellBean> subCells;
 
+    public PageBean page;
+
     @Override
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();

@@ -5,17 +5,13 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.v4.view.ViewPager;
-import android.util.AttributeSet;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.flyzebra.flyui.ActionKey;
-import com.flyzebra.flyui.FlyuiAction;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.chache.UpdataVersion;
-import com.flyzebra.flyui.module.FlyAction;
 import com.flyzebra.flyui.module.FlyClass;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.base.BaseView;
@@ -27,7 +23,7 @@ import com.flyzebra.flyui.view.themeview.PagesViewPager;
  * 2019/3/25 12:08
  * Describ:
  **/
-public class PagesNavCellView extends BaseView implements ICell, ViewPager.OnPageChangeListener {
+public class NavCellView extends BaseView implements ICell, ViewPager.OnPageChangeListener {
     private CellBean mCellBean;
     private ViewPager mViewPger;
     private Paint paint;
@@ -38,7 +34,7 @@ public class PagesNavCellView extends BaseView implements ICell, ViewPager.OnPag
     private Bitmap nav_on;
     private Bitmap nav_off;
 
-    public PagesNavCellView(Context context) {
+    public NavCellView(Context context) {
         super(context);
         initView(context);
     }
