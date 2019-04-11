@@ -47,7 +47,6 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
 
     @Override
     public void onAction(int key, Object obj) {
-        FlyLog.d("onAction key=%d", key);
         switch (key) {
             case ActionKey.KEY_PLAY:
                 musicPlayer.playPause();

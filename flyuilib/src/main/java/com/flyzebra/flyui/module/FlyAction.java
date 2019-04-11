@@ -34,9 +34,9 @@ public class FlyAction {
     }
 
     private void add(IAction flyuiAction) {
-        FlyLog.d("add action=" + flyuiAction);
+        FlyLog.v("add action=" + flyuiAction);
         flyuiEvents.add(flyuiAction);
-        FlyLog.d("flyuiEvents size=%d", flyuiEvents.size());
+        FlyLog.v("flyuiEvents size=%d", flyuiEvents.size());
     }
 
     public static void unregister(IAction flyuiAction) {
@@ -44,9 +44,9 @@ public class FlyAction {
     }
 
     private void remove(IAction flyuiAction) {
-        FlyLog.d("remove action=" + flyuiAction);
+        FlyLog.v("remove action=" + flyuiAction);
         flyuiEvents.remove(flyuiAction);
-        FlyLog.d("flyuiEvents size=%d", flyuiEvents.size());
+        FlyLog.v("flyuiEvents size=%d", flyuiEvents.size());
     }
 
     private static class FlyActionHolder {
@@ -72,13 +72,13 @@ public class FlyAction {
     }
 
     private void notifyAll(int key, Object obj) {
-        FlyLog.d("flyuiEvents size=%d", flyuiEvents.size());
-        FlyLog.d("notify key=%d,obj=%s,flyuiEvents size=%d", key, "" + obj, flyuiEvents.size());
+        FlyLog.v("flyuiEvents size=%d", flyuiEvents.size());
+        FlyLog.v("notify key=%d,obj=%s,flyuiEvents size=%d", key, "" + obj, flyuiEvents.size());
         if (obj != null) {
             saveKey.put(key, obj);
         }
         for (IAction flyuiAction : flyuiEvents) {
-            FlyLog.d("flyuiEvents flyuiAction=" + flyuiAction);
+            FlyLog.v("flyuiEvents flyuiAction=" + flyuiAction);
             flyuiAction.onAction(key, obj);
         }
     }

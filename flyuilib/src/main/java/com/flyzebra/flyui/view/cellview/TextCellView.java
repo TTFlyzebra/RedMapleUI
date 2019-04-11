@@ -70,8 +70,8 @@ public class TextCellView extends FlyTextView implements ICell, IAction {
 
     @Override
     public void onAction(int key, Object obj) {
-        FlyLog.d("key=%d,obj=" + obj, key);
         if (key == mCellBean.recvAction) {
+            FlyLog.d("key=%d,obj=" + obj, key);
             setText("" + obj);
         }
     }

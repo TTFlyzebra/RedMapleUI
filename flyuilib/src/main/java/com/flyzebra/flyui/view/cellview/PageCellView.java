@@ -29,10 +29,10 @@ public class PageCellView extends FrameLayout implements ICell {
     @Override
     public void upData(CellBean cellBean) {
         this.mCellBean = cellBean;
-        if (mCellBean != null && mCellBean.page != null ) {
+        if (mCellBean != null && mCellBean.cellpage != null ) {
             SimplePageView simplePageView = new SimplePageView(getContext());
             addView(simplePageView);
-            simplePageView.upData(mCellBean.page);
+            simplePageView.upData(mCellBean.cellpage);
         }
     }
 

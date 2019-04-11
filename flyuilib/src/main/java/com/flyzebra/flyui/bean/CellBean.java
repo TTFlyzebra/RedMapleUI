@@ -2,11 +2,11 @@ package com.flyzebra.flyui.bean;
 
 import java.util.List;
 
-public class CellBean implements Cloneable{
+public class CellBean implements Cloneable {
     public String imageurl1;
     public String imageurl2;
     public String backcolor;
-    public int celltype = 0;
+    public int celltype;
 
     public LanguageText textTitle;
     public int textSize = 0;
@@ -30,7 +30,7 @@ public class CellBean implements Cloneable{
     public int height = 0;
     public List<CellBean> subCells;
 
-    public PageBean page;
+    public PageBean cellpage;
 
     @Override
     protected Object clone() throws CloneNotSupportedException {
