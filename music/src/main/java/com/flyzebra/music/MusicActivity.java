@@ -16,7 +16,9 @@ import com.jancar.media.model.musicplayer.MusicPlayer;
 import com.jancar.media.utils.FlyLog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Author FlyZebra
@@ -65,8 +67,17 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
                         FlyAction.notifyAction(ActionKey.MEDIA_NAME, music.name);
                         FlyAction.notifyAction(ActionKey.MEDIA_ALBUM, music.album);
                         FlyAction.notifyAction(ActionKey.MEDIA_ARTIST, music.artist);
+                        FlyAction.notifyAction(ActionKey.MEDIA_URL, music.url);
                     }
                     FlyAction.notifyAction(ActionKey.STATUS_PLAY, musicPlayer.getPlayStatus());
+                    List<Map<String,Object>> list = new ArrayList<>();
+                    for(Music music:musicList){
+                        Map<String,Object> map = new HashMap<>();
+                        map.put("url",music.url);
+                        map.put("name",music.name);
+                        list.add(map);
+                    }
+                    FlyAction.notifyAction(ActionKey.MEDIA_PLAYLIST,list);
                 } catch (Exception e) {
                     FlyLog.e(e.toString());
                 }
@@ -114,6 +125,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
                 FlyAction.notifyAction(ActionKey.MEDIA_NAME, music.name);
                 FlyAction.notifyAction(ActionKey.MEDIA_ALBUM, music.album);
                 FlyAction.notifyAction(ActionKey.MEDIA_ARTIST, music.artist);
+                FlyAction.notifyAction(ActionKey.MEDIA_URL, music.url);
             }
         } catch (Exception e) {
             FlyLog.e(e.toString());
@@ -152,6 +164,14 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
         } catch (Exception e) {
             FlyLog.e(e.toString());
         }
+        List<Map<String,Object>> list = new ArrayList<>();
+        for(Music music:musicList){
+            Map<String,Object> map = new HashMap<>();
+            map.put("url",music.url);
+            map.put("name",music.name);
+            list.add(map);
+        }
+        FlyAction.notifyAction(ActionKey.MEDIA_PLAYLIST,list);
         super.musicID3UrlList(musicUrlList);
     }
 
@@ -177,6 +197,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
                 FlyAction.notifyAction(ActionKey.MEDIA_NAME, music.name);
                 FlyAction.notifyAction(ActionKey.MEDIA_ALBUM, music.album);
                 FlyAction.notifyAction(ActionKey.MEDIA_ARTIST, music.artist);
+                FlyAction.notifyAction(ActionKey.MEDIA_URL, music.url);
             }
         } catch (Exception e) {
             FlyLog.e(e.toString());

@@ -164,7 +164,6 @@ public class SeekbarCellView extends FrameLayout implements ICell, IAction {
     public boolean onAction(int key, Object obj) {
         switch (key) {
             case ActionKey.MEDIA_TIME:
-                FlyLog.d("key=%d,obj=" + obj, key);
                 if (obj instanceof long[]) {
                     long[] intarr = (long[]) obj;
                     if (intarr.length == 2) {
@@ -179,7 +178,7 @@ public class SeekbarCellView extends FrameLayout implements ICell, IAction {
                         }
                     }
                 }
-                return true;
+                return false;
             default:
                 return false;
         }

@@ -3,6 +3,7 @@ package com.flyzebra.flyui.view.cellview;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,6 @@ import com.flyzebra.flyui.view.customview.MirrorView;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -27,11 +27,12 @@ import java.util.Map;
  * 2019/4/12 16:13
  * Describ:
  **/
-public class ListCellView extends RecyclerView implements ICell , IAction {
+public class ListCellView extends RecyclerView implements ICell, IAction {
     private CellBean mCellBean;
-    private List<Map<String,Object>> mList = new ArrayList<>();
+    private List<Map<String, Object>> mList = new ArrayList<>();
     private OnItemClickListener onItemClickListener;
     private FlyAdapter adapter;
+    private String playItem;
 
     public ListCellView(Context context) {
         super(context);
@@ -48,11 +49,8 @@ public class ListCellView extends RecyclerView implements ICell , IAction {
         adapter = new FlyAdapter();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         setLayoutManager(linearLayoutManager);
-        addItemDecoration(new RecycleViewDivider(getContext(),LinearLayoutManager.HORIZONTAL, 1, 0xFFFFFFFF));
+        addItemDecoration(new RecycleViewDivider(getContext(), LinearLayoutManager.HORIZONTAL, 1, 0xFFFFFFFF));
         setAdapter(adapter);
-        for(int i=0;i<100;i++){
-            mList.add(new Hashtable<String, Object>());
-        }
     }
 
     @Override
@@ -71,13 +69,16 @@ public class ListCellView extends RecyclerView implements ICell , IAction {
     }
 
     class FlyAdapter extends RecyclerView.Adapter<FlyAdapter.ViewHolder> {
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public ViewHolder(View itemView) {
+        class ViewHolder extends RecyclerView.ViewHolder {
+            TextView text1;
+
+            ViewHolder(View itemView) {
                 super(itemView);
+                text1 = itemView.findViewById(android.R.id.text1);
             }
         }
 
-        public FlyAdapter() {
+        FlyAdapter() {
         }
 
         @Override
@@ -88,14 +89,23 @@ public class ListCellView extends RecyclerView implements ICell , IAction {
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             TextView view = new TextView(getContext());
-            ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,50);
+            view.setId(android.R.id.text1);
+            view.setTextColor(0xFF0000FF);
+            view.setSingleLine();
+            view.setTextSize(TypedValue.COMPLEX_UNIT_PX, mCellBean.textSize);
+            ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 50);
             view.setLayoutParams(lp);
-            view.setGravity(Gravity.START|Gravity.CENTER);
+            view.setGravity(Gravity.START | Gravity.CENTER);
             return new ViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(ViewHolder holder, final int position) {
+            Map<String, Object> map = mList.get(position);
+            String name = map.get("name") + "";
+            String url = map.get("url")+"";
+            holder.text1.setText(name);
+            holder.text1.setTextColor(url.endsWith(playItem) ? 0xFF00FF00 : 0xFFFFFFFF);
         }
 
     }
@@ -108,8 +118,8 @@ public class ListCellView extends RecyclerView implements ICell , IAction {
         this.onItemClickListener = onItemClickListener;
     }
 
-    private void refresh(){
-        if(adapter!=null){
+    private void refresh() {
+        if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
     }
@@ -128,16 +138,28 @@ public class ListCellView extends RecyclerView implements ICell , IAction {
 
     @Override
     public boolean onAction(int key, Object obj) {
-        if (mCellBean.recvAction == ActionKey.MEDIA_PLAYLIST) {
-            if (obj instanceof List) {
-                mList.clear();
-                try{
-                    mList.addAll((Collection<? extends Map<String, Object>>) obj);
-                }catch (Exception e){
-                    FlyLog.e(e.toString());
+        switch (key) {
+            case ActionKey.MEDIA_PLAYLIST:
+                if (obj instanceof List) {
+                    mList.clear();
+                    try {
+                        mList.addAll((Collection<? extends Map<String, Object>>) obj);
+                    } catch (Exception e) {
+                        FlyLog.e(e.toString());
+                    }
+                    refresh();
+                }
+                break;
+            case ActionKey.MEDIA_URL:
+                playItem = obj + "";
+                for (int i = 0; i < mList.size(); i++) {
+                    if (playItem.equals(mList.get(i).get("url"))) {
+                        getLayoutManager().scrollToPosition(i);
+                        break;
+                    }
                 }
                 refresh();
-            }
+                break;
         }
         return false;
     }
