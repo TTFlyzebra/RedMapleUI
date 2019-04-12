@@ -1,18 +1,28 @@
 package com.flyzebra.flyui.view.cellview;
 
 import android.content.Context;
+import android.graphics.drawable.ClipDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
+import android.os.Build;
 import android.view.Gravity;
 import android.widget.FrameLayout;
 import android.widget.SeekBar;
 
-import com.flyzebra.flyui.ActionKey;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.flyzebra.flyui.IAction;
 import com.flyzebra.flyui.bean.CellBean;
+import com.flyzebra.flyui.config.ActionKey;
 import com.flyzebra.flyui.module.FlyAction;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.customview.MirrorView;
 
 import java.util.Locale;
+
+import static android.graphics.drawable.ClipDrawable.HORIZONTAL;
 
 /**
  * Author FlyZebra
@@ -32,36 +42,94 @@ public class SeekbarCellView extends FrameLayout implements ICell, IAction {
     @Override
     public void initView(Context context) {
         FlyLog.d("seekbar");
+        setClipChildren(false);
         seekBar = new SeekBar(context);
+        seekBar.setVisibility(GONE);
         LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         addView(seekBar, lp);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            seekBar.setSplitTrack(false);
+        }
     }
+
+
+    private Drawable draw1 = null;
+    private Drawable draw2 = null;
+    private Drawable draw3 = null;
 
     @Override
     public void upData(CellBean cellBean) {
         this.mCellBean = cellBean;
-        if (mCellBean.subCells != null && mCellBean.subCells.size() >= 5) {
-            CellBean startCell = mCellBean.subCells.get(3);
-            CellBean endCell = mCellBean.subCells.get(4);
-            if (startCell.celltype == CellType.TYPE_TEXT) {
-                startTV = (TextCellView) CellViewFactory.createView(getContext(), startCell);
-                LayoutParams lp1 = new LayoutParams(startCell.width, startCell.height);
-                lp1.setMarginStart(0);
-                addView(startTV, lp1);
-                startTV.setGravity(Gravity.CENTER);
-            }
-            if (endCell.celltype == CellType.TYPE_TEXT) {
-                endTV = (TextCellView) CellViewFactory.createView(getContext(), endCell);
-                LayoutParams lp2 = new LayoutParams(endCell.width, endCell.height);
-                lp2.setMarginStart(mCellBean.width - endCell.width);
-                addView(endTV, lp2);
-                endTV.setGravity(Gravity.CENTER);
-            }
+        if (mCellBean.subCells != null
+                && mCellBean.subCells.size() == 4
+                && mCellBean.subCells.get(2).celltype == CellType.TYPE_TEXT
+                && mCellBean.subCells.get(3).celltype == CellType.TYPE_TEXT) {
+            CellBean cell1 = mCellBean.subCells.get(0);
+            CellBean cell2 = mCellBean.subCells.get(1);
+            CellBean cell3 = mCellBean.subCells.get(2);
+            CellBean cell4 = mCellBean.subCells.get(3);
+
+            Glide.with(getContext()).load(cell1.imageurl1).into(new SimpleTarget<GlideDrawable>() {
+                @Override
+                public void onResourceReady(GlideDrawable glideDrawable, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                    draw1 = glideDrawable;
+                    loadBitmapFinish();
+                }
+            });
+
+            Glide.with(getContext()).load(cell2.imageurl1).into(new SimpleTarget<GlideDrawable>() {
+                @Override
+                public void onResourceReady(GlideDrawable glideDrawable, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                    draw2 = glideDrawable;
+                    loadBitmapFinish();
+                }
+            });
+
+            Glide.with(getContext()).load(cell2.imageurl2).into(new SimpleTarget<GlideDrawable>() {
+                @Override
+                public void onResourceReady(GlideDrawable glideDrawable, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                    draw3 = glideDrawable;
+                    loadBitmapFinish();
+                }
+            });
+
+            startTV = (TextCellView) CellViewFactory.createView(getContext(), cell3);
+            LayoutParams lp1 = new LayoutParams(cell3.width, cell3.height);
+            lp1.setMarginStart(0);
+            addView(startTV, lp1);
+            startTV.setGravity(cell3.getGravity());
+            endTV = (TextCellView) CellViewFactory.createView(getContext(), cell4);
+            LayoutParams lp2 = new LayoutParams(cell4.width, cell4.height);
+            lp2.setMarginStart(mCellBean.width - cell4.width);
+            addView(endTV, lp2);
+            endTV.setGravity(cell4.getGravity());
 
             LayoutParams slp = (LayoutParams) seekBar.getLayoutParams();
-            slp.setMarginStart(startCell.width);
-            slp.setMarginEnd(endCell.width);
+            slp.setMarginStart(cell3.width);
+            slp.setMarginEnd(cell4.width);
+            slp.topMargin = (mCellBean.height - cell2.height) / 2;
+            slp.bottomMargin = (mCellBean.height - cell2.height) / 2;
             seekBar.setLayoutParams(slp);
+        }else{
+            seekBar.setVisibility(VISIBLE);
+        }
+    }
+
+    private void loadBitmapFinish() {
+        if (draw1 != null && draw2 != null && draw3 != null) {
+            seekBar.setThumb(draw1);
+            Drawable[] drawables = new Drawable[3];
+            drawables[0] = draw2;
+            ClipDrawable clipDrawable = new ClipDrawable(draw2, Gravity.START, HORIZONTAL);
+            drawables[1] = clipDrawable;
+            clipDrawable = new ClipDrawable(draw3, Gravity.START, HORIZONTAL);
+            drawables[2] = clipDrawable;
+            LayerDrawable layerDrawable = new LayerDrawable(drawables);
+            layerDrawable.setId(0, android.R.id.background);
+            layerDrawable.setId(1, android.R.id.secondaryProgress);
+            layerDrawable.setId(2, android.R.id.progress);
+            seekBar.setProgressDrawable(layerDrawable);
+            seekBar.setVisibility(VISIBLE);
         }
     }
 
@@ -93,23 +161,27 @@ public class SeekbarCellView extends FrameLayout implements ICell, IAction {
     }
 
     @Override
-    public void onAction(int key, Object obj) {
-        if (key == ActionKey.MEDIA_TIME) {
-            FlyLog.d("key=%d,obj=" + obj, key);
-            if (obj instanceof long[]) {
-                long[] intarr = (long[]) obj;
-                if (intarr.length == 2) {
-                    seekBar.setProgress((int) intarr[0]);
-                    seekBar.setMax((int) intarr[1]);
+    public boolean onAction(int key, Object obj) {
+        switch (key) {
+            case ActionKey.MEDIA_TIME:
+                FlyLog.d("key=%d,obj=" + obj, key);
+                if (obj instanceof long[]) {
+                    long[] intarr = (long[]) obj;
+                    if (intarr.length == 2) {
+                        seekBar.setProgress((int) intarr[0]);
+                        seekBar.setMax((int) intarr[1]);
 
-                    if (startTV != null) {
-                        startTV.setText(generateTime(intarr[0]));
-                    }
-                    if (endTV != null) {
-                        endTV.setText(generateTime(intarr[1]));
+                        if (startTV != null) {
+                            startTV.setText(generateTime(intarr[0]));
+                        }
+                        if (endTV != null) {
+                            endTV.setText(generateTime(intarr[1]));
+                        }
                     }
                 }
-            }
+                return true;
+            default:
+                return false;
         }
     }
 
@@ -119,6 +191,6 @@ public class SeekbarCellView extends FrameLayout implements ICell, IAction {
         int seconds = totalSeconds % 60;
         int minutes = (totalSeconds / 60) % 60;
         int hours = totalSeconds / 3600;
-        return hours > 0 ? String.format(Locale.US,"%02d:%02d:%02d", hours, minutes, seconds) : String.format(Locale.US,"%02d:%02d", minutes, seconds);
+        return hours > 0 ? String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, seconds) : String.format(Locale.US, "%02d:%02d", minutes, seconds);
     }
 }

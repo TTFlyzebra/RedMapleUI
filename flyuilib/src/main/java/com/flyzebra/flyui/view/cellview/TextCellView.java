@@ -3,7 +3,6 @@ package com.flyzebra.flyui.view.cellview;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.TypedValue;
-import android.view.Gravity;
 
 import com.flyzebra.flyui.IAction;
 import com.flyzebra.flyui.bean.CellBean;
@@ -38,7 +37,8 @@ public class TextCellView extends FlyTextView implements ICell, IAction {
             setTextColor(0xffffffff);
         }
         setTextSize(TypedValue.COMPLEX_UNIT_PX, cellBean.textSize);
-        setGravity(Gravity.START | Gravity.CENTER);
+        setPadding(mCellBean.mLeft,mCellBean.mTop,mCellBean.mRight,mCellBean.mBottom);
+        setGravity(mCellBean.getGravity());
         setSingleLine();
     }
 
@@ -69,18 +69,20 @@ public class TextCellView extends FlyTextView implements ICell, IAction {
     }
 
     @Override
-    public void onAction(int key, Object obj) {
+    public boolean onAction(int key, Object obj) {
         if (key == mCellBean.recvAction) {
             FlyLog.d("key=%d,obj=" + obj, key);
             setText("" + obj);
         }
+        return false;
     }
 
     @Override
     public void setText(CharSequence text, BufferType type) {
-        if (text==null) {
-            text="";
+        if (text == null) {
+            text = "";
         }
         super.setText(text, type);
     }
+
 }

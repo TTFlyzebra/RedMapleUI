@@ -225,7 +225,7 @@ public class ThemeView extends FrameLayout implements ITheme,IAction {
     }
 
     @Override
-    public void onAction(int key, Object obj) {
-
+    public boolean onAction(int key, Object obj) {
+        return false;
     }
 }

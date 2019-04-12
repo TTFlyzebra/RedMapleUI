@@ -48,6 +48,9 @@ public class CellViewFactory {
             case CellType.TYPE_TEXT:
                 iCellView = new TextCellView(context);
                 break;
+            case CellType.TYPE_LISTVIEW:
+                iCellView = new ListCellView(context);
+                break;
             case CellType.TYPE_APP_NORMAL:
             default:
                 iCellView = new SimpeCellView(context);

@@ -4,9 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
-import com.flyzebra.flyui.ActionKey;
 import com.flyzebra.flyui.Flyui;
 import com.flyzebra.flyui.IAction;
+import com.flyzebra.flyui.config.ActionKey;
 import com.flyzebra.flyui.module.FlyAction;
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Music;
@@ -46,7 +46,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
     }
 
     @Override
-    public void onAction(int key, Object obj) {
+    public boolean onAction(int key, Object obj) {
         switch (key) {
             case ActionKey.KEY_PLAY:
                 musicPlayer.playPause();
@@ -72,6 +72,8 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
                 }
                 break;
         }
+
+        return false;
     }
 
     @Override
@@ -188,6 +190,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
 
     @Override
     public void playtime(long current, long total) {
+        FlyAction.notifyAction(ActionKey.STATUS_PLAY, musicPlayer.getPlayStatus());
         FlyAction.notifyAction(ActionKey.MEDIA_TIME,new long[]{current,total});
     }
 

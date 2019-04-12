@@ -1,5 +1,8 @@
 package com.flyzebra.flyui.bean;
 
+
+import android.view.Gravity;
+
 import java.util.List;
 
 public class CellBean implements Cloneable {
@@ -63,5 +66,16 @@ public class CellBean implements Cloneable {
                 ", height=" + height +
                 ", subCells=" + subCells +
                 '}';
+    }
+
+    public int getGravity() {
+        switch (gravity) {
+            case 1:
+                return Gravity.START;
+            case 2:
+                return Gravity.END;
+            default:
+                return Gravity.CENTER;
+        }
     }
 }

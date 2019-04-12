@@ -6,5 +6,5 @@ package com.flyzebra.flyui;
  * Describ:
  **/
 public interface IAction {
-    void onAction(int key, Object obj);
+    boolean onAction(int key, Object obj);
 }

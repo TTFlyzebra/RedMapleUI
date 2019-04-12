@@ -46,4 +46,7 @@ public interface CellType {
      * 可根据条件变化的控件
      */
     int TYPE_TEXT = 10;
+
+
+    int TYPE_LISTVIEW = 11;
 }

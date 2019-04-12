@@ -11,10 +11,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.flyzebra.flyui.ActionKey;
 import com.flyzebra.flyui.IAction;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.chache.UpdataVersion;
+import com.flyzebra.flyui.config.ActionKey;
 import com.flyzebra.flyui.module.FlyAction;
 import com.flyzebra.flyui.status.PlayStatus;
 import com.flyzebra.flyui.utils.FlyLog;
@@ -153,7 +153,7 @@ public class ImageCellView extends FlyImageView implements ICell, IAction, View.
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        FlyAction.register(this,mCellBean.recvAction);
+        FlyAction.register(this, mCellBean.recvAction);
     }
 
     @Override
@@ -165,27 +165,16 @@ public class ImageCellView extends FlyImageView implements ICell, IAction, View.
     }
 
     @Override
-    public void onAction(int key, Object obj) {
-        if (mCellBean.recvAction != key) return;
-        switch (mCellBean.recvAction) {
-            case ActionKey.STATUS_PLAY:
-                if (obj instanceof Integer) {
-                    int status = (int) obj;
-                    switchImage(status);
-                }
-                break;
+    public boolean onAction(int key, Object obj) {
+        if (mCellBean.recvAction == ActionKey.STATUS_PLAY) {
+            if (obj instanceof Integer) {
+                int status = (int) obj;
+                showImageUrl(status==PlayStatus.STATUS_PLAYING||status==PlayStatus.STATUS_STARTPLAY
+                        ?mCellBean.imageurl2
+                        :mCellBean.imageurl1);
+            }
         }
+        return false;
     }
 
-    private void switchImage(int status) {
-        switch (status) {
-            case PlayStatus.STATUS_STARTPLAY:
-            case PlayStatus.STATUS_PLAYING:
-                showImageUrl(mCellBean.imageurl2);
-                break;
-            default:
-                showImageUrl(mCellBean.imageurl1);
-                break;
-        }
-    }
 }

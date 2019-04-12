@@ -1,4 +1,4 @@
-package com.flyzebra.flyui;
+package com.flyzebra.flyui.config;
 
 /**
  * Author FlyZebra
@@ -31,4 +31,5 @@ public interface ActionKey {
     int MEDIA_SEEK = 3011;//跳转到指定时间播放
     int MUSIC_IMAGE = 3012;//音乐图片
     int MEDIA_TEXT = 3013;//歌词
+    int MEDIA_PLAYLIST = 3014;//歌词
 }
