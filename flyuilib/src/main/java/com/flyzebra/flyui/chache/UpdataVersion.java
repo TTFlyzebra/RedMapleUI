@@ -325,6 +325,20 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
                         addDownImageUrl(subCell.imageurl2);
                     }
                 }
+                //cellpage
+                if(cellBean.cellpage!=null) {
+                    addDownImageUrl(cellBean.cellpage.imageurl);
+                    for (CellBean pageCellBean : cellBean.cellpage.cellList) {
+                        addDownImageUrl(pageCellBean.imageurl1);
+                        addDownImageUrl(pageCellBean.imageurl2);
+                        if (pageCellBean.subCells != null) {
+                            for (CellBean subCell : pageCellBean.subCells) {
+                                addDownImageUrl(subCell.imageurl1);
+                                addDownImageUrl(subCell.imageurl2);
+                            }
+                        }
+                    }
+                }
             }
         }
         for (PageBean pageBean : pageList) {
@@ -336,6 +350,20 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
                     for (CellBean subCell : cellBean.subCells) {
                         addDownImageUrl(subCell.imageurl1);
                         addDownImageUrl(subCell.imageurl2);
+                    }
+                }
+                //cellpage
+                if(cellBean.cellpage!=null) {
+                    addDownImageUrl(cellBean.cellpage.imageurl);
+                    for (CellBean pageCellBean : cellBean.cellpage.cellList) {
+                        addDownImageUrl(pageCellBean.imageurl1);
+                        addDownImageUrl(pageCellBean.imageurl2);
+                        if (pageCellBean.subCells != null) {
+                            for (CellBean subCell : pageCellBean.subCells) {
+                                addDownImageUrl(subCell.imageurl1);
+                                addDownImageUrl(subCell.imageurl2);
+                            }
+                        }
                     }
                 }
             }
@@ -458,9 +486,9 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
         if (mThemeBean == null) return;
         files.add(EncodeHelper.md5(VERSION_KEY) + ".0");
         files.add(EncodeHelper.md5(TEMPLATE_KEY) + ".0");
-
         if (mThemeBean.pageList == null) return;
         files.add(EncodeHelper.md5(mThemeBean.imageurl) + ".0");
+        //TOPPAGE
         if (mThemeBean.topPage != null && mThemeBean.topPage.cellList != null) {
             for (CellBean cellBean : mThemeBean.topPage.cellList) {
                 files.add(EncodeHelper.md5(cellBean.imageurl1) + ".0");
@@ -471,8 +499,22 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
                         files.add(EncodeHelper.md5(subCell.imageurl2) + ".0");
                     }
                 }
+                if(cellBean.cellpage!=null) {
+                    addDownImageUrl(cellBean.cellpage.imageurl);
+                    for (CellBean pageCellBean : cellBean.cellpage.cellList) {
+                        files.add(EncodeHelper.md5(pageCellBean.imageurl1) + ".0");
+                        files.add(EncodeHelper.md5(pageCellBean.imageurl2) + ".0");
+                        if (pageCellBean.subCells != null) {
+                            for (CellBean subCell : pageCellBean.subCells) {
+                                files.add(EncodeHelper.md5(subCell.imageurl1) + ".0");
+                                files.add(EncodeHelper.md5(subCell.imageurl2) + ".0");
+                            }
+                        }
+                    }
+                }
             }
         }
+        //PAGE
         for (PageBean pageBean : mThemeBean.pageList) {
             files.add(EncodeHelper.md5(pageBean.imageurl) + ".0");
             for (CellBean cellBean : pageBean.cellList) {
@@ -482,6 +524,19 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
                     for (CellBean subCell : cellBean.subCells) {
                         files.add(EncodeHelper.md5(subCell.imageurl1) + ".0");
                         files.add(EncodeHelper.md5(subCell.imageurl2) + ".0");
+                    }
+                }
+                if(cellBean.cellpage!=null) {
+                    addDownImageUrl(cellBean.cellpage.imageurl);
+                    for (CellBean pageCellBean : cellBean.cellpage.cellList) {
+                        files.add(EncodeHelper.md5(pageCellBean.imageurl1) + ".0");
+                        files.add(EncodeHelper.md5(pageCellBean.imageurl2) + ".0");
+                        if (pageCellBean.subCells != null) {
+                            for (CellBean subCell : pageCellBean.subCells) {
+                                files.add(EncodeHelper.md5(subCell.imageurl1) + ".0");
+                                files.add(EncodeHelper.md5(subCell.imageurl2) + ".0");
+                            }
+                        }
                     }
                 }
             }

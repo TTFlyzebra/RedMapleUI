@@ -105,7 +105,7 @@ public class ListCellView extends RecyclerView implements ICell, IAction {
             String name = map.get("name") + "";
             String url = map.get("url")+"";
             holder.text1.setText(name);
-            holder.text1.setTextColor(url.endsWith(playItem) ? 0xFF00FF00 : 0xFFFFFFFF);
+            holder.text1.setTextColor(url.endsWith(playItem) ? 0xFF00FF00 : 0xFF00FFFF);
         }
 
     }

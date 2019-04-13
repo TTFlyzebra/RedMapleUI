@@ -10,6 +10,7 @@ public class CellBean implements Cloneable {
     public String imageurl2;
     public String backcolor;
     public int celltype;
+    public String resId;
 
     public LanguageText textTitle;
     public int textSize = 0;
@@ -47,6 +48,7 @@ public class CellBean implements Cloneable {
                 ", imageurl2='" + imageurl2 + '\'' +
                 ", backcolor='" + backcolor + '\'' +
                 ", celltype=" + celltype +
+                ", resId='" + resId + '\'' +
                 ", textTitle=" + textTitle +
                 ", textSize=" + textSize +
                 ", textColor='" + textColor + '\'' +
@@ -65,6 +67,7 @@ public class CellBean implements Cloneable {
                 ", width=" + width +
                 ", height=" + height +
                 ", subCells=" + subCells +
+                ", cellpage=" + cellpage +
                 '}';
     }
 
