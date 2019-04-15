@@ -61,9 +61,12 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
                 musicPlayer.playPrev();
                 break;
             case ActionKey.MEDIA_SEEK:
-                if(obj instanceof Integer){
+                if (obj instanceof Integer) {
                     musicPlayer.seekTo((int) obj);
                 }
+                break;
+            case ActionKey.PLAY_URL:
+                musicPlayer.play((String) obj);
                 break;
         }
 
@@ -147,14 +150,14 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
         } catch (Exception e) {
             FlyLog.e(e.toString());
         }
-        List<Map<String,Object>> list = new ArrayList<>();
-        for(Music music:musicList){
-            Map<String,Object> map = new HashMap<>();
-            map.put("url",music.url);
-            map.put("name",music.name);
+        List<Map<Integer, Object>> list = new ArrayList<>();
+        for (Music music : musicList) {
+            Map<Integer, Object> map = new HashMap<>();
+            map.put(ActionKey.MEDIA_URL, music.url);
+            map.put(ActionKey.MEDIA_NAME, music.name);
             list.add(map);
         }
-        FlyAction.notifyAction(ActionKey.MEDIA_PLAYLIST,list);
+        FlyAction.notifyAction(ActionKey.MEDIA_PLAYLIST, list);
         super.musicID3UrlList(musicUrlList);
     }
 
@@ -194,7 +197,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
 
     @Override
     public void playtime(long current, long total) {
-        FlyAction.notifyAction(ActionKey.MEDIA_TIME,new long[]{current,total});
+        FlyAction.notifyAction(ActionKey.MEDIA_TIME, new long[]{current, total});
     }
 
 }

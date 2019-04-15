@@ -23,6 +23,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import static com.flyzebra.flyui.config.ActionKey.MEDIA_NAME;
+import static com.flyzebra.flyui.config.ActionKey.MEDIA_URL;
+
 /**
  * Author FlyZebra
  * 2019/4/12 16:13
@@ -30,7 +33,7 @@ import java.util.Map;
  **/
 public class ListCellView extends RecyclerView implements ICell, IAction {
     private CellBean mCellBean;
-    private List<Map<String, Object>> mList = new ArrayList<>();
+    private List<Map<Integer, Object>> mList = new ArrayList<>();
     private OnItemClickListener onItemClickListener;
     private FlyAdapter adapter;
     private String playItem;
@@ -64,7 +67,7 @@ public class ListCellView extends RecyclerView implements ICell, IAction {
             @Override
             public void onItemClick(View view) {
                 int pos = (int) view.getTag();
-                FlyAction.notifyAction(ActionKey.MEDIA_URL,mList.get(pos));
+                FlyAction.notifyAction(ActionKey.PLAY_URL,mList.get(pos).get(MEDIA_URL));
             }
         });
 
@@ -76,17 +79,17 @@ public class ListCellView extends RecyclerView implements ICell, IAction {
         if (obj instanceof List) {
             mList.clear();
             try {
-                mList.addAll((Collection<? extends Map<String, Object>>) obj);
+                mList.addAll((Collection<? extends Map<Integer, Object>>) obj);
             } catch (Exception e) {
                 FlyLog.e(e.toString());
             }
             refresh();
         }
-        obj = FlyAction.getValue(ActionKey.MEDIA_URL);
+        obj = FlyAction.getValue(MEDIA_URL);
         if(obj instanceof String) {
             playItem = (String) obj;
             for (int i = 0; i < mList.size(); i++) {
-                if (playItem.equals(mList.get(i).get("url"))) {
+                if (playItem.equals(mList.get(i).get(MEDIA_URL))) {
                     getLayoutManager().scrollToPosition(i);
                     break;
                 }
@@ -138,9 +141,9 @@ class FlyAdapter extends RecyclerView.Adapter<FlyAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        Map<String, Object> map = mList.get(position);
-        String name = map.get("name") + "";
-        String url = map.get("url") + "";
+        Map<Integer, Object> map = mList.get(position);
+        String name = map.get(MEDIA_NAME) + "";
+        String url = map.get(MEDIA_URL) + "";
         holder.text1.setText(name);
         holder.text1.setTextColor(url.equals(playItem) ? 0xFF00FF00 : 0xFF00FFFF);
         holder.itemView.setTag(position);
@@ -192,17 +195,17 @@ public interface OnItemClickListener {
                 if (obj instanceof List) {
                     mList.clear();
                     try {
-                        mList.addAll((Collection<? extends Map<String, Object>>) obj);
+                        mList.addAll((Collection<? extends Map<Integer, Object>>) obj);
                     } catch (Exception e) {
                         FlyLog.e(e.toString());
                     }
                     refresh();
                 }
                 break;
-            case ActionKey.MEDIA_URL:
+            case MEDIA_URL:
                 playItem = obj + "";
                 for (int i = 0; i < mList.size(); i++) {
-                    if (playItem.equals(mList.get(i).get("url"))) {
+                    if (playItem.equals(mList.get(i).get(MEDIA_URL))) {
                         getLayoutManager().scrollToPosition(i);
                         break;
                     }

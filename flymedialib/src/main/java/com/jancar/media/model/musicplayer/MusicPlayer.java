@@ -238,6 +238,10 @@ public class MusicPlayer implements IMusicPlayer,
 
     @Override
     public void play(String url) {
+        if(url==null&&url.equals(mPlayUrl)){
+            FlyLog.d("url is null or is playing-"+url);
+            return;
+        }
         FlyLog.d("start url=%s", url);
         try {
             this.mPlayUrl = url;

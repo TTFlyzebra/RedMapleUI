@@ -33,4 +33,5 @@ public interface ActionKey {
     int MEDIA_TEXT = 3013;//歌词
     int MEDIA_PLAYLIST = 3014;//歌词
     int MEDIA_URL = 3015;//音乐歌名
+    int PLAY_URL = 3016;//音乐歌名
 }
