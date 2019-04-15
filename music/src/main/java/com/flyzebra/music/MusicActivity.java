@@ -60,7 +60,10 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
             case ActionKey.KEY_PREV:
                 musicPlayer.playPrev();
                 break;
-            case ActionKey.REFRESH:
+            case ActionKey.MEDIA_SEEK:
+                if(obj instanceof Integer){
+                    musicPlayer.seekTo((int) obj);
+                }
                 break;
         }
 
@@ -191,7 +194,6 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
 
     @Override
     public void playtime(long current, long total) {
-        FlyAction.notifyAction(ActionKey.STATUS_PLAY, musicPlayer.getPlayStatus());
         FlyAction.notifyAction(ActionKey.MEDIA_TIME,new long[]{current,total});
     }
 

@@ -36,13 +36,11 @@ public class TextCellView extends FlyTextView implements ICell, IAction {
             setTextColor(0xffffffff);
         }
         setTextSize(TypedValue.COMPLEX_UNIT_PX, cellBean.textSize);
-        setPadding(mCellBean.mLeft,mCellBean.mTop,mCellBean.mRight,mCellBean.mBottom);
+        setPadding(mCellBean.mLeft, mCellBean.mTop, mCellBean.mRight, mCellBean.mBottom);
         setGravity(mCellBean.getGravity());
         setSingleLine();
-    }
 
-    @Override
-    public void upView() {
+        upView();
     }
 
     @Override
@@ -59,7 +57,6 @@ public class TextCellView extends FlyTextView implements ICell, IAction {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         FlyAction.register(this);
-        onAction(mCellBean.recvAction);
     }
 
     @Override
@@ -70,13 +67,17 @@ public class TextCellView extends FlyTextView implements ICell, IAction {
 
     @Override
     public boolean onAction(int key) {
-        if (key == mCellBean.recvAction) {
-            Object obj = FlyAction.getValue(mCellBean.recvAction);
-            if(obj instanceof String){
-                setText((String) obj);
-            }
+        if (mCellBean != null && key == mCellBean.recvAction) {
+           upView();
         }
         return false;
+    }
+
+    private void upView() {
+        Object obj = FlyAction.getValue(mCellBean.recvAction);
+        if (obj instanceof String) {
+            setText((String) obj);
+        }
     }
 
     @Override

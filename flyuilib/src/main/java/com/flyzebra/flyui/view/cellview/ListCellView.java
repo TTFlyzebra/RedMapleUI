@@ -59,11 +59,40 @@ public class ListCellView extends RecyclerView implements ICell, IAction {
         } catch (Exception e) {
             FlyLog.e("error! parseColor exception!" + e.toString());
         }
+
+        setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view) {
+                int pos = (int) view.getTag();
+                FlyAction.notifyAction(ActionKey.MEDIA_URL,mList.get(pos));
+            }
+        });
+
+        upView();
     }
 
-    @Override
     public void upView() {
-
+        Object obj = FlyAction.getValue(ActionKey.MEDIA_PLAYLIST);
+        if (obj instanceof List) {
+            mList.clear();
+            try {
+                mList.addAll((Collection<? extends Map<String, Object>>) obj);
+            } catch (Exception e) {
+                FlyLog.e(e.toString());
+            }
+            refresh();
+        }
+        obj = FlyAction.getValue(ActionKey.MEDIA_URL);
+        if(obj instanceof String) {
+            playItem = (String) obj;
+            for (int i = 0; i < mList.size(); i++) {
+                if (playItem.equals(mList.get(i).get("url"))) {
+                    getLayoutManager().scrollToPosition(i);
+                    break;
+                }
+            }
+            refresh();
+        }
     }
 
     @Override
@@ -76,51 +105,61 @@ public class ListCellView extends RecyclerView implements ICell, IAction {
 
     }
 
-    class FlyAdapter extends RecyclerView.Adapter<FlyAdapter.ViewHolder> {
-        class ViewHolder extends RecyclerView.ViewHolder {
-            TextView text1;
+class FlyAdapter extends RecyclerView.Adapter<FlyAdapter.ViewHolder> {
+    class ViewHolder extends RecyclerView.ViewHolder {
+        TextView text1;
 
-            ViewHolder(View itemView) {
-                super(itemView);
-                text1 = itemView.findViewById(android.R.id.text1);
+        ViewHolder(View itemView) {
+            super(itemView);
+            text1 = itemView.findViewById(android.R.id.text1);
+        }
+    }
+
+    FlyAdapter() {
+    }
+
+    @Override
+    public int getItemCount() {
+        return mList == null ? 0 : mList.size();
+    }
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        TextView view = new TextView(getContext());
+        view.setId(android.R.id.text1);
+        view.setTextColor(0xFF0000FF);
+        view.setSingleLine();
+        view.setTextSize(TypedValue.COMPLEX_UNIT_PX, mCellBean.textSize);
+        ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 50);
+        view.setLayoutParams(lp);
+        view.setGravity(Gravity.START | Gravity.CENTER);
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, final int position) {
+        Map<String, Object> map = mList.get(position);
+        String name = map.get("name") + "";
+        String url = map.get("url") + "";
+        holder.text1.setText(name);
+        holder.text1.setTextColor(url.equals(playItem) ? 0xFF00FF00 : 0xFF00FFFF);
+        holder.itemView.setTag(position);
+        holder.itemView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(onItemClickListener!=null){
+                    onItemClickListener.onItemClick(v);
+                }
             }
-        }
-
-        FlyAdapter() {
-        }
-
-        @Override
-        public int getItemCount() {
-            return mList == null ? 0 : mList.size();
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            TextView view = new TextView(getContext());
-            view.setId(android.R.id.text1);
-            view.setTextColor(0xFF0000FF);
-            view.setSingleLine();
-            view.setTextSize(TypedValue.COMPLEX_UNIT_PX, mCellBean.textSize);
-            ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 50);
-            view.setLayoutParams(lp);
-            view.setGravity(Gravity.START | Gravity.CENTER);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(ViewHolder holder, final int position) {
-            Map<String, Object> map = mList.get(position);
-            String name = map.get("name") + "";
-            String url = map.get("url") + "";
-            holder.text1.setText(name);
-            holder.text1.setTextColor(url.equals(playItem) ? 0xFF00FF00 : 0xFF00FFFF);
-        }
-
+        });
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(View view, int pos);
-    }
+}
+
+public interface OnItemClickListener {
+    void onItemClick(View view);
+
+}
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
@@ -136,8 +175,6 @@ public class ListCellView extends RecyclerView implements ICell, IAction {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         FlyAction.register(this);
-        onAction(ActionKey.MEDIA_PLAYLIST);
-        onAction(ActionKey.MEDIA_URL);
     }
 
     @Override
@@ -148,6 +185,7 @@ public class ListCellView extends RecyclerView implements ICell, IAction {
 
     @Override
     public boolean onAction(int key) {
+        if (mCellBean == null) return false;
         Object obj = FlyAction.getValue(key);
         switch (key) {
             case ActionKey.MEDIA_PLAYLIST:

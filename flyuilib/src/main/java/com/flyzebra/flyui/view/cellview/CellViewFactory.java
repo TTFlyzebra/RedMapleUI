@@ -62,7 +62,6 @@ public class CellViewFactory {
                 iCellView = new SimpeCellView(context);
                 break;
         }
-        iCellView.upData(cellBean);
         return iCellView;
     }
 

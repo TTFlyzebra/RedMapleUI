@@ -6,6 +6,7 @@ import android.view.Gravity;
 import java.util.List;
 
 public class CellBean implements Cloneable {
+    public int cellId;
     public String imageurl1;
     public String imageurl2;
     public String backcolor;

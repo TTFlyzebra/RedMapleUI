@@ -76,9 +76,9 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
         textView.setLines(2);
         setOnClickListener(this);
         setOnTouchListener(this);
+        upView();
     }
 
-    @Override
     public void upView() {
         if (mCellBean == null) {
             FlyLog.e("error! beacuse cellBean is empey!");

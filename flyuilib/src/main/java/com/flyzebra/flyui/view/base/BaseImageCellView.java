@@ -46,9 +46,9 @@ public class BaseImageCellView extends FrameLayout implements ICell {
     @Override
     public void upData(CellBean cellBean) {
         this.mCellBean = cellBean;
+        upView();
     }
 
-    @Override
     public void upView() {
         if (imageView == null||TextUtils.isEmpty(mCellBean.imageurl1)) return;
         String imageurl = UpdataVersion.getNativeFilePath(mCellBean.imageurl1);

@@ -116,8 +116,7 @@ public class SimplePageView extends FrameLayout implements IPage {
                 mirrorView.setRefHeight(MirrorView.MIRRORHIGHT);
                 addView(mirrorView, lpMirror);
             }
-
-            iCellView.upView();
+            iCellView.upData(cellBean);
         }
     }
 

@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -93,9 +92,9 @@ public class MediaInfoCellView extends FrameLayout implements ICell, View.OnClic
     @Override
     public void upData(CellBean appInfo) {
         this.mCellBean = appInfo;
+        upView();
     }
 
-    @Override
     public void upView() {
         if (imageView == null||TextUtils.isEmpty(mCellBean.imageurl1)) return;
         String imageurl = UpdataVersion.getNativeFilePath(mCellBean.imageurl1);

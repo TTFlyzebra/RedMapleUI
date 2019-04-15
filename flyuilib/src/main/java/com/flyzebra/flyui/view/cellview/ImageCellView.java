@@ -43,7 +43,7 @@ public class ImageCellView extends FlyImageView implements ICell, IAction, View.
             setOnClickListener(this);
             setOnTouchListener(this);
         }
-
+        upView();
     }
 
     @Override
@@ -52,9 +52,27 @@ public class ImageCellView extends FlyImageView implements ICell, IAction, View.
         focusChange(!enabled);
     }
 
-    @Override
     public void upView() {
-        showImageUrl(mCellBean.imageurl1);
+        switch (mCellBean.recvAction) {
+            case ActionKey.STATUS_PLAY:
+                Object obj1 = FlyAction.getValue(mCellBean.recvAction);
+                if (obj1 instanceof Integer) {
+                    int status = (int) obj1;
+                    showImageUrl(status == PlayStatus.STATUS_PLAYING || status == PlayStatus.STATUS_STARTPLAY
+                            ? mCellBean.imageurl2
+                            : mCellBean.imageurl1);
+                }
+                break;
+            case ActionKey.STATUS_MENU:
+                Object obj2 = FlyAction.getValue(mCellBean.recvAction);
+                if (obj2 instanceof Boolean) {
+                    showImageUrl((boolean) obj2 ? mCellBean.imageurl2 : mCellBean.imageurl1);
+                }
+                break;
+            default:
+                showImageUrl(mCellBean.imageurl1);
+                break;
+        }
     }
 
     private void showImageUrl(String imageurl) {
@@ -161,7 +179,6 @@ public class ImageCellView extends FlyImageView implements ICell, IAction, View.
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         FlyAction.register(this);
-        onAction(mCellBean.recvAction);
     }
 
     @Override
@@ -174,20 +191,25 @@ public class ImageCellView extends FlyImageView implements ICell, IAction, View.
 
     @Override
     public boolean onAction(int key) {
+        if (mCellBean == null || key != mCellBean.recvAction) return false;
         Object obj = FlyAction.getValue(key);
-        if (mCellBean.recvAction == ActionKey.STATUS_PLAY) {
-            if (obj instanceof Integer) {
-                int status = (int) obj;
-                showImageUrl(status == PlayStatus.STATUS_PLAYING || status == PlayStatus.STATUS_STARTPLAY
-                        ? mCellBean.imageurl2
-                        : mCellBean.imageurl1);
-            }
-        } else if (mCellBean.recvAction == ActionKey.STATUS_MENU) {
-            if (obj instanceof Boolean) {
-                showImageUrl((boolean) obj ? mCellBean.imageurl2 : mCellBean.imageurl1);
-            }
+        switch (key) {
+            case ActionKey.STATUS_PLAY:
+                if (obj instanceof Integer) {
+                    int status = (int) obj;
+                    showImageUrl(status == PlayStatus.STATUS_PLAYING || status == PlayStatus.STATUS_STARTPLAY
+                            ? mCellBean.imageurl2
+                            : mCellBean.imageurl1);
+                }
+                return false;
+            case ActionKey.STATUS_MENU:
+                if (obj instanceof Boolean) {
+                    showImageUrl((boolean) obj ? mCellBean.imageurl2 : mCellBean.imageurl1);
+                }
+                return false;
+            default:
+                return false;
         }
-        return false;
     }
 
 }

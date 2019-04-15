@@ -29,10 +29,15 @@ import static android.graphics.drawable.ClipDrawable.HORIZONTAL;
  * 2019/4/11 13:32
  * Describ:
  **/
-public class SeekbarCellView extends FrameLayout implements ICell, IAction {
+public class SeekbarCellView extends FrameLayout implements ICell, IAction, SeekBar.OnSeekBarChangeListener {
     private CellBean mCellBean;
     private SeekBar seekBar;
-    private TextCellView startTV, endTV;
+
+    private Drawable draw1 = null;
+    private Drawable draw2 = null;
+    private Drawable draw3 = null;
+    private TextCellView startTV;
+    private TextCellView endTV;
 
     public SeekbarCellView(Context context) {
         super(context);
@@ -50,12 +55,11 @@ public class SeekbarCellView extends FrameLayout implements ICell, IAction {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             seekBar.setSplitTrack(false);
         }
+
+        seekBar.setOnSeekBarChangeListener(this);
+
     }
 
-
-    private Drawable draw1 = null;
-    private Drawable draw2 = null;
-    private Drawable draw3 = null;
 
     @Override
     public void upData(CellBean cellBean) {
@@ -97,12 +101,13 @@ public class SeekbarCellView extends FrameLayout implements ICell, IAction {
             LayoutParams lp1 = new LayoutParams(cell3.width, cell3.height);
             lp1.setMarginStart(0);
             addView(startTV, lp1);
-            startTV.setGravity(cell3.getGravity());
+            startTV.upData(cell3);
+
             endTV = (TextCellView) CellViewFactory.createView(getContext(), cell4);
             LayoutParams lp2 = new LayoutParams(cell4.width, cell4.height);
             lp2.setMarginStart(mCellBean.width - cell4.width);
             addView(endTV, lp2);
-            endTV.setGravity(cell4.getGravity());
+            endTV.upData(cell4);
 
             LayoutParams slp = (LayoutParams) seekBar.getLayoutParams();
             slp.setMarginStart(cell3.width);
@@ -110,9 +115,12 @@ public class SeekbarCellView extends FrameLayout implements ICell, IAction {
             slp.topMargin = (mCellBean.height - cell2.height) / 2;
             slp.bottomMargin = (mCellBean.height - cell2.height) / 2;
             seekBar.setLayoutParams(slp);
-        }else{
+        } else {
             seekBar.setVisibility(VISIBLE);
         }
+
+        onAction(ActionKey.MEDIA_TIME);
+
     }
 
     private void loadBitmapFinish() {
@@ -134,11 +142,6 @@ public class SeekbarCellView extends FrameLayout implements ICell, IAction {
     }
 
     @Override
-    public void upView() {
-
-    }
-
-    @Override
     public void doEvent() {
 
     }
@@ -152,7 +155,6 @@ public class SeekbarCellView extends FrameLayout implements ICell, IAction {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         FlyAction.register(this);
-        onAction(ActionKey.MEDIA_TIME);
     }
 
     @Override
@@ -163,6 +165,7 @@ public class SeekbarCellView extends FrameLayout implements ICell, IAction {
 
     @Override
     public boolean onAction(int key) {
+        if (mCellBean == null) return false;
         Object obj = FlyAction.getValue(key);
         switch (key) {
             case ActionKey.MEDIA_TIME:
@@ -193,5 +196,20 @@ public class SeekbarCellView extends FrameLayout implements ICell, IAction {
         int minutes = (totalSeconds / 60) % 60;
         int hours = totalSeconds / 3600;
         return hours > 0 ? String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, seconds) : String.format(Locale.US, "%02d:%02d", minutes, seconds);
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        FlyAction.notifyAction(ActionKey.MEDIA_SEEK, seekBar.getProgress());
     }
 }

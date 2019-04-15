@@ -90,6 +90,8 @@ public class TimeCellView extends BaseImageCellView {
         weekView.setTextSize(TypedValue.COMPLEX_UNIT_PX, cellBean.textSize * 32 / 64);
         dateView.setTextColor(color);
         dateView.setTextSize(TypedValue.COMPLEX_UNIT_PX, cellBean.textSize * 32 / 64);
+
+        upView();
     }
 
     private static String getCurrentDate(String dateFormat) {

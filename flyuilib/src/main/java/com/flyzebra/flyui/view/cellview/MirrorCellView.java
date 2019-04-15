@@ -88,9 +88,10 @@ public class MirrorCellView extends FrameLayout implements ICell, View.OnTouchLi
         textView.setLayoutParams(params2);
         textView.setGravity(Gravity.CENTER);
         textView.setLines(2);
+
+        upView();
     }
 
-    @Override
     public void upView() {
         if (textView != null && mCellBean != null && mCellBean.textTitle != null) {
             textView.setText(mCellBean.textTitle.getText());

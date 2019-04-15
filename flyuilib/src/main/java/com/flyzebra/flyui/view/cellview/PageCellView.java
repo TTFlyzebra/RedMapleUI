@@ -3,6 +3,9 @@ package com.flyzebra.flyui.view.cellview;
 import android.animation.Animator;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.MotionEvent;
 import android.widget.FrameLayout;
 
 import com.flyzebra.flyui.IAction;
@@ -22,6 +25,14 @@ import com.flyzebra.flyui.view.pageview.SimplePageView;
  **/
 public class PageCellView extends FrameLayout implements ICell, IAction {
     private CellBean mCellBean;
+    private static Handler sHander = new Handler(Looper.getMainLooper());
+    private static Runnable hideMenuTask = new Runnable() {
+        @Override
+        public void run() {
+            FlyLog.d("hide Menu Task run");
+            FlyAction.notifyAction(ActionKey.STATUS_MENU, false);
+        }
+    };
 
     public PageCellView(Context context) {
         super(context);
@@ -49,11 +60,6 @@ public class PageCellView extends FrameLayout implements ICell, IAction {
     }
 
     @Override
-    public void upView() {
-
-    }
-
-    @Override
     public void doEvent() {
 
     }
@@ -63,49 +69,67 @@ public class PageCellView extends FrameLayout implements ICell, IAction {
 
     }
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        //TODO:处理弹出菜单
+        if (mCellBean.recvAction == ActionKey.STATUS_MENU) {
+            sHander.removeCallbacks(hideMenuTask);
+            sHander.postDelayed(hideMenuTask, 5000);
+        }
+        return super.dispatchTouchEvent(ev);
+    }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         FlyAction.register(this);
-        if(mCellBean.recvAction==ActionKey.STATUS_MENU){
+        if (mCellBean.recvAction == ActionKey.STATUS_MENU) {
             setVisibility(INVISIBLE);
-            FlyAction.notifyAction(ActionKey.STATUS_MENU,false);
-        }else if (mCellBean.recvAction > 0) {
+            FlyAction.notifyAction(ActionKey.STATUS_MENU, false);
+        } else if (mCellBean.recvAction > 0) {
             onAction(mCellBean.recvAction);
         }
     }
 
     @Override
     protected void onDetachedFromWindow() {
+        sHander.removeCallbacksAndMessages(null);
         FlyAction.unregister(this);
         super.onDetachedFromWindow();
     }
 
     @Override
     public boolean onAction(int key) {
+        if(mCellBean==null) return false;
         Object obj = FlyAction.getValue(key);
         switch (key) {
             case ActionKey.STATUS_MENU:
-                FlyLog.d("key=%d,obj=" + obj, key);
-                if (obj instanceof Boolean) {
-                    goAnimtor((Boolean) obj);
+                if(mCellBean.recvAction==ActionKey.STATUS_MENU) {
+                    FlyLog.d("cellid=%d,key=%d,obj=" + obj,mCellBean.cellId, key);
+                    if (obj instanceof Boolean) {
+                        goAnimtor((Boolean) obj);
+                    }
                 }
                 return false;
         }
         return false;
     }
 
-    private void goAnimtor(final boolean flag) {
-        if(flag){
+    private void goAnimtor(final boolean isShow) {
+        FlyLog.d("isShow="+isShow);
+        if (isShow) {
             setVisibility(VISIBLE);
+            sHander.removeCallbacks(hideMenuTask);
+            sHander.postDelayed(hideMenuTask, 5000);
+        }else{
+            sHander.removeCallbacks(hideMenuTask);
         }
         switch (mCellBean.gravity) {
             case Gravity.LEFT:
                 break;
             case Gravity.RIGHT:
                 boolean isRtl = RtlTools.isRtl();
-                animate().translationX(flag? 0: (isRtl ? -(mCellBean.width - 1) :(mCellBean.width - 1))
+                animate().translationX(isShow ? 0 : (isRtl ? -(mCellBean.width - 1) : (mCellBean.width - 1))
                 ).setDuration(300).setListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animation) {
@@ -113,7 +137,7 @@ public class PageCellView extends FrameLayout implements ICell, IAction {
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        setVisibility(flag ? VISIBLE : INVISIBLE);
+                        setVisibility(isShow ? VISIBLE : INVISIBLE);
                     }
 
                     @Override

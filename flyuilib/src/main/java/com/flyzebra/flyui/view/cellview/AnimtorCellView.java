@@ -71,11 +71,6 @@ public class AnimtorCellView extends FlyImageView implements ICell {
     }
 
     @Override
-    public void upView() {
-
-    }
-
-    @Override
     public void doEvent() {
 
     }

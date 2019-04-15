@@ -105,9 +105,9 @@ public class NavCellView extends BaseView implements ICell, ViewPager.OnPageChan
     public void upData(CellBean cellBean) {
         FlyLog.d("upData");
         mCellBean = cellBean;
+        upView();
     }
 
-    @Override
     public void upView() {
         FlyLog.d("upView");
         if (mCellBean == null) {

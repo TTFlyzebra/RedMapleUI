@@ -21,11 +21,6 @@ public interface ICell {
     void upData(CellBean cellBean);
 
     /**
-     * 更新界面
-     */
-    void upView();
-
-    /**
      * 执行事件
      */
     void doEvent();
