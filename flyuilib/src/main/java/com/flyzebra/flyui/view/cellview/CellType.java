@@ -34,13 +34,13 @@ public interface CellType {
      */
     int TYPE_SEEKBAR = 7;
     /**
-     * 弹出菜单
+     * 组合控件
      */
-    int TYPE_CELLS = 8;
+    int TYPE_PAGE = 8;
     /**
      * 可根据条件变化的控件
      */
-    int TYPE_SWITH_MENU = 9;
+    int TYPE_SWITH = 9;
 
     /**
      * 可根据条件变化的控件
@@ -49,4 +49,11 @@ public interface CellType {
 
 
     int TYPE_LISTVIEW = 11;
+
+
+    int TYPE_ANIMTOR = 12;
+
+
+    int TYPE_PAGE_MENU= 13;
+
 }

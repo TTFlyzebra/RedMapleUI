@@ -25,18 +25,13 @@ public class FlyAction {
         getInstance().add(flyuiAction);
     }
 
-    public static void register(IAction flyuiAction, int key) {
-        getInstance().add(flyuiAction);
-        Object obj = saveKey.get(key);
-        if (obj != null) {
-            flyuiAction.onAction(key, saveKey.get(key));
-        }
+    public static Object getValue(int key) {
+        return saveKey.get(key);
     }
 
     private void add(IAction flyuiAction) {
-        FlyLog.v("add action=" + flyuiAction);
         flyuiEvents.add(flyuiAction);
-        FlyLog.v("flyuiEvents size=%d", flyuiEvents.size());
+        FlyLog.v("add action=" + flyuiAction);
     }
 
     public static void unregister(IAction flyuiAction) {
@@ -44,9 +39,8 @@ public class FlyAction {
     }
 
     private void remove(IAction flyuiAction) {
-        FlyLog.v("remove action=" + flyuiAction);
         flyuiEvents.remove(flyuiAction);
-        FlyLog.v("flyuiEvents size=%d", flyuiEvents.size());
+        FlyLog.v("remove action=" + flyuiAction);
     }
 
     private static class FlyActionHolder {
@@ -72,14 +66,12 @@ public class FlyAction {
     }
 
     private void notifyAll(int key, Object obj) {
-        FlyLog.v("flyuiEvents size=%d", flyuiEvents.size());
         FlyLog.v("notify key=%d,obj=%s,flyuiEvents size=%d", key, "" + obj, flyuiEvents.size());
         if (obj != null) {
             saveKey.put(key, obj);
         }
         for (IAction flyuiAction : flyuiEvents) {
-            FlyLog.v("flyuiEvents flyuiAction=" + flyuiAction);
-            flyuiAction.onAction(key, obj);
+            flyuiAction.onAction(key);
         }
     }
 

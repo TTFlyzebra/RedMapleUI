@@ -1,6 +1,7 @@
 package com.flyzebra.flyui.view.cellview;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -45,12 +46,19 @@ public class ListCellView extends RecyclerView implements ICell, IAction {
 
     @Override
     public void upData(CellBean cellBean) {
+        FlyLog.d("ListCellView x=%d,y=%d", cellBean.x, cellBean.y);
         mCellBean = cellBean;
         adapter = new FlyAdapter();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         setLayoutManager(linearLayoutManager);
         addItemDecoration(new RecycleViewDivider(getContext(), LinearLayoutManager.HORIZONTAL, 1, 0xFFFFFFFF));
         setAdapter(adapter);
+
+        try {
+            setBackgroundColor(Color.parseColor(mCellBean.backcolor));
+        } catch (Exception e) {
+            FlyLog.e("error! parseColor exception!" + e.toString());
+        }
     }
 
     @Override
@@ -103,9 +111,9 @@ public class ListCellView extends RecyclerView implements ICell, IAction {
         public void onBindViewHolder(ViewHolder holder, final int position) {
             Map<String, Object> map = mList.get(position);
             String name = map.get("name") + "";
-            String url = map.get("url")+"";
+            String url = map.get("url") + "";
             holder.text1.setText(name);
-            holder.text1.setTextColor(url.endsWith(playItem) ? 0xFF00FF00 : 0xFF00FFFF);
+            holder.text1.setTextColor(url.equals(playItem) ? 0xFF00FF00 : 0xFF00FFFF);
         }
 
     }
@@ -127,7 +135,9 @@ public class ListCellView extends RecyclerView implements ICell, IAction {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        FlyAction.register(this, mCellBean.recvAction);
+        FlyAction.register(this);
+        onAction(ActionKey.MEDIA_PLAYLIST);
+        onAction(ActionKey.MEDIA_URL);
     }
 
     @Override
@@ -137,7 +147,8 @@ public class ListCellView extends RecyclerView implements ICell, IAction {
     }
 
     @Override
-    public boolean onAction(int key, Object obj) {
+    public boolean onAction(int key) {
+        Object obj = FlyAction.getValue(key);
         switch (key) {
             case ActionKey.MEDIA_PLAYLIST:
                 if (obj instanceof List) {

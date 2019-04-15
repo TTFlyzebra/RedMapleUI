@@ -6,9 +6,9 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.view.View;
 import android.widget.FrameLayout;
 
-import com.flyzebra.flyui.IAction;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.PageBean;
 import com.flyzebra.flyui.bean.ThemeBean;
@@ -22,14 +22,14 @@ import com.flyzebra.flyui.view.pageview.SimplePageView;
  * 2019/3/20 14:26
  * Describ:
  **/
-public class ThemeView extends FrameLayout implements ITheme,IAction {
+public class ThemeView extends FrameLayout implements ITheme {
     private Context mContext;
     private ThemeBean mThemeBean;
     private float screenWidth = 1024;
     private float screenHeigh = 600;
     private float screenScacle = 1.0f;
     private PagesViewPager pagesView;
-    private SimplePageView topView;
+    private SimplePageView topPageView;
 
     public ThemeView(Context context) {
         super(context);
@@ -183,9 +183,9 @@ public class ThemeView extends FrameLayout implements ITheme,IAction {
         }
 
         if (mThemeBean.topPage != null && mThemeBean.topPage.cellList != null && !mThemeBean.topPage.cellList.isEmpty()) {
-            topView = new SimplePageView(mContext);
-            addView(topView);
-            topView.upData(mThemeBean.topPage);
+            topPageView = new SimplePageView(mContext);
+            addView(topPageView);
+            topPageView.upData(mThemeBean.topPage);
         }
 
 
@@ -225,7 +225,8 @@ public class ThemeView extends FrameLayout implements ITheme,IAction {
     }
 
     @Override
-    public boolean onAction(int key, Object obj) {
-        return false;
+    public View findViewById(String id) {
+        return null;
     }
+
 }

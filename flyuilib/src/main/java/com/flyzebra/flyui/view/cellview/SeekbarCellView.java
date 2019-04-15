@@ -151,7 +151,8 @@ public class SeekbarCellView extends FrameLayout implements ICell, IAction {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        FlyAction.register(this, mCellBean.recvAction);
+        FlyAction.register(this);
+        onAction(ActionKey.MEDIA_TIME);
     }
 
     @Override
@@ -161,7 +162,8 @@ public class SeekbarCellView extends FrameLayout implements ICell, IAction {
     }
 
     @Override
-    public boolean onAction(int key, Object obj) {
+    public boolean onAction(int key) {
+        Object obj = FlyAction.getValue(key);
         switch (key) {
             case ActionKey.MEDIA_TIME:
                 if (obj instanceof long[]) {

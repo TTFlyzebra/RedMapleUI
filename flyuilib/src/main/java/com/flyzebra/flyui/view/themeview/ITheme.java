@@ -2,6 +2,7 @@ package com.flyzebra.flyui.view.themeview;
 
 
 import android.content.Context;
+import android.view.View;
 
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.ThemeBean;
@@ -30,4 +31,6 @@ public interface ITheme {
      * @param cell
      */
     void selectCell(CellBean cell);
+
+    View findViewById(String id);
 }

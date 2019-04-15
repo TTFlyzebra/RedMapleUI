@@ -48,7 +48,8 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
     }
 
     @Override
-    public boolean onAction(int key, Object obj) {
+    public boolean onAction(int key) {
+        Object obj = FlyAction.getValue(key);
         switch (key) {
             case ActionKey.KEY_PLAY:
                 musicPlayer.playPause();
@@ -60,27 +61,6 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
                 musicPlayer.playPrev();
                 break;
             case ActionKey.REFRESH:
-                try {
-                    final int i = musicPlayer.getPlayPos();
-                    if (i >= 0 && i < musicList.size()) {
-                        Music music = musicList.get(i);
-                        FlyAction.notifyAction(ActionKey.MEDIA_NAME, music.name);
-                        FlyAction.notifyAction(ActionKey.MEDIA_ALBUM, music.album);
-                        FlyAction.notifyAction(ActionKey.MEDIA_ARTIST, music.artist);
-                        FlyAction.notifyAction(ActionKey.MEDIA_URL, music.url);
-                    }
-                    FlyAction.notifyAction(ActionKey.STATUS_PLAY, musicPlayer.getPlayStatus());
-                    List<Map<String,Object>> list = new ArrayList<>();
-                    for(Music music:musicList){
-                        Map<String,Object> map = new HashMap<>();
-                        map.put("url",music.url);
-                        map.put("name",music.name);
-                        list.add(map);
-                    }
-                    FlyAction.notifyAction(ActionKey.MEDIA_PLAYLIST,list);
-                } catch (Exception e) {
-                    FlyLog.e(e.toString());
-                }
                 break;
         }
 

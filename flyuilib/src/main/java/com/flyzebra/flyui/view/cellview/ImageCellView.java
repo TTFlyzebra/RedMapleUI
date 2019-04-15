@@ -80,9 +80,16 @@ public class ImageCellView extends FlyImageView implements ICell, IAction, View.
 
     @Override
     public void doEvent() {
-        FlyLog.d("doEvent event=" + mCellBean.clickevent);
-        if (mCellBean.sendAction > 0) {
-            FlyAction.notifyAction(mCellBean.sendAction, null);
+        FlyLog.d("doEvent event=" + mCellBean.sendAction);
+        if (mCellBean.sendAction == ActionKey.STATUS_MENU) {
+            Object obj = FlyAction.getValue(ActionKey.STATUS_MENU);
+            boolean flag = true;
+            if (obj instanceof Boolean) {
+                flag = !((boolean) obj);
+            }
+            FlyAction.notifyAction(ActionKey.STATUS_MENU, flag);
+        } else if (mCellBean.sendAction > 0) {
+            FlyAction.notifyAction(mCellBean.sendAction);
         }
     }
 
@@ -153,7 +160,8 @@ public class ImageCellView extends FlyImageView implements ICell, IAction, View.
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        FlyAction.register(this, mCellBean.recvAction);
+        FlyAction.register(this);
+        onAction(mCellBean.recvAction);
     }
 
     @Override
@@ -165,13 +173,18 @@ public class ImageCellView extends FlyImageView implements ICell, IAction, View.
     }
 
     @Override
-    public boolean onAction(int key, Object obj) {
+    public boolean onAction(int key) {
+        Object obj = FlyAction.getValue(key);
         if (mCellBean.recvAction == ActionKey.STATUS_PLAY) {
             if (obj instanceof Integer) {
                 int status = (int) obj;
-                showImageUrl(status==PlayStatus.STATUS_PLAYING||status==PlayStatus.STATUS_STARTPLAY
-                        ?mCellBean.imageurl2
-                        :mCellBean.imageurl1);
+                showImageUrl(status == PlayStatus.STATUS_PLAYING || status == PlayStatus.STATUS_STARTPLAY
+                        ? mCellBean.imageurl2
+                        : mCellBean.imageurl1);
+            }
+        } else if (mCellBean.recvAction == ActionKey.STATUS_MENU) {
+            if (obj instanceof Boolean) {
+                showImageUrl((boolean) obj ? mCellBean.imageurl2 : mCellBean.imageurl1);
             }
         }
         return false;

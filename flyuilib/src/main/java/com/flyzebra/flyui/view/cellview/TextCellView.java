@@ -7,7 +7,6 @@ import android.util.TypedValue;
 import com.flyzebra.flyui.IAction;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.module.FlyAction;
-import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.customview.FlyTextView;
 import com.flyzebra.flyui.view.customview.MirrorView;
 
@@ -59,7 +58,8 @@ public class TextCellView extends FlyTextView implements ICell, IAction {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        FlyAction.register(this, mCellBean.recvAction);
+        FlyAction.register(this);
+        onAction(mCellBean.recvAction);
     }
 
     @Override
@@ -69,10 +69,12 @@ public class TextCellView extends FlyTextView implements ICell, IAction {
     }
 
     @Override
-    public boolean onAction(int key, Object obj) {
+    public boolean onAction(int key) {
         if (key == mCellBean.recvAction) {
-            FlyLog.d("key=%d,obj=" + obj, key);
-            setText("" + obj);
+            Object obj = FlyAction.getValue(mCellBean.recvAction);
+            if(obj instanceof String){
+                setText((String) obj);
+            }
         }
         return false;
     }

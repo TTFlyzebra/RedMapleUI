@@ -39,10 +39,10 @@ public class CellViewFactory {
             case CellType.TYPE_SEEKBAR:
                 iCellView = new SeekbarCellView(context);
                 break;
-            case CellType.TYPE_CELLS:
+            case CellType.TYPE_PAGE:
                 iCellView = new PageCellView(context);
                 break;
-            case CellType.TYPE_SWITH_MENU:
+            case CellType.TYPE_SWITH:
                 iCellView = new SimpeCellView(context);
                 break;
             case CellType.TYPE_TEXT:
@@ -50,6 +50,12 @@ public class CellViewFactory {
                 break;
             case CellType.TYPE_LISTVIEW:
                 iCellView = new ListCellView(context);
+                break;
+            case CellType.TYPE_ANIMTOR:
+                iCellView = new AnimtorCellView(context);
+                break;
+            case CellType.TYPE_PAGE_MENU:
+                iCellView = new AnimtorCellView(context);
                 break;
             case CellType.TYPE_APP_NORMAL:
             default:

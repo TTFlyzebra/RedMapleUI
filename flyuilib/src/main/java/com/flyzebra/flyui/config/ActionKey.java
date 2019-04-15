@@ -22,7 +22,7 @@ public interface ActionKey {
     int STATUS_MENU = 2002;//菜单状态
     int STATUS_PAGE = 2003;//页面改变
     int STATUS_LOOP = 2004;//循环状态
-    int STATUS_ZOOM = 2005;//循环状态
+    int STATUS_ZOOM = 2005;//缩放状态
 
     int MEDIA_NAME = 3007;//音乐歌名
     int MEDIA_ALBUM = 3008;//音乐专辑名
