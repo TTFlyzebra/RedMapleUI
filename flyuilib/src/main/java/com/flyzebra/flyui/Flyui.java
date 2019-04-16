@@ -94,4 +94,5 @@ public class Flyui implements IUpdataVersion.CheckCacheResult, IUpdataVersion.Up
         mThemeView.upData(themeBean);
         FlyAction.notifyAction(ActionKey.REFRESH);
     }
+
 }

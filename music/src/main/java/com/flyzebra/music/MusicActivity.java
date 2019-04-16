@@ -60,13 +60,23 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
             case ActionKey.KEY_PREV:
                 musicPlayer.playPrev();
                 break;
-            case ActionKey.MEDIA_SEEK:
+            case ActionKey.KEY_SEEK:
                 if (obj instanceof Integer) {
                     musicPlayer.seekTo((int) obj);
                 }
                 break;
-            case ActionKey.PLAY_URL:
-                musicPlayer.play((String) obj);
+            case ActionKey.KEY_URL:
+                if (!musicPlayer.getPlayUrl().equals(obj)) {
+                    musicPlayer.play((String) obj);
+                }
+                break;
+            case ActionKey.KEY_MENU:
+                obj = FlyAction.getValue(ActionKey.STATUS_MENU);
+                boolean flag = true;
+                if (obj instanceof Boolean) {
+                    flag = !((boolean) obj);
+                }
+                FlyAction.notifyAction(ActionKey.STATUS_MENU, flag);
                 break;
         }
 
@@ -77,14 +87,11 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
     public void notifyPathChange(String path) {
         FlyLog.d("notifyPathChange path=%s", path);
         if (isStop) return;
-        if (musicPlayer.isPlaying()) {
-            musicPlayer.savePathUrl(currenPath);
-        }
-        musicList.clear();
         if (!musicPlayer.getPlayUrl().startsWith(path)) {
             musicPlayer.stop();
         }
         musicPlayer.playSaveUrlByPath(path);
+        musicList.clear();
         super.notifyPathChange(path);
     }
 
@@ -155,9 +162,10 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
             Map<Integer, Object> map = new HashMap<>();
             map.put(ActionKey.MEDIA_URL, music.url);
             map.put(ActionKey.MEDIA_NAME, music.name);
+            map.put(ActionKey.MEDIA_ARTIST, music.artist);
             list.add(map);
         }
-        FlyAction.notifyAction(ActionKey.MEDIA_PLAYLIST, list);
+        FlyAction.notifyAction(ActionKey.MEDIA_LIST, list);
         super.musicID3UrlList(musicUrlList);
     }
 

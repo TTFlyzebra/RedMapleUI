@@ -58,6 +58,7 @@ public class MusicPlayer implements IMusicPlayer,
                 int c = getCurrentPosition();
                 int t = getDuration();
                 if (c != cretTime || t != totalTime) {
+                    savePathUrl();
                     for (IMusicPlayerListener listener : listeners) {
                         try {
                             listener.playtime(getCurrentPosition(), getDuration());
@@ -190,13 +191,14 @@ public class MusicPlayer implements IMusicPlayer,
     }
 
     public void onPrepared(MediaPlayer mp) {
+        cretTime = 0;
         totalTime = mp.getDuration();
         if (saveSeek > 0) {
             seekTo(saveSeek);
             saveSeek = 0;
         }
         start();
-        savePathUrl(mPlayPath);
+        savePathUrl();
         mPlayStatus = STATUS_PLAYING;
         notifyStatus();
     }
@@ -297,7 +299,7 @@ public class MusicPlayer implements IMusicPlayer,
     @Override
     public void pause() {
         if (mMediaPlayer != null) {
-            savePathUrl(mPlayPath);
+            savePathUrl();
             mMediaPlayer.pause();
             mPlayStatus = STATUS_PAUSE;
             notifyStatus();
@@ -311,6 +313,7 @@ public class MusicPlayer implements IMusicPlayer,
 
     @Override
     public void stop() {
+        savePathUrl();
         FlyLog.d("player stop");
         synchronized (mPlayUrls) {
             mPlayUrls.clear();
@@ -422,9 +425,10 @@ public class MusicPlayer implements IMusicPlayer,
     }
 
     @Override
-    public void savePathUrl(final String path) {
+    public void savePathUrl() {
+        final String path = mPlayPath;
         final String url = mPlayUrl;
-        final int seek = getCurrentPosition();
+        final int seek = cretTime;
         if (!TextUtils.isEmpty(path) && !TextUtils.isEmpty(url)) {
             executor.execute(new Runnable() {
                 @Override
@@ -443,7 +447,7 @@ public class MusicPlayer implements IMusicPlayer,
                 }
             });
         } else {
-            FlyLog.e("save failed! seek=%d,path=%s,url=%s", seek, path, url);
+            FlyLog.d("save failed! seek=%d,path=%s,url=%s", seek, path, url);
         }
     }
 
@@ -527,6 +531,7 @@ public class MusicPlayer implements IMusicPlayer,
         /**
          * 拔掉U盘停止播放
          */
+        cretTime = 0;
         totalTime = 0;
 
         if (mPlayStatus == STATUS_ERROR) {

@@ -37,7 +37,7 @@ public class TextCellView extends FlyTextView implements ICell, IAction {
         }
         setTextSize(TypedValue.COMPLEX_UNIT_PX, cellBean.textSize);
         setPadding(mCellBean.mLeft, mCellBean.mTop, mCellBean.mRight, mCellBean.mBottom);
-        setGravity(mCellBean.getGravity());
+        setGravity(mCellBean.getTextGravity());
         setSingleLine();
 
         upView();

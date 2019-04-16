@@ -1,9 +1,8 @@
 package com.flyzebra.flyui.bean;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class PageBean implements Cloneable{
+public class PageBean {
     public int columns = 0;
     public String imageurl;
     public int rows = 0;
@@ -13,11 +12,6 @@ public class PageBean implements Cloneable{
     public int x = 0;
     public int y= 0;
     public List<CellBean> cellList;
-    public PageBean clone() throws CloneNotSupportedException{
-        PageBean newPageBean = (PageBean) super.clone();
-        newPageBean.cellList = new ArrayList<>();
-        return newPageBean;
-    }
 
     @Override
     public String toString() {

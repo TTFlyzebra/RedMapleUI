@@ -1,6 +1,5 @@
 package com.flyzebra.flyui.view.cellview;
 
-import android.animation.Animator;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
@@ -55,7 +54,7 @@ public class PageCellView extends FrameLayout implements ICell, IAction {
         try {
             setBackgroundColor(Color.parseColor(mCellBean.backcolor));
         } catch (Exception e) {
-            FlyLog.e("error! parseColor exception!" + e.toString());
+            FlyLog.d("error! parseColor exception!" + e.toString());
         }
     }
 
@@ -84,7 +83,7 @@ public class PageCellView extends FrameLayout implements ICell, IAction {
         super.onAttachedToWindow();
         FlyAction.register(this);
         if (mCellBean.recvAction == ActionKey.STATUS_MENU) {
-            setVisibility(INVISIBLE);
+            goAnimtor(false,0);
             FlyAction.notifyAction(ActionKey.STATUS_MENU, false);
         } else if (mCellBean.recvAction > 0) {
             onAction(mCellBean.recvAction);
@@ -100,14 +99,14 @@ public class PageCellView extends FrameLayout implements ICell, IAction {
 
     @Override
     public boolean onAction(int key) {
-        if(mCellBean==null) return false;
+        if (mCellBean == null) return false;
         Object obj = FlyAction.getValue(key);
         switch (key) {
             case ActionKey.STATUS_MENU:
-                if(mCellBean.recvAction==ActionKey.STATUS_MENU) {
-                    FlyLog.d("cellid=%d,key=%d,obj=" + obj,mCellBean.cellId, key);
+                if (mCellBean.recvAction == ActionKey.STATUS_MENU) {
+                    FlyLog.d("cellid=%d,key=%d,obj=" + obj, mCellBean.cellId, key);
                     if (obj instanceof Boolean) {
-                        goAnimtor((Boolean) obj);
+                        goAnimtor((Boolean) obj,300);
                     }
                 }
                 return false;
@@ -115,13 +114,12 @@ public class PageCellView extends FrameLayout implements ICell, IAction {
         return false;
     }
 
-    private void goAnimtor(final boolean isShow) {
-        FlyLog.d("isShow="+isShow);
+    private void goAnimtor(final boolean isShow, long during) {
+        FlyLog.d("isShow=" + isShow);
         if (isShow) {
-            setVisibility(VISIBLE);
             sHander.removeCallbacks(hideMenuTask);
             sHander.postDelayed(hideMenuTask, 5000);
-        }else{
+        } else {
             sHander.removeCallbacks(hideMenuTask);
         }
         switch (mCellBean.gravity) {
@@ -129,27 +127,9 @@ public class PageCellView extends FrameLayout implements ICell, IAction {
                 break;
             case Gravity.RIGHT:
                 boolean isRtl = RtlTools.isRtl();
-                animate().translationX(isShow ? 0 : (isRtl ? -(mCellBean.width - 1) : (mCellBean.width - 1))
-                ).setDuration(300).setListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        setVisibility(isShow ? VISIBLE : INVISIBLE);
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-
-                    }
-                }).start();
+                animate().translationX(isShow ? 0 : (isRtl ? -(mCellBean.width - mCellBean.mLeft + mCellBean.mRight)
+                        : (mCellBean.width - mCellBean.mLeft + mCellBean.mRight))
+                ).setDuration(during).start();
                 break;
             case Gravity.TOP:
                 break;

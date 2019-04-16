@@ -99,14 +99,7 @@ public class ImageCellView extends FlyImageView implements ICell, IAction, View.
     @Override
     public void doEvent() {
         FlyLog.d("doEvent event=" + mCellBean.sendAction);
-        if (mCellBean.sendAction == ActionKey.STATUS_MENU) {
-            Object obj = FlyAction.getValue(ActionKey.STATUS_MENU);
-            boolean flag = true;
-            if (obj instanceof Boolean) {
-                flag = !((boolean) obj);
-            }
-            FlyAction.notifyAction(ActionKey.STATUS_MENU, flag);
-        } else if (mCellBean.sendAction > 0) {
+        if (mCellBean.sendAction > 0) {
             FlyAction.notifyAction(mCellBean.sendAction);
         }
     }

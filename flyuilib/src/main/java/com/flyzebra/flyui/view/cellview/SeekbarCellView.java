@@ -210,6 +210,6 @@ public class SeekbarCellView extends FrameLayout implements ICell, IAction, Seek
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-        FlyAction.notifyAction(ActionKey.MEDIA_SEEK, seekBar.getProgress());
+        FlyAction.notifyAction(ActionKey.KEY_SEEK, seekBar.getProgress());
     }
 }

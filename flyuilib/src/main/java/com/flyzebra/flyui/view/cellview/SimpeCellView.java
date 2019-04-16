@@ -72,7 +72,7 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
         params2.bottomMargin = Math.max(0, cellBean.mBottom);
         params2.height = (int) (cellBean.textSize * 2.5f);
         textView.setLayoutParams(params2);
-        textView.setGravity(mCellBean.getGravity());
+        textView.setGravity(mCellBean.getTextGravity());
         textView.setLines(2);
         setOnClickListener(this);
         setOnTouchListener(this);

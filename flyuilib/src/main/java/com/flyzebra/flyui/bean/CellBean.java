@@ -1,11 +1,14 @@
 package com.flyzebra.flyui.bean;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.view.Gravity;
+import android.widget.ImageView;
 
 import java.util.List;
 
-public class CellBean implements Cloneable {
+public class CellBean implements Parcelable {
     public int cellId;
     public String imageurl1;
     public String imageurl2;
@@ -37,10 +40,75 @@ public class CellBean implements Cloneable {
 
     public PageBean cellpage;
 
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
+    protected CellBean(Parcel in) {
+        cellId = in.readInt();
+        imageurl1 = in.readString();
+        imageurl2 = in.readString();
+        backcolor = in.readString();
+        celltype = in.readInt();
+        resId = in.readString();
+        textSize = in.readInt();
+        textColor = in.readString();
+        mLeft = in.readInt();
+        mRight = in.readInt();
+        mTop = in.readInt();
+        mBottom = in.readInt();
+        gravity = in.readInt();
+        launchAction = in.readString();
+        acceptAction = in.readString();
+        sendAction = in.readInt();
+        recvAction = in.readInt();
+        clickevent = in.readString();
+        x = in.readInt();
+        y = in.readInt();
+        width = in.readInt();
+        height = in.readInt();
+        subCells = in.createTypedArrayList(CellBean.CREATOR);
     }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(cellId);
+        dest.writeString(imageurl1);
+        dest.writeString(imageurl2);
+        dest.writeString(backcolor);
+        dest.writeInt(celltype);
+        dest.writeString(resId);
+        dest.writeInt(textSize);
+        dest.writeString(textColor);
+        dest.writeInt(mLeft);
+        dest.writeInt(mRight);
+        dest.writeInt(mTop);
+        dest.writeInt(mBottom);
+        dest.writeInt(gravity);
+        dest.writeString(launchAction);
+        dest.writeString(acceptAction);
+        dest.writeInt(sendAction);
+        dest.writeInt(recvAction);
+        dest.writeString(clickevent);
+        dest.writeInt(x);
+        dest.writeInt(y);
+        dest.writeInt(width);
+        dest.writeInt(height);
+        dest.writeTypedList(subCells);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<CellBean> CREATOR = new Creator<CellBean>() {
+        @Override
+        public CellBean createFromParcel(Parcel in) {
+            return new CellBean(in);
+        }
+
+        @Override
+        public CellBean[] newArray(int size) {
+            return new CellBean[size];
+        }
+    };
 
     @Override
     public String toString() {
@@ -72,7 +140,7 @@ public class CellBean implements Cloneable {
                 '}';
     }
 
-    public int getGravity() {
+    public int getTextGravity() {
         switch (gravity) {
             case 1:
                 return Gravity.START;
@@ -80,6 +148,13 @@ public class CellBean implements Cloneable {
                 return Gravity.END;
             default:
                 return Gravity.CENTER;
+        }
+    }
+
+    public ImageView.ScaleType getImageGravity() {
+        switch (gravity) {
+            default:
+                return ImageView.ScaleType.CENTER;
         }
     }
 }

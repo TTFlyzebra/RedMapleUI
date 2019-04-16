@@ -8,15 +8,15 @@ package com.flyzebra.flyui.config;
 public interface ActionKey {
     int REFRESH = 9000;
 
-    int KEY_HIDE_START = 1001;//执行左边隐藏动画
-    int KEY_HIDE_END = 1002;//执行右边隐藏动画
-    int KEY_HIDE_TOP = 1003;//执行上面隐藏动画
-    int KEY_HIDE_BOTTOM = 1004;//执行下面隐藏动画
+    int KEY_HIDE = 1001;//执行隐藏动画
 
     int KEY_PLAY = 1009;//播放暂停
     int KEY_NEXT = 1010;//播放下一首
     int KEY_PREV = 1011;//插放上一首
-    int KEY_MENU = 1012;//打开菜单
+    int KEY_SEEK = 1013;//跳转到指定时间播放
+    int KEY_MENU = 1014;//菜单按键
+    int KEY_URL = 1015;//播放文件
+    int KEY_STORE = 1016;//选择存储器
 
     int STATUS_PLAY = 2001;//播放状态
     int STATUS_MENU = 2002;//菜单状态
@@ -28,10 +28,11 @@ public interface ActionKey {
     int MEDIA_ALBUM = 3008;//音乐专辑名
     int MEDIA_ARTIST = 3009;//音乐艺术家
     int MEDIA_TIME = 3010;//音乐播放时间
-    int MEDIA_SEEK = 3011;//跳转到指定时间播放
-    int MUSIC_IMAGE = 3012;//音乐图片
-    int MEDIA_TEXT = 3013;//歌词
-    int MEDIA_PLAYLIST = 3014;//歌词
+    int MUSIC_IMAGE = 3012;//媒体图片
+    int MEDIA_TEXT = 3013;//媒体歌词
+    int MEDIA_LIST = 3014;//媒体单曲列表
     int MEDIA_URL = 3015;//音乐歌名
-    int PLAY_URL = 3016;//音乐歌名
+    int VIDEO_IMAGE = 3016;//媒体图片
+
+    int STORE = 3017;//存储器列表
 }

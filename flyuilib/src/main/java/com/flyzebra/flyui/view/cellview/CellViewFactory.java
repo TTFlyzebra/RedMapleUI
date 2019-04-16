@@ -54,8 +54,11 @@ public class CellViewFactory {
             case CellType.TYPE_ANIMTOR:
                 iCellView = new AnimtorCellView(context);
                 break;
-            case CellType.TYPE_PAGE_MENU:
-                iCellView = new AnimtorCellView(context);
+            case CellType.TYPE_FRAGMENT:
+                iCellView = new FragmentCellView(context);
+                break;
+            case CellType.TYPE_FRAGMENT_NAV:
+                iCellView = new FragmentNavCellView(context);
                 break;
             case CellType.TYPE_APP_NORMAL:
             default:

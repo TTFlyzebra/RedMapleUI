@@ -68,13 +68,6 @@ public class FlyuiActivity extends Activity implements IAction, IUpdataVersion.C
         super.onDestroy();
     }
 
-    @Override
-    public void onAction(int key, Object object) {
-        switch (key) {
-            default:
-                break;
-        }
-    }
 
     @Override
     public void upVersionOK(ThemeBean themeBean) {
@@ -118,5 +111,10 @@ public class FlyuiActivity extends Activity implements IAction, IUpdataVersion.C
                         }
                     });
         }
+    }
+
+    @Override
+    public boolean onAction(int key) {
+        return false;
     }
 }
