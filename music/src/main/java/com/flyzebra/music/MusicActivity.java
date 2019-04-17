@@ -84,6 +84,12 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
             case ActionKey.KEY_LOOP:
                 musicPlayer.switchLoopStatus();
                 break;
+            case ActionKey.KEY_STORE:
+                obj = FlyAction.getValue(ActionKey.KEY_STORE);
+                if(obj instanceof String){
+                    usbMediaScan.openStorager(new StorageInfo((String) obj));
+                }
+                break;
         }
         return false;
     }
@@ -107,6 +113,25 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
         if (musicUrlList != null && !musicUrlList.isEmpty()) {
             musicList.addAll(musicUrlList);
             musicPlayer.setPlayUrls(musicList);
+        }
+        try {
+            int playStauts = (musicPlayer.getPlayStatus() == MusicPlayer.STATUS_STARTPLAY || musicPlayer.getPlayStatus() == MusicPlayer.STATUS_PLAYING) ? 1 : 0;
+            FlyAction.notifyAction(ActionKey.STATUS_PLAY, playStauts);
+            final int i = musicPlayer.getPlayPos();
+            if (i >= 0 && i < musicList.size()) {
+                Music music = musicList.get(i);
+                FlyAction.notifyAction(ActionKey.MEDIA_NAME, music.name);
+                FlyAction.notifyAction(ActionKey.MEDIA_ALBUM, music.album);
+                FlyAction.notifyAction(ActionKey.MEDIA_ARTIST, music.artist);
+                FlyAction.notifyAction(ActionKey.MEDIA_URL, music.url);
+            }else{
+                FlyAction.notifyAction(ActionKey.MEDIA_NAME, "");
+                FlyAction.notifyAction(ActionKey.MEDIA_ALBUM, "");
+                FlyAction.notifyAction(ActionKey.MEDIA_ARTIST, "");
+                FlyAction.notifyAction(ActionKey.MEDIA_URL, "");
+            }
+        } catch (Exception e) {
+            FlyLog.e(e.toString());
         }
         super.musicUrlList(musicUrlList);
     }
@@ -171,6 +196,25 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
             list.add(map);
         }
         FlyAction.notifyAction(ActionKey.MEDIA_LIST, list);
+        try {
+            int playStauts = (musicPlayer.getPlayStatus() == MusicPlayer.STATUS_STARTPLAY || musicPlayer.getPlayStatus() == MusicPlayer.STATUS_PLAYING) ? 1 : 0;
+            FlyAction.notifyAction(ActionKey.STATUS_PLAY, playStauts);
+            final int i = musicPlayer.getPlayPos();
+            if (i >= 0 && i < musicList.size()) {
+                Music music = musicList.get(i);
+                FlyAction.notifyAction(ActionKey.MEDIA_NAME, music.name);
+                FlyAction.notifyAction(ActionKey.MEDIA_ALBUM, music.album);
+                FlyAction.notifyAction(ActionKey.MEDIA_ARTIST, music.artist);
+                FlyAction.notifyAction(ActionKey.MEDIA_URL, music.url);
+            }else{
+                FlyAction.notifyAction(ActionKey.MEDIA_NAME, "");
+                FlyAction.notifyAction(ActionKey.MEDIA_ALBUM, "");
+                FlyAction.notifyAction(ActionKey.MEDIA_ARTIST, "");
+                FlyAction.notifyAction(ActionKey.MEDIA_URL, "");
+            }
+        } catch (Exception e) {
+            FlyLog.e(e.toString());
+        }
         super.musicID3UrlList(musicUrlList);
     }
 
@@ -198,6 +242,11 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
                 FlyAction.notifyAction(ActionKey.MEDIA_ALBUM, music.album);
                 FlyAction.notifyAction(ActionKey.MEDIA_ARTIST, music.artist);
                 FlyAction.notifyAction(ActionKey.MEDIA_URL, music.url);
+            }else{
+                FlyAction.notifyAction(ActionKey.MEDIA_NAME, "");
+                FlyAction.notifyAction(ActionKey.MEDIA_ALBUM, "");
+                FlyAction.notifyAction(ActionKey.MEDIA_ARTIST, "");
+                FlyAction.notifyAction(ActionKey.MEDIA_URL, "");
             }
         } catch (Exception e) {
             FlyLog.e(e.toString());

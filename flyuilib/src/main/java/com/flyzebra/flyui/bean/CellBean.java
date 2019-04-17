@@ -146,6 +146,14 @@ public class CellBean implements Parcelable {
                 return Gravity.START;
             case 2:
                 return Gravity.END;
+            case 3:
+                return Gravity.TOP;
+            case 4:
+                return Gravity.BOTTOM;
+            case 5:
+                return Gravity.START|Gravity.CENTER;
+            case 6:
+                return Gravity.END|Gravity.CENTER;
             default:
                 return Gravity.CENTER;
         }

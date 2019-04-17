@@ -58,7 +58,7 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
 //            SPUtil.set(this, "MUSIC_SEEK", 0);
 //            currenPath = DEF_PATH;
 //        } else {
-            currenPath = "/storage";
+            currenPath = getSavePath();
             if (!(new File(currenPath).exists())) {
                 currenPath = DEF_PATH;
             }
