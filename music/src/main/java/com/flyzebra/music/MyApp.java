@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.jancar.media.model.mediascan.MediaScan;
 import com.jancar.media.model.musicplayer.MusicPlayer;
+import com.jancar.media.model.storage.Storage;
 import com.squareup.leakcanary.LeakCanary;
 
 /**
@@ -19,5 +20,6 @@ public class MyApp extends Application {
         LeakCanary.install(this);
         MediaScan.getInstance().init(getApplicationContext());
         MusicPlayer.getInstance().init(getApplicationContext());
+        Storage.getInstance().init(getApplicationContext());
     }
 }

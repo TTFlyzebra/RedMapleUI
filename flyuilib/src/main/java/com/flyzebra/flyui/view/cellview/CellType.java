@@ -58,4 +58,7 @@ public interface CellType {
 
 
     int TYPE_FRAGMENT_NAV = 14 ;
+
+
+    int TYPE_IMAGE_RES = 99 ;
 }

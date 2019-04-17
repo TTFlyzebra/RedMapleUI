@@ -22,18 +22,18 @@ import com.flyzebra.flyui.view.pageview.SimplePageView;
  * 2019/4/2 16:15
  * Describ:
  **/
-public class PageCellView extends FrameLayout implements ICell, IAction {
+public class CellsCellView extends FrameLayout implements ICell, IAction {
     private CellBean mCellBean;
     private static Handler sHander = new Handler(Looper.getMainLooper());
     private static Runnable hideMenuTask = new Runnable() {
         @Override
         public void run() {
             FlyLog.d("hide Menu Task run");
-            FlyAction.notifyAction(ActionKey.STATUS_MENU, false);
+            FlyAction.notifyAction(ActionKey.STATUS_MENU, 0);
         }
     };
 
-    public PageCellView(Context context) {
+    public CellsCellView(Context context) {
         super(context);
     }
 
@@ -83,8 +83,8 @@ public class PageCellView extends FrameLayout implements ICell, IAction {
         super.onAttachedToWindow();
         FlyAction.register(this);
         if (mCellBean.recvAction == ActionKey.STATUS_MENU) {
-            goAnimtor(false,0);
-            FlyAction.notifyAction(ActionKey.STATUS_MENU, false);
+            goAnimtor(false, 0);
+            FlyAction.notifyAction(ActionKey.STATUS_MENU, 0);
         } else if (mCellBean.recvAction > 0) {
             onAction(mCellBean.recvAction);
         }
@@ -99,15 +99,13 @@ public class PageCellView extends FrameLayout implements ICell, IAction {
 
     @Override
     public boolean onAction(int key) {
-        if (mCellBean == null) return false;
-        Object obj = FlyAction.getValue(key);
+        if (mCellBean == null && mCellBean.recvAction != key) return false;
         switch (key) {
             case ActionKey.STATUS_MENU:
-                if (mCellBean.recvAction == ActionKey.STATUS_MENU) {
-                    FlyLog.d("cellid=%d,key=%d,obj=" + obj, mCellBean.cellId, key);
-                    if (obj instanceof Boolean) {
-                        goAnimtor((Boolean) obj,300);
-                    }
+                Object obj = FlyAction.getValue(key);
+                FlyLog.d("cellid=%d,key=%d,obj=" + obj, mCellBean.cellId, key);
+                if (obj instanceof Integer) {
+                    goAnimtor((Integer) obj > 0, 300);
                 }
                 return false;
         }

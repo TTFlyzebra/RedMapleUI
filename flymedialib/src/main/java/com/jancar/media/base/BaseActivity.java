@@ -26,7 +26,6 @@ import com.jancar.media.model.storage.Storage;
 import com.jancar.media.utils.CleanLeakUtils;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.SPUtil;
-import com.jancar.media.utils.SystemPropertiesProxy;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -65,6 +64,7 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
             }
 //        }
 
+        iStorage.refresh();
         iStorage.addListener(this);
 
         usbMediaScan.addListener(this);
@@ -215,11 +215,13 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
             }
             switch (action) {
                 case Intent.ACTION_MEDIA_MOUNTED:
+                    iStorage.refresh();
                     break;
                 case Intent.ACTION_MEDIA_EJECT:
                 case Intent.ACTION_MEDIA_REMOVED:
                 case Intent.ACTION_MEDIA_BAD_REMOVAL:
                 case Intent.ACTION_MEDIA_UNMOUNTED:
+                    iStorage.refresh();
                     final Uri uri = intent.getData();
                     if (uri == null) return;
                     if (!("file".equals(uri.getScheme()))) return;

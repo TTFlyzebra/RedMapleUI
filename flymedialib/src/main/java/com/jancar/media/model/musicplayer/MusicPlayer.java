@@ -215,6 +215,9 @@ public class MusicPlayer implements IMusicPlayer,
     @Override
     public void addListener(IMusicPlayerListener iMusicPlayerListener) {
         listeners.add(iMusicPlayerListener);
+        iMusicPlayerListener.loopStatusChange(mLoopStatus);
+        iMusicPlayerListener.playStatusChange(mPlayStatus);
+        iMusicPlayerListener.playtime(getCurrentPosition(), getDuration());
     }
 
     @Override

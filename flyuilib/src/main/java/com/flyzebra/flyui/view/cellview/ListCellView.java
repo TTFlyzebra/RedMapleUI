@@ -2,6 +2,7 @@ package com.flyzebra.flyui.view.cellview;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -54,10 +55,16 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
     public void upData(CellBean cellBean) {
         FlyLog.d("ListCellView x=%d,y=%d", cellBean.x, cellBean.y);
         mCellBean = cellBean;
+        int num = mCellBean.width/mCellBean.subCells.get(0).width;
+        if(num>1){
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),num);
+            setLayoutManager(gridLayoutManager);
+        }else {
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+            setLayoutManager(linearLayoutManager);
+            addItemDecoration(new RecycleViewDivider(getContext(), LinearLayoutManager.HORIZONTAL, 1, 0xFFFFFFFF));
+        }
         adapter = new FlyAdapter();
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        setLayoutManager(linearLayoutManager);
-        addItemDecoration(new RecycleViewDivider(getContext(), LinearLayoutManager.HORIZONTAL, 1, 0xFFFFFFFF));
         setAdapter(adapter);
 
         try {
@@ -88,12 +95,12 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
             }
             refresh();
         }
-        if (mCellBean.recvAction == MEDIA_LIST) {
-            obj = FlyAction.getValue(MEDIA_URL);
+        if (mCellBean.subCells != null && mCellBean.subCells.size() > 0) {
+            obj = FlyAction.getValue(mCellBean.subCells.get(0).recvAction);
             if (obj instanceof String) {
                 playItem = (String) obj;
                 for (int i = 0; i < mList.size(); i++) {
-                    if (playItem.equals(mList.get(i).get(MEDIA_URL))) {
+                    if (playItem.equals(mList.get(i).get(mCellBean.subCells.get(0).recvAction))) {
                         getLayoutManager().scrollToPosition(i);
                         break;
                     }
@@ -208,6 +215,7 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
                 }
                 if (cellBean.celltype == CellType.TYPE_ANIMTOR) {
                     ImageView imageView = holder.images.get(cellBean.recvAction);
+                    imageView.setVisibility(INVISIBLE);
                     try {
                         imageView.setVisibility(url.equals(playItem) ? VISIBLE : INVISIBLE);
                     } catch (Exception e) {
@@ -255,30 +263,30 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
     public boolean onAction(int key) {
         if (mCellBean == null) return false;
         Object obj = FlyAction.getValue(key);
-        switch (key) {
-            case MEDIA_LIST:
-                if (obj instanceof List) {
-                    mList.clear();
-                    try {
-                        mList.addAll((Collection<? extends Map<Integer, Object>>) obj);
-                    } catch (Exception e) {
-                        FlyLog.e(e.toString());
-                    }
-                    refresh();
+        if (key == mCellBean.recvAction) {
+            if (obj instanceof List) {
+                mList.clear();
+                try {
+                    mList.addAll((Collection<? extends Map<Integer, Object>>) obj);
+                } catch (Exception e) {
+                    FlyLog.e(e.toString());
                 }
-                break;
-            case MEDIA_URL:
-                if(mCellBean.recvAction==MEDIA_LIST) {
-                    playItem = obj + "";
-                    for (int i = 0; i < mList.size(); i++) {
-                        if (playItem.equals(mList.get(i).get(MEDIA_URL))) {
-                            getLayoutManager().scrollToPosition(i);
-                            break;
-                        }
+                refresh();
+            }
+        }
+
+        if (mCellBean.subCells != null && mCellBean.subCells.size() > 0 && key == mCellBean.subCells.get(0).recvAction) {
+            obj = FlyAction.getValue(mCellBean.subCells.get(0).recvAction);
+            if (obj instanceof String) {
+                playItem = (String) obj;
+                for (int i = 0; i < mList.size(); i++) {
+                    if (playItem.equals(mList.get(i).get(mCellBean.subCells.get(0).recvAction))) {
+                        getLayoutManager().scrollToPosition(i);
+                        break;
                     }
-                    refresh();
                 }
-                break;
+                refresh();
+            }
         }
         return false;
     }

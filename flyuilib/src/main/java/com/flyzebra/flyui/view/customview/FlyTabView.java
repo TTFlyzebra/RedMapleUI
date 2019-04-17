@@ -128,7 +128,7 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener {
         focusPos = (int) v.getTag();
         setSelectItem(animDuration);
         if (onItemClickListener != null) {
-            onItemClickListener.onItemClick(v, (Integer) v.getTag());
+            onItemClickListener.onItemClick(v);
         }
     }
 
@@ -186,7 +186,7 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener {
     }
 
     public interface OnItemClickListener {
-        void onItemClick(View v, int pos);
+        void onItemClick(View v);
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {

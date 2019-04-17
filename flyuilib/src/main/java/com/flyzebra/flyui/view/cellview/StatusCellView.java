@@ -11,18 +11,20 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.flyzebra.flyui.IAction;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.chache.UpdataVersion;
+import com.flyzebra.flyui.config.ActionKey;
 import com.flyzebra.flyui.module.FlyAction;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.customview.FlyImageView;
 import com.flyzebra.flyui.view.customview.MirrorView;
 
-public class ImageCellView extends FlyImageView implements ICell, View.OnTouchListener, View.OnClickListener {
+public class StatusCellView extends FlyImageView implements ICell, IAction, View.OnTouchListener, View.OnClickListener {
     protected CellBean mCellBean;
     private MirrorView mirrorView;
 
-    public ImageCellView(Context context) {
+    public StatusCellView(Context context) {
         super(context);
         initView(context);
     }
@@ -50,7 +52,24 @@ public class ImageCellView extends FlyImageView implements ICell, View.OnTouchLi
     }
 
     public void upView() {
-        showImageUrl(mCellBean.imageurl1);
+        switch (mCellBean.recvAction) {
+            case ActionKey.STATUS_PLAY:
+            case ActionKey.STATUS_MENU:
+            case ActionKey.STATUS_LOOP:
+                Object obj = FlyAction.getValue(mCellBean.recvAction);
+                if (obj instanceof Integer) {
+                    int status = (int) obj;
+                    if (status == 0) {
+                        showImageUrl(mCellBean.imageurl1);
+                    }else if (status > 0 && mCellBean.subCells != null && mCellBean.subCells.size() >= status) {
+                        showImageUrl(mCellBean.subCells.get(status - 1).imageurl1);
+                    }
+                }
+                break;
+            default:
+                showImageUrl(mCellBean.imageurl1);
+                break;
+        }
     }
 
     private void showImageUrl(String imageurl) {
@@ -131,10 +150,7 @@ public class ImageCellView extends FlyImageView implements ICell, View.OnTouchLi
         int top = location[1];
         int right = left + view.getMeasuredWidth();
         int bottom = top + view.getMeasuredHeight();
-        if (y >= top && y <= bottom && x >= left && x <= right) {
-            return true;
-        }
-        return false;
+        return y >= top && y <= bottom && x >= left && x <= right;
     }
 
     private Handler mHandler = new Handler();
@@ -149,13 +165,36 @@ public class ImageCellView extends FlyImageView implements ICell, View.OnTouchLi
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        FlyAction.register(this);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         mHandler.removeCallbacksAndMessages(null);
         focusChange(false);
+        FlyAction.unregister(this);
         super.onDetachedFromWindow();
+    }
+
+    @Override
+    public boolean onAction(int key) {
+        if (mCellBean == null || key != mCellBean.recvAction) return false;
+        switch (mCellBean.recvAction) {
+            case ActionKey.STATUS_PLAY:
+            case ActionKey.STATUS_MENU:
+            case ActionKey.STATUS_LOOP:
+                Object obj = FlyAction.getValue(key);
+                if (obj instanceof Integer) {
+                    int status = (int) obj;
+                    if (status == 0) {
+                        showImageUrl(mCellBean.imageurl1);
+                    }else if (status > 0 && mCellBean.subCells != null && mCellBean.subCells.size() >= status) {
+                        showImageUrl(mCellBean.subCells.get(status - 1).imageurl1);
+                    }
+                }
+                return false;
+        }
+        return false;
     }
 
 }
