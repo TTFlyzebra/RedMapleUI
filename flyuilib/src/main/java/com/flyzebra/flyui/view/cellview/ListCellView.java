@@ -1,8 +1,8 @@
 package com.flyzebra.flyui.view.cellview;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,10 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.flyzebra.flyui.IAction;
 import com.flyzebra.flyui.bean.CellBean;
+import com.flyzebra.flyui.bean.ThemeBean;
 import com.flyzebra.flyui.chache.UpdataVersion;
 import com.flyzebra.flyui.config.ActionKey;
 import com.flyzebra.flyui.module.FlyAction;
@@ -26,6 +25,7 @@ import com.flyzebra.flyui.view.customview.MirrorView;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +42,7 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
     private OnItemClickListener onItemClickListener;
     private FlyAdapter adapter;
     private String itemKey;
+    private Map<String,String> resurl = new HashMap<>();
 
     public ListCellView(Context context) {
         super(context);
@@ -63,7 +64,7 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
         } else {
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
             setLayoutManager(linearLayoutManager);
-            addItemDecoration(new RecycleViewDivider(getContext(), LinearLayoutManager.HORIZONTAL, 1, 0xFFFFFFFF));
+            addItemDecoration(new RecycleViewDivider(getContext(), LinearLayoutManager.HORIZONTAL, 1, 0x1FFFFFFF));
         }
         adapter = new FlyAdapter();
         setAdapter(adapter);
@@ -85,6 +86,12 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
                 }
             }
         });
+
+        for(CellBean resCellBen:mCellBean.subCells){
+            if(resCellBen.celltype==CellType.TYPE_IMAGE_RES){
+                resurl.put(resCellBen.resId,resCellBen.imageurl1);
+            }
+        }
 
         upView();
     }
@@ -135,9 +142,9 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
                 for (CellBean cellBean : mCellBean.subCells) {
                     if (cellBean.celltype == CellType.TYPE_TEXT && cellBean.recvAction > 0) {
                         TextView textView = itemView.findViewById(cellBean.recvAction);
-                        if(textView!=null){
+                        if (textView != null) {
                             texts.put(cellBean.recvAction, textView);
-                        }else {
+                        } else {
                             FlyLog.e("find by id empty");
                         }
                     }
@@ -145,9 +152,9 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
                 for (CellBean cellBean : mCellBean.subCells) {
                     if ((cellBean.celltype == CellType.TYPE_IMAGE || cellBean.celltype == CellType.TYPE_ANIMTOR) && cellBean.recvAction > 0) {
                         ImageView imageView = itemView.findViewById(cellBean.recvAction);
-                        if(imageView!=null){
+                        if (imageView != null) {
                             images.put(cellBean.recvAction, imageView);
-                        }else{
+                        } else {
                             FlyLog.e("find by id empty");
                         }
                     }
@@ -196,7 +203,7 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
         @Override
         public void onBindViewHolder(ViewHolder holder, final int position) {
             Map<Integer, Object> map = mList.get(position);
-            String url = map.get(MEDIA_URL) + "";
+            Object key =map.get(mCellBean.subCells.get(0).recvAction);
             holder.itemView.setTag(position);
             holder.itemView.setOnClickListener(new OnClickListener() {
                 @Override
@@ -206,31 +213,40 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
                     }
                 }
             });
+            try{
+                holder.itemView.setEnabled(!key.equals(ListCellView.this.itemKey));
+            }catch (Exception e){
+                FlyLog.e(e.toString());
+            }
             for (CellBean cellBean : mCellBean.subCells) {
                 if (cellBean.celltype == CellType.TYPE_TEXT && cellBean.recvAction > 0) {
                     TextView textView = holder.texts.get(cellBean.recvAction);
                     try {
-                        textView.setTextColor(url.equals(itemKey) ? 0xFF00FF00 : 0xFF00FFFF);
+                        textView.setTextColor(key.equals(ListCellView.this.itemKey) ? ThemeBean.filterColor : ThemeBean.normalColor);
                     } catch (Exception e) {
                         FlyLog.e(e.toString());
                     }
                     String text = map.get(cellBean.recvAction) + "";
                     textView.setText(text);
                 }
-                if (cellBean.celltype == CellType.TYPE_IMAGE && cellBean.recvAction > 0){
+                if (cellBean.celltype == CellType.TYPE_IMAGE && cellBean.recvAction > 0) {
                     final ImageView imageView = holder.images.get(cellBean.recvAction);
-                    String imgurl = UpdataVersion.getNativeFilePath(cellBean.imageurl1);
-                    Glide.with(getContext()).load(imgurl).asBitmap().into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
-                            imageView.setImageBitmap(bitmap);
+                    try {
+                        Object obj = mList.get(position).get(cellBean.recvAction);
+                        if(obj instanceof String) {
+                            String imgurl = UpdataVersion.getNativeFilePath(resurl.get(obj));
+                            Glide.with(getContext()).load(imgurl).asBitmap().into(imageView);
+                        }else if(obj instanceof Drawable){
+                            imageView.setImageDrawable((Drawable) obj);
                         }
-                    });
-//                    imageView.setImageResource(R.drawable.mediainfo_fm);
-//                    Object obj = map.get(cellBean.recvAction);
-//                    if(obj instanceof Drawable){
-//                        imageView.setImageDrawable((Drawable) obj);
-//                    }
+                    }catch (Exception e){
+                        FlyLog.e(e.toString());
+                    }
+                    try {
+                        imageView.setColorFilter(key.equals(ListCellView.this.itemKey) ? ThemeBean.filterColor : ThemeBean.normalColor);
+                    } catch (Exception e) {
+                        FlyLog.e(e.toString());
+                    }
                 }
             }
         }

@@ -38,6 +38,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
         flyui = new Flyui(this);
         flyui.onCreate();
         musicPlayer.addListener(this);
+        FlyAction.notifyAction(ActionKey.PAGER_RESID,"music_fm01");
     }
 
     @Override
@@ -97,10 +98,12 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
     @Override
     public void notifyPathChange(String path) {
         FlyLog.d("notifyPathChange path=%s", path);
+        FlyAction.notifyAction(ActionKey.STORE_URL,path);
         if (isStop) return;
         if (!musicPlayer.getPlayUrl().startsWith(path)) {
             musicPlayer.stop();
         }
+        FlyAction.notifyAction(ActionKey.MEDIA_LIST, new ArrayList<>());
         musicPlayer.playSaveUrlByPath(path);
         musicList.clear();
         super.notifyPathChange(path);
@@ -280,7 +283,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
             } else {
                 imageKey = "DISK_USB";
             }
-            map.put(ActionKey.STORE_IMAGE, imageKey);
+            map.put(ActionKey.RES_IMAGE, imageKey);
             list.add(map);
         }
         FlyAction.notifyAction(ActionKey.STORE_LIST, list);

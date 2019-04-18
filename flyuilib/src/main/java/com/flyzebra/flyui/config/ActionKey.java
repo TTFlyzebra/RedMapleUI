@@ -38,6 +38,6 @@ public interface ActionKey {
     int STORE_LIST = 3017;//存储器列表
     int STORE_URL = 3018;//存储器地址
     int STORE_NAME = 3020;//存储器名称
-    int STORE_IMAGE = 3019;//存储器图片资源
+    int RES_IMAGE = 3019;//存储器图片资源
 
 }

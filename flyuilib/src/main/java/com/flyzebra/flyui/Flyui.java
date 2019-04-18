@@ -88,6 +88,7 @@ public class Flyui implements IUpdataVersion.CheckCacheResult, IUpdataVersion.Up
 
     @Override
     public void getCacheDataFaile(String error) {
+        iUpDataVersion.forceUpVersion(this);
     }
 
     private void upView(ThemeBean themeBean) {

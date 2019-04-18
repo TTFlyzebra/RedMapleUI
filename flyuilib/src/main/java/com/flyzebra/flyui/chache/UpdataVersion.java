@@ -41,6 +41,7 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
     private CheckCacheResult checkCacheResult;
     private String localVersion = "0.00";
     private List<String> mDownImageList = new ArrayList<>();
+    private Set<String> files = new HashSet<>();
     private int mDownImageSum = 0;
     private AtomicInteger mAtomicImgCount = new AtomicInteger(0);
     private String mThemeJson;
@@ -317,58 +318,49 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
         addDownImageUrl(mThemeBean.imageurl);
         if (mThemeBean.topPage != null && mThemeBean.topPage.cellList != null) {
             for (CellBean cellBean : mThemeBean.topPage.cellList) {
-                addDownImageUrl(cellBean.imageurl1);
-                addDownImageUrl(cellBean.imageurl2);
-                if (cellBean.subCells != null) {
-                    for (CellBean subCell : cellBean.subCells) {
-                        addDownImageUrl(subCell.imageurl1);
-                        addDownImageUrl(subCell.imageurl2);
-                    }
-                }
-                //cellpage
-                if(cellBean.cellpage!=null) {
-                    addDownImageUrl(cellBean.cellpage.imageurl);
-                    for (CellBean pageCellBean : cellBean.cellpage.cellList) {
-                        addDownImageUrl(pageCellBean.imageurl1);
-                        addDownImageUrl(pageCellBean.imageurl2);
-                        if (pageCellBean.subCells != null) {
-                            for (CellBean subCell : pageCellBean.subCells) {
-                                addDownImageUrl(subCell.imageurl1);
-                                addDownImageUrl(subCell.imageurl2);
-                            }
-                        }
-                    }
-                }
+                addCellImageUrls(cellBean);
             }
         }
         for (PageBean pageBean : pageList) {
             addDownImageUrl(pageBean.imageurl);
             for (CellBean cellBean : pageBean.cellList) {
-                addDownImageUrl(cellBean.imageurl1);
-                addDownImageUrl(cellBean.imageurl2);
-                if (cellBean.subCells != null) {
-                    for (CellBean subCell : cellBean.subCells) {
-                        addDownImageUrl(subCell.imageurl1);
-                        addDownImageUrl(subCell.imageurl2);
-                    }
-                }
-                //cellpage
-                if(cellBean.cellpage!=null) {
-                    addDownImageUrl(cellBean.cellpage.imageurl);
-                    for (CellBean pageCellBean : cellBean.cellpage.cellList) {
-                        addDownImageUrl(pageCellBean.imageurl1);
-                        addDownImageUrl(pageCellBean.imageurl2);
-                        if (pageCellBean.subCells != null) {
-                            for (CellBean subCell : pageCellBean.subCells) {
-                                addDownImageUrl(subCell.imageurl1);
-                                addDownImageUrl(subCell.imageurl2);
-                            }
-                        }
-                    }
-                }
+                addCellImageUrls(cellBean);
             }
         }
         downloadAllImage(mDownImageList);
+    }
+
+    private void addCellImageUrls(CellBean cellBean) {
+        addDownImageUrl(cellBean.imageurl1);
+        addDownImageUrl(cellBean.imageurl2);
+        if (cellBean.subCells != null) {
+            for (CellBean subCell : cellBean.subCells) {
+                addCellImageUrls(subCell);
+            }
+        }
+
+        if(cellBean.cellpage!=null) {
+            addDownImageUrl(cellBean.cellpage.imageurl);
+            for (CellBean pageCellBean : cellBean.cellpage.cellList) {
+                addCellImageUrls(pageCellBean);
+            }
+         }
+    }
+
+    private void addSaveFileNames(CellBean cellBean) {
+        files.add(EncodeHelper.md5(cellBean.imageurl1) + ".0");
+        files.add(EncodeHelper.md5(cellBean.imageurl2) + ".0");
+        if (cellBean.subCells != null) {
+            for (CellBean subCell : cellBean.subCells) {
+                addSaveFileNames(subCell);
+            }
+        }
+        if(cellBean.cellpage!=null) {
+            addDownImageUrl(cellBean.cellpage.imageurl);
+            for (CellBean pageCellBean : cellBean.cellpage.cellList) {
+                addSaveFileNames(pageCellBean);
+            }
+        }
     }
 
     private void addDownImageUrl(String imageurl) {
@@ -464,7 +456,6 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
         isUpSuccess = true;
     }
 
-
     public void cancelAllTasks() {
         FlyOkHttp.getInstance().cancelAll(HTTPTAG);
         tHandler.removeCallbacksAndMessages(null);
@@ -473,7 +464,6 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
         checkCacheResult = null;
     }
 
-
     /**
      * 思路
      * 根据缓存的tabjson文件遍历读取所需要的文件名放入Set集合
@@ -481,7 +471,7 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
      */
     private void DelNoUseFiles() {
         FlyLog.d("开始删除不用的缓存文件");
-        Set<String> files = new HashSet<>();
+        files.clear();
         files.add("journal");
         if (mThemeBean == null) return;
         files.add(EncodeHelper.md5(VERSION_KEY) + ".0");
@@ -491,57 +481,16 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
         //TOPPAGE
         if (mThemeBean.topPage != null && mThemeBean.topPage.cellList != null) {
             for (CellBean cellBean : mThemeBean.topPage.cellList) {
-                files.add(EncodeHelper.md5(cellBean.imageurl1) + ".0");
-                files.add(EncodeHelper.md5(cellBean.imageurl2) + ".0");
-                if (cellBean.subCells != null) {
-                    for (CellBean subCell : cellBean.subCells) {
-                        files.add(EncodeHelper.md5(subCell.imageurl1) + ".0");
-                        files.add(EncodeHelper.md5(subCell.imageurl2) + ".0");
-                    }
-                }
-                if(cellBean.cellpage!=null) {
-                    addDownImageUrl(cellBean.cellpage.imageurl);
-                    for (CellBean pageCellBean : cellBean.cellpage.cellList) {
-                        files.add(EncodeHelper.md5(pageCellBean.imageurl1) + ".0");
-                        files.add(EncodeHelper.md5(pageCellBean.imageurl2) + ".0");
-                        if (pageCellBean.subCells != null) {
-                            for (CellBean subCell : pageCellBean.subCells) {
-                                files.add(EncodeHelper.md5(subCell.imageurl1) + ".0");
-                                files.add(EncodeHelper.md5(subCell.imageurl2) + ".0");
-                            }
-                        }
-                    }
-                }
+                addSaveFileNames(cellBean);
             }
         }
         //PAGE
         for (PageBean pageBean : mThemeBean.pageList) {
             files.add(EncodeHelper.md5(pageBean.imageurl) + ".0");
             for (CellBean cellBean : pageBean.cellList) {
-                files.add(EncodeHelper.md5(cellBean.imageurl1) + ".0");
-                files.add(EncodeHelper.md5(cellBean.imageurl2) + ".0");
-                if (cellBean.subCells != null) {
-                    for (CellBean subCell : cellBean.subCells) {
-                        files.add(EncodeHelper.md5(subCell.imageurl1) + ".0");
-                        files.add(EncodeHelper.md5(subCell.imageurl2) + ".0");
-                    }
-                }
-                if(cellBean.cellpage!=null) {
-                    addDownImageUrl(cellBean.cellpage.imageurl);
-                    for (CellBean pageCellBean : cellBean.cellpage.cellList) {
-                        files.add(EncodeHelper.md5(pageCellBean.imageurl1) + ".0");
-                        files.add(EncodeHelper.md5(pageCellBean.imageurl2) + ".0");
-                        if (pageCellBean.subCells != null) {
-                            for (CellBean subCell : pageCellBean.subCells) {
-                                files.add(EncodeHelper.md5(subCell.imageurl1) + ".0");
-                                files.add(EncodeHelper.md5(subCell.imageurl2) + ".0");
-                            }
-                        }
-                    }
-                }
+                addSaveFileNames(cellBean);
             }
         }
-
 
         File rootFile = new File(iDiskCache.getSavePath());
         File[] savefiles = rootFile.listFiles();

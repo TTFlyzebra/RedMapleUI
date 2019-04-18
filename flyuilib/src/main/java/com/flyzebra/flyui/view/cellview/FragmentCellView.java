@@ -1,16 +1,15 @@
 package com.flyzebra.flyui.view.cellview;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import com.flyzebra.flyui.IAction;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.config.ActionKey;
-import com.flyzebra.flyui.fragment.CellFragment;
 import com.flyzebra.flyui.module.FlyAction;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.customview.MirrorView;
@@ -31,24 +30,28 @@ public class FragmentCellView extends FrameLayout implements ICell, IAction {
 
     @Override
     public void initView(Context context) {
-        setId(resID);
     }
 
     @Override
     public void upData(CellBean cellBean) {
+        if (cellBean == null) {
+            removeAllViews();
+            return;
+        }
         this.mCellBean = cellBean;
+        resID = 0x4f000001 + mCellBean.cellId;
+        setId(resID);
         if (mCellBean != null && mCellBean.cellpage != null && mCellBean.cellpage.cellList != null && mCellBean.cellpage.cellList.size() > 0) {
             Object obj = FlyAction.getValue(ActionKey.PAGER_RESID);
             if (obj != null) {
                 for (CellBean subCell : mCellBean.cellpage.cellList) {
                     if (obj.equals(subCell.resId)) {
-                        replaceFragment(subCell);
+                        replaceFragment(subCell, resID);
                         break;
                     }
                 }
             }
         }
-
         try {
             setBackgroundColor(Color.parseColor(mCellBean.backcolor));
         } catch (Exception e) {
@@ -75,6 +78,7 @@ public class FragmentCellView extends FrameLayout implements ICell, IAction {
     @Override
     protected void onDetachedFromWindow() {
         FlyAction.unregister(this);
+        mHandler.removeCallbacksAndMessages(null);
         super.onDetachedFromWindow();
     }
 
@@ -86,7 +90,7 @@ public class FragmentCellView extends FrameLayout implements ICell, IAction {
             Object obj = FlyAction.getValue(key);
             for (CellBean cellBean : mCellBean.cellpage.cellList) {
                 if (obj.equals(cellBean.resId)) {
-                    replaceFragment(cellBean);
+                    replaceFragment(cellBean, resID);
                     break;
                 }
             }
@@ -95,14 +99,24 @@ public class FragmentCellView extends FrameLayout implements ICell, IAction {
     }
 
 
-    public void replaceFragment(CellBean cellBean) {
-        try {
-            FragmentTransaction ft = ((Activity) getContext()).getFragmentManager().beginTransaction();
-            Fragment fragment = CellFragment.newInstance(cellBean);
-            ft.replace(resID, fragment).commitAllowingStateLoss();
-        } catch (Exception e) {
-            FlyLog.e(e.toString());
-        }
+    private Handler mHandler = new Handler(Looper.getMainLooper());
+    public void replaceFragment(final CellBean cellBean, int resID) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                removeAllViews();
+                ICell view = CellViewFactory.createView(getContext(), cellBean);
+                addView((View) view);
+                view.upData(cellBean);
+            }
+        });
+//        try {
+//            FragmentTransaction ft = ((Activity) getContext()).getFragmentManager().beginTransaction();
+//            Fragment fragment = CellFragment.newInstance(cellBean);
+//            ft.replace(resID, fragment).commit();
+//        } catch (Exception e) {
+//            FlyLog.e(e.toString());
+//        }
     }
 
 }

@@ -12,6 +12,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.flyzebra.flyui.bean.CellBean;
+import com.flyzebra.flyui.bean.ThemeBean;
 import com.flyzebra.flyui.chache.UpdataVersion;
 import com.flyzebra.flyui.module.FlyAction;
 import com.flyzebra.flyui.utils.FlyLog;
@@ -115,7 +116,7 @@ public class ImageCellView extends FlyImageView implements ICell, View.OnTouchLi
         if (flag) {
             mHandler.removeCallbacks(show);
             mHandler.postDelayed(show, 300);
-            setColorFilter(0xFF0370E5);
+            setColorFilter(ThemeBean.filterColor);
         } else {
             clearColorFilter();
         }

@@ -8,6 +8,8 @@ import java.util.List;
  * Describ:
  **/
 public class ThemeBean {
+    public static int filterColor = 0xFF0370E5;
+    public static int normalColor = 0xFFFFFFFF;
     public String themeName;
     public String themeType;
     public String imageurl = "";

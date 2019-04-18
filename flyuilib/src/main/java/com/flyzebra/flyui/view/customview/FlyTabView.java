@@ -171,7 +171,7 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener {
     public void setFocusPos(int pos) {
         FlyLog.d("setFocusPos=%d", pos);
         focusPos = pos;
-        setSelectItem(0);
+        setSelectItem(300);
     }
 
     public void setNewTitles(String[] titles) {

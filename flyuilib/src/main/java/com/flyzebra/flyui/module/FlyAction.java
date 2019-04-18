@@ -31,7 +31,7 @@ public class FlyAction {
 
     private void add(IAction flyuiAction) {
         flyuiEvents.add(flyuiAction);
-        FlyLog.v("add action=" + flyuiAction);
+        FlyLog.v("size=%d, add action=" + flyuiAction,flyuiEvents.size());
     }
 
     public static void unregister(IAction flyuiAction) {
@@ -40,7 +40,7 @@ public class FlyAction {
 
     private void remove(IAction flyuiAction) {
         flyuiEvents.remove(flyuiAction);
-        FlyLog.v("remove action=" + flyuiAction);
+        FlyLog.v("size=%d, remove action=" + flyuiAction,flyuiEvents.size());
     }
 
     private static class FlyActionHolder {
