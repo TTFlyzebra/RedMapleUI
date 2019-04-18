@@ -57,6 +57,11 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
     public void upData(CellBean cellBean) {
         FlyLog.d("ListCellView x=%d,y=%d", cellBean.x, cellBean.y);
         mCellBean = cellBean;
+        for(CellBean resCellBen:mCellBean.subCells){
+            if(resCellBen.celltype==CellType.TYPE_IMAGE_RES){
+                resurl.put(resCellBen.resId,resCellBen.imageurl1);
+            }
+        }
         int num = mCellBean.width / mCellBean.subCells.get(0).width;
         if (num > 1) {
             GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), num);
@@ -86,12 +91,6 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
                 }
             }
         });
-
-        for(CellBean resCellBen:mCellBean.subCells){
-            if(resCellBen.celltype==CellType.TYPE_IMAGE_RES){
-                resurl.put(resCellBen.resId,resCellBen.imageurl1);
-            }
-        }
 
         upView();
     }
