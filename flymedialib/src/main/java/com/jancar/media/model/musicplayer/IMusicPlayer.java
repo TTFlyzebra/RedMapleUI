@@ -24,7 +24,7 @@ public interface IMusicPlayer {
 
     void pause();
 
-    void stop();
+    void destory();
 
     boolean isPause();
 

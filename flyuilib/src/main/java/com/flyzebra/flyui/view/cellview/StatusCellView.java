@@ -54,9 +54,9 @@ public class StatusCellView extends FlyImageView implements ICell, IAction, View
 
     public void upView() {
         switch (mCellBean.recvAction) {
-            case ActionKey.STATUS_PLAY:
-            case ActionKey.STATUS_MENU:
-            case ActionKey.STATUS_LOOP:
+            case ActionKey.MSG_PLAY_STATUS:
+            case ActionKey.MSG_MENU_STATUS:
+            case ActionKey.MSG_LOOP_STATUS:
                 Object obj = FlyAction.getValue(mCellBean.recvAction);
                 if (obj instanceof Integer) {
                     int status = (int) obj;
@@ -181,9 +181,9 @@ public class StatusCellView extends FlyImageView implements ICell, IAction, View
     public boolean onAction(int key) {
         if (mCellBean == null || key != mCellBean.recvAction) return false;
         switch (mCellBean.recvAction) {
-            case ActionKey.STATUS_PLAY:
-            case ActionKey.STATUS_MENU:
-            case ActionKey.STATUS_LOOP:
+            case ActionKey.MSG_PLAY_STATUS:
+            case ActionKey.MSG_MENU_STATUS:
+            case ActionKey.MSG_LOOP_STATUS:
                 Object obj = FlyAction.getValue(key);
                 if (obj instanceof Integer) {
                     int status = (int) obj;

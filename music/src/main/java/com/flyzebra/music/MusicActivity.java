@@ -38,14 +38,14 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
         flyui = new Flyui(this);
         flyui.onCreate();
         musicPlayer.addListener(this);
-        FlyAction.notifyAction(ActionKey.PAGER_RESID,"music_fm01");
+        FlyAction.notifyAction(ActionKey.CHANGE_PAGER_WITH_RESID,"music_fm01");
     }
 
     @Override
     protected void onDestroy() {
         flyui.onDestroy();
         musicPlayer.removeListener(this);
-        musicPlayer.stop();
+        musicPlayer.destory();
         super.onDestroy();
     }
 
@@ -76,11 +76,11 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
                 break;
             case ActionKey.KEY_MENU:
                 int flag = 0;
-                obj = FlyAction.getValue(ActionKey.STATUS_MENU);
+                obj = FlyAction.getValue(ActionKey.MSG_MENU_STATUS);
                 if (obj instanceof Integer) {
                     flag = ((int) obj) == 0 ? 1 : 0;
                 }
-                FlyAction.notifyAction(ActionKey.STATUS_MENU, flag);
+                FlyAction.notifyAction(ActionKey.MSG_MENU_STATUS, flag);
                 break;
             case ActionKey.KEY_LOOP:
                 musicPlayer.switchLoopStatus();
@@ -101,7 +101,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
         FlyAction.notifyAction(ActionKey.STORE_URL,path);
         if (isStop) return;
         if (!musicPlayer.getPlayUrl().startsWith(path)) {
-            musicPlayer.stop();
+            musicPlayer.destory();
         }
         FlyAction.notifyAction(ActionKey.MEDIA_LIST, new ArrayList<>());
         musicPlayer.playSaveUrlByPath(path);
@@ -119,7 +119,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
         }
         try {
             int playStauts = (musicPlayer.getPlayStatus() == MusicPlayer.STATUS_STARTPLAY || musicPlayer.getPlayStatus() == MusicPlayer.STATUS_PLAYING) ? 1 : 0;
-            FlyAction.notifyAction(ActionKey.STATUS_PLAY, playStauts);
+            FlyAction.notifyAction(ActionKey.MSG_PLAY_STATUS, playStauts);
             final int i = musicPlayer.getPlayPos();
             if (i >= 0 && i < musicList.size()) {
                 Music music = musicList.get(i);
@@ -201,7 +201,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
         FlyAction.notifyAction(ActionKey.MEDIA_LIST, list);
         try {
             int playStauts = (musicPlayer.getPlayStatus() == MusicPlayer.STATUS_STARTPLAY || musicPlayer.getPlayStatus() == MusicPlayer.STATUS_PLAYING) ? 1 : 0;
-            FlyAction.notifyAction(ActionKey.STATUS_PLAY, playStauts);
+            FlyAction.notifyAction(ActionKey.MSG_PLAY_STATUS, playStauts);
             final int i = musicPlayer.getPlayPos();
             if (i >= 0 && i < musicList.size()) {
                 Music music = musicList.get(i);
@@ -237,7 +237,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
         }
         try {
             int playStauts = (musicPlayer.getPlayStatus() == MusicPlayer.STATUS_STARTPLAY || musicPlayer.getPlayStatus() == MusicPlayer.STATUS_PLAYING) ? 1 : 0;
-            FlyAction.notifyAction(ActionKey.STATUS_PLAY, playStauts);
+            FlyAction.notifyAction(ActionKey.MSG_PLAY_STATUS, playStauts);
             final int i = musicPlayer.getPlayPos();
             if (i >= 0 && i < musicList.size()) {
                 Music music = musicList.get(i);
@@ -258,7 +258,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
 
     @Override
     public void loopStatusChange(int staut) {
-        FlyAction.notifyAction(ActionKey.STATUS_LOOP, staut);
+        FlyAction.notifyAction(ActionKey.MSG_LOOP_STATUS, staut);
     }
 
     @Override

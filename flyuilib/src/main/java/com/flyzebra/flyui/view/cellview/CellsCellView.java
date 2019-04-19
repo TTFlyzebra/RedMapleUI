@@ -29,7 +29,7 @@ public class CellsCellView extends FrameLayout implements ICell, IAction {
         @Override
         public void run() {
             FlyLog.d("hide Menu Task run");
-            FlyAction.notifyAction(ActionKey.STATUS_MENU, 0);
+            FlyAction.notifyAction(ActionKey.MSG_MENU_STATUS, 0);
         }
     };
 
@@ -71,7 +71,7 @@ public class CellsCellView extends FrameLayout implements ICell, IAction {
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         //TODO:处理弹出菜单
-        if (mCellBean.recvAction == ActionKey.STATUS_MENU) {
+        if (mCellBean.recvAction == ActionKey.MSG_MENU_STATUS) {
             sHander.removeCallbacks(hideMenuTask);
             sHander.postDelayed(hideMenuTask, 5000);
         }
@@ -82,9 +82,9 @@ public class CellsCellView extends FrameLayout implements ICell, IAction {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         FlyAction.register(this);
-        if (mCellBean.recvAction == ActionKey.STATUS_MENU) {
+        if (mCellBean.recvAction == ActionKey.MSG_MENU_STATUS) {
             goAnimtor(false, 0);
-            FlyAction.notifyAction(ActionKey.STATUS_MENU, 0);
+            FlyAction.notifyAction(ActionKey.MSG_MENU_STATUS, 0);
         } else if (mCellBean.recvAction > 0) {
             onAction(mCellBean.recvAction);
         }
@@ -101,7 +101,7 @@ public class CellsCellView extends FrameLayout implements ICell, IAction {
     public boolean onAction(int key) {
         if (mCellBean == null && mCellBean.recvAction != key) return false;
         switch (key) {
-            case ActionKey.STATUS_MENU:
+            case ActionKey.MSG_MENU_STATUS:
                 Object obj = FlyAction.getValue(key);
                 FlyLog.d("cellid=%d,key=%d,obj=" + obj, mCellBean.cellId, key);
                 if (obj instanceof Integer) {

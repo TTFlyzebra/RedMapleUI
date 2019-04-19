@@ -91,7 +91,7 @@ public class RegisterMediaSession {
             FlyLog.d("media key fore");
             musicPlayer.playPrev();
         } else if (KeyEvent.KEYCODE_MEDIA_STOP == keyCode) {
-            FlyLog.d("media key stop");
+            FlyLog.d("media key destory");
             musicPlayer.pause();
         } else if (KeyEvent.KEYCODE_MEDIA_PAUSE == keyCode) {
             FlyLog.d("media key pause");

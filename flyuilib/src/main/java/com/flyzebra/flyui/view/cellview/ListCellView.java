@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.flyzebra.flyui.IAction;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.ThemeBean;
@@ -25,7 +26,6 @@ import com.flyzebra.flyui.view.customview.MirrorView;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +42,7 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
     private OnItemClickListener onItemClickListener;
     private FlyAdapter adapter;
     private String itemKey;
-    private Map<String,String> resurl = new HashMap<>();
+    private Map<String, String> mResUrls = new Hashtable<>();
 
     public ListCellView(Context context) {
         super(context);
@@ -57,9 +57,9 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
     public void upData(CellBean cellBean) {
         FlyLog.d("ListCellView x=%d,y=%d", cellBean.x, cellBean.y);
         mCellBean = cellBean;
-        for(CellBean resCellBen:mCellBean.subCells){
-            if(resCellBen.celltype==CellType.TYPE_IMAGE_RES){
-                resurl.put(resCellBen.resId,resCellBen.imageurl1);
+        for (CellBean resCellBen : mCellBean.subCells) {
+            if (resCellBen.celltype == CellType.TYPE_IMAGE_RES) {
+                mResUrls.put(resCellBen.resId, resCellBen.imageurl1);
             }
         }
         int num = mCellBean.width / mCellBean.subCells.get(0).width;
@@ -202,7 +202,7 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
         @Override
         public void onBindViewHolder(ViewHolder holder, final int position) {
             Map<Integer, Object> map = mList.get(position);
-            Object key =map.get(mCellBean.subCells.get(0).recvAction);
+            Object key = map.get(mCellBean.subCells.get(0).recvAction);
             holder.itemView.setTag(position);
             holder.itemView.setOnClickListener(new OnClickListener() {
                 @Override
@@ -212,9 +212,9 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
                     }
                 }
             });
-            try{
+            try {
                 holder.itemView.setEnabled(!key.equals(ListCellView.this.itemKey));
-            }catch (Exception e){
+            } catch (Exception e) {
                 FlyLog.e(e.toString());
             }
             for (CellBean cellBean : mCellBean.subCells) {
@@ -227,18 +227,24 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
                     }
                     String text = map.get(cellBean.recvAction) + "";
                     textView.setText(text);
-                }
-                if (cellBean.celltype == CellType.TYPE_IMAGE && cellBean.recvAction > 0) {
+                } else if (cellBean.celltype == CellType.TYPE_IMAGE && cellBean.recvAction > 0) {
                     final ImageView imageView = holder.images.get(cellBean.recvAction);
+                    imageView.setImageBitmap(null);
                     try {
                         Object obj = mList.get(position).get(cellBean.recvAction);
-                        if(obj instanceof String) {
-                            String imgurl = UpdataVersion.getNativeFilePath(resurl.get(obj));
-                            Glide.with(getContext()).load(imgurl).asBitmap().into(imageView);
-                        }else if(obj instanceof Drawable){
+                        if (obj instanceof String) {
+                            String resUrl = mResUrls.get(obj);
+                            FlyLog.d("res image string=%s,url=%s,imageView="+imageView,obj,resUrl);
+                            String imgurl = UpdataVersion.getNativeFilePath(mResUrls.get(obj));
+                            Glide.with(getContext())
+                                    .load(imgurl)
+                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                    .into(imageView);
+                        } else if (obj instanceof Drawable) {
+                            FlyLog.d("set drawable");
                             imageView.setImageDrawable((Drawable) obj);
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         FlyLog.e(e.toString());
                     }
                     try {

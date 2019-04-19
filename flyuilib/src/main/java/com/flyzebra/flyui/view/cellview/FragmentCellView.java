@@ -42,7 +42,7 @@ public class FragmentCellView extends FrameLayout implements ICell, IAction {
         resID = 0x4f000001 + mCellBean.cellId;
         setId(resID);
         if (mCellBean != null && mCellBean.cellpage != null && mCellBean.cellpage.cellList != null && mCellBean.cellpage.cellList.size() > 0) {
-            Object obj = FlyAction.getValue(ActionKey.PAGER_RESID);
+            Object obj = FlyAction.getValue(ActionKey.CHANGE_PAGER_WITH_RESID);
             if (obj != null) {
                 for (CellBean subCell : mCellBean.cellpage.cellList) {
                     if (obj.equals(subCell.resId)) {
@@ -86,7 +86,7 @@ public class FragmentCellView extends FrameLayout implements ICell, IAction {
     public boolean onAction(int key) {
         if (mCellBean == null || mCellBean.cellpage == null || mCellBean.cellpage.cellList == null || mCellBean.cellpage.cellList.isEmpty())
             return false;
-        if (key == ActionKey.PAGER_RESID) {
+        if (key == ActionKey.CHANGE_PAGER_WITH_RESID) {
             Object obj = FlyAction.getValue(key);
             for (CellBean cellBean : mCellBean.cellpage.cellList) {
                 if (obj.equals(cellBean.resId)) {

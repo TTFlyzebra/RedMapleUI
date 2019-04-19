@@ -59,15 +59,9 @@ public class MusicPlayer implements IMusicPlayer,
                 int t = getDuration();
                 if (c != cretTime || t != totalTime) {
                     savePathUrl();
-                    for (IMusicPlayerListener listener : listeners) {
-                        try {
-                            listener.playtime(getCurrentPosition(), getDuration());
-                        }catch (Exception e){
-                            FlyLog.e(e.toString());
-                        }
-                    }
                     cretTime = c;
                     totalTime = t;
+                    notifyPlayTime();
                 }
             } catch (Exception e) {
                 FlyLog.e(e.toString());
@@ -315,9 +309,9 @@ public class MusicPlayer implements IMusicPlayer,
     }
 
     @Override
-    public void stop() {
+    public void destory() {
         savePathUrl();
-        FlyLog.d("player stop");
+        FlyLog.d("player destory");
         synchronized (mPlayUrls) {
             mPlayUrls.clear();
         }
@@ -325,8 +319,12 @@ public class MusicPlayer implements IMusicPlayer,
         mPlayPos = -1;
         mPlayUrl = "";
         mPlayStatus = STATUS_IDLE;
-        releaseMediaPlay();
+        cretTime = 0;
+        totalTime = 0;
         notifyStatus();
+        notifyPlayTime();
+        releaseMediaPlay();
+
     }
 
     private void releaseMediaPlay() {
@@ -573,6 +571,16 @@ public class MusicPlayer implements IMusicPlayer,
         mPlayPos = getPlayPos();
         for (IMusicPlayerListener iMusicPlayerListener : listeners) {
             iMusicPlayerListener.playStatusChange(mPlayStatus);
+        }
+    }
+
+    private void notifyPlayTime() {
+        for (IMusicPlayerListener listener : listeners) {
+            try {
+                listener.playtime(cretTime, totalTime);
+            }catch (Exception e){
+                FlyLog.e(e.toString());
+            }
         }
     }
 

@@ -44,7 +44,7 @@ class FragmentNavCellView extends FrameLayout implements ICell,IAction {
             flyTabView.setOnItemClickListener(new FlyTabView.OnItemClickListener() {
                 @Override
                 public void onItemClick(View v) {
-                    FlyAction.notifyAction(ActionKey.PAGER_RESID,mCellBean.subCells.get((Integer) v.getTag()).resId);
+                    FlyAction.notifyAction(ActionKey.CHANGE_PAGER_WITH_RESID,mCellBean.subCells.get((Integer) v.getTag()).resId);
                 }
             });
         }
@@ -81,7 +81,7 @@ class FragmentNavCellView extends FrameLayout implements ICell,IAction {
     @Override
     public boolean onAction(int key) {
         if(mCellBean == null || mCellBean.subCells.isEmpty()) return false;
-        if(key==ActionKey.PAGER_RESID){
+        if(key==ActionKey.CHANGE_PAGER_WITH_RESID){
             Object obj = FlyAction.getValue(key);
             if(obj instanceof String) {
                 for (int i = 0; i < mCellBean.subCells.size(); i++) {
