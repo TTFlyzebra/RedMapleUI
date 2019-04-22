@@ -22,6 +22,7 @@ import tcking.github.com.giraffeplayer.IjkVideoView;
 public class VideoActivity extends BaseActivity implements IAction {
     public Flyui flyui;
     public IjkVideoView ijkVideoView;
+    private ArrayList<Video> videoList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +93,18 @@ public class VideoActivity extends BaseActivity implements IAction {
             FlyLog.d("start ijk play url=%s", url);
             ijkVideoView.setVideoPath(url);
             ijkVideoView.start();
+
+            if (isStop) return;
+            if (!videoUrlList.isEmpty()) {
+                videoList.addAll(videoUrlList);
+            }
+            List<Map<Integer, Object>> list = new ArrayList<>();
+            for (Video video : videoList) {
+                Map<Integer, Object> map = new HashMap<>();
+                map.put(ActionKey.MEDIA_URL, video.url);
+                list.add(map);
+            }
+            FlyAction.notifyAction(ActionKey.MEDIA_LIST, list);
         }catch (Exception e){
             FlyLog.e(e.toString());
         }

@@ -243,6 +243,8 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
                         } else if (obj instanceof Drawable) {
                             FlyLog.d("set drawable");
                             imageView.setImageDrawable((Drawable) obj);
+                        }else{
+                            Glide.with(getContext()).load(cellBean.imageurl1).into(imageView);
                         }
                     } catch (Exception e) {
                         FlyLog.e(e.toString());
