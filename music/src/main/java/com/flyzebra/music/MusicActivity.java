@@ -12,7 +12,6 @@ import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Music;
 import com.jancar.media.data.StorageInfo;
 import com.jancar.media.model.listener.IMusicPlayerListener;
-import com.jancar.media.model.listener.IStorageListener;
 import com.jancar.media.model.musicplayer.IMusicPlayer;
 import com.jancar.media.model.musicplayer.MusicPlayer;
 import com.jancar.media.utils.FlyLog;
@@ -27,7 +26,7 @@ import java.util.Map;
  * 2019/3/20 10:55
  * Describ:
  **/
-public class MusicActivity extends BaseActivity implements IAction, IMusicPlayerListener, IStorageListener {
+public class MusicActivity extends BaseActivity implements IAction, IMusicPlayerListener {
     public Flyui flyui;
     protected IMusicPlayer musicPlayer = MusicPlayer.getInstance();
     public List<Music> musicList = new ArrayList<>();

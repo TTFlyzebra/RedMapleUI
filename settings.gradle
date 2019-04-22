@@ -1,1 +1,1 @@
-include ':app', ':flyuilib', ':music', ':flymedialib', ':flyuitvlib'
+include ':app', ':flyuilib', ':music', ':flymedialib', ':flyuitvlib', ':video', ':photo'

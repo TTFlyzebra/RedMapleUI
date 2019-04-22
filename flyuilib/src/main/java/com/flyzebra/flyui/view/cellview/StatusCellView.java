@@ -65,6 +65,8 @@ public class StatusCellView extends FlyImageView implements ICell, IAction, View
                     }else if (status > 0 && mCellBean.subCells != null && mCellBean.subCells.size() >= status) {
                         showImageUrl(mCellBean.subCells.get(status - 1).imageurl1);
                     }
+                }else{
+                    showImageUrl(mCellBean.imageurl1);
                 }
                 break;
             default:

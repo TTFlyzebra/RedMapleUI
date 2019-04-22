@@ -142,7 +142,9 @@ public class MediaScan implements IMediaScan {
     }
 
     public void init(Context applicationContext) {
-        this.mContext = applicationContext;
+        if(mContext==null){
+            this.mContext = applicationContext;
+        }
     }
 
     private static class UsbMediaScanHolder {

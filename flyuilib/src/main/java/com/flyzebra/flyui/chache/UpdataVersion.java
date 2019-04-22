@@ -470,7 +470,7 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
      * 遍历缓存目录中的文件，将set集合中不存在的文件名删除
      */
     private void DelNoUseFiles() {
-        FlyLog.d("开始删除不用的缓存文件");
+        FlyLog.d("start delete no use file");
         files.clear();
         files.add("journal");
         if (mThemeBean == null) return;
@@ -498,7 +498,7 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
             String realFile = f.getName();
 //                realFile = realFile.substring(0,realFile.lastIndexOf(".")-1);
             if (!files.contains(realFile)) {
-                FlyLog.d("删除多余文件：" + realFile);
+                FlyLog.d("del file：" + realFile);
                 if (!f.delete()) {
                     FlyLog.e("Delete file failed! file=%s", f.getAbsolutePath());
                 }

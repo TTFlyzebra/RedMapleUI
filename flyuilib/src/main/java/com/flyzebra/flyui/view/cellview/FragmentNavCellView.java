@@ -52,7 +52,7 @@ class FragmentNavCellView extends FrameLayout implements ICell,IAction {
         try {
             setBackgroundColor(Color.parseColor(mCellBean.backcolor));
         } catch (Exception e) {
-            FlyLog.e("error! parseColor exception!" + e.toString());
+            FlyLog.d("error! parseColor exception!" + e.toString());
         }
     }
 

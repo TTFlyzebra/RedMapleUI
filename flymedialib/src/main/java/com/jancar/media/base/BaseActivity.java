@@ -44,6 +44,8 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
     @SuppressLint("WrongConstant")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        MediaScan.getInstance().init(getApplicationContext());
+        Storage.getInstance().init(getApplicationContext());
         super.onCreate(savedInstanceState);
 
         /**

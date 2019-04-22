@@ -111,47 +111,36 @@ public class ThemeView extends FrameLayout implements ITheme {
             for (PageBean pageBean : mThemeBean.pageList) {
                 for (CellBean cellBean : pageBean.cellList) {
                     //有效显示区域FitCenter，只显示位于指定区域中的内容
-                    cellBean.x = (int) (cellBean.x * screenScacle) + moveX - mThemeBean.left;
-                    cellBean.y = (int) (cellBean.y * screenScacle) + moveY - mThemeBean.top;
-                    cellBean.width = (int) (cellBean.width * screenScacle);
-                    cellBean.height = (int) (cellBean.height * screenScacle);
-                    cellBean.textSize = (int) (cellBean.textSize * screenScacle);
-                    cellBean.mLeft = (int) (cellBean.mLeft * screenScacle);
-                    cellBean.mTop = (int) (cellBean.mTop * screenScacle);
-                    cellBean.mRight = (int) (cellBean.mRight * screenScacle);
-                    cellBean.mBottom = (int) (cellBean.mBottom * screenScacle);
-                    if (cellBean.subCells != null && cellBean.subCells.size() > 0) {
-                        for (CellBean subCellBean : cellBean.subCells) {
-                            subCellBean.x = (int) (subCellBean.x * screenScacle);
-                            subCellBean.y = (int) (subCellBean.y * screenScacle);
-                            subCellBean.width = (int) (subCellBean.width * screenScacle);
-                            subCellBean.height = (int) (subCellBean.height * screenScacle);
-                            subCellBean.textSize = (int) (subCellBean.textSize * screenScacle);
-                        }
-                    }
+                    convertCellBeanPix(cellBean, moveX, moveY, mThemeBean.left, mThemeBean.top);
                 }
             }
             if (mThemeBean.topPage != null && mThemeBean.topPage.cellList != null) {
                 for (CellBean cellBean : mThemeBean.topPage.cellList) {
-                    cellBean.x = (int) (cellBean.x * screenScacle) + moveX;
-                    cellBean.y = (int) (cellBean.y * screenScacle) + moveY;
-                    cellBean.width = (int) (cellBean.width * screenScacle);
-                    cellBean.height = (int) (cellBean.height * screenScacle);
-                    cellBean.textSize = (int) (cellBean.textSize * screenScacle);
-                    cellBean.mLeft = (int) (cellBean.mLeft * screenScacle);
-                    cellBean.mTop = (int) (cellBean.mTop * screenScacle);
-                    cellBean.mRight = (int) (cellBean.mRight * screenScacle);
-                    cellBean.mBottom = (int) (cellBean.mBottom * screenScacle);
-                    if (cellBean.subCells != null && cellBean.subCells.size() > 0) {
-                        for (CellBean subCellBean : cellBean.subCells) {
-                            subCellBean.x = (int) (subCellBean.x * screenScacle);
-                            subCellBean.y = (int) (subCellBean.y * screenScacle);
-                            subCellBean.width = (int) (subCellBean.width * screenScacle);
-                            subCellBean.height = (int) (subCellBean.height * screenScacle);
-                            subCellBean.textSize = (int) (subCellBean.textSize * screenScacle);
-                        }
-                    }
+                    convertCellBeanPix(cellBean, moveX, moveY, 0, 0);
                 }
+            }
+        }
+    }
+
+    private void convertCellBeanPix(CellBean cellBean, int moveX, int moveY, int left, int top) {
+        cellBean.x = (int) (cellBean.x * screenScacle) + moveX - left;
+        cellBean.y = (int) (cellBean.y * screenScacle) + moveY - top;
+        cellBean.width = (int) (cellBean.width * screenScacle);
+        cellBean.height = (int) (cellBean.height * screenScacle);
+        cellBean.textSize = (int) (cellBean.textSize * screenScacle);
+        cellBean.mLeft = (int) (cellBean.mLeft * screenScacle);
+        cellBean.mTop = (int) (cellBean.mTop * screenScacle);
+        cellBean.mRight = (int) (cellBean.mRight * screenScacle);
+        cellBean.mBottom = (int) (cellBean.mBottom * screenScacle);
+        if (cellBean.subCells != null && cellBean.subCells.size() > 0) {
+            for (CellBean subCellBean : cellBean.subCells) {
+                convertCellBeanPix(subCellBean, 0, 0, 0, 0);
+            }
+        }
+
+        if (cellBean.cellpage != null && cellBean.cellpage.cellList != null) {
+            for (CellBean subCellBean : cellBean.cellpage.cellList) {
+                convertCellBeanPix(subCellBean, 0, 0, 0, 0);
             }
         }
     }

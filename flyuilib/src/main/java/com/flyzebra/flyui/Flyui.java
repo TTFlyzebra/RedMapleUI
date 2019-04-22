@@ -1,7 +1,9 @@
 package com.flyzebra.flyui;
 
 import android.app.Activity;
-import android.text.TextUtils;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.view.ViewGroup;
 
 import com.flyzebra.flyui.bean.ThemeBean;
 import com.flyzebra.flyui.chache.DiskCache;
@@ -11,9 +13,7 @@ import com.flyzebra.flyui.chache.UpdataVersion;
 import com.flyzebra.flyui.config.ActionKey;
 import com.flyzebra.flyui.module.FlyAction;
 import com.flyzebra.flyui.module.FlyClass;
-import com.flyzebra.flyui.utils.AppUtil;
 import com.flyzebra.flyui.utils.FlyLog;
-import com.flyzebra.flyui.utils.SysproUtils;
 import com.flyzebra.flyui.view.themeview.ThemeView;
 
 /**
@@ -34,7 +34,7 @@ public class Flyui implements IUpdataVersion.CheckCacheResult, IUpdataVersion.Up
     public void onCreate() {
         FlyLog.d("onCreate");
         mThemeView = new ThemeView(activity);
-        activity.setContentView(mThemeView);
+        activity.addContentView(mThemeView,new ViewGroup.LayoutParams(-1,-1));
         mThemeView.onCreate(activity);
         if(activity instanceof IAction){
             FlyAction.register((IAction) activity);
@@ -43,13 +43,10 @@ public class Flyui implements IUpdataVersion.CheckCacheResult, IUpdataVersion.Up
         iUpDataVersion = new UpdataVersion(activity.getApplicationContext(), iDiskCache) {
             @Override
             public void initApi() {
-                String url = SysproUtils.get(activity, SysproUtils.Property.URL_BASE, "http://192.168.1.119:801/uiweb");
-                String areaCode = SysproUtils.get(activity, SysproUtils.Property.AREA_CODE, "0");
-                String version = AppUtil.getVersionName(activity);
                 token = "1234567890";
-                ApiUrl = TextUtils.isEmpty(url) ? "http://192.168.1.119:801/uiweb" : url;
-                ApiVersion = "/api/version?areaCode=" + areaCode + "&type=launcher&version=" + version;
-                ApiTheme = "/api/app?areaCode=" + areaCode + "&type=launcher&version=" + version;
+                ApiUrl = "http://192.168.1.119:801/uiweb";
+                ApiVersion = "/api/version?areaCode=0&type="+getApplicationName(activity)+"&version=v1.0";
+                ApiTheme = "/api/app?areaCode=0&type="+getApplicationName(activity)+"&version=v1.0";
             }
         };
         iUpDataVersion.forceUpVersion(this);
@@ -94,6 +91,18 @@ public class Flyui implements IUpdataVersion.CheckCacheResult, IUpdataVersion.Up
     private void upView(ThemeBean themeBean) {
         mThemeView.upData(themeBean);
         FlyAction.notifyAction(ActionKey.REFRESH);
+    }
+
+    public String getApplicationName(Activity activity) {
+        PackageManager packageManager = null;
+        ApplicationInfo applicationInfo = null;
+        try {
+            packageManager = activity.getApplicationContext().getPackageManager();
+            applicationInfo = packageManager.getApplicationInfo(activity.getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            FlyLog.e(e.toString());
+        }
+        return (String) packageManager.getApplicationLabel(applicationInfo);
     }
 
 }
