@@ -35,7 +35,6 @@ public class StatusCellView extends FlyImageView implements ICell, IAction, View
     @Override
     public void initView(Context context) {
         focusChange(false);
-        setScaleType(ScaleType.CENTER);
     }
 
     @Override
@@ -45,6 +44,7 @@ public class StatusCellView extends FlyImageView implements ICell, IAction, View
             setOnClickListener(this);
             setOnTouchListener(this);
         }
+        setScaleType(ScaleType.CENTER);
         upView();
     }
 
@@ -83,11 +83,12 @@ public class StatusCellView extends FlyImageView implements ICell, IAction, View
         Glide.with(getContext())
                 .asBitmap()
                 .load(url)
-                .override(mCellBean.width, mCellBean.height)
+                .centerInside()
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(new BitmapImageViewTarget(this){
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        FlyLog.d("width=%d,height=%d",resource.getWidth(),resource.getHeight());
                         setImageBitmap(resource);
                         if (mirrorView != null) {
                             setDrawingCacheEnabled(true);
