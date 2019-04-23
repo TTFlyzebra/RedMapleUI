@@ -246,7 +246,7 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
                                             String resUrl = mResUrls.get(obj);
                                             FlyLog.d("res image string=%s,url=%s,imageView=" + imageView, obj, resUrl);
                                             String imgurl = UpdataVersion.getNativeFilePath(mResUrls.get(obj));
-                                            Glide.with(getContext())
+                                            Glide.with(imageView)
                                                     .load(imgurl)
                                                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                                                     .into(imageView);
@@ -254,7 +254,7 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
                                             FlyLog.d("set drawable");
                                             imageView.setImageDrawable((Drawable) obj);
                                         } else {
-                                            Glide.with(getContext()).load(cellBean.imageurl1).into(imageView);
+                                            Glide.with(imageView).load(cellBean.imageurl1).into(imageView);
                                         }
                                     } catch (Exception e) {
                                         FlyLog.e(e.toString());
