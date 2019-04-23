@@ -2,9 +2,8 @@ package com.flyzebra.flyui.view.customview;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
-public class FlyTextView extends TextView{
+public class FlyTextView extends MarqueeTextView{
     public FlyTextView(Context context) {
         super(context);
     }

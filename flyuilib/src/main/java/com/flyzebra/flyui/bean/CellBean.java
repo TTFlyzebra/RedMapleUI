@@ -19,6 +19,7 @@ public class CellBean implements Parcelable {
     public LanguageText textTitle;
     public int textSize = 0;
     public String textColor;
+    public int textLine;
 
     public int mLeft = 0;
     public int mRight = 0;

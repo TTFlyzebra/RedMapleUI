@@ -125,12 +125,12 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
                 FlyAction.notifyAction(ActionKey.MEDIA_NAME, music.name);
                 FlyAction.notifyAction(ActionKey.MEDIA_ALBUM, music.album);
                 FlyAction.notifyAction(ActionKey.MEDIA_ARTIST, music.artist);
-                FlyAction.notifyAction(ActionKey.MEDIA_URL, music.url);
+                FlyAction.notifyAction(ActionKey.MUSIC_URL, music.url);
             }else{
                 FlyAction.notifyAction(ActionKey.MEDIA_NAME, "");
                 FlyAction.notifyAction(ActionKey.MEDIA_ALBUM, "");
                 FlyAction.notifyAction(ActionKey.MEDIA_ARTIST, "");
-                FlyAction.notifyAction(ActionKey.MEDIA_URL, "");
+                FlyAction.notifyAction(ActionKey.MUSIC_URL, "");
             }
         } catch (Exception e) {
             FlyLog.e(e.toString());
@@ -150,7 +150,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
                 FlyAction.notifyAction(ActionKey.MEDIA_NAME, music.name);
                 FlyAction.notifyAction(ActionKey.MEDIA_ALBUM, music.album);
                 FlyAction.notifyAction(ActionKey.MEDIA_ARTIST, music.artist);
-                FlyAction.notifyAction(ActionKey.MEDIA_URL, music.url);
+                FlyAction.notifyAction(ActionKey.MUSIC_URL, music.url);
             }
         } catch (Exception e) {
             FlyLog.e(e.toString());
@@ -192,7 +192,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
         List<Map<Integer, Object>> list = new ArrayList<>();
         for (Music music : musicList) {
             Map<Integer, Object> map = new HashMap<>();
-            map.put(ActionKey.MEDIA_URL, music.url);
+            map.put(ActionKey.MUSIC_URL, music.url);
             map.put(ActionKey.MEDIA_NAME, music.name);
             map.put(ActionKey.MEDIA_ARTIST, music.artist);
             list.add(map);
@@ -207,12 +207,12 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
                 FlyAction.notifyAction(ActionKey.MEDIA_NAME, music.name);
                 FlyAction.notifyAction(ActionKey.MEDIA_ALBUM, music.album);
                 FlyAction.notifyAction(ActionKey.MEDIA_ARTIST, music.artist);
-                FlyAction.notifyAction(ActionKey.MEDIA_URL, music.url);
+                FlyAction.notifyAction(ActionKey.MUSIC_URL, music.url);
             }else{
                 FlyAction.notifyAction(ActionKey.MEDIA_NAME, "");
                 FlyAction.notifyAction(ActionKey.MEDIA_ALBUM, "");
                 FlyAction.notifyAction(ActionKey.MEDIA_ARTIST, "");
-                FlyAction.notifyAction(ActionKey.MEDIA_URL, "");
+                FlyAction.notifyAction(ActionKey.MUSIC_URL, "");
             }
         } catch (Exception e) {
             FlyLog.e(e.toString());
@@ -243,12 +243,12 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
                 FlyAction.notifyAction(ActionKey.MEDIA_NAME, music.name);
                 FlyAction.notifyAction(ActionKey.MEDIA_ALBUM, music.album);
                 FlyAction.notifyAction(ActionKey.MEDIA_ARTIST, music.artist);
-                FlyAction.notifyAction(ActionKey.MEDIA_URL, music.url);
+                FlyAction.notifyAction(ActionKey.MUSIC_URL, music.url);
             }else{
                 FlyAction.notifyAction(ActionKey.MEDIA_NAME, "");
                 FlyAction.notifyAction(ActionKey.MEDIA_ALBUM, "");
                 FlyAction.notifyAction(ActionKey.MEDIA_ARTIST, "");
-                FlyAction.notifyAction(ActionKey.MEDIA_URL, "");
+                FlyAction.notifyAction(ActionKey.MUSIC_URL, "");
             }
         } catch (Exception e) {
             FlyLog.e(e.toString());
@@ -282,7 +282,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
             } else {
                 imageKey = "DISK_USB";
             }
-            map.put(ActionKey.RES_IMAGE, imageKey);
+            map.put(ActionKey.RES_URL, imageKey);
             list.add(map);
         }
         FlyAction.notifyAction(ActionKey.STORE_LIST, list);

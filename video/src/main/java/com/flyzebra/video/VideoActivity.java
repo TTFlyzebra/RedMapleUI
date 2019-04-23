@@ -1,5 +1,6 @@
 package com.flyzebra.video;
 
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 
@@ -23,6 +24,7 @@ public class VideoActivity extends BaseActivity implements IAction {
     public Flyui flyui;
     public IjkVideoView ijkVideoView;
     private ArrayList<Video> videoList = new ArrayList<>();
+    private AudioManager audioManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,10 @@ public class VideoActivity extends BaseActivity implements IAction {
                 break;
             case ActionKey.KEY_URL:
                 obj = FlyAction.getValue(ActionKey.KEY_URL);
+                if(obj instanceof String){
+                    ijkVideoView.setVideoPath((String) obj);
+                    ijkVideoView.start();
+                }
                 break;
             case ActionKey.KEY_MENU:
                 int flag = 0;
@@ -96,12 +102,13 @@ public class VideoActivity extends BaseActivity implements IAction {
 
             if (isStop) return;
             if (!videoUrlList.isEmpty()) {
+                videoList.clear();
                 videoList.addAll(videoUrlList);
             }
             List<Map<Integer, Object>> list = new ArrayList<>();
             for (Video video : videoList) {
                 Map<Integer, Object> map = new HashMap<>();
-                map.put(ActionKey.MEDIA_URL, video.url);
+                map.put(ActionKey.VIDEO_URL, video.url);
                 list.add(map);
             }
             FlyAction.notifyAction(ActionKey.MEDIA_LIST, list);
@@ -128,7 +135,7 @@ public class VideoActivity extends BaseActivity implements IAction {
             } else {
                 imageKey = "DISK_USB";
             }
-            map.put(ActionKey.RES_IMAGE, imageKey);
+            map.put(ActionKey.RES_URL, imageKey);
             list.add(map);
         }
         FlyAction.notifyAction(ActionKey.STORE_LIST, list);

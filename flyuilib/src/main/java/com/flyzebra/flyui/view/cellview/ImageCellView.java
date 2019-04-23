@@ -149,11 +149,13 @@ public class ImageCellView extends FlyImageView implements ICell, View.OnTouchLi
 
     @Override
     protected void onAttachedToWindow() {
+        FlyLog.d("onAttachedToWindow");
         super.onAttachedToWindow();
     }
 
     @Override
     protected void onDetachedFromWindow() {
+        FlyLog.d("onDetachedFromWindow");
         mHandler.removeCallbacksAndMessages(null);
         focusChange(false);
         super.onDetachedFromWindow();

@@ -2,6 +2,7 @@ package com.flyzebra.flyui.view.cellview;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.util.TypedValue;
 
 import com.flyzebra.flyui.IAction;
@@ -38,7 +39,14 @@ public class TextCellView extends FlyTextView implements ICell, IAction {
         setTextSize(TypedValue.COMPLEX_UNIT_PX, cellBean.textSize);
         setPadding(mCellBean.mLeft, mCellBean.mTop, mCellBean.mRight, mCellBean.mBottom);
         setGravity(mCellBean.getTextGravity());
-        setSingleLine();
+        if(mCellBean.textLine==0){
+            setEllipsize(TextUtils.TruncateAt.MARQUEE);
+            setMarqueeRepeatLimit(1);
+            setSingleLine(true);
+        }else{
+            setMaxLines(mCellBean.textLine);
+            setEllipsize(TextUtils.TruncateAt.END);
+        }
 
         upView();
     }
@@ -73,7 +81,7 @@ public class TextCellView extends FlyTextView implements ICell, IAction {
         return false;
     }
 
-    private void upView() {
+    public void upView() {
         Object obj = FlyAction.getValue(mCellBean.recvAction);
         if (obj instanceof String) {
             setText((String) obj);

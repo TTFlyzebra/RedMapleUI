@@ -91,7 +91,7 @@ public class PhotoActivity extends BaseActivity implements IAction {
             } else {
                 imageKey = "DISK_USB";
             }
-            map.put(ActionKey.RES_IMAGE, imageKey);
+            map.put(ActionKey.RES_URL, imageKey);
             list.add(map);
         }
         FlyAction.notifyAction(ActionKey.STORE_LIST, list);

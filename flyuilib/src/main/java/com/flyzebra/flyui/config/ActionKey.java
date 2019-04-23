@@ -31,11 +31,14 @@ public interface ActionKey {
     int MUSIC_IMAGE = 3012;//媒体音乐图片
     int MEDIA_TEXT = 3013;//媒体歌词
     int MEDIA_LIST = 3014;//媒体单曲列表
-    int MEDIA_URL = 3015;//音乐播放地址
+    int MUSIC_URL = 3015;//音乐播放地址
     int VIDEO_IMAGE = 3016;//媒体视频图片
     int STORE_LIST = 3017;//存储器列表
     int STORE_URL = 3018;//存储器地址
     int STORE_NAME = 3020;//存储器名称
-    int RES_IMAGE = 3019;//存储器图片资源
+    int RES_URL = 3019;//存储器图片资源
+
+    int VIDEO_NAME = 3021;//视频文件名称
+    int VIDEO_URL = 3022;//视频文件地址
 
 }
