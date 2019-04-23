@@ -4,12 +4,15 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.chache.UpdataVersion;
 import com.flyzebra.flyui.module.FlyClass;
@@ -38,7 +41,6 @@ public class NavCellView extends BaseView implements ICell, ViewPager.OnPageChan
         super(context);
         initView(context);
     }
-
 
 
     @Override
@@ -114,32 +116,39 @@ public class NavCellView extends BaseView implements ICell, ViewPager.OnPageChan
             return;
         }
         Glide.with(getContext())
-                .load(UpdataVersion.getNativeFilePath(mCellBean.imageurl1))
                 .asBitmap()
+                .load(UpdataVersion.getNativeFilePath(mCellBean.imageurl1))
                 .override(mCellBean.width, mCellBean.height)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .into(new SimpleTarget<Bitmap>() {
+                .into(new CustomTarget<Bitmap>() {
                     @Override
-                    public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
-                        nav_on = bitmap;
-                        if (nav_on != null) {
-                            postInvalidate();
-                        }
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        nav_on = resource;
+                        postInvalidate();
                     }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                    }
+
                 });
 
         Glide.with(getContext())
-                .load(UpdataVersion.getNativeFilePath(mCellBean.imageurl2))
                 .asBitmap()
+                .load(UpdataVersion.getNativeFilePath(mCellBean.imageurl2))
                 .override(mCellBean.width, mCellBean.height)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .into(new SimpleTarget<Bitmap>() {
+                .into(new CustomTarget<Bitmap>() {
                     @Override
-                    public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
-                        nav_off = bitmap;
-                        if (nav_off != null) {
-                            postInvalidate();
-                        }
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        nav_off = resource;
+                        postInvalidate();
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
                     }
                 });
         postInvalidate();

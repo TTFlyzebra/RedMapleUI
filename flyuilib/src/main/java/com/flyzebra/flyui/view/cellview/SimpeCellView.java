@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -15,8 +17,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.chache.UpdataVersion;
 import com.flyzebra.flyui.utils.FlyLog;
@@ -98,14 +100,14 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
         String imageurl = UpdataVersion.getNativeFilePath(mCellBean.imageurl1);
         FlyLog.v("glide image url=" + imageurl);
         Glide.with(getContext())
-                .load(imageurl)
                 .asBitmap()
+                .load(imageurl)
                 .override(mCellBean.width, mCellBean.height)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .into(new SimpleTarget<Bitmap>() {
+                .into(new BitmapImageViewTarget(imageView){
                     @Override
-                    public void onResourceReady(final Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
-                        imageView.setImageBitmap(bitmap);
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        imageView.setImageBitmap(resource);
                         if (mirrorView != null) {
                             setDrawingCacheEnabled(true);
                             Bitmap bmp = getDrawingCache();

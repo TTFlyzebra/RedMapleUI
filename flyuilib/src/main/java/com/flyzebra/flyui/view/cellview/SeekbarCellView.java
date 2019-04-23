@@ -5,14 +5,15 @@ import android.graphics.drawable.ClipDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.widget.FrameLayout;
 import android.widget.SeekBar;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.flyzebra.flyui.IAction;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.config.ActionKey;
@@ -73,27 +74,43 @@ public class SeekbarCellView extends FrameLayout implements ICell, IAction, Seek
             CellBean cell3 = mCellBean.subCells.get(2);
             CellBean cell4 = mCellBean.subCells.get(3);
 
-            Glide.with(getContext()).load(cell1.imageurl1).into(new SimpleTarget<GlideDrawable>() {
+            Glide.with(getContext()).load(cell1.imageurl1).into(new CustomTarget<Drawable>() {
                 @Override
-                public void onResourceReady(GlideDrawable glideDrawable, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                    draw1 = glideDrawable;
+                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                    draw1 = resource;
                     loadBitmapFinish();
+                }
+
+                @Override
+                public void onLoadCleared(@Nullable Drawable placeholder) {
+
                 }
             });
 
-            Glide.with(getContext()).load(cell2.imageurl1).into(new SimpleTarget<GlideDrawable>() {
+            Glide.with(getContext()).load(cell2.imageurl1).into(new CustomTarget<Drawable>() {
                 @Override
-                public void onResourceReady(GlideDrawable glideDrawable, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                    draw2 = glideDrawable;
+                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                    draw2 = resource;
                     loadBitmapFinish();
                 }
+
+                @Override
+                public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                }
+
             });
 
-            Glide.with(getContext()).load(cell2.imageurl2).into(new SimpleTarget<GlideDrawable>() {
+            Glide.with(getContext()).load(cell2.imageurl2).into(new CustomTarget<Drawable>() {
                 @Override
-                public void onResourceReady(GlideDrawable glideDrawable, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                    draw3 = glideDrawable;
+                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                    draw3 = resource;
                     loadBitmapFinish();
+                }
+
+                @Override
+                public void onLoadCleared(@Nullable Drawable placeholder) {
+
                 }
             });
 

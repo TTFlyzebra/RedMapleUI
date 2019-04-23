@@ -3,12 +3,13 @@ package com.flyzebra.flyui.view.cellview;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.DrawableImageViewTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.chache.UpdataVersion;
 import com.flyzebra.flyui.view.customview.FlyImageView;
@@ -42,10 +43,10 @@ public class AnimtorCellView extends FlyImageView implements ICell {
                     .load(url)
                     .override(cellBean.subCells.get(i).width, cellBean.subCells.get(i).height)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .into(new SimpleTarget<GlideDrawable>() {
+                    .into(new DrawableImageViewTarget(this){
                         @Override
-                        public void onResourceReady(GlideDrawable glideDrawable, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                            drawable[num] = glideDrawable;
+                        public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                            drawable[num] = resource;
                             boolean flag = true;
                             for(Drawable draw:drawable){
                                 if(draw==null){

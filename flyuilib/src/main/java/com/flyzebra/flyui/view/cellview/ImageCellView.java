@@ -3,14 +3,16 @@ package com.flyzebra.flyui.view.cellview;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.ThemeBean;
 import com.flyzebra.flyui.chache.UpdataVersion;
@@ -58,14 +60,14 @@ public class ImageCellView extends FlyImageView implements ICell, View.OnTouchLi
         if (TextUtils.isEmpty(imageurl)) return;
         String url = UpdataVersion.getNativeFilePath(imageurl);
         Glide.with(getContext())
-                .load(url)
                 .asBitmap()
+                .load(url)
                 .override(mCellBean.width, mCellBean.height)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .into(new SimpleTarget<Bitmap>() {
+                .into(new BitmapImageViewTarget(this){
                     @Override
-                    public void onResourceReady(final Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
-                        setImageBitmap(bitmap);
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        setImageBitmap(resource);
                         if (mirrorView != null) {
                             setDrawingCacheEnabled(true);
                             Bitmap bmp = getDrawingCache();

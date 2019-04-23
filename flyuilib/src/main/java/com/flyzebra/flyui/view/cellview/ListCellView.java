@@ -14,9 +14,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.flyzebra.flyui.IAction;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.ThemeBean;
@@ -272,19 +269,7 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
                                     final Object url = mList.get(position).get(ActionKey.VIDEO_URL);
                                     FlyLog.d("show1"+url);
                                     if(url instanceof String) {
-                                        Glide.with(getContext()).load((String)url).listener(new RequestListener<String, GlideDrawable>(){
-                                            @Override
-                                            public boolean onException(Exception e, String s, Target<GlideDrawable> target, boolean b) {
-                                                FlyLog.d("Exception="+e);
-                                                return false;
-                                            }
-
-                                            @Override
-                                            public boolean onResourceReady(GlideDrawable glideDrawable, String s, Target<GlideDrawable> target, boolean b, boolean b1) {
-                                                FlyLog.d();
-                                                return false;
-                                            }
-                                        }).into(imageView);
+                                        Glide.with(getContext()).load((String)url).into(imageView);
                                     }
                                     break;
                                 case ActionKey.MUSIC_URL:
@@ -326,7 +311,6 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
     @Override
     protected void onDetachedFromWindow() {
         FlyLog.d("onDetachedFromWindow");
-        Glide.clear(this);
         FlyAction.unregister(this);
         super.onDetachedFromWindow();
     }
