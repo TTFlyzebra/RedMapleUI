@@ -44,4 +44,5 @@ public interface ActionKey {
     int IMAGE_NAME = 3024;//图片文件名称
     int IMAGE_URL = 3025;//图片文件地址
     int IMAGE_LIST = 3026;//图片播放列表
+    int IMAGE_LIST_FOLDER = 3027;//图片文件夹列表
 }

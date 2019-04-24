@@ -60,6 +60,9 @@ public class CellViewFactory {
             case CellType.TYPE_FRAGMENT_NAV:
                 iCellView = new FragmentNavCellView(context);
                 break;
+            case CellType.TYPE_GROUP_LIST:
+                iCellView = new GrouplistCellView(context);
+                break;
             case CellType.TYPE_APP_NORMAL:
             default:
                 iCellView = new SimpeCellView(context);

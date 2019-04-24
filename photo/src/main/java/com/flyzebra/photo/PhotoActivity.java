@@ -8,18 +8,25 @@ import com.flyzebra.flyui.IAction;
 import com.flyzebra.flyui.config.ActionKey;
 import com.flyzebra.flyui.module.FlyAction;
 import com.jancar.media.base.BaseActivity;
+import com.jancar.media.data.FloderImage;
 import com.jancar.media.data.Image;
 import com.jancar.media.data.StorageInfo;
 import com.jancar.media.utils.FlyLog;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class PhotoActivity extends BaseActivity implements IAction {
     public Flyui flyui;
     private ArrayList<Image> imageList = new ArrayList<>();
+    private List<FloderImage> mAllList = new ArrayList<>();
+    private List<FloderImage> mAdapterList = new ArrayList<>();
+    private Set<String> mHashSet = new HashSet<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +79,9 @@ public class PhotoActivity extends BaseActivity implements IAction {
         FlyLog.d("notifyPathChange path=%s", path);
         FlyAction.notifyAction(ActionKey.STORE_URL,path);
         if (isStop) return;
+        mAllList.clear();
+        mHashSet.clear();
+        mAdapterList.clear();
         imageList.clear();
         FlyAction.notifyAction(ActionKey.IMAGE_LIST, new ArrayList<>());
         super.notifyPathChange(path);
@@ -100,6 +110,7 @@ public class PhotoActivity extends BaseActivity implements IAction {
         FlyAction.notifyAction(ActionKey.STORE_LIST, list);
     }
 
+    private FloderImage floderParant;
     @Override
     public void imageUrlList(List<Image> imageUrlList) {
         try {
@@ -107,13 +118,43 @@ public class PhotoActivity extends BaseActivity implements IAction {
             if (!imageUrlList.isEmpty()) {
                 imageList.addAll(imageUrlList);
             }
-            List<Map<Integer, Object>> list = new ArrayList<>();
+
+            for (int i = 0; i < imageList.size(); i++) {
+                String url = imageList.get(i).url;
+                int last = url.lastIndexOf(File.separator);
+                String path = url.substring(0, last).intern();
+                if (!mHashSet.contains(path)) {
+                    mHashSet.add(path);
+                    floderParant = new FloderImage(imageList.get(i));
+                    floderParant.group = floderParant.sort;
+                    floderParant.url = path;
+                    floderParant.sum = 1;
+                    floderParant.type = 1;
+                    mAllList.add(floderParant);
+                } else {
+                    floderParant.sum++;
+                }
+                FloderImage floder = new FloderImage(imageList.get(i));
+                floder.group = floderParant.sort;
+                floder.type = 2;
+                mAllList.add(floder);
+            }
+
+            List<Map<Integer, Object>> list1 = new ArrayList<>();
+            for (FloderImage image : mAllList) {
+                Map<Integer, Object> map = new HashMap<>();
+                map.put(ActionKey.IMAGE_URL, image.url);
+                list1.add(map);
+            }
+            FlyAction.notifyAction(ActionKey.IMAGE_LIST_FOLDER, list1);
+
+            List<Map<Integer, Object>> list2 = new ArrayList<>();
             for (Image image : imageList) {
                 Map<Integer, Object> map = new HashMap<>();
                 map.put(ActionKey.IMAGE_URL, image.url);
-                list.add(map);
+                list2.add(map);
             }
-            FlyAction.notifyAction(ActionKey.IMAGE_LIST, list);
+            FlyAction.notifyAction(ActionKey.IMAGE_LIST, list2);
         }catch (Exception e){
             com.flyzebra.flyui.utils.FlyLog.e(e.toString());
         }
