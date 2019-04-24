@@ -91,9 +91,7 @@ public class StatusCellView extends FlyImageView implements ICell, IAction, View
                         FlyLog.d("width=%d,height=%d",resource.getWidth(),resource.getHeight());
                         setImageBitmap(resource);
                         if (mirrorView != null) {
-                            setDrawingCacheEnabled(true);
-                            Bitmap bmp = getDrawingCache();
-                            mirrorView.showImage(bmp);
+                            mirrorView.showImage(resource);
                         }
                     }
                 });

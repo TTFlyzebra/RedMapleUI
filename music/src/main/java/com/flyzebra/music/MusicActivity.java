@@ -102,9 +102,9 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
         if (!musicPlayer.getPlayUrl().startsWith(path)) {
             musicPlayer.destory();
         }
-        FlyAction.notifyAction(ActionKey.MEDIA_LIST, new ArrayList<>());
         musicPlayer.playSaveUrlByPath(path);
         musicList.clear();
+        FlyAction.notifyAction(ActionKey.MUSIC_LIST, new ArrayList<>());
         super.notifyPathChange(path);
     }
 
@@ -116,25 +116,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
             musicList.addAll(musicUrlList);
             musicPlayer.setPlayUrls(musicList);
         }
-        try {
-            int playStauts = (musicPlayer.getPlayStatus() == MusicPlayer.STATUS_STARTPLAY || musicPlayer.getPlayStatus() == MusicPlayer.STATUS_PLAYING) ? 1 : 0;
-            FlyAction.notifyAction(ActionKey.MSG_PLAY_STATUS, playStauts);
-            final int i = musicPlayer.getPlayPos();
-            if (i >= 0 && i < musicList.size()) {
-                Music music = musicList.get(i);
-                FlyAction.notifyAction(ActionKey.MEDIA_NAME, music.name);
-                FlyAction.notifyAction(ActionKey.MEDIA_ALBUM, music.album);
-                FlyAction.notifyAction(ActionKey.MEDIA_ARTIST, music.artist);
-                FlyAction.notifyAction(ActionKey.MUSIC_URL, music.url);
-            }else{
-                FlyAction.notifyAction(ActionKey.MEDIA_NAME, "");
-                FlyAction.notifyAction(ActionKey.MEDIA_ALBUM, "");
-                FlyAction.notifyAction(ActionKey.MEDIA_ARTIST, "");
-                FlyAction.notifyAction(ActionKey.MUSIC_URL, "");
-            }
-        } catch (Exception e) {
-            FlyLog.e(e.toString());
-        }
+        notifyMusicList();
         super.musicUrlList(musicUrlList);
     }
 
@@ -143,18 +125,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
         FlyLog.d("scanFinish path=%s", path);
         if (isStop) return;
         super.scanFinish(path);
-        try {
-            final int i = musicPlayer.getPlayPos();
-            if (i >= 0 && i < musicList.size()) {
-                Music music = musicList.get(i);
-                FlyAction.notifyAction(ActionKey.MEDIA_NAME, music.name);
-                FlyAction.notifyAction(ActionKey.MEDIA_ALBUM, music.album);
-                FlyAction.notifyAction(ActionKey.MEDIA_ARTIST, music.artist);
-                FlyAction.notifyAction(ActionKey.MUSIC_URL, music.url);
-            }
-        } catch (Exception e) {
-            FlyLog.e(e.toString());
-        }
+        notifyCurrentMusic();
     }
 
     @Override
@@ -189,34 +160,8 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
         } catch (Exception e) {
             FlyLog.e(e.toString());
         }
-        List<Map<Integer, Object>> list = new ArrayList<>();
-        for (Music music : musicList) {
-            Map<Integer, Object> map = new HashMap<>();
-            map.put(ActionKey.MUSIC_URL, music.url);
-            map.put(ActionKey.MEDIA_NAME, music.name);
-            map.put(ActionKey.MEDIA_ARTIST, music.artist);
-            list.add(map);
-        }
-        FlyAction.notifyAction(ActionKey.MEDIA_LIST, list);
-        try {
-            int playStauts = (musicPlayer.getPlayStatus() == MusicPlayer.STATUS_STARTPLAY || musicPlayer.getPlayStatus() == MusicPlayer.STATUS_PLAYING) ? 1 : 0;
-            FlyAction.notifyAction(ActionKey.MSG_PLAY_STATUS, playStauts);
-            final int i = musicPlayer.getPlayPos();
-            if (i >= 0 && i < musicList.size()) {
-                Music music = musicList.get(i);
-                FlyAction.notifyAction(ActionKey.MEDIA_NAME, music.name);
-                FlyAction.notifyAction(ActionKey.MEDIA_ALBUM, music.album);
-                FlyAction.notifyAction(ActionKey.MEDIA_ARTIST, music.artist);
-                FlyAction.notifyAction(ActionKey.MUSIC_URL, music.url);
-            }else{
-                FlyAction.notifyAction(ActionKey.MEDIA_NAME, "");
-                FlyAction.notifyAction(ActionKey.MEDIA_ALBUM, "");
-                FlyAction.notifyAction(ActionKey.MEDIA_ARTIST, "");
-                FlyAction.notifyAction(ActionKey.MUSIC_URL, "");
-            }
-        } catch (Exception e) {
-            FlyLog.e(e.toString());
-        }
+        notifyMusicList();
+        notifyCurrentMusic();
         super.musicID3UrlList(musicUrlList);
     }
 
@@ -234,25 +179,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
             case MusicPlayer.STATUS_IDLE:
                 break;
         }
-        try {
-            int playStauts = (musicPlayer.getPlayStatus() == MusicPlayer.STATUS_STARTPLAY || musicPlayer.getPlayStatus() == MusicPlayer.STATUS_PLAYING) ? 1 : 0;
-            FlyAction.notifyAction(ActionKey.MSG_PLAY_STATUS, playStauts);
-            final int i = musicPlayer.getPlayPos();
-            if (i >= 0 && i < musicList.size()) {
-                Music music = musicList.get(i);
-                FlyAction.notifyAction(ActionKey.MEDIA_NAME, music.name);
-                FlyAction.notifyAction(ActionKey.MEDIA_ALBUM, music.album);
-                FlyAction.notifyAction(ActionKey.MEDIA_ARTIST, music.artist);
-                FlyAction.notifyAction(ActionKey.MUSIC_URL, music.url);
-            }else{
-                FlyAction.notifyAction(ActionKey.MEDIA_NAME, "");
-                FlyAction.notifyAction(ActionKey.MEDIA_ALBUM, "");
-                FlyAction.notifyAction(ActionKey.MEDIA_ARTIST, "");
-                FlyAction.notifyAction(ActionKey.MUSIC_URL, "");
-            }
-        } catch (Exception e) {
-            FlyLog.e(e.toString());
-        }
+        notifyCurrentMusic();
     }
 
     @Override
@@ -262,7 +189,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
 
     @Override
     public void playtime(long current, long total) {
-        FlyAction.notifyAction(ActionKey.MEDIA_TIME, new long[]{current, total});
+        FlyAction.notifyAction(ActionKey.MUSIC_TIME, new long[]{current, total});
     }
 
     @Override
@@ -287,4 +214,39 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
         }
         FlyAction.notifyAction(ActionKey.STORE_LIST, list);
     }
+
+    private void notifyCurrentMusic() {
+        try {
+            int playStauts = (musicPlayer.getPlayStatus() == MusicPlayer.STATUS_STARTPLAY || musicPlayer.getPlayStatus() == MusicPlayer.STATUS_PLAYING) ? 1 : 0;
+            FlyAction.notifyAction(ActionKey.MSG_PLAY_STATUS, playStauts);
+            final int i = musicPlayer.getPlayPos();
+            if (i >= 0 && i < musicList.size()) {
+                Music music = musicList.get(i);
+                FlyAction.notifyAction(ActionKey.MUSIC_NAME, music.name);
+                FlyAction.notifyAction(ActionKey.MUSIC_ALBUM, music.album);
+                FlyAction.notifyAction(ActionKey.MUSIC_ARTIST, music.artist);
+                FlyAction.notifyAction(ActionKey.MUSIC_URL, music.url);
+            }else{
+                FlyAction.notifyAction(ActionKey.MUSIC_NAME, "");
+                FlyAction.notifyAction(ActionKey.MUSIC_ALBUM, "");
+                FlyAction.notifyAction(ActionKey.MUSIC_ARTIST, "");
+                FlyAction.notifyAction(ActionKey.MUSIC_URL, "");
+            }
+        } catch (Exception e) {
+            FlyLog.e(e.toString());
+        }
+    }
+
+    private void notifyMusicList() {
+        List<Map<Integer, Object>> list = new ArrayList<>();
+        for (Music music : musicList) {
+            Map<Integer, Object> map = new HashMap<>();
+            map.put(ActionKey.MUSIC_URL, music.url);
+            map.put(ActionKey.MUSIC_NAME, music.name);
+            map.put(ActionKey.MUSIC_ARTIST, music.artist);
+            list.add(map);
+        }
+        FlyAction.notifyAction(ActionKey.MUSIC_LIST, list);
+    }
+
 }

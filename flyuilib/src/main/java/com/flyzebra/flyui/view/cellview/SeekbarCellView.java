@@ -136,7 +136,7 @@ public class SeekbarCellView extends FrameLayout implements ICell, IAction, Seek
             seekBar.setVisibility(VISIBLE);
         }
 
-        onAction(ActionKey.MEDIA_TIME);
+        onAction(ActionKey.MUSIC_TIME);
 
     }
 
@@ -185,7 +185,7 @@ public class SeekbarCellView extends FrameLayout implements ICell, IAction, Seek
         if (mCellBean == null) return false;
         Object obj = FlyAction.getValue(key);
         switch (key) {
-            case ActionKey.MEDIA_TIME:
+            case ActionKey.MUSIC_TIME:
                 if (obj instanceof long[]) {
                     long[] intarr = (long[]) obj;
                     if (intarr.length == 2) {

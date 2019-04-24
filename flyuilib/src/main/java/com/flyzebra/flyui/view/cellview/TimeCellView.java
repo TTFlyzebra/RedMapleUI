@@ -9,13 +9,11 @@ import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.flyzebra.flyui.R;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.base.BaseImageCellView;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Timer;
@@ -100,22 +98,6 @@ public class TimeCellView extends BaseImageCellView {
         return sdf.format(date);
     }
 
-    private String[] weeks = new String[7];
-
-    private String getCurrentWeek() {
-        weeks = new String[]{getContext().getString(R.string.tv_str_sunday),
-                getContext().getString(R.string.tv_str_monday),
-                getContext().getString(R.string.tv_str_tuesday),
-                getContext().getString(R.string.tv_str_wednesday),
-                getContext().getString(R.string.tv_str_thursday),
-                getContext().getString(R.string.tv_str_friday),
-                getContext().getString(R.string.tv_str_saturday)};
-        Date date = new Date(System.currentTimeMillis());
-        final Calendar mCalendar = Calendar.getInstance();
-        mCalendar.setTime(date);
-        return weeks[mCalendar.get(Calendar.DAY_OF_WEEK) - 1];
-    }
-
     private Timer mTimer;
     private String time = "";
     private String date = "";
@@ -133,7 +115,7 @@ public class TimeCellView extends BaseImageCellView {
                 public void run() {
                     String tmpTime = getCurrentDate("HH:mm");
                     String tmpDate = getCurrentDate("yyyy-MM-dd");
-                    String tmpWeek = getCurrentWeek();
+                    String tmpWeek = getCurrentDate("E");
                     if (!(tmpTime.equals(time) && tmpDate.equals(date) && tmpWeek.equals(week))) {
                         time = tmpTime;
                         date = tmpDate;

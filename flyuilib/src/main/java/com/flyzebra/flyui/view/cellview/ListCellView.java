@@ -3,6 +3,8 @@ package com.flyzebra.flyui.view.cellview;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +16,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.flyzebra.flyui.IAction;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.ThemeBean;
@@ -22,6 +26,7 @@ import com.flyzebra.flyui.config.ActionKey;
 import com.flyzebra.flyui.module.FlyAction;
 import com.flyzebra.flyui.module.RecycleViewDivider;
 import com.flyzebra.flyui.utils.FlyLog;
+import com.flyzebra.flyui.view.customview.MarqueeTextView;
 import com.flyzebra.flyui.view.customview.MirrorView;
 
 import java.util.ArrayList;
@@ -43,6 +48,7 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
     private FlyAdapter adapter;
     private String itemKey;
     private Map<String, String> mResUrls = new Hashtable<>();
+    private Map<Integer, Drawable> mDefaultDrawables = new Hashtable<>();
 
     public ListCellView(Context context) {
         super(context);
@@ -62,6 +68,32 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
                 mResUrls.put(resCellBen.resId, resCellBen.imageurl1);
             }
         }
+
+        for (final CellBean subcell : mCellBean.subCells) {
+            if (subcell.celltype == CellType.TYPE_IMAGE && subcell.recvAction > 0) {
+                Glide.with(getContext()).load(subcell.imageurl2).into(new CustomTarget<Drawable>() {
+                    @Override
+                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                        mDefaultDrawables.put(subcell.cellId, resource);
+                        upView();
+                    }
+
+                    @Override
+                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                        upView();
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                    }
+                });
+                break;
+            }
+            upView();
+        }
+    }
+
+    public void upView() {
         int num = mCellBean.width / mCellBean.subCells.get(0).width;
         if (num > 1) {
             GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), num);
@@ -85,17 +117,13 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
             public void onItemClick(View view) {
                 int pos = (int) view.getTag();
                 try {
-                    FlyAction.notifyAction(mCellBean.sendAction, mList.get(pos).get(mCellBean.subCells.get(0).recvAction));
+                    FlyAction.notifyAction(mCellBean.subCells.get(0).sendAction, mList.get(pos).get(mCellBean.subCells.get(0).recvAction));
                 } catch (Exception e) {
                     FlyLog.e(e.toString());
                 }
             }
         });
 
-        upView();
-    }
-
-    public void upView() {
         Object obj = FlyAction.getValue(mCellBean.recvAction);
         if (obj instanceof List) {
             mList.clear();
@@ -149,7 +177,7 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
                     }
                 }
                 for (CellBean cellBean : mCellBean.subCells) {
-                    if (cellBean.celltype == CellType.TYPE_IMAGE  ) {
+                    if (cellBean.celltype == CellType.TYPE_IMAGE) {
                         ImageView imageView = itemView.findViewById(cellBean.cellId);
                         if (imageView != null) {
                             images.put(cellBean.cellId, imageView);
@@ -177,7 +205,7 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
                     ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(cellBean.width, cellBean.height);
                     rootView.setLayoutParams(lp);
                 }
-                if (cellBean.celltype == CellType.TYPE_TEXT ) {
+                if (cellBean.celltype == CellType.TYPE_TEXT) {
                     FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(cellBean.width, cellBean.height);
                     TextView textView = (TextView) CellViewFactory.createView(getContext(), cellBean);
                     ((ICell) textView).upData(cellBean);
@@ -203,6 +231,7 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
         public void onBindViewHolder(ViewHolder holder, final int position) {
             Map<Integer, Object> map = mList.get(position);
             Object key = map.get(mCellBean.subCells.get(0).recvAction);
+            boolean isSelect = key != null && key.equals(ListCellView.this.itemKey);
             holder.itemView.setTag(position);
             holder.itemView.setOnClickListener(new OnClickListener() {
                 @Override
@@ -217,12 +246,15 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
             } catch (Exception e) {
                 FlyLog.e(e.toString());
             }
-            for (CellBean cellBean : mCellBean.subCells) {
+            for (final CellBean cellBean : mCellBean.subCells) {
                 if (cellBean.celltype == CellType.TYPE_TEXT) {
                     TextView textView = holder.texts.get(cellBean.cellId);
                     if (textView != null) {
                         try {
-                            textView.setTextColor(key.equals(ListCellView.this.itemKey) ? ThemeBean.filterColor : ThemeBean.normalColor);
+                            textView.setTextColor(isSelect ? ThemeBean.filterColor : ThemeBean.normalColor);
+                            if (textView instanceof MarqueeTextView) {
+                                ((MarqueeTextView) textView).enableMarquee(isSelect);
+                            }
                         } catch (Exception e) {
                             FlyLog.e(e.toString());
                         }
@@ -236,7 +268,6 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
                 } else if (cellBean.celltype == CellType.TYPE_IMAGE) {
                     final ImageView imageView = holder.images.get(cellBean.cellId);
                     if (imageView != null) {
-                        imageView.setImageBitmap(null);
                         if (cellBean.recvAction > 0) {
                             switch (cellBean.recvAction) {
                                 case ActionKey.RES_URL:
@@ -246,10 +277,7 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
                                             String resUrl = mResUrls.get(obj);
                                             FlyLog.d("res image string=%s,url=%s,imageView=" + imageView, obj, resUrl);
                                             String imgurl = UpdataVersion.getNativeFilePath(mResUrls.get(obj));
-                                            Glide.with(imageView)
-                                                    .load(imgurl)
-                                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                                    .into(imageView);
+                                            Glide.with(imageView).load(imgurl).diskCacheStrategy(DiskCacheStrategy.NONE).into(imageView);
                                         } else if (obj instanceof Drawable) {
                                             FlyLog.d("set drawable");
                                             imageView.setImageDrawable((Drawable) obj);
@@ -266,10 +294,19 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
                                     }
                                     break;
                                 case ActionKey.VIDEO_URL:
-                                    final Object url = mList.get(position).get(ActionKey.VIDEO_URL);
-                                    FlyLog.d("show1"+url);
-                                    if(url instanceof String) {
-                                        Glide.with(getContext()).load((String)url).into(imageView);
+                                    final Object videoUrl = mList.get(position).get(ActionKey.VIDEO_URL);
+                                    FlyLog.d("video url=" + videoUrl);
+                                    Drawable drawable1 = mDefaultDrawables.get(cellBean.cellId);
+                                    if (videoUrl instanceof String) {
+                                        Glide.with(imageView).load((String) videoUrl).placeholder(drawable1).error(drawable1).into(imageView);
+                                    }
+                                    break;
+                                case ActionKey.IMAGE_URL:
+                                    final Object imageUrl = mList.get(position).get(ActionKey.IMAGE_URL);
+                                    FlyLog.d("video url=" + imageUrl);
+                                    Drawable drawable2 = mDefaultDrawables.get(cellBean.cellId);
+                                    if (imageUrl instanceof String) {
+                                        Glide.with(imageView).load((String) imageUrl).diskCacheStrategy(DiskCacheStrategy.NONE).placeholder(drawable2).error(drawable2).into(imageView);
                                     }
                                     break;
                                 case ActionKey.MUSIC_URL:
@@ -277,8 +314,8 @@ public class ListCellView extends RecyclerView implements ICell, IAction, Action
                                 default:
                                     break;
                             }
-                        }else{
-                            Glide.with(getContext()).load(cellBean.imageurl1).into(imageView);
+                        } else {
+                            Glide.with(getContext()).load(isSelect ? cellBean.imageurl2 : cellBean.imageurl1).into(imageView);
                         }
                     }
                 }

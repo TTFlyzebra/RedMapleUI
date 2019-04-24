@@ -39,7 +39,7 @@ public class NumTextView extends View {
     }
 
     private void init(Context context) {
-        numBitmap = getBitmapFromResources(context, R.drawable.rodio_numtext);
+        numBitmap = getBitmapFromResources(context, R.drawable.numtext);
         bitmapWidth = numBitmap.getWidth();
         bitmapHeigth = numBitmap.getHeight();
         textWidth = bitmapWidth / 11;

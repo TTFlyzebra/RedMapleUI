@@ -18,7 +18,7 @@ public class MarqueeTextView extends TextView {
         super(context, attrs, defStyleAttr);
     }
 
-    private boolean enableMarquee  = true;
+    private boolean enableMarquee  = false;
 
     @Override
     public boolean isFocused() {

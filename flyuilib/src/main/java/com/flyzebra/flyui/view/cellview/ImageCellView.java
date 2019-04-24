@@ -69,9 +69,7 @@ public class ImageCellView extends FlyImageView implements ICell, View.OnTouchLi
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                         setImageBitmap(resource);
                         if (mirrorView != null) {
-                            setDrawingCacheEnabled(true);
-                            Bitmap bmp = getDrawingCache();
-                            mirrorView.showImage(bmp);
+                            mirrorView.showImage(resource);
                         }
                     }
                 });

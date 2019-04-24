@@ -7,9 +7,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.flyzebra.flyui.GlideApp;
 import com.flyzebra.flyui.IAction;
 import com.flyzebra.flyui.bean.ThemeBean;
 import com.flyzebra.flyui.chache.DiskCache;
@@ -53,7 +53,7 @@ public class FlyuiActivity extends Activity implements IAction, IUpdataVersion.C
                 ApiTheme = "/api/app?appname=Launcher-AP1&areaCode=" + areaCode + "&type=launcher&version=" + version;
             }
         };
-        iUpDataVersion.getCacheData(this);
+        iUpDataVersion.forceUpVersion(this);
     }
 
     @Override
@@ -83,13 +83,12 @@ public class FlyuiActivity extends Activity implements IAction, IUpdataVersion.C
 
     @Override
     public void upVersionFaile(String error) {
-
+        iUpDataVersion.forceUpVersion(this);
     }
 
     @Override
     public void getCacheDataOK(ThemeBean themeBean) {
         upView(themeBean);
-        iUpDataVersion.forceUpVersion(this);
     }
 
     @Override
@@ -98,22 +97,26 @@ public class FlyuiActivity extends Activity implements IAction, IUpdataVersion.C
         iUpDataVersion.forceUpVersion(this);
     }
 
+    private Drawable drawable;
+
     private void upView(ThemeBean themeBean) {
         mThemeView.upData(themeBean);
         if (TextUtils.isEmpty(themeBean.imageurl)) {
             getWindow().getDecorView().setBackground(null);
         } else {
-            Glide.with(this)
+            GlideApp.with(this)
                     .load(themeBean.imageurl)
+                    .override(1024,600)
                     .into(new CustomTarget<Drawable>() {
                         @Override
                         public synchronized void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                             getWindow().getDecorView().setBackground(resource);
+                            FlyLog.d("resource="+resource.getBounds());
                         }
 
                         @Override
                         public void onLoadCleared(@Nullable Drawable placeholder) {
-
+                            FlyLog.d("placeholder="+placeholder);
                         }
                     });
         }

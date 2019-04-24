@@ -1,6 +1,5 @@
 package com.flyzebra.video;
 
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 
@@ -24,7 +23,6 @@ public class VideoActivity extends BaseActivity implements IAction {
     public Flyui flyui;
     public IjkVideoView ijkVideoView;
     private ArrayList<Video> videoList = new ArrayList<>();
-    private AudioManager audioManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +36,7 @@ public class VideoActivity extends BaseActivity implements IAction {
 
     @Override
     protected void onDestroy() {
+        ijkVideoView.stopPlayback();
         flyui.onDestroy();
         super.onDestroy();
     }
@@ -62,6 +61,7 @@ public class VideoActivity extends BaseActivity implements IAction {
                 if(obj instanceof String){
                     ijkVideoView.setVideoPath((String) obj);
                     ijkVideoView.start();
+                    FlyAction.notifyAction(ActionKey.VIDEO_URL, obj);
                 }
                 break;
             case ActionKey.KEY_MENU:
@@ -89,33 +89,9 @@ public class VideoActivity extends BaseActivity implements IAction {
         FlyLog.d("notifyPathChange path=%s", path);
         FlyAction.notifyAction(ActionKey.STORE_URL,path);
         if (isStop) return;
+        videoList.clear();
+        FlyAction.notifyAction(ActionKey.VIDEO_LIST, new ArrayList<>());
         super.notifyPathChange(path);
-    }
-
-    @Override
-    public void videoUrlList(List<Video> videoUrlList) {
-        try {
-            String url = videoUrlList.get(0).url;
-            FlyLog.d("start ijk play url=%s", url);
-            ijkVideoView.setVideoPath(url);
-            ijkVideoView.start();
-
-            if (isStop) return;
-            if (!videoUrlList.isEmpty()) {
-                videoList.clear();
-                videoList.addAll(videoUrlList);
-            }
-            List<Map<Integer, Object>> list = new ArrayList<>();
-            for (Video video : videoList) {
-                Map<Integer, Object> map = new HashMap<>();
-                map.put(ActionKey.VIDEO_URL, video.url);
-                list.add(map);
-            }
-            FlyAction.notifyAction(ActionKey.MEDIA_LIST, list);
-        }catch (Exception e){
-            FlyLog.e(e.toString());
-        }
-        super.videoUrlList(videoUrlList);
     }
 
     @Override
@@ -139,6 +115,31 @@ public class VideoActivity extends BaseActivity implements IAction {
             list.add(map);
         }
         FlyAction.notifyAction(ActionKey.STORE_LIST, list);
+    }
+
+    @Override
+    public void videoUrlList(List<Video> videoUrlList) {
+        try {
+            String url = videoUrlList.get(0).url;
+            FlyLog.d("start ijk play url=%s", url);
+            ijkVideoView.setVideoPath(url);
+            ijkVideoView.start();
+
+            if (isStop) return;
+            if (!videoUrlList.isEmpty()) {
+                videoList.addAll(videoUrlList);
+            }
+            List<Map<Integer, Object>> list = new ArrayList<>();
+            for (Video video : videoList) {
+                Map<Integer, Object> map = new HashMap<>();
+                map.put(ActionKey.VIDEO_URL, video.url);
+                list.add(map);
+            }
+            FlyAction.notifyAction(ActionKey.VIDEO_LIST, list);
+        }catch (Exception e){
+            FlyLog.e(e.toString());
+        }
+        super.videoUrlList(videoUrlList);
     }
 
 }

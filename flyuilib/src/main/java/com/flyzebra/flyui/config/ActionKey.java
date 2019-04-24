@@ -24,15 +24,14 @@ public interface ActionKey {
     int MSG_MENU_STATUS = 2002;//菜单状态
     int MSG_LOOP_STATUS = 2004;//循环状态
 
-    int MEDIA_NAME = 3007;//音乐歌名
-    int MEDIA_ALBUM = 3008;//音乐专辑名
-    int MEDIA_ARTIST = 3009;//音乐艺术家
-    int MEDIA_TIME = 3010;//音乐播放时间
-    int MUSIC_IMAGE = 3012;//媒体音乐图片
-    int MEDIA_TEXT = 3013;//媒体歌词
-    int MEDIA_LIST = 3014;//媒体单曲列表
+    int MUSIC_NAME = 3007;//音乐歌名
+    int MUSIC_ALBUM = 3008;//音乐专辑名
+    int MUSIC_ARTIST = 3009;//音乐艺术家
+    int MUSIC_TIME = 3010;//音乐播放时间
+    int MUSIC_TEXT = 3013;//音乐歌词
+    int MUSIC_LIST = 3014;//音乐播放列表
     int MUSIC_URL = 3015;//音乐播放地址
-    int VIDEO_IMAGE = 3016;//媒体视频图片
+
     int STORE_LIST = 3017;//存储器列表
     int STORE_URL = 3018;//存储器地址
     int STORE_NAME = 3020;//存储器名称
@@ -40,5 +39,9 @@ public interface ActionKey {
 
     int VIDEO_NAME = 3021;//视频文件名称
     int VIDEO_URL = 3022;//视频文件地址
+    int VIDEO_LIST = 3023;//视频播放列表
 
+    int IMAGE_NAME = 3024;//图片文件名称
+    int IMAGE_URL = 3025;//图片文件地址
+    int IMAGE_LIST = 3026;//图片播放列表
 }

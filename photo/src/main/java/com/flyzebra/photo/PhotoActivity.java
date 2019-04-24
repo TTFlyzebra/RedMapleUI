@@ -8,6 +8,7 @@ import com.flyzebra.flyui.IAction;
 import com.flyzebra.flyui.config.ActionKey;
 import com.flyzebra.flyui.module.FlyAction;
 import com.jancar.media.base.BaseActivity;
+import com.jancar.media.data.Image;
 import com.jancar.media.data.StorageInfo;
 import com.jancar.media.utils.FlyLog;
 
@@ -18,7 +19,7 @@ import java.util.Map;
 
 public class PhotoActivity extends BaseActivity implements IAction {
     public Flyui flyui;
-
+    private ArrayList<Image> imageList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +72,8 @@ public class PhotoActivity extends BaseActivity implements IAction {
         FlyLog.d("notifyPathChange path=%s", path);
         FlyAction.notifyAction(ActionKey.STORE_URL,path);
         if (isStop) return;
+        imageList.clear();
+        FlyAction.notifyAction(ActionKey.IMAGE_LIST, new ArrayList<>());
         super.notifyPathChange(path);
     }
 
@@ -95,5 +98,25 @@ public class PhotoActivity extends BaseActivity implements IAction {
             list.add(map);
         }
         FlyAction.notifyAction(ActionKey.STORE_LIST, list);
+    }
+
+    @Override
+    public void imageUrlList(List<Image> imageUrlList) {
+        try {
+            if (isStop) return;
+            if (!imageUrlList.isEmpty()) {
+                imageList.addAll(imageUrlList);
+            }
+            List<Map<Integer, Object>> list = new ArrayList<>();
+            for (Image image : imageList) {
+                Map<Integer, Object> map = new HashMap<>();
+                map.put(ActionKey.IMAGE_URL, image.url);
+                list.add(map);
+            }
+            FlyAction.notifyAction(ActionKey.IMAGE_LIST, list);
+        }catch (Exception e){
+            com.flyzebra.flyui.utils.FlyLog.e(e.toString());
+        }
+        super.imageUrlList(imageUrlList);
     }
 }
