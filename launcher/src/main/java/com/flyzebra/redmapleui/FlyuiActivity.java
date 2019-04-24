@@ -1,13 +1,15 @@
 package com.flyzebra.redmapleui;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.flyzebra.flyui.IAction;
 import com.flyzebra.flyui.bean.ThemeBean;
 import com.flyzebra.flyui.chache.DiskCache;
@@ -103,11 +105,15 @@ public class FlyuiActivity extends Activity implements IAction, IUpdataVersion.C
         } else {
             Glide.with(this)
                     .load(themeBean.imageurl)
-                    .override(1024, 600)
-                    .into(new SimpleTarget<GlideDrawable>() {
+                    .into(new CustomTarget<Drawable>() {
                         @Override
-                        public void onResourceReady(GlideDrawable glideDrawable, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                            getWindow().getDecorView().setBackground(glideDrawable);
+                        public synchronized void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                            getWindow().getDecorView().setBackground(resource);
+                        }
+
+                        @Override
+                        public void onLoadCleared(@Nullable Drawable placeholder) {
+
                         }
                     });
         }

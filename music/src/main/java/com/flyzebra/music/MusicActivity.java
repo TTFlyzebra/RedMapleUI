@@ -8,13 +8,13 @@ import com.flyzebra.flyui.Flyui;
 import com.flyzebra.flyui.IAction;
 import com.flyzebra.flyui.config.ActionKey;
 import com.flyzebra.flyui.module.FlyAction;
+import com.flyzebra.flyui.utils.FlyLog;
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Music;
 import com.jancar.media.data.StorageInfo;
 import com.jancar.media.model.listener.IMusicPlayerListener;
 import com.jancar.media.model.musicplayer.IMusicPlayer;
 import com.jancar.media.model.musicplayer.MusicPlayer;
-import com.jancar.media.utils.FlyLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
