@@ -41,14 +41,16 @@ import java.util.Map;
  **/
 public class GrouplistCellView extends RecyclerView implements ICell, IAction, ActionKey {
     private CellBean mCellBean;
-    private List<Map<Integer, Object>> mList = new ArrayList<>();
+    private List<Map<Integer, Object>> mAllList = new ArrayList<>();
     private OnItemClickListener onItemClickListener;
     private FlyAdapter adapter;
     private String itemKey;
     private Map<String, String> mResUrls = new Hashtable<>();
     private Map<Integer, Drawable> mDefaultDrawables = new Hashtable<>();
+    private int maxColumn = 1;
 
     private List<List<CellBean>> groupList = new ArrayList<>();
+    private List<Integer> groupNum = new ArrayList<>();
 
     public GrouplistCellView(Context context) {
         super(context);
@@ -95,18 +97,22 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
 
     public void upView() {
         List<CellBean> tempList = null;
+        groupList.clear();
+        groupNum.clear();
         for (CellBean cellBean : mCellBean.subCells) {
             if (cellBean.celltype == CellType.TYPE_PAGE) {
                 tempList = new ArrayList<>();
                 groupList.add(tempList);
+                int num = mCellBean.width / cellBean.width;
+                groupNum.add(num);
+                maxColumn = Math.max(maxColumn, num);
             }
             if (tempList != null) {
                 tempList.add(cellBean);
             }
         }
 
-        int num = mCellBean.width / mCellBean.subCells.get(0).width;
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), maxColumn);
         setLayoutManager(gridLayoutManager);
         adapter = new FlyAdapter();
         setAdapter(adapter);
@@ -122,7 +128,7 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
             public void onItemClick(View view) {
                 int pos = (int) view.getTag();
                 try {
-                    FlyAction.notifyAction(mCellBean.subCells.get(0).sendAction, mList.get(pos).get(mCellBean.subCells.get(0).recvAction));
+                    FlyAction.notifyAction(mCellBean.subCells.get(0).sendAction, mAllList.get(pos).get(mCellBean.subCells.get(0).recvAction));
                 } catch (Exception e) {
                     FlyLog.e(e.toString());
                 }
@@ -131,9 +137,9 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
 
         Object obj = FlyAction.getValue(mCellBean.recvAction);
         if (obj instanceof List) {
-            mList.clear();
+            mAllList.clear();
             try {
-                mList.addAll((Collection<? extends Map<Integer, Object>>) obj);
+                mAllList.addAll((Collection<? extends Map<Integer, Object>>) obj);
             } catch (Exception e) {
                 FlyLog.e(e.toString());
             }
@@ -143,8 +149,8 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
             obj = FlyAction.getValue(mCellBean.subCells.get(0).recvAction);
             if (obj instanceof String) {
                 itemKey = (String) obj;
-                for (int i = 0; i < mList.size(); i++) {
-                    if (itemKey.equals(mList.get(i).get(mCellBean.subCells.get(0).recvAction))) {
+                for (int i = 0; i < mAllList.size(); i++) {
+                    if (itemKey.equals(mAllList.get(i).get(mCellBean.subCells.get(0).recvAction))) {
                         getLayoutManager().scrollToPosition(i);
                         break;
                     }
@@ -177,7 +183,7 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
                         if (textView != null) {
                             texts.put(cellBean.cellId, textView);
                         } else {
-                            FlyLog.e("find by id empty");
+                            FlyLog.i("find by id empty");
                         }
                     }
                 }
@@ -187,7 +193,7 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
                         if (imageView != null) {
                             images.put(cellBean.cellId, imageView);
                         } else {
-                            FlyLog.e("find by id empty");
+                            FlyLog.i("find by id empty");
                         }
                     }
                 }
@@ -199,12 +205,12 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
 
         @Override
         public int getItemCount() {
-            return mList == null ? 0 : mList.size();
+            return mAllList == null ? 0 : mAllList.size();
         }
 
         @Override
         public int getItemViewType(int position) {
-            return (int) mList.get(position).get(ActionKey.TYPE);
+            return (int) mAllList.get(position).get(ActionKey.TYPE);
         }
 
 
@@ -214,16 +220,10 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
             if (groupList.size() < 2) {
                 bindChildView(rootView, mCellBean.subCells);
             } else {
-                switch (viewType) {
-                    case 1:
-                        bindChildView(rootView, groupList.get(0));
-                        break;
-                    case 2:
-                        bindChildView(rootView, groupList.get(1));
-                        break;
-                    default:
-                        bindChildView(rootView, groupList.get(0));
-                        break;
+                if (viewType >= 0 && viewType < groupList.size()) {
+                    bindChildView(rootView, groupList.get(viewType));
+                } else {
+                    bindChildView(rootView, mCellBean.subCells);
                 }
             }
             return new ViewHolder(rootView);
@@ -231,7 +231,7 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
 
         @Override
         public void onBindViewHolder(ViewHolder holder, final int position) {
-            Map<Integer, Object> map = mList.get(position);
+            Map<Integer, Object> map = mAllList.get(position);
             Object key = map.get(mCellBean.subCells.get(0).recvAction);
             boolean isSelect = key != null && key.equals(GrouplistCellView.this.itemKey);
             holder.itemView.setTag(position);
@@ -274,7 +274,7 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
                             switch (cellBean.recvAction) {
                                 case ActionKey.RES_URL:
                                     try {
-                                        Object obj = mList.get(position).get(ActionKey.RES_URL);
+                                        Object obj = mAllList.get(position).get(ActionKey.RES_URL);
                                         if (obj instanceof String) {
                                             String resUrl = mResUrls.get(obj);
                                             FlyLog.d("res image string=%s,url=%s,imageView=" + imageView, obj, resUrl);
@@ -296,7 +296,7 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
                                     }
                                     break;
                                 case ActionKey.VIDEO_URL:
-                                    final Object videoUrl = mList.get(position).get(ActionKey.VIDEO_URL);
+                                    final Object videoUrl = mAllList.get(position).get(ActionKey.VIDEO_URL);
                                     FlyLog.d("video url=" + videoUrl);
                                     Drawable drawable1 = mDefaultDrawables.get(cellBean.cellId);
                                     if (videoUrl instanceof String) {
@@ -304,7 +304,7 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
                                     }
                                     break;
                                 case ActionKey.IMAGE_URL:
-                                    final Object imageUrl = mList.get(position).get(ActionKey.IMAGE_URL);
+                                    final Object imageUrl = mAllList.get(position).get(ActionKey.IMAGE_URL);
                                     FlyLog.d("video url=" + imageUrl);
                                     Drawable drawable2 = mDefaultDrawables.get(cellBean.cellId);
                                     if (imageUrl instanceof String) {
@@ -330,14 +330,11 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
             gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
-                    int type = (int) mList.get(position).get(ActionKey.TYPE);
-                    switch (type) {
-                        case 1:
-                            return 3;
-                        case 2:
-                            return 1;
-                        default:
-                            return 1;
+                    int type = (int) mAllList.get(position).get(ActionKey.TYPE);
+                    if(type>=0&&type<groupNum.size()){
+                        return maxColumn/groupNum.get(type);
+                    }else{
+                        return maxColumn;
                     }
                 }
             });
@@ -406,9 +403,9 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
         Object obj = FlyAction.getValue(key);
         if (key == mCellBean.recvAction) {
             if (obj instanceof List) {
-                mList.clear();
+                mAllList.clear();
                 try {
-                    mList.addAll((Collection<? extends Map<Integer, Object>>) obj);
+                    mAllList.addAll((Collection<? extends Map<Integer, Object>>) obj);
                 } catch (Exception e) {
                     FlyLog.e(e.toString());
                 }
@@ -420,8 +417,8 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
             obj = FlyAction.getValue(mCellBean.subCells.get(0).recvAction);
             if (obj instanceof String) {
                 itemKey = (String) obj;
-                for (int i = 0; i < mList.size(); i++) {
-                    if (itemKey.equals(mList.get(i).get(mCellBean.subCells.get(0).recvAction))) {
+                for (int i = 0; i < mAllList.size(); i++) {
+                    if (itemKey.equals(mAllList.get(i).get(mCellBean.subCells.get(0).recvAction))) {
                         getLayoutManager().scrollToPosition(i);
                         break;
                     }

@@ -15,8 +15,11 @@ import com.jancar.media.data.StorageInfo;
 import com.jancar.media.model.listener.IMusicPlayerListener;
 import com.jancar.media.model.musicplayer.IMusicPlayer;
 import com.jancar.media.model.musicplayer.MusicPlayer;
+import com.jancar.media.utils.StringTools;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
@@ -38,7 +41,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
         flyui = new Flyui(this);
         flyui.onCreate();
         musicPlayer.addListener(this);
-        FlyAction.notifyAction(ActionKey.CHANGE_PAGER_WITH_RESID,"music_fm01");
+        FlyAction.notifyAction(ActionKey.CHANGE_PAGER_WITH_RESID, "music_fm01");
     }
 
     @Override
@@ -87,7 +90,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
                 break;
             case ActionKey.KEY_STORE:
                 obj = FlyAction.getValue(ActionKey.KEY_STORE);
-                if(obj instanceof String){
+                if (obj instanceof String) {
                     usbMediaScan.openStorager(new StorageInfo((String) obj));
                 }
                 break;
@@ -98,7 +101,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
     @Override
     public void notifyPathChange(String path) {
         FlyLog.d("notifyPathChange path=%s", path);
-        FlyAction.notifyAction(ActionKey.STORE_URL,path);
+        FlyAction.notifyAction(ActionKey.STORE_URL, path);
         if (isStop) return;
         if (!musicPlayer.getPlayUrl().startsWith(path)) {
             musicPlayer.destory();
@@ -227,7 +230,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
                 FlyAction.notifyAction(ActionKey.MUSIC_ALBUM, music.album);
                 FlyAction.notifyAction(ActionKey.MUSIC_ARTIST, music.artist);
                 FlyAction.notifyAction(ActionKey.MUSIC_URL, music.url);
-            }else{
+            } else {
                 FlyAction.notifyAction(ActionKey.MUSIC_NAME, "");
                 FlyAction.notifyAction(ActionKey.MUSIC_ALBUM, "");
                 FlyAction.notifyAction(ActionKey.MUSIC_ARTIST, "");
@@ -239,9 +242,14 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
     }
 
     private void notifyMusicList() {
+        long time = System.currentTimeMillis();
+        FlyLog.d("notifyMusicList start");
         //单曲列表
         List<Map<Integer, Object>> listSingle = new ArrayList<>();
         for (Music music : musicList) {
+            music.artist = TextUtils.isEmpty(music.artist) ? getString(R.string.no_artist) : music.artist;
+            music.album = TextUtils.isEmpty(music.album) ? getString(R.string.no_album) : music.album;
+            music.name = TextUtils.isEmpty(music.name) ? StringTools.getNameByPath(music.url) : music.name;
             Map<Integer, Object> map = new Hashtable<>();
             map.put(ActionKey.MUSIC_URL, music.url);
             map.put(ActionKey.MUSIC_NAME, music.name);
@@ -250,41 +258,137 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
         }
         FlyAction.notifyAction(ActionKey.MUSIC_LIST, listSingle);
 
-        //歌手列表
-        List<Map<Integer, Object>> listArtist = new ArrayList<>();
+
+        //列表分类
+        Map<String, List<Music>> mArtistHashMap = new HashMap<>();
+        Map<String, List<Music>> mAlbumHashMap = new HashMap<>();
+        Map<String, List<Music>> mFolderHashMap = new HashMap<>();
         for (Music music : musicList) {
-            Map<Integer, Object> map = new Hashtable<>();
-            map.put(ActionKey.MUSIC_URL, music.url);
-            map.put(ActionKey.MUSIC_NAME, music.name);
-            map.put(ActionKey.MUSIC_ARTIST, music.artist);
-            map.put(ActionKey.TYPE,1);
-            listArtist.add(map);
+            if (mArtistHashMap.get(music.artist) == null) {
+                mArtistHashMap.put(music.artist, new ArrayList<Music>());
+            }
+            mArtistHashMap.get(music.artist).add(music);
+            if (mAlbumHashMap.get(music.album) == null) {
+                mAlbumHashMap.put(music.album, new ArrayList<Music>());
+            }
+            mAlbumHashMap.get(music.album).add(music);
+
+            String path = StringTools.getPathByPath(music.url);
+            if (mFolderHashMap.get(path) == null) {
+                mFolderHashMap.put(path, new ArrayList<Music>());
+            }
+            mFolderHashMap.get(path).add(music);
+        }
+
+        //歌手列表
+        List<String> artistGroupList = new ArrayList<>(mArtistHashMap.keySet());
+        Collections.sort(artistGroupList, new Comparator<String>() {
+            public int compare(String p1, String p2) {
+                if (TextUtils.isEmpty(p1) || p1.startsWith(getString(R.string.no_album_start))) {
+                    return 1;
+                } else if (TextUtils.isEmpty(p2) || p2.startsWith(getString(R.string.no_album_start))) {
+                    return -1;
+                } else {
+                    return p1.compareToIgnoreCase(p2);
+                }
+            }
+        });
+        List<Map<Integer, Object>> listArtist = new ArrayList<>();
+        for (String key : artistGroupList) {
+            List<Music> list = mArtistHashMap.get(key);
+            if (list != null && !list.isEmpty()) {
+                Map<Integer, Object> map1 = new Hashtable<>();
+                map1.put(ActionKey.MUSIC_URL, list.get(0).url);
+                map1.put(ActionKey.MUSIC_NAME, list.get(0).name);
+                map1.put(ActionKey.MUSIC_ARTIST, list.get(0).artist);
+                map1.put(ActionKey.TYPE, 0);
+                listArtist.add(map1);
+                for (Music music : list) {
+                    Map<Integer, Object> map2 = new Hashtable<>();
+                    map2.put(ActionKey.MUSIC_URL, music.url);
+                    map2.put(ActionKey.MUSIC_NAME, music.name);
+                    map2.put(ActionKey.MUSIC_ARTIST, music.artist);
+                    map2.put(ActionKey.TYPE, 1);
+                    listArtist.add(map2);
+                }
+            }
         }
         FlyAction.notifyAction(ActionKey.MUSIC_LIST_ARTIST, listArtist);
 
         //专辑列表
+        List<String> albumGroupList = new ArrayList<>(mAlbumHashMap.keySet());
+        Collections.sort(albumGroupList, new Comparator<String>() {
+            public int compare(String p1, String p2) {
+                if (TextUtils.isEmpty(p1) || p1.startsWith(getString(R.string.no_album_start))) {
+                    return 1;
+                } else if (TextUtils.isEmpty(p2) || p2.startsWith(getString(R.string.no_album_start))) {
+                    return -1;
+                } else {
+                    return p1.compareToIgnoreCase(p2);
+                }
+            }
+        });
         List<Map<Integer, Object>> listAlbum = new ArrayList<>();
-        for (Music music : musicList) {
-            Map<Integer, Object> map = new Hashtable<>();
-            map.put(ActionKey.MUSIC_URL, music.url);
-            map.put(ActionKey.MUSIC_NAME, music.name);
-            map.put(ActionKey.MUSIC_ALBUM, music.album);
-            map.put(ActionKey.TYPE,1);
-            listAlbum.add(map);
+        for (String key : albumGroupList) {
+            List<Music> list = mAlbumHashMap.get(key);
+            if (list != null && !list.isEmpty()) {
+                Map<Integer, Object> map1 = new Hashtable<>();
+                map1.put(ActionKey.MUSIC_URL, list.get(0).url);
+                map1.put(ActionKey.MUSIC_NAME, list.get(0).name);
+                map1.put(ActionKey.MUSIC_ALBUM, list.get(0).album);
+                map1.put(ActionKey.MUSIC_ARTIST, list.get(0).artist);
+                map1.put(ActionKey.TYPE, 0);
+                listAlbum.add(map1);
+                for (Music music : list) {
+                    Map<Integer, Object> map2 = new Hashtable<>();
+                    map2.put(ActionKey.MUSIC_URL, music.url);
+                    map2.put(ActionKey.MUSIC_NAME, music.name);
+                    map1.put(ActionKey.MUSIC_ALBUM, music.album);
+                    map2.put(ActionKey.MUSIC_ARTIST, music.artist);
+                    map2.put(ActionKey.TYPE, 1);
+                    listAlbum.add(map2);
+                }
+            }
         }
         FlyAction.notifyAction(ActionKey.MUSIC_LIST_ALBUM, listAlbum);
 
         //文件夹列表
-        List<Map<Integer, Object>> listAFolder = new ArrayList<>();
-        for (Music music : musicList) {
-            Map<Integer, Object> map = new Hashtable<>();
-            map.put(ActionKey.MUSIC_URL, music.url);
-            map.put(ActionKey.MUSIC_NAME, music.name);
-            map.put(ActionKey.MUSIC_ALBUM, music.album);
-            map.put(ActionKey.TYPE,1);
-            listAFolder.add(map);
+        List<String> folderGroupList = new ArrayList<>(mFolderHashMap.keySet());
+        Collections.sort(folderGroupList, new Comparator<String>() {
+            public int compare(String p1, String p2) {
+                if (TextUtils.isEmpty(p1)) {
+                    return 1;
+                } else if (TextUtils.isEmpty(p2)) {
+                    return -1;
+                } else {
+                    return p1.compareToIgnoreCase(p2);
+                }
+            }
+        });
+        List<Map<Integer, Object>> listFolder = new ArrayList<>();
+        for (String key : folderGroupList) {
+            List<Music> list = mFolderHashMap.get(key);
+            if (list != null && !list.isEmpty()) {
+                Map<Integer, Object> map1 = new Hashtable<>();
+                map1.put(ActionKey.MUSIC_URL, list.get(0).url);
+                map1.put(ActionKey.MUSIC_NAME, list.get(0).name);
+                map1.put(ActionKey.MUSIC_ALBUM, list.get(0).album);
+                map1.put(ActionKey.MUSIC_ARTIST, list.get(0).artist);
+                map1.put(ActionKey.TYPE, 0);
+                listFolder.add(map1);
+                for (Music music : list) {
+                    Map<Integer, Object> map2 = new Hashtable<>();
+                    map2.put(ActionKey.MUSIC_URL, music.url);
+                    map2.put(ActionKey.MUSIC_NAME, music.name);
+                    map1.put(ActionKey.MUSIC_ALBUM, music.album);
+                    map2.put(ActionKey.MUSIC_ARTIST, music.artist);
+                    map2.put(ActionKey.TYPE, 1);
+                    listFolder.add(map2);
+                }
+            }
         }
-        FlyAction.notifyAction(ActionKey.MUSIC_LIST_FOLDER, listAFolder);
+        FlyAction.notifyAction(ActionKey.MUSIC_LIST_FOLDER, listFolder);
+        FlyLog.d("notifyMusicList end use time =" + (System.currentTimeMillis() - time) + "ms");
     }
 
 }

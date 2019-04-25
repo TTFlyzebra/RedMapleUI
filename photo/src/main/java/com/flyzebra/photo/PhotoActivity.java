@@ -132,14 +132,14 @@ public class PhotoActivity extends BaseActivity implements IAction {
                     floderParant.group = floderParant.sort;
                     floderParant.url = path;
                     floderParant.sum = 1;
-                    floderParant.type = 1;
+                    floderParant.type = 0;
                     mAllList.add(floderParant);
                 } else {
                     floderParant.sum++;
                 }
                 FloderImage floder = new FloderImage(imageList.get(i));
                 floder.group = floderParant.sort;
-                floder.type = 2;
+                floder.type = 1;
                 mAllList.add(floder);
             }
 
