@@ -18,6 +18,7 @@ import com.jancar.media.model.musicplayer.MusicPlayer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -238,15 +239,52 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
     }
 
     private void notifyMusicList() {
-        List<Map<Integer, Object>> list = new ArrayList<>();
+        //单曲列表
+        List<Map<Integer, Object>> listSingle = new ArrayList<>();
         for (Music music : musicList) {
-            Map<Integer, Object> map = new HashMap<>();
+            Map<Integer, Object> map = new Hashtable<>();
             map.put(ActionKey.MUSIC_URL, music.url);
             map.put(ActionKey.MUSIC_NAME, music.name);
             map.put(ActionKey.MUSIC_ARTIST, music.artist);
-            list.add(map);
+            listSingle.add(map);
         }
-        FlyAction.notifyAction(ActionKey.MUSIC_LIST, list);
+        FlyAction.notifyAction(ActionKey.MUSIC_LIST, listSingle);
+
+        //歌手列表
+        List<Map<Integer, Object>> listArtist = new ArrayList<>();
+        for (Music music : musicList) {
+            Map<Integer, Object> map = new Hashtable<>();
+            map.put(ActionKey.MUSIC_URL, music.url);
+            map.put(ActionKey.MUSIC_NAME, music.name);
+            map.put(ActionKey.MUSIC_ARTIST, music.artist);
+            map.put(ActionKey.TYPE,1);
+            listArtist.add(map);
+        }
+        FlyAction.notifyAction(ActionKey.MUSIC_LIST_ARTIST, listArtist);
+
+        //专辑列表
+        List<Map<Integer, Object>> listAlbum = new ArrayList<>();
+        for (Music music : musicList) {
+            Map<Integer, Object> map = new Hashtable<>();
+            map.put(ActionKey.MUSIC_URL, music.url);
+            map.put(ActionKey.MUSIC_NAME, music.name);
+            map.put(ActionKey.MUSIC_ALBUM, music.album);
+            map.put(ActionKey.TYPE,1);
+            listAlbum.add(map);
+        }
+        FlyAction.notifyAction(ActionKey.MUSIC_LIST_ALBUM, listAlbum);
+
+        //文件夹列表
+        List<Map<Integer, Object>> listAFolder = new ArrayList<>();
+        for (Music music : musicList) {
+            Map<Integer, Object> map = new Hashtable<>();
+            map.put(ActionKey.MUSIC_URL, music.url);
+            map.put(ActionKey.MUSIC_NAME, music.name);
+            map.put(ActionKey.MUSIC_ALBUM, music.album);
+            map.put(ActionKey.TYPE,1);
+            listAFolder.add(map);
+        }
+        FlyAction.notifyAction(ActionKey.MUSIC_LIST_FOLDER, listAFolder);
     }
 
 }

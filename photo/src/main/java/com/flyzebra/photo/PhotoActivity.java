@@ -15,8 +15,8 @@ import com.jancar.media.utils.FlyLog;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -55,6 +55,9 @@ public class PhotoActivity extends BaseActivity implements IAction {
                 break;
             case ActionKey.KEY_URL:
                 obj = FlyAction.getValue(ActionKey.KEY_URL);
+                if(obj instanceof String){
+                    FlyAction.notifyAction(ActionKey.IMAGE_URL, obj);
+                }
                 break;
             case ActionKey.KEY_MENU:
                 int flag = 0;
@@ -93,7 +96,7 @@ public class PhotoActivity extends BaseActivity implements IAction {
         List<Map<Integer, Object>> list = new ArrayList<>();
         for (StorageInfo storageInfo : storageList) {
             if (TextUtils.isEmpty(storageInfo.mPath)) break;
-            Map<Integer, Object> map = new HashMap<>();
+            Map<Integer, Object> map = new Hashtable<>();
             map.put(ActionKey.STORE_NAME, storageInfo.mDescription);
             map.put(ActionKey.STORE_URL, storageInfo.mPath);
             String imageKey;
@@ -142,15 +145,16 @@ public class PhotoActivity extends BaseActivity implements IAction {
 
             List<Map<Integer, Object>> list1 = new ArrayList<>();
             for (FloderImage image : mAllList) {
-                Map<Integer, Object> map = new HashMap<>();
+                Map<Integer, Object> map = new Hashtable<>();
                 map.put(ActionKey.IMAGE_URL, image.url);
+                map.put(ActionKey.TYPE, image.type);
                 list1.add(map);
             }
             FlyAction.notifyAction(ActionKey.IMAGE_LIST_FOLDER, list1);
 
             List<Map<Integer, Object>> list2 = new ArrayList<>();
             for (Image image : imageList) {
-                Map<Integer, Object> map = new HashMap<>();
+                Map<Integer, Object> map = new Hashtable<>();
                 map.put(ActionKey.IMAGE_URL, image.url);
                 list2.add(map);
             }

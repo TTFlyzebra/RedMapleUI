@@ -13,7 +13,7 @@ import com.jancar.media.data.StorageInfo;
 import com.jancar.media.data.Video;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -100,7 +100,7 @@ public class VideoActivity extends BaseActivity implements IAction {
         List<Map<Integer, Object>> list = new ArrayList<>();
         for (StorageInfo storageInfo : storageList) {
             if (TextUtils.isEmpty(storageInfo.mPath)) break;
-            Map<Integer, Object> map = new HashMap<>();
+            Map<Integer, Object> map = new Hashtable<>();
             map.put(ActionKey.STORE_NAME, storageInfo.mDescription);
             map.put(ActionKey.STORE_URL, storageInfo.mPath);
             String imageKey;
@@ -131,7 +131,7 @@ public class VideoActivity extends BaseActivity implements IAction {
             }
             List<Map<Integer, Object>> list = new ArrayList<>();
             for (Video video : videoList) {
-                Map<Integer, Object> map = new HashMap<>();
+                Map<Integer, Object> map = new Hashtable<>();
                 map.put(ActionKey.VIDEO_URL, video.url);
                 list.add(map);
             }

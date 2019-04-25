@@ -6,7 +6,6 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,6 @@ import com.flyzebra.flyui.bean.ThemeBean;
 import com.flyzebra.flyui.chache.UpdataVersion;
 import com.flyzebra.flyui.config.ActionKey;
 import com.flyzebra.flyui.module.FlyAction;
-import com.flyzebra.flyui.module.RecycleViewDivider;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.customview.MarqueeTextView;
 import com.flyzebra.flyui.view.customview.MirrorView;
@@ -49,6 +47,8 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
     private String itemKey;
     private Map<String, String> mResUrls = new Hashtable<>();
     private Map<Integer, Drawable> mDefaultDrawables = new Hashtable<>();
+
+    private List<List<CellBean>> groupList = new ArrayList<>();
 
     public GrouplistCellView(Context context) {
         super(context);
@@ -94,15 +94,20 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
     }
 
     public void upView() {
-        int num = mCellBean.width / mCellBean.subCells.get(0).width;
-        if (num > 1) {
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), num);
-            setLayoutManager(gridLayoutManager);
-        } else {
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-            setLayoutManager(linearLayoutManager);
-            addItemDecoration(new RecycleViewDivider(getContext(), LinearLayoutManager.HORIZONTAL, 1, 0x1FFFFFFF));
+        List<CellBean> tempList = null;
+        for (CellBean cellBean : mCellBean.subCells) {
+            if (cellBean.celltype == CellType.TYPE_PAGE) {
+                tempList = new ArrayList<>();
+                groupList.add(tempList);
+            }
+            if (tempList != null) {
+                tempList.add(cellBean);
+            }
         }
+
+        int num = mCellBean.width / mCellBean.subCells.get(0).width;
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
+        setLayoutManager(gridLayoutManager);
         adapter = new FlyAdapter();
         setAdapter(adapter);
 
@@ -198,30 +203,27 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
         }
 
         @Override
+        public int getItemViewType(int position) {
+            return (int) mList.get(position).get(ActionKey.TYPE);
+        }
+
+
+        @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             FrameLayout rootView = new FrameLayout(getContext());
-            for (CellBean cellBean : mCellBean.subCells) {
-                if (cellBean.celltype == CellType.TYPE_PAGE) {
-                    ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(cellBean.width, cellBean.height);
-                    rootView.setLayoutParams(lp);
-                }
-                if (cellBean.celltype == CellType.TYPE_TEXT) {
-                    FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(cellBean.width, cellBean.height);
-                    TextView textView = (TextView) CellViewFactory.createView(getContext(), cellBean);
-                    ((ICell) textView).upData(cellBean);
-                    textView.setId(cellBean.cellId);
-                    textView.setPadding(0, 0, 0, 0);
-                    lp.setMargins(cellBean.mLeft, cellBean.mTop, cellBean.mRight, cellBean.mBottom);
-                    rootView.addView(textView, lp);
-                } else if (cellBean.celltype == CellType.TYPE_IMAGE) {
-                    FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(cellBean.width, cellBean.height);
-                    ImageView imageView = (ImageView) CellViewFactory.createView(getContext(), cellBean);
-                    ((ICell) imageView).upData(cellBean);
-                    imageView.setId(cellBean.cellId);
-                    imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                    imageView.setPadding(0, 0, 0, 0);
-                    lp.setMargins(cellBean.mLeft, cellBean.mTop, cellBean.mRight, cellBean.mBottom);
-                    rootView.addView(imageView, lp);
+            if (groupList.size() < 2) {
+                bindChildView(rootView, mCellBean.subCells);
+            } else {
+                switch (viewType) {
+                    case 1:
+                        bindChildView(rootView, groupList.get(0));
+                        break;
+                    case 2:
+                        bindChildView(rootView, groupList.get(1));
+                        break;
+                    default:
+                        bindChildView(rootView, groupList.get(0));
+                        break;
                 }
             }
             return new ViewHolder(rootView);
@@ -318,6 +320,52 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
                             Glide.with(getContext()).load(isSelect ? cellBean.imageurl2 : cellBean.imageurl1).into(imageView);
                         }
                     }
+                }
+            }
+        }
+
+        @Override
+        public void onAttachedToRecyclerView(final RecyclerView recyclerView) {
+            GridLayoutManager gridLayoutManager = (GridLayoutManager) recyclerView.getLayoutManager();
+            gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    int type = (int) mList.get(position).get(ActionKey.TYPE);
+                    switch (type) {
+                        case 1:
+                            return 3;
+                        case 2:
+                            return 1;
+                        default:
+                            return 1;
+                    }
+                }
+            });
+        }
+
+        private void bindChildView(ViewGroup rootView, List<CellBean> subCells) {
+            for (CellBean cellBean : subCells) {
+                if (cellBean.celltype == CellType.TYPE_PAGE) {
+                    ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(cellBean.width, cellBean.height);
+                    rootView.setLayoutParams(lp);
+                }
+                if (cellBean.celltype == CellType.TYPE_TEXT) {
+                    FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(cellBean.width, cellBean.height);
+                    TextView textView = (TextView) CellViewFactory.createView(getContext(), cellBean);
+                    ((ICell) textView).upData(cellBean);
+                    textView.setId(cellBean.cellId);
+                    textView.setPadding(0, 0, 0, 0);
+                    lp.setMargins(cellBean.mLeft, cellBean.mTop, cellBean.mRight, cellBean.mBottom);
+                    rootView.addView(textView, lp);
+                } else if (cellBean.celltype == CellType.TYPE_IMAGE) {
+                    FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(cellBean.width, cellBean.height);
+                    ImageView imageView = (ImageView) CellViewFactory.createView(getContext(), cellBean);
+                    ((ICell) imageView).upData(cellBean);
+                    imageView.setId(cellBean.cellId);
+                    imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                    imageView.setPadding(0, 0, 0, 0);
+                    lp.setMargins(cellBean.mLeft, cellBean.mTop, cellBean.mRight, cellBean.mBottom);
+                    rootView.addView(imageView, lp);
                 }
             }
         }
