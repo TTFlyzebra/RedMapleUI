@@ -17,7 +17,7 @@ import com.flyzebra.flyui.utils.RtlTools;
 
 
 public class FlyTabView extends FrameLayout implements View.OnClickListener {
-//    private String titles[] = null;
+    //    private String titles[] = null;
     private TextView textViews[] = null;
     private View focusView = null;
     private int focusPos = 0;
@@ -58,7 +58,7 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener {
 
     public void setTitles(CellBean mCellBean) {
         removeAllViews();
-        if (mCellBean == null || mCellBean.subCells==null ||mCellBean.subCells.isEmpty()) return;
+        if (mCellBean == null || mCellBean.subCells == null || mCellBean.subCells.isEmpty()) return;
         textViews = new TextView[mCellBean.subCells.size()];
         for (int i = 0; i < textViews.length; i++) {
             CellBean subCell = mCellBean.subCells.get(i);
@@ -68,7 +68,7 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener {
             textViews[i].setGravity(Gravity.CENTER);
             textViews[i].setText(subCell.textTitle.getText());
             textViews[i].setTag(i);
-            textViews[i].setTextSize(TypedValue.COMPLEX_UNIT_PX,subCell.textSize);
+            textViews[i].setTextSize(TypedValue.COMPLEX_UNIT_PX, subCell.textSize);
             textViews[i].setOnClickListener(FlyTabView.this);
             textViews[i].setTextColor(colorStateList);
             addView(textViews[i], lp);
@@ -174,7 +174,7 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener {
         setSelectItem(300);
     }
 
-    public void setNewTitles(String[] titles) {
+    public void setTextTitle(String[] titles) {
         try {
             if (titles == null || textViews == null || titles.length != textViews.length) return;
             for (int i = 0; i < titles.length; i++) {
@@ -182,6 +182,12 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener {
             }
         } catch (Exception e) {
             FlyLog.e(e.toString());
+        }
+    }
+
+    public void setTextTitle(int i, String s) {
+        if (i >= 0 && i < textViews.length) {
+            textViews[i].setText(s);
         }
     }
 

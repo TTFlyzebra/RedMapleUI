@@ -8,7 +8,7 @@ package com.flyzebra.flyui.config;
 public interface ActionKey {
     int REFRESH = 9000;
     int CHANGE_PAGER_WITH_RESID = 1018;
-    int TYPE =  9001;
+    int GROUP_ORDER =  9001;
     int KEY_HIDE = 1001;//执行隐藏动画
 
     int KEY_PLAY = 1009;//播放暂停
@@ -35,9 +35,6 @@ public interface ActionKey {
     int MUSIC_LIST_FOLDER = 3028;//音乐文件夹列表
     int MUSIC_LIST_ALBUM = 3029;//音乐专辑分类放列表
     int MUSIC_LIST_ARTIST = 3030;//音乐歌手分类列表
-    int MUSIC_SUM_FOLDER = 3031;//音乐文件夹数量
-    int MUSIC_SUM_ALBUM = 3032;//音乐专辑数量
-    int MUSIC_SUM_ARTIST = 3033;//音乐歌手数量
 
     int STORE_LIST = 3017;//存储器列表
     int STORE_URL = 3018;//存储器地址
@@ -52,4 +49,14 @@ public interface ActionKey {
     int IMAGE_URL = 3025;//图片文件地址
     int IMAGE_LIST = 3026;//图片播放列表
     int IMAGE_LIST_FOLDER = 3027;//图片文件夹列表
+
+    int FOLODER_NAME = 3034;//文件夹名
+    int FOLODER_PATH = 3035;//文件夹路径
+    int FOLODER_NUM = 3036;//文件夹包含文件数
+
+    int MUSIC_SUM_FOLDER = 3031;//音乐文件夹数量
+    int MUSIC_SUM_ALBUM = 3032;//音乐专辑数量
+    int MUSIC_SUM_ARTIST = 3033;//音乐歌手数量
+    int SUM_STORE = 3037;//存储器数量
+    int MUSIC_SUM = 3038;//音乐数量
 }

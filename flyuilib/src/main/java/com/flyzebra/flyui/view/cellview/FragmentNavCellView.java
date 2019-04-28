@@ -19,7 +19,7 @@ import com.flyzebra.flyui.view.customview.MirrorView;
  * 2019/4/16 15:01
  * Describ:
  **/
-class FragmentNavCellView extends FrameLayout implements ICell,IAction {
+class FragmentNavCellView extends FrameLayout implements ICell, IAction {
     private CellBean mCellBean;
     private FlyTabView flyTabView;
 
@@ -44,9 +44,17 @@ class FragmentNavCellView extends FrameLayout implements ICell,IAction {
             flyTabView.setOnItemClickListener(new FlyTabView.OnItemClickListener() {
                 @Override
                 public void onItemClick(View v) {
-                    FlyAction.notifyAction(ActionKey.CHANGE_PAGER_WITH_RESID,mCellBean.subCells.get((Integer) v.getTag()).resId);
+                    FlyAction.notifyAction(ActionKey.CHANGE_PAGER_WITH_RESID, mCellBean.subCells.get((Integer) v.getTag()).resId);
                 }
             });
+
+            for (int i = 0; i < mCellBean.subCells.size(); i++) {
+                int action = mCellBean.subCells.get(i).recvAction;
+                Object obj = FlyAction.getValue(action);
+                if(obj instanceof String){
+                    flyTabView.setTextTitle(i, (String) obj);
+                }
+            }
         }
 
         try {
@@ -80,15 +88,24 @@ class FragmentNavCellView extends FrameLayout implements ICell,IAction {
 
     @Override
     public boolean onAction(int key) {
-        if(mCellBean == null || mCellBean.subCells.isEmpty()) return false;
-        if(key==ActionKey.CHANGE_PAGER_WITH_RESID){
+        if (mCellBean == null || mCellBean.subCells == null || mCellBean.subCells.isEmpty())
+            return false;
+        if (key == ActionKey.CHANGE_PAGER_WITH_RESID) {
             Object obj = FlyAction.getValue(key);
-            if(obj instanceof String) {
+            if (obj instanceof String) {
                 for (int i = 0; i < mCellBean.subCells.size(); i++) {
                     if (obj.equals(mCellBean.subCells.get(i).resId)) {
                         flyTabView.setFocusPos(i);
                         break;
                     }
+                }
+            }
+        } else {
+            for (int i = 0; i < mCellBean.subCells.size(); i++) {
+                int action = mCellBean.subCells.get(i).recvAction;
+                Object obj = FlyAction.getValue(action);
+                if (key > 0 && key == action&&obj instanceof String) {
+                    flyTabView.setTextTitle(i, (String) obj);
                 }
             }
         }

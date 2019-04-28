@@ -97,6 +97,8 @@ public class LanguageText {
             text = en;
         }
 
-        return TextUtils.isEmpty(text)?zh:text;
+        text =  TextUtils.isEmpty(text)?zh:text;
+        text = text.replace("\\n","\n");
+        return text;
     }
 }

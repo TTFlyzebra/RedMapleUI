@@ -147,7 +147,7 @@ public class PhotoActivity extends BaseActivity implements IAction {
             for (FloderImage image : mAllList) {
                 Map<Integer, Object> map = new Hashtable<>();
                 map.put(ActionKey.IMAGE_URL, image.url);
-                map.put(ActionKey.TYPE, image.type);
+                map.put(ActionKey.GROUP_ORDER, image.type);
                 list1.add(map);
             }
             FlyAction.notifyAction(ActionKey.IMAGE_LIST_FOLDER, list1);
