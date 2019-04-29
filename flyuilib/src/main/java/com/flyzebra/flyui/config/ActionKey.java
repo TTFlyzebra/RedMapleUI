@@ -9,6 +9,7 @@ public interface ActionKey {
     int REFRESH = 9000;
     int CHANGE_PAGER_WITH_RESID = 1018;
     int GROUP_ORDER =  9001;
+    int IS_SELECT = 9002;
     int KEY_HIDE = 1001;//执行隐藏动画
 
     int KEY_PLAY = 1009;//播放暂停

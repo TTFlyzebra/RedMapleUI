@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Matrix;
+import android.graphics.NinePatch;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
@@ -16,6 +17,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.NinePatchDrawable;
 import android.os.Build;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
@@ -61,7 +63,7 @@ public class BitmapUtils {
         return bitmap;
     }
 
-    public static Bitmap convertViewToBitmap(View view){
+    public static Bitmap convertViewToBitmap(View view) {
 
         Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(),
                 Bitmap.Config.ARGB_8888);
@@ -112,7 +114,7 @@ public class BitmapUtils {
         }
     }
 
-    public static BitmapFactory.Options getBitmapOption(int inSampleSize){
+    public static BitmapFactory.Options getBitmapOption(int inSampleSize) {
         System.gc();
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPurgeable = true;
@@ -120,16 +122,23 @@ public class BitmapUtils {
         return options;
     }
 
+    /**
+     * 获取镜像图片
+     *
+     * @param originalImage
+     * @param reflectHeight
+     * @return
+     */
     public static Bitmap createReflectedImage(Bitmap originalImage, int reflectHeight) {
         int width = originalImage.getWidth();
         int height = originalImage.getHeight();
         Matrix matrix = new Matrix();
         // 实现图片垂直翻转
         matrix.preScale(1, -1);
-        if (reflectHeight > height){
+        if (reflectHeight > height) {
             reflectHeight = height;
         }
-        reflectHeight = Math.min(height,reflectHeight);
+        reflectHeight = Math.min(height, reflectHeight);
         // 创建倒影图片（是原始图片的一半大小）
         Bitmap finalReflection = null;
         try {
@@ -143,7 +152,7 @@ public class BitmapUtils {
 
             Paint shaderPaint = new Paint();
             // 创建线性渐变LinearGradient对象
-            LinearGradient shader = new LinearGradient(0, 0, 0, reflectHeight, new int[]{0x7fffffff, 0x00ffffff},new float[]{0.0f , 0.8f}, Shader.TileMode.CLAMP);
+            LinearGradient shader = new LinearGradient(0, 0, 0, reflectHeight, new int[]{0x7fffffff, 0x00ffffff}, new float[]{0.0f, 0.8f}, Shader.TileMode.CLAMP);
             shaderPaint.setShader(shader);
             shaderPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
             // 画布画出反转图片大小区域，然后把渐变效果加到其中，就出现了图片的倒影效果。
@@ -156,7 +165,7 @@ public class BitmapUtils {
     }
 
     /**
-     *  把View转化成Bitmap的方法,测试不能用
+     * 把View转化成Bitmap的方法,测试不能用
      */
 
     public static Bitmap getViewBitmap(View v) {
@@ -231,5 +240,19 @@ public class BitmapUtils {
         tmpOut.copyTo(outputBitmap);
 
         return outputBitmap;
+    }
+
+    /**
+     * 设置点9背景
+     * @param bitmap
+     */
+    public static void setNineBackground(View view, Bitmap bitmap) {
+        if (bitmap == null)
+            return;
+        byte[] chunk = bitmap.getNinePatchChunk();
+        if (NinePatch.isNinePatchChunk(chunk)) {
+            NinePatchDrawable patchy = new NinePatchDrawable(bitmap, chunk, new Rect(), null);
+            view.setBackground(patchy);
+        }
     }
 }

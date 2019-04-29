@@ -1,23 +1,19 @@
 package com.flyzebra.flyui.http;
 
-import android.content.Context;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.ArrayMap;
 
 import com.flyzebra.flyui.utils.FlyLog;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Cache;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.CipherSuite;
@@ -37,7 +33,7 @@ public class FlyOkHttp implements IHttp {
     private static OkHttpClient mOkHttpClient;
     private final int OK = 1;
     private final int FAIL = 2;
-    public Map<Object, Set<Call>> map_Call = new HashMap<>();
+    public Map<Object, Set<Call>> map_Call = new ArrayMap<>();
     /**
      * 跟主线程通信用
      */

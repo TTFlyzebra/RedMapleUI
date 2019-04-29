@@ -237,8 +237,8 @@ public class MusicPlayer implements IMusicPlayer,
 
     @Override
     public void play(String url) {
-        if(url==null&&url.equals(mPlayUrl)){
-            FlyLog.d("url is null or is playing-"+url);
+        if (url == null || url.equals(mPlayUrl)) {
+            FlyLog.d("url is null or is playing-" + url);
             return;
         }
         FlyLog.d("start url=%s", url);
@@ -578,7 +578,7 @@ public class MusicPlayer implements IMusicPlayer,
         for (IMusicPlayerListener listener : listeners) {
             try {
                 listener.playtime(cretTime, totalTime);
-            }catch (Exception e){
+            } catch (Exception e) {
                 FlyLog.e(e.toString());
             }
         }
