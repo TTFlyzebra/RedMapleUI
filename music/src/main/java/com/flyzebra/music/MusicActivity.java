@@ -384,7 +384,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
                     String pathName = last > 0 ? path.substring(last + 1, path.length()) : path;
                     String pathPath = last > 0 ? path.substring(0, last) : path;
                     Map<Integer, Object> map1 = new Hashtable<>();
-                    map1.put(ActionKey.MUSIC_URL, path);
+                    map1.put(ActionKey.MUSIC_URL, list.get(0).url);
                     map1.put(ActionKey.MUSIC_NAME, list.get(0).name);
                     map1.put(ActionKey.FOLODER_NAME, pathName);
                     map1.put(ActionKey.FOLODER_PATH, pathPath);
