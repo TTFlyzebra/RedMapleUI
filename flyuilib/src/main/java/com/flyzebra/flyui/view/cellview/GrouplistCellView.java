@@ -513,6 +513,8 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
             }
         }
 
+        int pos = 0;
+
         for (int j = num; j >= 0; j--) {
             if (0 == (int) mAllList.get(j).get(GROUP_ORDER)) {
                 mAllList.get(j).put(IS_SELECT, true);
@@ -521,15 +523,26 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
             }
         }
 
-        addChildItem(selectMap);
+//        跳转到子歌曲
+//        addChildItem(selectMap);
+//        if (mShowList == null || mShowList.isEmpty()) return;
+//        for (int i = mShowList.size() - 1; i >= 0; i--) {
+//            if ((boolean) mShowList.get(i).get(IS_SELECT)) {
+//                getLayoutManager().scrollToPosition(i);
+//                break;
+//            }
+//        }
 
-        if (mShowList == null || mShowList.isEmpty()) return;
-        for (int i = mShowList.size() - 1; i >= 0; i--) {
-            if ((boolean) mShowList.get(i).get(IS_SELECT)) {
-                getLayoutManager().scrollToPosition(i);
-                break;
+        //不跳转到子歌曲
+        addChildItem(null);
+        if (selectMap != null) {
+            for (int i = 0; i < mShowList.size(); i++) {
+                if (mShowList.get(i).equals(selectMap)) {
+                    getLayoutManager().scrollToPosition(i);
+                }
             }
         }
+
     }
 
     class ItemBean {
