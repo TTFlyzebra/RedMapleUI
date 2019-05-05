@@ -53,7 +53,7 @@ public interface ActionKey {
 
     int FOLODER_NAME = 3034;//文件夹名
     int FOLODER_PATH = 3035;//文件夹路径
-    int FOLODER_NUM = 3036;//文件夹包含文件数
+    int FOLODER_NUM = 3036;//子项目统计数
 
     int MUSIC_SUM_FOLDER = 3031;//音乐文件夹数量
     int MUSIC_SUM_ALBUM = 3032;//音乐专辑数量

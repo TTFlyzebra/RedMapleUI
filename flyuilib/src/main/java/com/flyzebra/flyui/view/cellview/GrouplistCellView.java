@@ -48,8 +48,7 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
     private List<Map<Integer, Object>> mAllList = new ArrayList<>();
     private OnItemClick OnItemClick;
     private FlyAdapter adapter;
-    private ArrayMap<String, Integer> mResUrls = new ArrayMap<>();
-    private ArrayMap<Integer, Drawable> mAllDrawable = new ArrayMap<>();
+    private ArrayMap<String, Drawable> mAllDrawable = new ArrayMap<>();
     private int maxColumn = 1;
     private Map<Integer, Object> mSelectMap = null;
 
@@ -84,22 +83,20 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
                 itemBean.cellBean = subcell;
                 itemBeans.add(itemBean);
                 maxColumn = Math.max(maxColumn, itemBean.groupNum);
-            } else if (subcell.celltype == CellType.TYPE_IMAGE_RES) {
-                mResUrls.put(subcell.resId, subcell.cellId);
             } else {
                 if (tempList != null) {
                     tempList.add(subcell);
                 }
             }
 
-            loadImageUrl(subcell.imageurl1, subcell.cellId);
-            loadImageUrl(subcell.imageurl2, subcell.cellId);
+            loadImageUrl(subcell.imageurl1);
+            loadImageUrl(subcell.imageurl2);
         }
 
         checkLoadingFinish();
     }
 
-    private void loadImageUrl(String imageurl, final int key) {
+    private void loadImageUrl(final String imageurl) {
         if (TextUtils.isEmpty(imageurl)) return;
         meLoading.incrementAndGet();
         Glide.with(getContext())
@@ -115,7 +112,7 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
 
                     @Override
                     public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                        mAllDrawable.put(key, resource);
+                        mAllDrawable.put(imageurl, resource);
                         meLoading.decrementAndGet();
                         checkLoadingFinish();
                     }
@@ -236,7 +233,7 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
             }
             holder.itemView.setTag(position);
             {
-                Drawable Drawable = getDrawableById(itemBeans.get(type).cellBean.cellId);
+                Drawable Drawable = getDrawableById(itemBeans.get(type).cellBean.imageurl1);
                 if (Drawable != null) {
                     holder.itemView.setBackground(Drawable);
                 }
@@ -260,7 +257,7 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
                                     mSelectMap = mShowList.get(pos);
                                 }
                             }
-                            refresh(mSelectMap);
+                            addChildItem(mSelectMap);
                         } else {
                             ItemBean itemBean = itemBeans.get(type);
                             FlyAction.notifyAction(itemBean.cellBean.sendAction, mShowList.get(pos).get(itemBean.cellBean.recvAction));
@@ -270,9 +267,11 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
                     }
                 }
             });
+
             if (type != 0) {
                 holder.itemView.setEnabled(!isSelect);
             }
+
             for (final CellBean cellBean : mCellBean.subCells) {
                 if (cellBean.celltype == CellType.TYPE_TEXT) {
                     TextView textView = holder.texts.get(cellBean.cellId);
@@ -301,9 +300,7 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
                                     try {
                                         Object obj = mShowList.get(position).get(RES_URL);
                                         if (obj instanceof String) {
-                                            int cellId = mResUrls.get(obj);
-                                            FlyLog.d("res image string=%s,cellId=%d,imageView=" + imageView, obj, cellId);
-                                            Drawable Drawable1 = mAllDrawable.get(cellId);
+                                            Drawable Drawable1 = mAllDrawable.get(cellBean.imageurl1);
                                             imageView.setImageDrawable(Drawable1);
                                         } else if (obj instanceof Drawable) {
                                             FlyLog.d("set drawable");
@@ -323,7 +320,7 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
                                 case VIDEO_URL:
                                     final Object videoUrl = mShowList.get(position).get(VIDEO_URL);
                                     FlyLog.d("video url=" + videoUrl);
-                                    Drawable drawable1 = mAllDrawable.get(cellBean.cellId);
+                                    Drawable drawable1 = mAllDrawable.get(cellBean.imageurl1);
                                     imageView.setImageDrawable(drawable1);
                                     if (videoUrl instanceof String) {
                                         Glide.with(imageView)
@@ -335,7 +332,7 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
                                 case IMAGE_URL:
                                     final Object imageUrl = mShowList.get(position).get(IMAGE_URL);
                                     FlyLog.d("video url=" + imageUrl);
-                                    Drawable drawable2 = mAllDrawable.get(cellBean.cellId);
+                                    Drawable drawable2 = mAllDrawable.get(cellBean.imageurl1);
                                     imageView.setImageDrawable(drawable2);
                                     if (imageUrl instanceof String) {
                                         Glide.with(imageView)
@@ -396,8 +393,7 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
                 if (cellBean.celltype == CellType.TYPE_PAGE) {
                     ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(cellBean.width, cellBean.height);
                     rootView.setLayoutParams(lp);
-                }
-                if (cellBean.celltype == CellType.TYPE_TEXT) {
+                } else if (cellBean.celltype == CellType.TYPE_TEXT) {
                     FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(cellBean.width, cellBean.height);
                     TextView textView = (TextView) CellViewFactory.createView(getContext(), cellBean);
                     ((ICell) textView).upData(cellBean);
@@ -420,8 +416,8 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
 
     }
 
-    private Drawable getDrawableById(int cellId) {
-        return mAllDrawable.isEmpty() ? null : mAllDrawable.get(cellId);
+    private Drawable getDrawableById(String imageUrl) {
+        return mAllDrawable.isEmpty() ? null : mAllDrawable.get(imageUrl);
     }
 
     public interface OnItemClick {
@@ -432,13 +428,17 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
         this.OnItemClick = OnItemClick;
     }
 
-    private void refresh(Map<Integer, Object> mSelectMap) {
-        FlyLog.d("refresh");
+    private void addChildItem(Map<Integer, Object> mSelectMap) {
+        FlyLog.d("addChildItem");
+//        if (mSelectMap == null || mSelectMap.isEmpty()) {
+//            FlyLog.d("mSelectMap is empty");
+//            return;
+//        }
         mShowList.clear();
         boolean flag = false;
         for (int i = 0; i < mAllList.size(); i++) {
             Map<Integer, Object> map = mAllList.get(i);
-            if ((int) map.get(GROUP_ORDER) == 0) {
+            if (0 == (int) map.get(GROUP_ORDER)) {
                 mShowList.add(map);
                 flag = map.equals(mSelectMap);
             } else {
@@ -447,6 +447,7 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
                 }
             }
         }
+        FlyLog.d("mShowList size=%s", mShowList.size());
         if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
@@ -479,7 +480,7 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
                 } catch (Exception e) {
                     FlyLog.e(e.toString());
                 }
-                FlyLog.d("refresh 3");
+                FlyLog.d("addChildItem 3");
             }
         } else if (key == mCellBean.subCells.get(0).recvAction) {
             scrollToCurrent();
@@ -487,31 +488,36 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
         return false;
     }
 
+    /**
+     * 滚动到当前播放歌曲
+     */
     private void scrollToCurrent() {
         if (mCellBean == null || mCellBean.subCells == null || mCellBean.subCells.isEmpty() || mAllList == null || mAllList.isEmpty())
             return;
         int key = mCellBean.subCells.get(0).recvAction;
         Object obj = FlyAction.getValue(key);
         if (!(obj instanceof String)) return;
+
+        Map<Integer, Object> selectMap = null;
         int num = 0;
-        int type = 0;
         for (int i = mAllList.size() - 1; i >= 0; i--) {
             if (obj.equals(mAllList.get(i).get(key))) {
                 mAllList.get(i).put(IS_SELECT, true);
-                num = i - 1;
-                type = (int) mAllList.get(i).get(GROUP_ORDER);
+                num = i;
             } else {
                 mAllList.get(i).put(IS_SELECT, false);
             }
         }
 
         for (int j = num; j >= 0; j--) {
-            if (type != (int) mAllList.get(j).get(GROUP_ORDER)) {
+            if (0 == (int) mAllList.get(j).get(GROUP_ORDER)) {
                 mAllList.get(j).put(IS_SELECT, true);
-                refresh(mAllList.get(j));
+                selectMap = mAllList.get(j);
                 break;
             }
         }
+
+        addChildItem(selectMap);
 
         if (mShowList == null || mShowList.isEmpty()) return;
         for (int i = mShowList.size() - 1; i >= 0; i--) {

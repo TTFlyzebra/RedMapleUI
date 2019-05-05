@@ -83,7 +83,7 @@ public class FlyuiActivity extends Activity implements IAction, IUpdataVersion.C
 
     @Override
     public void upVersionFaile(String error) {
-        iUpDataVersion.forceUpVersion(this);
+        iUpDataVersion.getCacheData(this);
     }
 
     @Override

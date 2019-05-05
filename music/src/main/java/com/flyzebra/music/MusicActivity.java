@@ -179,12 +179,12 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
                 notifyCurrentMusic();
                 break;
             case MusicPlayer.STATUS_PLAYING:
-                break;
-            case MusicPlayer.STATUS_ERROR:
-                break;
-            case MusicPlayer.STATUS_IDLE:
+            case MusicPlayer.STATUS_PAUSE:
                 break;
         }
+        int playStauts = (musicPlayer.getPlayStatus() == MusicPlayer.STATUS_STARTPLAY
+                || musicPlayer.getPlayStatus() == MusicPlayer.STATUS_PLAYING) ? 1 : 0;
+        FlyAction.notifyAction(ActionKey.MSG_PLAY_STATUS, playStauts);
     }
 
     @Override
@@ -226,8 +226,6 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
     private void notifyCurrentMusic() {
         FlyLog.d("notifyCurrentMusic");
         try {
-            int playStauts = (musicPlayer.getPlayStatus() == MusicPlayer.STATUS_STARTPLAY || musicPlayer.getPlayStatus() == MusicPlayer.STATUS_PLAYING) ? 1 : 0;
-            FlyAction.notifyAction(ActionKey.MSG_PLAY_STATUS, playStauts);
             final int i = musicPlayer.getPlayPos();
             if (i >= 0 && i < musicList.size()) {
                 Music music = musicList.get(i);
@@ -310,6 +308,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
                 map1.put(ActionKey.MUSIC_URL, list.get(0).url);
                 map1.put(ActionKey.MUSIC_NAME, list.get(0).name);
                 map1.put(ActionKey.MUSIC_ARTIST, list.get(0).artist);
+                map1.put(ActionKey.FOLODER_NUM, "(" + list.size() + "首)");
                 map1.put(ActionKey.GROUP_ORDER, 0);
                 listArtist.add(map1);
                 for (Music music : list) {
@@ -345,13 +344,14 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
                 map1.put(ActionKey.MUSIC_URL, list.get(0).url);
                 map1.put(ActionKey.MUSIC_NAME, list.get(0).name);
                 map1.put(ActionKey.MUSIC_ALBUM, list.get(0).album);
+                map1.put(ActionKey.FOLODER_NUM, "(" + list.size() + "首)");
                 map1.put(ActionKey.GROUP_ORDER, 0);
                 listAlbum.add(map1);
                 for (Music music : list) {
                     Map<Integer, Object> map2 = new Hashtable<>();
                     map2.put(ActionKey.MUSIC_URL, music.url);
                     map2.put(ActionKey.MUSIC_NAME, music.name);
-                    map1.put(ActionKey.MUSIC_ALBUM, music.album);
+                    map2.put(ActionKey.MUSIC_ALBUM, music.album);
                     map2.put(ActionKey.GROUP_ORDER, 1);
                     listAlbum.add(map2);
                 }
@@ -388,7 +388,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
                     map1.put(ActionKey.MUSIC_NAME, list.get(0).name);
                     map1.put(ActionKey.FOLODER_NAME, pathName);
                     map1.put(ActionKey.FOLODER_PATH, pathPath);
-                    map1.put(ActionKey.FOLODER_NUM, "(" + list.size() + ")");
+                    map1.put(ActionKey.FOLODER_NUM, "(" + list.size() + "首)");
                     map1.put(ActionKey.GROUP_ORDER, 0);
                     listFolder.add(map1);
                 }

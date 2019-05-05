@@ -43,7 +43,7 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
     @Override
     public void initView(Context context) {
         imageView = new FlyImageView(context);
-        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        imageView.setScaleType(ImageView.ScaleType.CENTER);
         addView(imageView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         textView = new FlyTextView(context);
         addView(textView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
@@ -104,6 +104,7 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
                 .load(imageurl)
                 .override(mCellBean.width, mCellBean.height)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .centerInside()
                 .into(new BitmapImageViewTarget(imageView){
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {

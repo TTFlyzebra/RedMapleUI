@@ -22,7 +22,7 @@ import com.flyzebra.flyui.view.pageview.SimplePageView;
  * 2019/4/2 16:15
  * Describ:
  **/
-public class CellsCellView extends FrameLayout implements ICell, IAction {
+public class PageCellView extends FrameLayout implements ICell, IAction {
     private CellBean mCellBean;
     private static Handler sHander = new Handler(Looper.getMainLooper());
     private static Runnable hideMenuTask = new Runnable() {
@@ -33,7 +33,7 @@ public class CellsCellView extends FrameLayout implements ICell, IAction {
         }
     };
 
-    public CellsCellView(Context context) {
+    public PageCellView(Context context) {
         super(context);
     }
 
@@ -99,7 +99,7 @@ public class CellsCellView extends FrameLayout implements ICell, IAction {
 
     @Override
     public boolean onAction(int key) {
-        if (mCellBean == null && mCellBean.recvAction != key) return false;
+        if (mCellBean == null || mCellBean.recvAction != key) return false;
         switch (key) {
             case ActionKey.MSG_MENU_STATUS:
                 Object obj = FlyAction.getValue(key);

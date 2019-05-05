@@ -48,7 +48,7 @@ public class SeekbarCellView extends FrameLayout implements ICell, IAction, Seek
     @Override
     public void initView(Context context) {
         FlyLog.d("seekbar");
-        setClipChildren(false);
+//        setClipChildren(false);
         seekBar = new SeekBar(context);
         seekBar.setVisibility(GONE);
         LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
@@ -212,7 +212,9 @@ public class SeekbarCellView extends FrameLayout implements ICell, IAction, Seek
         int seconds = totalSeconds % 60;
         int minutes = (totalSeconds / 60) % 60;
         int hours = totalSeconds / 3600;
-        return hours > 0 ? String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, seconds) : String.format(Locale.US, "%02d:%02d", minutes, seconds);
+        return hours > 0 ?
+                String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, seconds) :
+                String.format(Locale.US, "%02d:%02d", minutes, seconds);
     }
 
     @Override

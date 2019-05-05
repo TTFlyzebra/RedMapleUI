@@ -40,7 +40,7 @@ public class CellViewFactory {
                 iCellView = new SeekbarCellView(context);
                 break;
             case CellType.TYPE_PAGE:
-                iCellView = new CellsCellView(context);
+                iCellView = new PageCellView(context);
                 break;
             case CellType.TYPE_SWITH:
                 iCellView = new StatusCellView(context);
