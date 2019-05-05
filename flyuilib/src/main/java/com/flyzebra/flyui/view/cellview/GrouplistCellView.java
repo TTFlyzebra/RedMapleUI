@@ -50,7 +50,7 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
     private FlyAdapter adapter;
     private ArrayMap<String, Drawable> mAllDrawable = new ArrayMap<>();
     private int maxColumn = 1;
-    private Map<Integer, Object> mSelectMap = null;
+    private Map<Integer, Object> mShowMap = null;
 
     private List<List<CellBean>> groupSubList = new ArrayList<>();
     private List<ItemBean> itemBeans = new ArrayList<>();
@@ -154,7 +154,7 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
                 FlyLog.e(e.toString());
             }
         }
-        scrollToCurrent();
+        scrollToKeyCurrent();
     }
 
     @Override
@@ -248,16 +248,24 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
                     try {
                         int type = (int) mShowList.get(pos).get(GROUP_ORDER);
                         if (type == 0) {
-                            if (mSelectMap == null) {
-                                mSelectMap = mShowList.get(pos);
+                            if (mShowMap == null) {
+                                mShowMap = mShowList.get(pos);
                             } else {
-                                if (mSelectMap.equals(mShowList.get(pos))) {
-                                    mSelectMap = null;
+                                if (mShowMap.equals(mShowList.get(pos))) {
+                                    mShowMap = null;
                                 } else {
-                                    mSelectMap = mShowList.get(pos);
+                                    mShowMap = mShowList.get(pos);
                                 }
                             }
-                            addChildItem(mSelectMap);
+                            addChildItem(mShowMap);
+
+                            if (mShowMap != null) {
+                                for (int i = 0; i < mShowList.size(); i++) {
+                                    if (mShowList.get(i).equals(mShowMap)) {
+                                        getLayoutManager().scrollToPosition(i);
+                                    }
+                                }
+                            }
                         } else {
                             ItemBean itemBean = itemBeans.get(type);
                             FlyAction.notifyAction(itemBean.cellBean.sendAction, mShowList.get(pos).get(itemBean.cellBean.recvAction));
@@ -430,10 +438,6 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
 
     private void addChildItem(Map<Integer, Object> mSelectMap) {
         FlyLog.d("addChildItem");
-//        if (mSelectMap == null || mSelectMap.isEmpty()) {
-//            FlyLog.d("mSelectMap is empty");
-//            return;
-//        }
         mShowList.clear();
         boolean flag = false;
         for (int i = 0; i < mAllList.size(); i++) {
@@ -483,7 +487,7 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
                 FlyLog.d("addChildItem 3");
             }
         } else if (key == mCellBean.subCells.get(0).recvAction) {
-            scrollToCurrent();
+            scrollToKeyCurrent();
         }
         return false;
     }
@@ -491,7 +495,7 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
     /**
      * 滚动到当前播放歌曲
      */
-    private void scrollToCurrent() {
+    private void scrollToKeyCurrent() {
         if (mCellBean == null || mCellBean.subCells == null || mCellBean.subCells.isEmpty() || mAllList == null || mAllList.isEmpty())
             return;
         int key = mCellBean.subCells.get(0).recvAction;
