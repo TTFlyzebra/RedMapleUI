@@ -1,8 +1,8 @@
 package com.flyzebra.flyui.module;
 
-import android.util.ArrayMap;
-
 import com.flyzebra.flyui.utils.FlyLog;
+
+import java.util.HashMap;
 
 /**
  * Author FlyZebra
@@ -10,7 +10,7 @@ import com.flyzebra.flyui.utils.FlyLog;
  * Describ:
  **/
 public class FlyClass {
-    private static final ArrayMap<Object, Object> clsMap = new ArrayMap<>();
+    private static final HashMap<Object, Object> classMap = new HashMap<>();
 
 
     public static FlyClass getInstance() {
@@ -18,7 +18,7 @@ public class FlyClass {
     }
 
     private static class FlyClassHolder {
-        public static final FlyClass sInstance = new FlyClass();
+        static final FlyClass sInstance = new FlyClass();
     }
 
 
@@ -27,7 +27,7 @@ public class FlyClass {
     }
 
     private void clearMap() {
-        clsMap.clear();
+        classMap.clear();
     }
 
     public static <T> T get(Class<T> key) {
@@ -44,17 +44,17 @@ public class FlyClass {
 
     private void putClass(Class<?> key, Object cls) {
         FlyLog.d("add class="+key);
-        clsMap.put(key, cls);
+        classMap.put(key, cls);
     }
 
 
     private void removeClass(Class<?> key) {
         FlyLog.d("remove class="+key);
-        clsMap.remove(key);
+        classMap.remove(key);
     }
 
     private <T> T getClass(Class<T> key) {
-        return (T) clsMap.get(key);
+        return (T) classMap.get(key);
     }
 
 }

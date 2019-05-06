@@ -51,6 +51,8 @@ public class MusicPlayer implements IMusicPlayer,
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
     private int cretTime = 0, totalTime = 0;
+    private int saveIntaval = 5;
+    private int savaCount = 0;
     private Runnable timeTask = new Runnable() {
         @Override
         public void run() {
@@ -58,10 +60,13 @@ public class MusicPlayer implements IMusicPlayer,
                 int c = getCurrentPosition();
                 int t = getDuration();
                 if (c != cretTime || t != totalTime) {
-                    savePathUrl();
                     cretTime = c;
                     totalTime = t;
                     notifyPlayTime();
+                    savaCount++;
+                    if (savaCount % saveIntaval == 2) {
+                        savePathUrl();
+                    }
                 }
             } catch (Exception e) {
                 FlyLog.e(e.toString());
@@ -192,7 +197,6 @@ public class MusicPlayer implements IMusicPlayer,
             saveSeek = 0;
         }
         start();
-        savePathUrl();
         mPlayStatus = STATUS_PLAYING;
         notifyStatus();
     }
@@ -310,7 +314,6 @@ public class MusicPlayer implements IMusicPlayer,
 
     @Override
     public void destory() {
-        savePathUrl();
         FlyLog.d("player destory");
         synchronized (mPlayUrls) {
             mPlayUrls.clear();

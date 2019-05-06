@@ -44,9 +44,8 @@ public class FlyAction {
     }
 
     private static class FlyActionHolder {
-        public static final FlyAction sInstance = new FlyAction();
+        static final FlyAction sInstance = new FlyAction();
     }
-
 
     public static void clear() {
         getInstance().clearMap();
@@ -70,8 +69,10 @@ public class FlyAction {
         if (obj != null) {
             saveKey.put(key, obj);
         }
-        for (IAction flyuiAction : flyuiEvents) {
-            flyuiAction.onAction(key);
+        synchronized (this) {
+            for (IAction flyuiAction : flyuiEvents) {
+                flyuiAction.onAction(key);
+            }
         }
     }
 

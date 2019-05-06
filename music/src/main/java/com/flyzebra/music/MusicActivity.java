@@ -309,14 +309,14 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
                 map1.put(ActionKey.MUSIC_NAME, list.get(0).name);
                 map1.put(ActionKey.MUSIC_ARTIST, list.get(0).artist);
                 map1.put(ActionKey.FOLODER_NUM, "(" + list.size() + "首)");
-                map1.put(ActionKey.GROUP_ORDER, 0);
+                map1.put(ActionKey.GROUP_TYPE, 0);
                 listArtist.add(map1);
                 for (Music music : list) {
                     Map<Integer, Object> map2 = new Hashtable<>();
                     map2.put(ActionKey.MUSIC_URL, music.url);
                     map2.put(ActionKey.MUSIC_NAME, music.name);
                     map2.put(ActionKey.MUSIC_ARTIST, music.artist);
-                    map2.put(ActionKey.GROUP_ORDER, 1);
+                    map2.put(ActionKey.GROUP_TYPE, 1);
                     listArtist.add(map2);
                 }
             }
@@ -345,14 +345,14 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
                 map1.put(ActionKey.MUSIC_NAME, list.get(0).name);
                 map1.put(ActionKey.MUSIC_ALBUM, list.get(0).album);
                 map1.put(ActionKey.FOLODER_NUM, "(" + list.size() + "首)");
-                map1.put(ActionKey.GROUP_ORDER, 0);
+                map1.put(ActionKey.GROUP_TYPE, 0);
                 listAlbum.add(map1);
                 for (Music music : list) {
                     Map<Integer, Object> map2 = new Hashtable<>();
                     map2.put(ActionKey.MUSIC_URL, music.url);
                     map2.put(ActionKey.MUSIC_NAME, music.name);
                     map2.put(ActionKey.MUSIC_ALBUM, music.album);
-                    map2.put(ActionKey.GROUP_ORDER, 1);
+                    map2.put(ActionKey.GROUP_TYPE, 1);
                     listAlbum.add(map2);
                 }
             }
@@ -389,14 +389,14 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
                     map1.put(ActionKey.FOLODER_NAME, pathName);
                     map1.put(ActionKey.FOLODER_PATH, pathPath);
                     map1.put(ActionKey.FOLODER_NUM, "(" + list.size() + "首)");
-                    map1.put(ActionKey.GROUP_ORDER, 0);
+                    map1.put(ActionKey.GROUP_TYPE, 0);
                     listFolder.add(map1);
                 }
                 for (Music music : list) {
                     Map<Integer, Object> map2 = new Hashtable<>();
                     map2.put(ActionKey.MUSIC_URL, music.url);
                     map2.put(ActionKey.MUSIC_NAME, music.name);
-                    map2.put(ActionKey.GROUP_ORDER, 1);
+                    map2.put(ActionKey.GROUP_TYPE, 1);
                     listFolder.add(map2);
                 }
             }

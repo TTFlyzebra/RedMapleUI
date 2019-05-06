@@ -1,6 +1,7 @@
 package com.flyzebra.flyui.view.cellview;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
@@ -25,6 +26,7 @@ import com.flyzebra.flyui.bean.ThemeBean;
 import com.flyzebra.flyui.chache.UpdataVersion;
 import com.flyzebra.flyui.config.ActionKey;
 import com.flyzebra.flyui.module.FlyAction;
+import com.flyzebra.flyui.utils.BitmapUtils;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.customview.MarqueeTextView;
 import com.flyzebra.flyui.view.customview.MirrorView;
@@ -48,7 +50,7 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
     private List<Map<Integer, Object>> mAllList = new ArrayList<>();
     private OnItemClick OnItemClick;
     private FlyAdapter adapter;
-    private ArrayMap<String, Drawable> mAllDrawable = new ArrayMap<>();
+    private ArrayMap<String, Bitmap> mAllBitmap = new ArrayMap<>();
     private int maxColumn = 1;
     private Map<Integer, Object> mShowMap = null;
 
@@ -69,7 +71,6 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
     public void upData(CellBean mCellBean) {
         FlyLog.d("ListCellView x=%d,y=%d", mCellBean.x, mCellBean.y);
         this.mCellBean = mCellBean;
-
         List<CellBean> tempList = null;
         groupSubList.clear();
         itemBeans.clear();
@@ -100,10 +101,10 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
         if (TextUtils.isEmpty(imageurl)) return;
         meLoading.incrementAndGet();
         Glide.with(getContext())
-                .asDrawable()
+                .asBitmap()
                 .load(UpdataVersion.getNativeFilePath(imageurl))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .into(new CustomTarget<Drawable>() {
+                .into(new CustomTarget<Bitmap>() {
                     @Override
                     public void onLoadFailed(@Nullable Drawable errorDrawable) {
                         meLoading.decrementAndGet();
@@ -111,15 +112,14 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
                     }
 
                     @Override
-                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                        mAllDrawable.put(imageurl, resource);
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        mAllBitmap.put(imageurl, resource);
                         meLoading.decrementAndGet();
                         checkLoadingFinish();
                     }
 
                     @Override
                     public void onLoadCleared(@Nullable Drawable placeholder) {
-
                     }
                 });
     }
@@ -149,7 +149,6 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
             mAllList.clear();
             try {
                 mAllList.addAll((Collection<? extends Map<Integer, Object>>) obj);
-
             } catch (Exception e) {
                 FlyLog.e(e.toString());
             }
@@ -180,10 +179,12 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
                         if (textView != null) {
                             texts.put(cellBean.cellId, textView);
                         }
-                    }
-                }
-                for (CellBean cellBean : mCellBean.subCells) {
-                    if (cellBean.celltype == CellType.TYPE_IMAGE) {
+                    } else if (cellBean.celltype == CellType.TYPE_IMAGE) {
+                        ImageView imageView = itemView.findViewById(cellBean.cellId);
+                        if (imageView != null) {
+                            images.put(cellBean.cellId, imageView);
+                        }
+                    } else if (cellBean.celltype == CellType.TYPE_SWITH) {
                         ImageView imageView = itemView.findViewById(cellBean.cellId);
                         if (imageView != null) {
                             images.put(cellBean.cellId, imageView);
@@ -203,7 +204,7 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
 
         @Override
         public int getItemViewType(int position) {
-            return (int) mShowList.get(position).get(GROUP_ORDER);
+            return (int) mShowList.get(position).get(GROUP_TYPE);
         }
 
 
@@ -225,72 +226,57 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
         @Override
         public void onBindViewHolder(ViewHolder holder, final int position) {
             Map<Integer, Object> map = mShowList.get(position);
-            int type = (int) map.get(GROUP_ORDER);
+            Object objtype = mShowList.get(position).get(GROUP_TYPE);
+            int type = -1;
+            if (objtype instanceof Integer) type = (int) objtype;
             boolean isSelect = false;
             Object objselect = map.get(IS_SELECT);
-            if (objselect instanceof Boolean) {
-                isSelect = (boolean) objselect;
-            }
+            if (objselect instanceof Boolean) isSelect = (boolean) objselect;
             holder.itemView.setTag(position);
-            {
-                Drawable Drawable = getDrawableById(itemBeans.get(type).cellBean.imageurl1);
-                if (Drawable != null) {
-                    holder.itemView.setBackground(Drawable);
-                }
-            }
+            Bitmap itemBitmap = getBitmapById(itemBeans.get(type).cellBean.imageurl1);
+            if (itemBitmap != null) holder.itemView.setBackground(BitmapUtils.toDrawable(itemBitmap));
             holder.itemView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int pos = (int) v.getTag();
-                    if (OnItemClick != null) {
-                        OnItemClick.onItemClick(v);
-                    }
-                    try {
-                        int type = (int) mShowList.get(pos).get(GROUP_ORDER);
-                        if (type == 0) {
-                            if (mShowMap == null) {
-                                mShowMap = mShowList.get(pos);
-                            } else {
-                                if (mShowMap.equals(mShowList.get(pos))) {
-                                    mShowMap = null;
-                                } else {
-                                    mShowMap = mShowList.get(pos);
-                                }
-                            }
-                            addChildItem(mShowMap);
-
-                            if (mShowMap != null) {
-                                for (int i = 0; i < mShowList.size(); i++) {
-                                    if (mShowList.get(i).equals(mShowMap)) {
-                                        getLayoutManager().scrollToPosition(i);
-                                    }
-                                }
-                            }
+                    if (OnItemClick != null) OnItemClick.onItemClick(v);
+                    Object objtype = mShowList.get(pos).get(GROUP_TYPE);
+                    int type = -1;
+                    if (objtype instanceof Integer) type = (int) objtype;
+                    if (type == 0) {
+                        if (mShowMap == null) {
+                            mShowMap = mShowList.get(pos);
                         } else {
-                            ItemBean itemBean = itemBeans.get(type);
-                            FlyAction.notifyAction(itemBean.cellBean.sendAction, mShowList.get(pos).get(itemBean.cellBean.recvAction));
+                            if (mShowMap.equals(mShowList.get(pos))) {
+                                mShowMap = null;
+                            } else {
+                                mShowMap = mShowList.get(pos);
+                            }
                         }
-                    } catch (Exception e) {
-                        FlyLog.e(e.toString());
+                        addChildItem(mShowMap);
+                        if (mShowMap != null) {
+                            for (int i = 0; i < mShowList.size(); i++) {
+                                if (mShowList.get(i).equals(mShowMap)) {
+                                    getLayoutManager().scrollToPosition(i);
+                                }
+                            }
+                        }
+                    } else {
+                        ItemBean itemBean = itemBeans.get(type);
+                        FlyAction.notifyAction(itemBean.cellBean.sendAction, mShowList.get(pos).get(itemBean.cellBean.recvAction));
                     }
                 }
             });
 
-            if (type != 0) {
-                holder.itemView.setEnabled(!isSelect);
-            }
-
+            if (type != 0) holder.itemView.setEnabled(!isSelect);
             for (final CellBean cellBean : mCellBean.subCells) {
                 if (cellBean.celltype == CellType.TYPE_TEXT) {
                     TextView textView = holder.texts.get(cellBean.cellId);
                     if (textView != null) {
-                        try {
-                            textView.setTextColor(isSelect ? ThemeBean.filterColor : ThemeBean.normalColor);
-                            if (textView instanceof MarqueeTextView) {
-                                ((MarqueeTextView) textView).enableMarquee(isSelect);
-                            }
-                        } catch (Exception e) {
-                            FlyLog.e(e.toString());
+                        FlyLog.d("text position=%d,cellId=%d,isSlect=%b",position,cellBean.cellId,isSelect);
+                        textView.setTextColor(isSelect ? ThemeBean.filterColor : ThemeBean.normalColor);
+                        if (textView instanceof MarqueeTextView) {
+                            ((MarqueeTextView) textView).enableMarquee(isSelect);
                         }
                         if (cellBean.recvAction > 0) {
                             String text = map.get(cellBean.recvAction) + "";
@@ -305,31 +291,25 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
                         if (cellBean.recvAction > 0) {
                             switch (cellBean.recvAction) {
                                 case RES_URL:
-                                    try {
-                                        Object obj = mShowList.get(position).get(RES_URL);
-                                        if (obj instanceof String) {
-                                            Drawable Drawable1 = mAllDrawable.get(cellBean.imageurl1);
-                                            imageView.setImageDrawable(Drawable1);
-                                        } else if (obj instanceof Drawable) {
-                                            FlyLog.d("set drawable");
-                                            imageView.setImageDrawable((Drawable) obj);
-                                        } else {
-                                            Glide.with(imageView).load(cellBean.imageurl1).into(imageView);
-                                        }
-                                    } catch (Exception e) {
-                                        FlyLog.e(e.toString());
+                                    Object obj = mShowList.get(position).get(RES_URL);
+                                    if (obj instanceof String) {
+                                        Bitmap Bitmap1 = mAllBitmap.get(cellBean.imageurl1);
+                                        imageView.setImageBitmap(Bitmap1);
+                                    } else if (obj instanceof Bitmap) {
+                                        FlyLog.d("set Bitmap");
+                                        imageView.setImageBitmap((Bitmap) obj);
                                     }
-                                    try {
-                                        imageView.setColorFilter(isSelect ? ThemeBean.filterColor : ThemeBean.normalColor);
-                                    } catch (Exception e) {
-                                        FlyLog.e(e.toString());
+                                    if(isSelect){
+                                        imageView.setColorFilter(ThemeBean.filterColor);
+                                    }else{
+                                        imageView.clearColorFilter();
                                     }
                                     break;
                                 case VIDEO_URL:
                                     final Object videoUrl = mShowList.get(position).get(VIDEO_URL);
                                     FlyLog.d("video url=" + videoUrl);
-                                    Drawable drawable1 = mAllDrawable.get(cellBean.imageurl1);
-                                    imageView.setImageDrawable(drawable1);
+                                    Bitmap Bitmap1 = mAllBitmap.get(cellBean.imageurl1);
+                                    imageView.setImageBitmap(Bitmap1);
                                     if (videoUrl instanceof String) {
                                         Glide.with(imageView)
                                                 .load((String) videoUrl)
@@ -340,40 +320,46 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
                                 case IMAGE_URL:
                                     final Object imageUrl = mShowList.get(position).get(IMAGE_URL);
                                     FlyLog.d("video url=" + imageUrl);
-                                    Drawable drawable2 = mAllDrawable.get(cellBean.imageurl1);
-                                    imageView.setImageDrawable(drawable2);
+                                    Bitmap Bitmap2 = mAllBitmap.get(cellBean.imageurl1);
+                                    imageView.setImageBitmap(Bitmap2);
                                     if (imageUrl instanceof String) {
                                         Glide.with(imageView)
                                                 .load((String) imageUrl)
                                                 .centerInside()
-                                                .diskCacheStrategy(DiskCacheStrategy.NONE)
                                                 .into(imageView);
                                     }
                                     break;
-                                case MUSIC_URL:
-                                    Glide.with(getContext())
-                                            .load(cellBean.imageurl1)
-                                            .centerInside()
-                                            .into(imageView);
-                                    if (isSelect) {
+                                default:
+                                    Bitmap Bitmap3 = mAllBitmap.get(cellBean.imageurl1);
+                                    imageView.setImageBitmap(Bitmap3);
+                                    if(isSelect){
                                         imageView.setColorFilter(ThemeBean.filterColor);
-                                    } else {
+                                    }else{
                                         imageView.clearColorFilter();
                                     }
                                     break;
-                                default:
-                                    break;
                             }
                         } else {
-                            Glide.with(getContext())
-                                    .load(cellBean.imageurl1)
-                                    .centerInside()
-                                    .into(imageView);
-                            if (isSelect) {
+                            Bitmap Bitmap3 = mAllBitmap.get(cellBean.imageurl1);
+                            imageView.setImageBitmap(Bitmap3);
+                            if(isSelect){
                                 imageView.setColorFilter(ThemeBean.filterColor);
-                            } else {
+                            }else{
                                 imageView.clearColorFilter();
                             }
+                        }
+                    }
+                } else if (cellBean.celltype == CellType.TYPE_SWITH) {
+                    final ImageView imageView = holder.images.get(cellBean.cellId);
+                    if (imageView != null) {
+                        FlyLog.d("image position=%d,cellId=%d,isSlect=%b---"+imageView.toString(),position,cellBean.cellId,isSelect);
+                        boolean isOpen = map.equals(mShowMap);
+                        Bitmap Bitmap = mAllBitmap.get(isOpen?cellBean.imageurl2:cellBean.imageurl1);
+                        imageView.setImageBitmap(Bitmap);
+                        if(isSelect){
+                            imageView.setColorFilter(ThemeBean.filterColor);
+                        }else{
+                            imageView.clearColorFilter();
                         }
                     }
                 }
@@ -386,7 +372,7 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
             gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
-                    int type = (int) mShowList.get(position).get(GROUP_ORDER);
+                    int type = (int) mShowList.get(position).get(GROUP_TYPE);
                     if (type >= 0 && type < itemBeans.size()) {
                         return maxColumn / itemBeans.get(type).groupNum;
                     } else {
@@ -418,14 +404,23 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
                     imageView.setPadding(0, 0, 0, 0);
                     lp.setMargins(cellBean.mLeft, cellBean.mTop, cellBean.mRight, cellBean.mBottom);
                     rootView.addView(imageView, lp);
+                } else if (cellBean.celltype == CellType.TYPE_SWITH) {
+                    FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(cellBean.width, cellBean.height);
+                    ImageView imageView = (ImageView) CellViewFactory.createView(getContext(), cellBean);
+                    ((ICell) imageView).upData(cellBean);
+                    imageView.setId(cellBean.cellId);
+                    imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                    imageView.setPadding(0, 0, 0, 0);
+                    lp.setMargins(cellBean.mLeft, cellBean.mTop, cellBean.mRight, cellBean.mBottom);
+                    rootView.addView(imageView, lp);
                 }
             }
         }
 
     }
 
-    private Drawable getDrawableById(String imageUrl) {
-        return mAllDrawable.isEmpty() ? null : mAllDrawable.get(imageUrl);
+    private Bitmap getBitmapById(String imageUrl) {
+        return mAllBitmap.isEmpty() ? null : mAllBitmap.get(imageUrl);
     }
 
     public interface OnItemClick {
@@ -442,7 +437,7 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
         boolean flag = false;
         for (int i = 0; i < mAllList.size(); i++) {
             Map<Integer, Object> map = mAllList.get(i);
-            if (0 == (int) map.get(GROUP_ORDER)) {
+            if (0 == (int) map.get(GROUP_TYPE)) {
                 mShowList.add(map);
                 flag = map.equals(mSelectMap);
             } else {
@@ -502,7 +497,6 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
         Object obj = FlyAction.getValue(key);
         if (!(obj instanceof String)) return;
 
-        Map<Integer, Object> selectMap = null;
         int num = 0;
         for (int i = mAllList.size() - 1; i >= 0; i--) {
             if (obj.equals(mAllList.get(i).get(key))) {
@@ -513,35 +507,34 @@ public class GrouplistCellView extends RecyclerView implements ICell, IAction, A
             }
         }
 
-        int pos = 0;
-
         for (int j = num; j >= 0; j--) {
-            if (0 == (int) mAllList.get(j).get(GROUP_ORDER)) {
+            if (0 == (int) mAllList.get(j).get(GROUP_TYPE)) {
                 mAllList.get(j).put(IS_SELECT, true);
-                selectMap = mAllList.get(j);
+                mShowMap = mAllList.get(j);
                 break;
             }
         }
 
 //        跳转到子歌曲
-//        addChildItem(selectMap);
-//        if (mShowList == null || mShowList.isEmpty()) return;
-//        for (int i = mShowList.size() - 1; i >= 0; i--) {
-//            if ((boolean) mShowList.get(i).get(IS_SELECT)) {
-//                getLayoutManager().scrollToPosition(i);
-//                break;
-//            }
-//        }
-
-        //不跳转到子歌曲
-        addChildItem(null);
-        if (selectMap != null) {
-            for (int i = 0; i < mShowList.size(); i++) {
-                if (mShowList.get(i).equals(selectMap)) {
-                    getLayoutManager().scrollToPosition(i);
-                }
+        addChildItem(mShowMap);
+        if (mShowList == null || mShowList.isEmpty()) return;
+        for (int i = mShowList.size() - 1; i >= 0; i--) {
+            if ((boolean) mShowList.get(i).get(IS_SELECT)) {
+                getLayoutManager().scrollToPosition(i);
+                break;
             }
         }
+
+        //不跳转到子歌曲
+//        addChildItem(null);
+//        if (mShowList == null || mShowList.isEmpty()) return;
+//        if (mShowMap != null) {
+//            for (int i = 0; i < mShowList.size(); i++) {
+//                if (mShowList.get(i).equals(mShowMap)) {
+//                    getLayoutManager().scrollToPosition(i);
+//                }
+//            }
+//        }
 
     }
 

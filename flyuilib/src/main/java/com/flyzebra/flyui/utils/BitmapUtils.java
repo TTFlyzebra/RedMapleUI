@@ -38,12 +38,9 @@ public class BitmapUtils {
         if (bitmap == null) {
             return null;
         }
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
-
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(os.toByteArray());
         return Drawable.createFromStream(inputStream, null);
     }
 
@@ -51,7 +48,6 @@ public class BitmapUtils {
         if (drawable == null) {
             return null;
         }
-
         int w = drawable.getIntrinsicWidth();
         int h = drawable.getIntrinsicHeight();
         Bitmap.Config config =
@@ -59,20 +55,16 @@ public class BitmapUtils {
         Bitmap bitmap = Bitmap.createBitmap(w, h, config);
         Canvas canvas = new Canvas(bitmap);
         drawable.draw(canvas);
-
         return bitmap;
     }
 
     public static Bitmap convertViewToBitmap(View view) {
-
         Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(),
                 Bitmap.Config.ARGB_8888);
         //利用bitmap生成画布
         Canvas canvas = new Canvas(bitmap);
-
         //把view中的内容绘制在画布上
         view.draw(canvas);
-
         return bitmap;
     }
 
@@ -80,7 +72,6 @@ public class BitmapUtils {
         if (bitmap == null) {
             return null;
         }
-
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
         ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());

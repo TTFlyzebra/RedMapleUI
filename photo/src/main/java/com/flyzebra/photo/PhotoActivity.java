@@ -200,14 +200,14 @@ public class PhotoActivity extends BaseActivity implements IAction {
                     map1.put(ActionKey.FOLODER_NAME, pathName);
                     map1.put(ActionKey.FOLODER_PATH, pathPath);
                     map1.put(ActionKey.FOLODER_NUM, "(" + list.size() + ")");
-                    map1.put(ActionKey.GROUP_ORDER, 0);
+                    map1.put(ActionKey.GROUP_TYPE, 0);
                     listFolder.add(map1);
                 }
                 for (Image image : list) {
                     Map<Integer, Object> map2 = new Hashtable<>();
                     map2.put(ActionKey.IMAGE_NAME, StringTools.getNameByPath(image.url));
                     map2.put(ActionKey.IMAGE_URL, image.url);
-                    map2.put(ActionKey.GROUP_ORDER, 1);
+                    map2.put(ActionKey.GROUP_TYPE, 1);
                     listFolder.add(map2);
                 }
             }

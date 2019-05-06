@@ -1,1 +1,1 @@
-include ':launcher', ':flyuilib', ':music', ':flymedialib', ':flyuitvlib', ':video', ':photo', ':message'
+include ':launcher', ':flyuilib', ':music', ':flymedialib', ':flyuitvlib', ':video', ':photo', ':message', ':flyevent'
