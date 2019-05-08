@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主机： localhost
--- 生成日期： 2019-05-07 09:26:22
+-- 生成日期： 2019-05-08 10:31:20
 -- 服务器版本： 5.5.62
 -- PHP 版本： 7.3.0
 
@@ -219,6 +219,44 @@ INSERT INTO `fly_cell` (`cellId`, `celltypeId`, `resId`, `width`, `height`, `ima
 (118, 41, 'music_fm03', 400, 400, '', '', '', '音乐歌手分类列表', 24, '', '', 0, 0, 0, 0, 0, 0, 0, 3030, NULL, NULL, '', 1, NULL, '', NULL, '2019-04-25 06:14:56', 6, '192.168.1.119'),
 (119, 41, 'music_fm04', 400, 400, '', '', '', '音乐专辑分组列表', 24, '', '', 0, 0, 0, 0, 0, 0, 0, 3029, NULL, NULL, '', 1, NULL, '', NULL, '2019-04-29 08:19:30', 6, '192.168.1.119'),
 (120, 41, 'music_fm05', 400, 400, '', '', '', '音乐文件夹列表', 24, '', '', 0, 0, 0, 0, 0, 0, 0, 3028, NULL, NULL, '', 1, NULL, '', NULL, '2019-04-28 06:06:38', 6, '192.168.1.119');
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `fly_cellpro`
+--
+
+CREATE TABLE `fly_cellpro` (
+  `cellId` int(11) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `themeId` int(11) NOT NULL,
+  `celltypeId` int(11) NOT NULL,
+  `resId` int(11) DEFAULT NULL,
+  `width` int(11) NOT NULL,
+  `height` int(11) NOT NULL,
+  `backColor` varchar(9) DEFAULT NULL,
+  `filterColor` varchar(9) DEFAULT NULL,
+  `recv` varchar(1024) DEFAULT NULL,
+  `send` varchar(1024) DEFAULT NULL,
+  `texts` text,
+  `images` text,
+  `pages` text,
+  `remark` text,
+  `status` int(11) NOT NULL DEFAULT '1',
+  `userid` int(11) NOT NULL,
+  `uptime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `ip` varchar(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- 转存表中的数据 `fly_cellpro`
+--
+
+INSERT INTO `fly_cellpro` (`cellId`, `description`, `themeId`, `celltypeId`, `resId`, `width`, `height`, `backColor`, `filterColor`, `recv`, `send`, `texts`, `images`, `pages`, `remark`, `status`, `userid`, `uptime`, `ip`) VALUES
+(1, '导航', 17, 23, 1, 212, 317, '', '', '', '', '[{\"text\":\"\\u5bfc\\u822a\",\"textSize\":\"24\",\"textLines\":\"\",\"textColor\":\"#FF0000\",\"textFilter\":\"\",\"left\":\"\",\"top\":\"\",\"right\":\"\",\"bottom\":\"\",\"gravity\":\"0\",\"recv\":\"\",\"send\":\"\"}]', '[{\"width\":\"212\",\"height\":\"317\",\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/4e\\/5d2087efc0c4c74acd1d3612b20c62.png\",\"filterColor\":\"\",\"left\":\"\",\"top\":\"\",\"right\":\"\",\"bottom\":\"\",\"scaleType\":\"0\",\"recv\":\"\",\"send\":\"\"}]', '[]', '', 1, 6, '2019-05-08 09:18:49', '192.168.1.119'),
+(2, 'Test', 5, 24, 0, 100, 100, '', '', '', '', '[{\"text\":\"\",\"textSize\":\"\",\"textLines\":\"\",\"textColor\":\"\",\"textFilter\":\"\",\"left\":\"\",\"top\":\"\",\"right\":\"\",\"bottom\":\"\",\"gravity\":\"0\",\"recv\":\"\",\"send\":\"\"}]', '[{\"width\":\"\",\"height\":\"\",\"url\":\"\",\"filterColor\":\"\",\"left\":\"\",\"top\":\"\",\"right\":\"\",\"bottom\":\"\",\"scaleType\":\"0\",\"recv\":\"\",\"send\":\"\"}]', '[]', '', 1, 6, '2019-05-08 09:00:48', '192.168.1.119'),
+(3, '2222', 17, 1, 0, 111, 111, '', '', '', '', '[{\"text\":\"\",\"textSize\":\"\",\"textLines\":\"\",\"textColor\":\"\",\"textFilter\":\"\",\"left\":\"\",\"top\":\"\",\"right\":\"\",\"bottom\":\"\",\"gravity\":\"0\",\"recv\":\"\",\"send\":\"\"}]', '[{\"width\":\"\",\"height\":\"\",\"url\":\"\",\"filterColor\":\"\",\"left\":\"\",\"top\":\"\",\"right\":\"\",\"bottom\":\"\",\"scaleType\":\"0\",\"recv\":\"\",\"send\":\"\"}]', '[]', '', 1, 6, '2019-05-08 09:18:57', '192.168.1.119'),
+(4, '3333', 7, 25, 1, 211, 211, '#FF00FF', '#FF00FF', '1', '2', '[{\"text\":\"\\u6d4b\\u8bd5\\u63a7\\u4ef6\",\"textSize\":\"12\",\"textLines\":\"1\",\"textColor\":\"#FF00FF\",\"textFilter\":\"#FF00FF\",\"left\":\"1\",\"top\":\"1\",\"right\":\"11\",\"bottom\":\"11\",\"gravity\":\"2\",\"recv\":\"2\",\"send\":\"2\"},{\"text\":\"\\u6d4b\\u8bd5\\u5b50\\u63a7\\u4ef6\",\"textSize\":\"12\",\"textLines\":\"1\",\"textColor\":\"#FF00FF\",\"textFilter\":\"#FF00FF\",\"left\":\"22\",\"top\":\"22\",\"right\":\"22\",\"bottom\":\"22\",\"gravity\":\"0\",\"recv\":\"33\",\"send\":\"33\"}]', '[{\"width\":\"630\",\"height\":\"472\",\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/8e\\/466e3e87d66d8a0e5b9c4c9a968aa9.jpg\",\"filterColor\":\"#FF00FF\",\"left\":\"1\",\"top\":\"1\",\"right\":\"1\",\"bottom\":\"1\",\"scaleType\":\"3\",\"recv\":\"21\",\"send\":\"21\"},{\"width\":\"212\",\"height\":\"317\",\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/4e\\/5d2087efc0c4c74acd1d3612b20c62.png\",\"filterColor\":\"\",\"left\":\"22\",\"top\":\"22\",\"right\":\"22\",\"bottom\":\"22\",\"scaleType\":\"1\",\"recv\":\"1212\",\"send\":\"1212\"}]', '[]', '1212', 1, 6, '2019-05-08 09:23:07', '192.168.1.119');
 
 -- --------------------------------------------------------
 
@@ -603,9 +641,6 @@ INSERT INTO `fly_pagecell` (`id`, `pageId`, `cellId`, `x`, `y`, `width`, `height
 (476, 5, 18, 768, 141, 212, 317),
 (477, 5, 16, 284, 141, 212, 317),
 (1059, 21, 78, 0, 536, 1024, 16),
-(1215, 7, 25, 526, 141, 212, 317),
-(1216, 7, 23, 42, 141, 212, 317),
-(1217, 7, 24, 284, 141, 212, 317),
 (1262, 32, 103, 100, 0, 400, 400),
 (1263, 32, 104, 500, 0, 100, 400),
 (1264, 32, 105, 32, 348, 48, 32),
@@ -642,7 +677,10 @@ INSERT INTO `fly_pagecell` (`id`, `pageId`, `cellId`, `x`, `y`, `width`, `height
 (1480, 33, 101, 0, 0, 400, 400),
 (1481, 33, 118, 0, 0, 400, 400),
 (1482, 33, 119, 0, 0, 400, 400),
-(1483, 33, 120, 0, 0, 400, 400);
+(1483, 33, 120, 0, 0, 400, 400),
+(1484, 7, 25, 526, 141, 212, 317),
+(1485, 7, 23, 42, 141, 212, 317),
+(1486, 7, 24, 284, 141, 212, 317);
 
 -- --------------------------------------------------------
 
@@ -1918,7 +1956,14 @@ INSERT INTO `fly_user_log` (`id`, `userid`, `event`, `tableName`, `data`, `creat
 (770, 6, 'edit', 'cell', '{\"celltypeId\":\"41\",\"resId\":\"music_fm04\",\"imageurl1\":\"\",\"imageurl2\":\"\",\"width\":\"400\",\"height\":\"400\",\"backcolor\":\"\",\"textTitle\":\"\\u97f3\\u4e50\\u4e13\\u8f91\\u5206\\u7ec4\\u5217\\u8868\",\"textSize\":\"24\",\"textColor\":\"\",\"textFont\":\"\",\"mLeft\":\"0\",\"mTop\":\"0\",\"mRight\":\"0\",\"mBottom\":\"0\",\"textLine\":\"0\",\"gravity\":\"0\",\"sendAction\":\"0\",\"recvAction\":\"3029\",\"clickevent\":\"\",\"remark\":\"\",\"cellId\":\"119\",\"subcell\":[\"sub_1_\",\"sub_2_\",\"sub_3_\",\"sub_4_\",\"sub_5_\",\"sub_6_\",\"sub_7_\",\"sub_8_\"],\"sub_1_celltypeId\":\"30\",\"sub_1_resId\":\"\",\"sub_1_imageurl1\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/7c\\/6ac87901c618466a45962dc5ae3918.png\",\"sub_1_imageurl2\":\"\",\"sub_1_width\":\"400\",\"sub_1_height\":\"60\",\"sub_1_backcolor\":\"\",\"sub_1_textTitle\":\"\",\"sub_1_textSize\":\"24\",\"sub_1_textColor\":\"\",\"sub_1_textFont\":\"\",\"sub_1_mLeft\":\"0\",\"sub_1_mTop\":\"0\",\"sub_1_mRight\":\"0\",\"sub_1_mBottom\":\"0\",\"sub_1_textLine\":\"0\",\"sub_1_gravity\":\"0\",\"sub_1_sendAction\":\"0\",\"sub_1_recvAction\":\"3015\",\"sub_1_clickevent\":\"\",\"sub_1_remark\":\"\",\"sub_2_celltypeId\":\"24\",\"sub_2_resId\":\"\",\"sub_2_imageurl1\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/6b\\/a2079ea2b9be06bc6e10b4c6ee2b1f.png\",\"sub_2_imageurl2\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/d6\\/298f05311296229db96c4816aaf773.png\",\"sub_2_width\":\"42\",\"sub_2_height\":\"42\",\"sub_2_backcolor\":\"\",\"sub_2_textTitle\":\"\",\"sub_2_textSize\":\"24\",\"sub_2_textColor\":\"\",\"sub_2_textFont\":\"\",\"sub_2_mLeft\":\"9\",\"sub_2_mTop\":\"9\",\"sub_2_mRight\":\"0\",\"sub_2_mBottom\":\"0\",\"sub_2_textLine\":\"0\",\"sub_2_gravity\":\"0\",\"sub_2_sendAction\":\"0\",\"sub_2_recvAction\":\"0\",\"sub_2_clickevent\":\"\",\"sub_2_remark\":\"\",\"sub_3_celltypeId\":\"32\",\"sub_3_resId\":\"\",\"sub_3_imageurl1\":\"\",\"sub_3_imageurl2\":\"\",\"sub_3_width\":\"210\",\"sub_3_height\":\"60\",\"sub_3_backcolor\":\"\",\"sub_3_textTitle\":\"\",\"sub_3_textSize\":\"24\",\"sub_3_textColor\":\"\",\"sub_3_textFont\":\"\",\"sub_3_mLeft\":\"60\",\"sub_3_mTop\":\"0\",\"sub_3_mRight\":\"0\",\"sub_3_mBottom\":\"0\",\"sub_3_textLine\":\"0\",\"sub_3_gravity\":\"5\",\"sub_3_sendAction\":\"0\",\"sub_3_recvAction\":\"3008\",\"sub_3_clickevent\":\"\",\"sub_3_remark\":\"\",\"sub_4_celltypeId\":\"32\",\"sub_4_resId\":\"\",\"sub_4_imageurl1\":\"\",\"sub_4_imageurl2\":\"\",\"sub_4_width\":\"80\",\"sub_4_height\":\"60\",\"sub_4_backcolor\":\"\",\"sub_4_textTitle\":\"\",\"sub_4_textSize\":\"24\",\"sub_4_textColor\":\"\",\"sub_4_textFont\":\"\",\"sub_4_mLeft\":\"270\",\"sub_4_mTop\":\"0\",\"sub_4_mRight\":\"0\",\"sub_4_mBottom\":\"0\",\"sub_4_textLine\":\"0\",\"sub_4_gravity\":\"6\",\"sub_4_sendAction\":\"0\",\"sub_4_recvAction\":\"3036\",\"sub_4_clickevent\":\"\",\"sub_4_remark\":\"\",\"sub_5_celltypeId\":\"31\",\"sub_5_resId\":\"\",\"sub_5_imageurl1\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/03\\/3db0cfc86a96c6e0672d23563f6d9f.png\",\"sub_5_imageurl2\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/b4\\/772b7ae96c72545ef37b5f24d33530.png\",\"sub_5_width\":\"35\",\"sub_5_height\":\"35\",\"sub_5_backcolor\":\"\",\"sub_5_textTitle\":\"\",\"sub_5_textSize\":\"20\",\"sub_5_textColor\":\"\",\"sub_5_textFont\":\"\",\"sub_5_mLeft\":\"357\",\"sub_5_mTop\":\"10\",\"sub_5_mRight\":\"0\",\"sub_5_mBottom\":\"0\",\"sub_5_textLine\":\"0\",\"sub_5_gravity\":\"0\",\"sub_5_sendAction\":\"0\",\"sub_5_recvAction\":\"0\",\"sub_5_clickevent\":\"\",\"sub_5_remark\":\"\",\"sub_6_celltypeId\":\"30\",\"sub_6_resId\":\"\",\"sub_6_imageurl1\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/7c\\/6ac87901c618466a45962dc5ae3918.png\",\"sub_6_imageurl2\":\"\",\"sub_6_width\":\"400\",\"sub_6_height\":\"50\",\"sub_6_backcolor\":\"\",\"sub_6_textTitle\":\"\",\"sub_6_textSize\":\"24\",\"sub_6_textColor\":\"\",\"sub_6_textFont\":\"\",\"sub_6_mLeft\":\"0\",\"sub_6_mTop\":\"0\",\"sub_6_mRight\":\"0\",\"sub_6_mBottom\":\"0\",\"sub_6_textLine\":\"0\",\"sub_6_gravity\":\"0\",\"sub_6_sendAction\":\"1015\",\"sub_6_recvAction\":\"3015\",\"sub_6_clickevent\":\"\",\"sub_6_remark\":\"\",\"sub_7_celltypeId\":\"34\",\"sub_7_resId\":\"\",\"sub_7_imageurl1\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/a0\\/33ee0aa838682d369ead6110100ea8.png\",\"sub_7_imageurl2\":\"\",\"sub_7_width\":\"33\",\"sub_7_height\":\"33\",\"sub_7_backcolor\":\"\",\"sub_7_textTitle\":\"\",\"sub_7_textSize\":\"20\",\"sub_7_textColor\":\"\",\"sub_7_textFont\":\"\",\"sub_7_mLeft\":\"0\",\"sub_7_mTop\":\"0\",\"sub_7_mRight\":\"0\",\"sub_7_mBottom\":\"0\",\"sub_7_textLine\":\"0\",\"sub_7_gravity\":\"0\",\"sub_7_sendAction\":\"0\",\"sub_7_recvAction\":\"0\",\"sub_7_clickevent\":\"\",\"sub_7_remark\":\"\",\"sub_8_celltypeId\":\"32\",\"sub_8_resId\":\"\",\"sub_8_imageurl1\":\"\",\"sub_8_imageurl2\":\"\",\"sub_8_width\":\"350\",\"sub_8_height\":\"50\",\"sub_8_backcolor\":\"\",\"sub_8_textTitle\":\"\",\"sub_8_textSize\":\"20\",\"sub_8_textColor\":\"\",\"sub_8_textFont\":\"\",\"sub_8_mLeft\":\"50\",\"sub_8_mTop\":\"0\",\"sub_8_mRight\":\"0\",\"sub_8_mBottom\":\"0\",\"sub_8_textLine\":\"0\",\"sub_8_gravity\":\"5\",\"sub_8_sendAction\":\"0\",\"sub_8_recvAction\":\"3007\",\"sub_8_clickevent\":\"\",\"sub_8_remark\":\"\"}', '2019-05-06 07:45:17', '192.168.1.119'),
 (771, 6, 'edit', 'cell', '{\"celltypeId\":\"41\",\"resId\":\"music_fm03\",\"imageurl1\":\"\",\"imageurl2\":\"\",\"width\":\"400\",\"height\":\"400\",\"backcolor\":\"\",\"textTitle\":\"\\u97f3\\u4e50\\u6b4c\\u624b\\u5206\\u7c7b\\u5217\\u8868\",\"textSize\":\"24\",\"textColor\":\"\",\"textFont\":\"\",\"mLeft\":\"0\",\"mTop\":\"0\",\"mRight\":\"0\",\"mBottom\":\"0\",\"textLine\":\"0\",\"gravity\":\"0\",\"sendAction\":\"0\",\"recvAction\":\"3030\",\"clickevent\":\"\",\"remark\":\"\",\"cellId\":\"118\",\"subcell\":[\"sub_1_\",\"sub_2_\",\"sub_3_\",\"sub_4_\",\"sub_5_\",\"sub_6_\",\"sub_7_\",\"sub_8_\"],\"sub_1_celltypeId\":\"30\",\"sub_1_resId\":\"\",\"sub_1_imageurl1\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/7c\\/6ac87901c618466a45962dc5ae3918.png\",\"sub_1_imageurl2\":\"\",\"sub_1_width\":\"400\",\"sub_1_height\":\"60\",\"sub_1_backcolor\":\"\",\"sub_1_textTitle\":\"\",\"sub_1_textSize\":\"24\",\"sub_1_textColor\":\"\",\"sub_1_textFont\":\"\",\"sub_1_mLeft\":\"0\",\"sub_1_mTop\":\"0\",\"sub_1_mRight\":\"0\",\"sub_1_mBottom\":\"0\",\"sub_1_textLine\":\"0\",\"sub_1_gravity\":\"0\",\"sub_1_sendAction\":\"0\",\"sub_1_recvAction\":\"3015\",\"sub_1_clickevent\":\"\",\"sub_1_remark\":\"\",\"sub_2_celltypeId\":\"24\",\"sub_2_resId\":\"\",\"sub_2_imageurl1\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/5e\\/a041b8ee9eb0b3a494ab3a87cef13f.png\",\"sub_2_imageurl2\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/bb\\/e2d5c0a14d0203dc3b1a0163b31284.png\",\"sub_2_width\":\"42\",\"sub_2_height\":\"42\",\"sub_2_backcolor\":\"\",\"sub_2_textTitle\":\"\",\"sub_2_textSize\":\"24\",\"sub_2_textColor\":\"\",\"sub_2_textFont\":\"\",\"sub_2_mLeft\":\"9\",\"sub_2_mTop\":\"9\",\"sub_2_mRight\":\"0\",\"sub_2_mBottom\":\"0\",\"sub_2_textLine\":\"0\",\"sub_2_gravity\":\"0\",\"sub_2_sendAction\":\"0\",\"sub_2_recvAction\":\"0\",\"sub_2_clickevent\":\"\",\"sub_2_remark\":\"\",\"sub_3_celltypeId\":\"32\",\"sub_3_resId\":\"\",\"sub_3_imageurl1\":\"\",\"sub_3_imageurl2\":\"\",\"sub_3_width\":\"210\",\"sub_3_height\":\"60\",\"sub_3_backcolor\":\"\",\"sub_3_textTitle\":\"\",\"sub_3_textSize\":\"24\",\"sub_3_textColor\":\"\",\"sub_3_textFont\":\"\",\"sub_3_mLeft\":\"60\",\"sub_3_mTop\":\"0\",\"sub_3_mRight\":\"0\",\"sub_3_mBottom\":\"0\",\"sub_3_textLine\":\"0\",\"sub_3_gravity\":\"5\",\"sub_3_sendAction\":\"0\",\"sub_3_recvAction\":\"3009\",\"sub_3_clickevent\":\"\",\"sub_3_remark\":\"\",\"sub_4_celltypeId\":\"32\",\"sub_4_resId\":\"\",\"sub_4_imageurl1\":\"\",\"sub_4_imageurl2\":\"\",\"sub_4_width\":\"80\",\"sub_4_height\":\"60\",\"sub_4_backcolor\":\"\",\"sub_4_textTitle\":\"\",\"sub_4_textSize\":\"24\",\"sub_4_textColor\":\"\",\"sub_4_textFont\":\"\",\"sub_4_mLeft\":\"270\",\"sub_4_mTop\":\"0\",\"sub_4_mRight\":\"0\",\"sub_4_mBottom\":\"0\",\"sub_4_textLine\":\"0\",\"sub_4_gravity\":\"6\",\"sub_4_sendAction\":\"0\",\"sub_4_recvAction\":\"3036\",\"sub_4_clickevent\":\"\",\"sub_4_remark\":\"\",\"sub_5_celltypeId\":\"31\",\"sub_5_resId\":\"\",\"sub_5_imageurl1\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/03\\/3db0cfc86a96c6e0672d23563f6d9f.png\",\"sub_5_imageurl2\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/b4\\/772b7ae96c72545ef37b5f24d33530.png\",\"sub_5_width\":\"35\",\"sub_5_height\":\"35\",\"sub_5_backcolor\":\"\",\"sub_5_textTitle\":\"\",\"sub_5_textSize\":\"24\",\"sub_5_textColor\":\"\",\"sub_5_textFont\":\"\",\"sub_5_mLeft\":\"357\",\"sub_5_mTop\":\"10\",\"sub_5_mRight\":\"0\",\"sub_5_mBottom\":\"0\",\"sub_5_textLine\":\"0\",\"sub_5_gravity\":\"0\",\"sub_5_sendAction\":\"0\",\"sub_5_recvAction\":\"0\",\"sub_5_clickevent\":\"\",\"sub_5_remark\":\"\",\"sub_6_celltypeId\":\"30\",\"sub_6_resId\":\"\",\"sub_6_imageurl1\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/7c\\/6ac87901c618466a45962dc5ae3918.png\",\"sub_6_imageurl2\":\"\",\"sub_6_width\":\"400\",\"sub_6_height\":\"60\",\"sub_6_backcolor\":\"\",\"sub_6_textTitle\":\"\",\"sub_6_textSize\":\"24\",\"sub_6_textColor\":\"\",\"sub_6_textFont\":\"\",\"sub_6_mLeft\":\"0\",\"sub_6_mTop\":\"0\",\"sub_6_mRight\":\"0\",\"sub_6_mBottom\":\"0\",\"sub_6_textLine\":\"0\",\"sub_6_gravity\":\"0\",\"sub_6_sendAction\":\"1015\",\"sub_6_recvAction\":\"3015\",\"sub_6_clickevent\":\"\",\"sub_6_remark\":\"\",\"sub_7_celltypeId\":\"34\",\"sub_7_resId\":\"\",\"sub_7_imageurl1\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/a0\\/33ee0aa838682d369ead6110100ea8.png\",\"sub_7_imageurl2\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/6c\\/678f3faa815e48ba2b76733ba09834.png\",\"sub_7_width\":\"50\",\"sub_7_height\":\"50\",\"sub_7_backcolor\":\"\",\"sub_7_textTitle\":\"\",\"sub_7_textSize\":\"24\",\"sub_7_textColor\":\"\",\"sub_7_textFont\":\"\",\"sub_7_mLeft\":\"0\",\"sub_7_mTop\":\"0\",\"sub_7_mRight\":\"0\",\"sub_7_mBottom\":\"0\",\"sub_7_textLine\":\"0\",\"sub_7_gravity\":\"0\",\"sub_7_sendAction\":\"0\",\"sub_7_recvAction\":\"3007\",\"sub_7_clickevent\":\"\",\"sub_7_remark\":\"\",\"sub_8_celltypeId\":\"32\",\"sub_8_resId\":\"\",\"sub_8_imageurl1\":\"\",\"sub_8_imageurl2\":\"\",\"sub_8_width\":\"350\",\"sub_8_height\":\"50\",\"sub_8_backcolor\":\"\",\"sub_8_textTitle\":\"\",\"sub_8_textSize\":\"20\",\"sub_8_textColor\":\"\",\"sub_8_textFont\":\"\",\"sub_8_mLeft\":\"50\",\"sub_8_mTop\":\"0\",\"sub_8_mRight\":\"0\",\"sub_8_mBottom\":\"0\",\"sub_8_textLine\":\"0\",\"sub_8_gravity\":\"5\",\"sub_8_sendAction\":\"0\",\"sub_8_recvAction\":\"3007\",\"sub_8_clickevent\":\"\",\"sub_8_remark\":\"\"}', '2019-05-06 07:45:40', '192.168.1.119'),
 (772, 6, 'edit', 'celltype', '{\"celltypeName\":\"\\u5206\\u7ec4\\u5217\\u8868\\u5206\\u7ec4\\u5217\\u8868\\u5206\\u7ec4\\u5217\\u8868\\u5206\\u7ec4\\u5217\\u8868\\u5206\\u7ec4\\u5217\\u8868\",\"celltype\":\"15\",\"imageurl\":\"\",\"extend\":\"\",\"remark\":\"\",\"celltypeId\":\"41\",\"ip\":\"192.168.1.119\",\"userid\":6}', '2019-05-07 08:31:17', '192.168.1.119'),
-(773, 6, 'edit', 'celltype', '{\"celltypeName\":\"\\u5206\\u7ec4\\u5217\\u8868\",\"celltype\":\"15\",\"imageurl\":\"\",\"extend\":\"\",\"remark\":\"\",\"celltypeId\":\"41\",\"ip\":\"192.168.1.119\",\"userid\":6}', '2019-05-07 08:31:53', '192.168.1.119');
+(773, 6, 'edit', 'celltype', '{\"celltypeName\":\"\\u5206\\u7ec4\\u5217\\u8868\",\"celltype\":\"15\",\"imageurl\":\"\",\"extend\":\"\",\"remark\":\"\",\"celltypeId\":\"41\",\"ip\":\"192.168.1.119\",\"userid\":6}', '2019-05-07 08:31:53', '192.168.1.119'),
+(774, 6, 'login', '', '', '2019-05-07 10:28:45', '192.168.1.119'),
+(775, 6, 'login', '', '', '2019-05-08 00:42:31', '192.168.1.119');
+INSERT INTO `fly_user_log` (`id`, `userid`, `event`, `tableName`, `data`, `createtime`, `ip`) VALUES
+(776, 6, 'add', 'cellpro', '{\"themeId\":\"5\",\"celltypeId\":\"1\",\"resId\":\"1\",\"width\":212,\"height\":317,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"\",\"send\":\"\",\"texts\":\"[{\\\"text\\\":\\\"\\\\u5bfc\\\\u822a\\\",\\\"textSize\\\":\\\"24\\\",\\\"textLines\\\":\\\"\\\",\\\"textColor\\\":\\\"#FF0000\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":\\\"\\\",\\\"top\\\":\\\"\\\",\\\"right\\\":\\\"\\\",\\\"bottom\\\":\\\"\\\",\\\"gravity\\\":\\\"0\\\",\\\"recv\\\":\\\"\\\",\\\"send\\\":\\\"\\\"}]\",\"images\":\"[{\\\"width\\\":\\\"212\\\",\\\"height\\\":\\\"317\\\",\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/4e\\\\\\/5d2087efc0c4c74acd1d3612b20c62.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":\\\"\\\",\\\"top\\\":\\\"\\\",\\\"right\\\":\\\"\\\",\\\"bottom\\\":\\\"\\\",\\\"scaleType\\\":\\\"0\\\",\\\"recv\\\":\\\"\\\",\\\"send\\\":\\\"\\\"}]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\"}', '2019-05-08 05:55:59', '192.168.1.119'),
+(777, 6, 'add', 'cellpro', '{\"description\":\"\",\"themeId\":\"5\",\"celltypeId\":\"1\",\"resId\":\"\",\"width\":0,\"height\":0,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"\",\"send\":\"\",\"texts\":\"[{\\\"text\\\":\\\"\\\",\\\"textSize\\\":\\\"\\\",\\\"textLines\\\":\\\"\\\",\\\"textColor\\\":\\\"\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":\\\"\\\",\\\"top\\\":\\\"\\\",\\\"right\\\":\\\"\\\",\\\"bottom\\\":\\\"\\\",\\\"gravity\\\":\\\"0\\\",\\\"recv\\\":\\\"\\\",\\\"send\\\":\\\"\\\"}]\",\"images\":\"[{\\\"width\\\":\\\"\\\",\\\"height\\\":\\\"\\\",\\\"url\\\":\\\"\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":\\\"\\\",\\\"top\\\":\\\"\\\",\\\"right\\\":\\\"\\\",\\\"bottom\\\":\\\"\\\",\\\"scaleType\\\":\\\"0\\\",\\\"recv\\\":\\\"\\\",\\\"send\\\":\\\"\\\"}]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\"}', '2019-05-08 07:33:46', '192.168.1.119'),
+(778, 6, 'add', 'cellpro', '{\"description\":\"2222\",\"themeId\":\"5\",\"celltypeId\":\"1\",\"resId\":\"\",\"width\":0,\"height\":0,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"\",\"send\":\"\",\"texts\":\"[{\\\"text\\\":\\\"\\\",\\\"textSize\\\":\\\"\\\",\\\"textLines\\\":\\\"\\\",\\\"textColor\\\":\\\"\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":\\\"\\\",\\\"top\\\":\\\"\\\",\\\"right\\\":\\\"\\\",\\\"bottom\\\":\\\"\\\",\\\"gravity\\\":\\\"0\\\",\\\"recv\\\":\\\"\\\",\\\"send\\\":\\\"\\\"}]\",\"images\":\"[{\\\"width\\\":\\\"\\\",\\\"height\\\":\\\"\\\",\\\"url\\\":\\\"\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":\\\"\\\",\\\"top\\\":\\\"\\\",\\\"right\\\":\\\"\\\",\\\"bottom\\\":\\\"\\\",\\\"scaleType\\\":\\\"0\\\",\\\"recv\\\":\\\"\\\",\\\"send\\\":\\\"\\\"}]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\"}', '2019-05-08 08:57:10', '192.168.1.119'),
+(779, 6, 'add', 'cellpro', '{\"description\":\"3333\",\"themeId\":\"7\",\"celltypeId\":\"25\",\"resId\":\"1\",\"width\":211,\"height\":211,\"backColor\":\"#FF00FF\",\"filterColor\":\"#FF00FF\",\"recv\":\"1\",\"send\":\"2\",\"texts\":\"[{\\\"text\\\":\\\"\\\\u6d4b\\\\u8bd5\\\\u63a7\\\\u4ef6\\\",\\\"textSize\\\":\\\"12\\\",\\\"textLines\\\":\\\"1\\\",\\\"textColor\\\":\\\"#FF00FF\\\",\\\"textFilter\\\":\\\"#FF00FF\\\",\\\"left\\\":\\\"1\\\",\\\"top\\\":\\\"1\\\",\\\"right\\\":\\\"11\\\",\\\"bottom\\\":\\\"11\\\",\\\"gravity\\\":\\\"2\\\",\\\"recv\\\":\\\"2\\\",\\\"send\\\":\\\"2\\\"},{\\\"text\\\":\\\"\\\\u6d4b\\\\u8bd5\\\\u5b50\\\\u63a7\\\\u4ef6\\\",\\\"textSize\\\":\\\"12\\\",\\\"textLines\\\":\\\"1\\\",\\\"textColor\\\":\\\"#FF00FF\\\",\\\"textFilter\\\":\\\"#FF00FF\\\",\\\"left\\\":\\\"22\\\",\\\"top\\\":\\\"22\\\",\\\"right\\\":\\\"22\\\",\\\"bottom\\\":\\\"22\\\",\\\"gravity\\\":\\\"0\\\",\\\"recv\\\":\\\"33\\\",\\\"send\\\":\\\"33\\\"}]\",\"images\":\"[{\\\"width\\\":\\\"630\\\",\\\"height\\\":\\\"472\\\",\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/8e\\\\\\/466e3e87d66d8a0e5b9c4c9a968aa9.jpg\\\",\\\"filterColor\\\":\\\"#FF00FF\\\",\\\"left\\\":\\\"1\\\",\\\"top\\\":\\\"1\\\",\\\"right\\\":\\\"1\\\",\\\"bottom\\\":\\\"1\\\",\\\"scaleType\\\":\\\"3\\\",\\\"recv\\\":\\\"21\\\",\\\"send\\\":\\\"21\\\"},{\\\"width\\\":\\\"212\\\",\\\"height\\\":\\\"317\\\",\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/4e\\\\\\/5d2087efc0c4c74acd1d3612b20c62.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":\\\"22\\\",\\\"top\\\":\\\"22\\\",\\\"right\\\":\\\"22\\\",\\\"bottom\\\":\\\"22\\\",\\\"scaleType\\\":\\\"1\\\",\\\"recv\\\":\\\"1212\\\",\\\"send\\\":\\\"1212\\\"}]\",\"pages\":\"[]\",\"remark\":\"1212\",\"userid\":6,\"ip\":\"192.168.1.119\"}', '2019-05-08 09:23:07', '192.168.1.119');
 
 -- --------------------------------------------------------
 
@@ -1988,6 +2033,12 @@ ALTER TABLE `fly_cases`
 -- 表的索引 `fly_cell`
 --
 ALTER TABLE `fly_cell`
+  ADD PRIMARY KEY (`cellId`);
+
+--
+-- 表的索引 `fly_cellpro`
+--
+ALTER TABLE `fly_cellpro`
   ADD PRIMARY KEY (`cellId`);
 
 --
@@ -2122,6 +2173,12 @@ ALTER TABLE `fly_cell`
   MODIFY `cellId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
 
 --
+-- 使用表AUTO_INCREMENT `fly_cellpro`
+--
+ALTER TABLE `fly_cellpro`
+  MODIFY `cellId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- 使用表AUTO_INCREMENT `fly_cellsub`
 --
 ALTER TABLE `fly_cellsub`
@@ -2161,7 +2218,7 @@ ALTER TABLE `fly_page`
 -- 使用表AUTO_INCREMENT `fly_pagecell`
 --
 ALTER TABLE `fly_pagecell`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1484;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1487;
 
 --
 -- 使用表AUTO_INCREMENT `fly_permission`
@@ -2215,7 +2272,7 @@ ALTER TABLE `fly_user`
 -- 使用表AUTO_INCREMENT `fly_user_log`
 --
 ALTER TABLE `fly_user_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=774;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=780;
 
 --
 -- 使用表AUTO_INCREMENT `fly_user_role`
