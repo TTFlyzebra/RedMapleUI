@@ -16,7 +16,7 @@ public class CellProBean {
     public String backColor;
     public String filterColor;
     public String recv;
-    public String send;
+    public EventBean send;
     public List<TextBean> texts;
     public List<ImageBean> images;
     public List<PageBean> pages;
