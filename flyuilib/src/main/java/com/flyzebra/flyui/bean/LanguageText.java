@@ -5,9 +5,8 @@ import android.text.TextUtils;
 import java.util.Locale;
 
 public class LanguageText {
-    public String zh;
-    public String zh_TW;
-    public String zh_HK;
+    public String zh_rCN;
+    public String zh_rTW;
     public String en;
     public String ru;
     public String el;
@@ -28,9 +27,8 @@ public class LanguageText {
     @Override
     public String toString() {
         return "Language{" +
-                "zh='" + zh + '\'' +
-                ", zh_TW='" + zh_TW + '\'' +
-                ", zh_HK='" + zh_HK + '\'' +
+                "zh='" + zh_rCN + '\'' +
+                ", zh_TW='" + zh_rTW + '\'' +
                 ", en='" + en + '\'' +
                 ", ru='" + ru + '\'' +
                 ", el='" + el + '\'' +
@@ -58,9 +56,9 @@ public class LanguageText {
         type = type.toLowerCase();
 
         if(type.startsWith("zh-cn")){
-            text = zh;
+            text = zh_rCN;
         }else if(type.startsWith("zh-")){
-            text = zh_TW;
+            text = zh_rTW;
         }else if(type.startsWith("en")){
             text = en;
         }else if(type.startsWith("ru")){
@@ -97,7 +95,7 @@ public class LanguageText {
             text = en;
         }
 
-        text =  TextUtils.isEmpty(text)?zh:text;
+        text =  TextUtils.isEmpty(text)?zh_rCN:text;
         text = text.replace("\\n","\n");
         return text;
     }
