@@ -60,6 +60,12 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
             imageView.setLayoutParams(params);
         }
 
+        if(cellBean.texts.get(0).bottom<0){
+            LayoutParams params = (LayoutParams) getLayoutParams();
+            params.height = params.height - cellBean.texts.get(0).bottom;
+            setLayoutParams(params);
+        }
+
         try {
             textView.setTextColor(Color.parseColor(cellBean.texts.get(0).textColor));
         } catch (Exception e) {

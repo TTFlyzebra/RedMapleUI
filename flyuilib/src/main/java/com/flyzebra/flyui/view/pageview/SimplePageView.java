@@ -88,7 +88,11 @@ public class SimplePageView extends FrameLayout implements IPage {
                 lp.topMargin = sy + pageBean.y + (i / pageBean.columns) * (pageBean.itemHeight + pageBean.itemPadding * 2) + pageBean.itemPadding;
 
             } else {
+//                if (cellBean.texts!=null&&!cellBean.texts.isEmpty()&&cellBean.texts.get(0).bottom<=0) {
+//                    lp = new LayoutParams(cellBean.width, cellBean.height - cellBean.texts.get(0).bottom);
+//                } else {
                 lp = new LayoutParams(cellBean.width, cellBean.height);
+//                }
                 lp.setMarginStart(cellBean.x);
                 lp.topMargin = cellBean.y;
             }
