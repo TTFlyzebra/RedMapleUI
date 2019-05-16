@@ -61,18 +61,18 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
         }
 
         try {
-            textView.setTextColor(Color.parseColor(cellBean.textColor));
+            textView.setTextColor(Color.parseColor(cellBean.texts.get(0).textColor));
         } catch (Exception e) {
             textView.setTextColor(0xffffffff);
         }
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, cellBean.textSize);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, cellBean.texts.get(0).textSize);
         LayoutParams params2 = (LayoutParams) textView.getLayoutParams();
         params2.gravity = Gravity.BOTTOM;
-        params2.leftMargin = cellBean.mLeft;
-        params2.topMargin = cellBean.mTop;
-        params2.rightMargin = cellBean.mRight;
-        params2.bottomMargin = Math.max(0, cellBean.mBottom);
-        params2.height = (int) (cellBean.textSize * 2.5f);
+        params2.leftMargin = cellBean.texts.get(0).left;
+        params2.topMargin = cellBean.texts.get(0).top;
+        params2.rightMargin = cellBean.texts.get(0).right;
+        params2.bottomMargin = Math.max(0, cellBean.texts.get(0).bottom);
+        params2.height = (int) (cellBean.texts.get(0).textSize * 2.5f);
         textView.setLayoutParams(params2);
         textView.setGravity(mCellBean.getTextGravity());
         textView.setLines(2);
@@ -86,18 +86,18 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
             FlyLog.e("error! beacuse cellBean is empey!");
             return;
         }
-        if (textView != null && mCellBean.textTitle != null) {
-            textView.setText(mCellBean.textTitle.getText());
+        if (textView != null && mCellBean.texts.get(0).text != null) {
+            textView.setText(mCellBean.texts.get(0).text.getText());
         }
-        if (imageView == null || TextUtils.isEmpty(mCellBean.imageurl1)) {
+        if (imageView == null || TextUtils.isEmpty(mCellBean.images.get(0).url)) {
             try {
-                setBackgroundColor(Color.parseColor(mCellBean.backcolor));
+                setBackgroundColor(Color.parseColor(mCellBean.backColor));
             } catch (Exception e) {
-                FlyLog.e("error! parseColor exception!"+e.toString());
+                FlyLog.e("error! parseColor exception!" + e.toString());
             }
             return;
         }
-        String imageurl = UpdataVersion.getNativeFilePath(mCellBean.imageurl1);
+        String imageurl = UpdataVersion.getNativeFilePath(mCellBean.images.get(0).url);
         FlyLog.v("glide image url=" + imageurl);
         Glide.with(getContext())
                 .asBitmap()
@@ -105,7 +105,7 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
                 .override(mCellBean.width, mCellBean.height)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .centerInside()
-                .into(new BitmapImageViewTarget(imageView){
+                .into(new BitmapImageViewTarget(imageView) {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                         imageView.setImageBitmap(resource);
@@ -130,10 +130,11 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
      */
     @Override
     public void doEvent() {
-        if (IntentUtils.execStartPackage(getContext(), mCellBean.launchAction, mCellBean.acceptAction))
+        if(mCellBean.send==null){
             return;
-        if (IntentUtils.execStartActivity(getContext(), mCellBean.clickevent)) return;
-        if (!IntentUtils.execStartPackage(getContext(), mCellBean.launchAction)) {
+        }
+        if (IntentUtils.execStartPackage(getContext(), mCellBean.send.packName, mCellBean.send.className)) {
+        } else if (!IntentUtils.execStartPackage(getContext(), mCellBean.send.packName)) {
         }
     }
 

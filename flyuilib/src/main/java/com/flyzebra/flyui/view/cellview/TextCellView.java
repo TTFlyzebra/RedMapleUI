@@ -5,9 +5,8 @@ import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.TypedValue;
 
-import com.flyzebra.flyui.IAction;
 import com.flyzebra.flyui.bean.CellBean;
-import com.flyzebra.flyui.module.FlyAction;
+import com.flyzebra.flyui.bean.TextBean;
 import com.flyzebra.flyui.view.customview.FlyTextView;
 import com.flyzebra.flyui.view.customview.MirrorView;
 
@@ -16,7 +15,7 @@ import com.flyzebra.flyui.view.customview.MirrorView;
  * 2019/4/3 16:22
  * Describ:
  **/
-public class TextCellView extends FlyTextView implements ICell, IAction {
+public class TextCellView extends FlyTextView implements ICell {
     public CellBean mCellBean;
 
     public TextCellView(Context context) {
@@ -31,24 +30,24 @@ public class TextCellView extends FlyTextView implements ICell, IAction {
     @Override
     public void upData(CellBean cellBean) {
         this.mCellBean = cellBean;
+        if(mCellBean.texts==null||mCellBean.texts.isEmpty()) return;
+        TextBean textBean = mCellBean.texts.get(0);
         try {
-            setTextColor(Color.parseColor(cellBean.textColor));
+            setTextColor(Color.parseColor(textBean.textColor));
         } catch (Exception e) {
             setTextColor(0xffffffff);
         }
-        setTextSize(TypedValue.COMPLEX_UNIT_PX, cellBean.textSize);
-        setPadding(mCellBean.mLeft, mCellBean.mTop, mCellBean.mRight, mCellBean.mBottom);
-        setGravity(mCellBean.getTextGravity());
-        if(mCellBean.textLine==0){
+        setTextSize(TypedValue.COMPLEX_UNIT_PX, textBean.textSize);
+        setPadding(textBean.left, textBean.top, textBean.right, textBean.bottom);
+        if(textBean.textLines==0){
             setEllipsize(TextUtils.TruncateAt.MARQUEE);
             setMarqueeRepeatLimit(1);
             setSingleLine(true);
         }else{
-            setMaxLines(mCellBean.textLine);
+            setMaxLines(textBean.textLines);
             setEllipsize(TextUtils.TruncateAt.END);
         }
-
-        upView();
+        setText(textBean.text.getText());
     }
 
     @Override
@@ -59,33 +58,6 @@ public class TextCellView extends FlyTextView implements ICell, IAction {
     @Override
     public void bindMirrorView(MirrorView mirrorView) {
 
-    }
-
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        FlyAction.register(this);
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        FlyAction.unregister(this);
-        super.onDetachedFromWindow();
-    }
-
-    @Override
-    public boolean onAction(int key) {
-        if (mCellBean != null && key == mCellBean.recvAction) {
-           upView();
-        }
-        return false;
-    }
-
-    public void upView() {
-        Object obj = FlyAction.getValue(mCellBean.recvAction);
-        if (obj instanceof String) {
-            setText((String) obj);
-        }
     }
 
     @Override

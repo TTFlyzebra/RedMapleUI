@@ -74,7 +74,7 @@ public class SeekbarCellView extends FrameLayout implements ICell, IAction, Seek
             CellBean cell3 = mCellBean.subCells.get(2);
             CellBean cell4 = mCellBean.subCells.get(3);
 
-            Glide.with(getContext()).load(cell1.imageurl1).into(new CustomTarget<Drawable>() {
+            Glide.with(getContext()).load(cell1.images.get(0).url).into(new CustomTarget<Drawable>() {
                 @Override
                 public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                     draw1 = resource;
@@ -87,7 +87,7 @@ public class SeekbarCellView extends FrameLayout implements ICell, IAction, Seek
                 }
             });
 
-            Glide.with(getContext()).load(cell2.imageurl1).into(new CustomTarget<Drawable>() {
+            Glide.with(getContext()).load(cell2.images.get(0).url).into(new CustomTarget<Drawable>() {
                 @Override
                 public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                     draw2 = resource;
@@ -101,7 +101,7 @@ public class SeekbarCellView extends FrameLayout implements ICell, IAction, Seek
 
             });
 
-            Glide.with(getContext()).load(cell2.imageurl2).into(new CustomTarget<Drawable>() {
+            Glide.with(getContext()).load(cell2.images.get(1).url).into(new CustomTarget<Drawable>() {
                 @Override
                 public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                     draw3 = resource;

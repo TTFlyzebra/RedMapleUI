@@ -1,4 +1,4 @@
-package com.flyzebra.redmapleui.ui;
+package com.flyzebra.launcher.ui;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 
-import com.flyzebra.redmapleui.R;
+import com.flyzebra.launcher.R;
 
 public class PermissionActivity extends AppCompatActivity {
 

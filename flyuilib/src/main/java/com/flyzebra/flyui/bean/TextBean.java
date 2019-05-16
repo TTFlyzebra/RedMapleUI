@@ -10,7 +10,7 @@ public class TextBean {
     public int textLines;
     public String textColor;
     public String filterColor;
-    public String text;
+    public LanguageText text;
     public int left;
     public int top;
     public int right;

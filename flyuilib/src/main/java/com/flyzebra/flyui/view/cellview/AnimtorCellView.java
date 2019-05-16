@@ -35,10 +35,11 @@ public class AnimtorCellView extends FlyImageView implements ICell {
 
     @Override
     public void upData(CellBean cellBean) {
-        drawable = new Drawable[cellBean.subCells.size()];
+        if(cellBean.images==null||cellBean.images.isEmpty()) return;
+        drawable = new Drawable[cellBean.images.size()];
         for (int i = 0; i < drawable.length; i++) {
             final int num = i;
-            String url = UpdataVersion.getNativeFilePath(cellBean.subCells.get(i).imageurl1);
+            String url = UpdataVersion.getNativeFilePath(cellBean.images.get(i).url);
             Glide.with(getContext())
                     .load(url)
                     .override(cellBean.subCells.get(i).width, cellBean.subCells.get(i).height)

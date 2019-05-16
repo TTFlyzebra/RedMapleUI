@@ -1,4 +1,4 @@
-package com.flyzebra.redmapleui;
+package com.flyzebra.launcher;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

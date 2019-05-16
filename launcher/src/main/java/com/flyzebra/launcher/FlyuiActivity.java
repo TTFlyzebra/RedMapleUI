@@ -1,4 +1,4 @@
-package com.flyzebra.redmapleui;
+package com.flyzebra.launcher;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
@@ -48,7 +48,7 @@ public class FlyuiActivity extends Activity implements IAction, IUpdataVersion.C
                 String areaCode = SysproUtils.get(FlyuiActivity.this, SysproUtils.Property.AREA_CODE, "0");
                 String version = AppUtil.getVersionName(FlyuiActivity.this);
                 token = "12345678";
-                ApiUrl = TextUtils.isEmpty(url) ? "http://192.168.1.119:801/uiweb" : url;
+                ApiUrl = url;
                 ApiVersion = "/api/version?areaCode=" + areaCode + "&type=launcher&version=" + version;
                 ApiTheme = "/api/app?appname=Launcher-AP1&areaCode=" + areaCode + "&type=launcher&version=" + version;
             }

@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.text.TextUtils;
 
 import com.flyzebra.flyui.bean.CellBean;
+import com.flyzebra.flyui.bean.ImageBean;
 import com.flyzebra.flyui.bean.PageBean;
 import com.flyzebra.flyui.bean.ThemeBean;
 import com.flyzebra.flyui.bean.VersionBean;
@@ -331,36 +332,42 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
     }
 
     private void addCellImageUrls(CellBean cellBean) {
-        addDownImageUrl(cellBean.imageurl1);
-        addDownImageUrl(cellBean.imageurl2);
+        if(cellBean.images!=null&&cellBean.images.size()>0){
+            for(ImageBean imageBean:cellBean.images){
+                addDownImageUrl(imageBean.url);
+            }
+        }
         if (cellBean.subCells != null) {
             for (CellBean subCell : cellBean.subCells) {
                 addCellImageUrls(subCell);
             }
         }
 
-        if(cellBean.cellpage!=null) {
-            addDownImageUrl(cellBean.cellpage.imageurl);
-            for (CellBean pageCellBean : cellBean.cellpage.cellList) {
-                addCellImageUrls(pageCellBean);
-            }
-         }
+//        if(cellBean.pages!=null) {
+//            addDownImageUrl(cellBean.cellpage.imageurl);
+//            for (CellBean pageCellBean : cellBean.cellpage.cellList) {
+//                addCellImageUrls(pageCellBean);
+//            }
+//         }
     }
 
     private void addSaveFileNames(CellBean cellBean) {
-        files.add(EncodeHelper.md5(cellBean.imageurl1) + ".0");
-        files.add(EncodeHelper.md5(cellBean.imageurl2) + ".0");
+        if(cellBean.images!=null&&cellBean.images.size()>0){
+            for(ImageBean imageBean:cellBean.images){
+                files.add(EncodeHelper.md5(imageBean.url) + ".0");
+            }
+        }
         if (cellBean.subCells != null) {
             for (CellBean subCell : cellBean.subCells) {
                 addSaveFileNames(subCell);
             }
         }
-        if(cellBean.cellpage!=null) {
-            addDownImageUrl(cellBean.cellpage.imageurl);
-            for (CellBean pageCellBean : cellBean.cellpage.cellList) {
-                addSaveFileNames(pageCellBean);
-            }
-        }
+//        if(cellBean.cellpage!=null) {
+//            addDownImageUrl(cellBean.cellpage.imageurl);
+//            for (CellBean pageCellBean : cellBean.cellpage.cellList) {
+//                addSaveFileNames(pageCellBean);
+//            }
+//        }
     }
 
     private void addDownImageUrl(String imageurl) {

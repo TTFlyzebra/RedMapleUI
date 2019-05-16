@@ -39,7 +39,7 @@ public class ImageCellView extends FlyImageView implements ICell, View.OnTouchLi
     @Override
     public void upData(CellBean cellBean) {
         this.mCellBean = cellBean;
-        if (mCellBean.sendAction > 0) {
+        if (mCellBean.send != null) {
             setOnClickListener(this);
             setOnTouchListener(this);
         }
@@ -53,7 +53,7 @@ public class ImageCellView extends FlyImageView implements ICell, View.OnTouchLi
     }
 
     public void upView() {
-        showImageUrl(mCellBean.imageurl1);
+        showImageUrl(mCellBean.images.get(0).url);
     }
 
     private void showImageUrl(String imageurl) {
@@ -64,7 +64,7 @@ public class ImageCellView extends FlyImageView implements ICell, View.OnTouchLi
                 .load(url)
                 .override(mCellBean.width, mCellBean.height)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .into(new BitmapImageViewTarget(this){
+                .into(new BitmapImageViewTarget(this) {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                         setImageBitmap(resource);
@@ -77,10 +77,8 @@ public class ImageCellView extends FlyImageView implements ICell, View.OnTouchLi
 
     @Override
     public void doEvent() {
-        FlyLog.d("doEvent event=" + mCellBean.sendAction);
-        if (mCellBean.sendAction > 0) {
-            FlyAction.notifyAction(mCellBean.sendAction);
-        }
+        FlyLog.d("doEvent event=" + mCellBean.send.eventId);
+        FlyAction.notifyAction(mCellBean.send.eventId);
     }
 
     @Override

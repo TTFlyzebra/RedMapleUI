@@ -25,7 +25,7 @@ public class CellViewFactory {
                 iCellView = new SimpeCellView(context);
                 break;
             case CellType.TYPE_APP_TIME:
-                iCellView = new TimeCellView(context);
+                iCellView = new SimpeCellView(context);
                 break;
             case CellType.TYPE_APP_MEDIA:
                 iCellView = new SimpeCellView(context);
@@ -40,28 +40,28 @@ public class CellViewFactory {
                 iCellView = new SeekbarCellView(context);
                 break;
             case CellType.TYPE_PAGE:
-                iCellView = new PageCellView(context);
+                iCellView = new SimpeCellView(context);
                 break;
             case CellType.TYPE_SWITH:
-                iCellView = new StatusCellView(context);
+                iCellView = new SimpeCellView(context);
                 break;
             case CellType.TYPE_TEXT:
                 iCellView = new TextCellView(context);
                 break;
             case CellType.TYPE_LISTVIEW:
-                iCellView = new ListCellView(context);
+                iCellView = new SimpeCellView(context);
                 break;
             case CellType.TYPE_ANIMTOR:
                 iCellView = new AnimtorCellView(context);
                 break;
             case CellType.TYPE_FRAGMENT:
-                iCellView = new FragmentCellView(context);
+                iCellView = new SimpeCellView(context);
                 break;
             case CellType.TYPE_FRAGMENT_NAV:
-                iCellView = new FragmentNavCellView(context);
+                iCellView = new SimpeCellView(context);
                 break;
             case CellType.TYPE_GROUP_LIST:
-                iCellView = new GrouplistCellView(context);
+                iCellView = new SimpeCellView(context);
                 break;
             case CellType.TYPE_APP_NORMAL:
             default:

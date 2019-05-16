@@ -117,7 +117,7 @@ public class NavCellView extends BaseView implements ICell, ViewPager.OnPageChan
         }
         Glide.with(getContext())
                 .asBitmap()
-                .load(UpdataVersion.getNativeFilePath(mCellBean.imageurl1))
+                .load(UpdataVersion.getNativeFilePath(mCellBean.images.get(0).url))
                 .override(mCellBean.width, mCellBean.height)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(new CustomTarget<Bitmap>() {
@@ -136,7 +136,7 @@ public class NavCellView extends BaseView implements ICell, ViewPager.OnPageChan
 
         Glide.with(getContext())
                 .asBitmap()
-                .load(UpdataVersion.getNativeFilePath(mCellBean.imageurl2))
+                .load(UpdataVersion.getNativeFilePath(mCellBean.images.get(0).url))
                 .override(mCellBean.width, mCellBean.height)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(new CustomTarget<Bitmap>() {

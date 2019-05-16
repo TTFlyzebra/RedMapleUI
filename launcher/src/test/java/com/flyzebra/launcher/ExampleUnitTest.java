@@ -1,4 +1,4 @@
-package com.flyzebra.redmapleui;
+package com.flyzebra.launcher;
 
 import org.junit.Test;
 

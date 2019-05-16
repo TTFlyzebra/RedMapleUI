@@ -20,6 +20,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.flyzebra.flyui.bean.CellBean;
+import com.flyzebra.flyui.bean.TextBean;
 import com.flyzebra.flyui.chache.UpdataVersion;
 import com.flyzebra.flyui.utils.IntentUtils;
 import com.flyzebra.flyui.view.customview.FlyImageView;
@@ -73,33 +74,33 @@ public class MirrorCellView extends FrameLayout implements ICell, View.OnTouchLi
             mirrorImageView.setLayoutParams(params2);
         }
 
+        TextBean textBean = mCellBean.texts.get(0);
+
         textView.setGravity(Gravity.CENTER);
         try {
-            textView.setTextColor(Color.parseColor(cellBean.textColor));
+            textView.setTextColor(Color.parseColor(textBean.textColor));
         } catch (Exception e) {
             textView.setTextColor(0xffffffff);
         }
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, cellBean.textSize);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textBean.textSize);
         LayoutParams params2 = (LayoutParams) textView.getLayoutParams();
         params2.gravity = Gravity.BOTTOM;
-        params2.leftMargin = cellBean.mLeft;
-        params2.topMargin = cellBean.mTop;
-        params2.rightMargin = cellBean.mRight;
-        params2.bottomMargin = Math.max(0, cellBean.mBottom);
-        params2.height = (int) (cellBean.textSize * 2.5f);
+        params2.leftMargin = textBean.left;
+        params2.topMargin = textBean.top;
+        params2.rightMargin = textBean.right;
+        params2.bottomMargin = Math.max(0, textBean.bottom);
+        params2.height = (int) (textBean.textSize * 2.5f);
         textView.setLayoutParams(params2);
         textView.setGravity(Gravity.CENTER);
         textView.setLines(2);
+        textView.setText(textBean.text.getText());
 
         upView();
     }
 
     public void upView() {
-        if (textView != null && mCellBean != null && mCellBean.textTitle != null) {
-            textView.setText(mCellBean.textTitle.getText());
-        }
-        if (imageView == null||TextUtils.isEmpty(mCellBean.imageurl1)) return;
-        String imageurl = UpdataVersion.getNativeFilePath(mCellBean.imageurl1);
+        if (imageView == null||TextUtils.isEmpty(mCellBean.images.get(0).url)) return;
+        String imageurl = UpdataVersion.getNativeFilePath(mCellBean.images.get(0).url);
         Glide.with(getContext())
                 .asBitmap()
                 .load(imageurl)
@@ -124,11 +125,8 @@ public class MirrorCellView extends FrameLayout implements ICell, View.OnTouchLi
      */
     @Override
     public void doEvent() {
-        if (IntentUtils.execStartPackage(getContext(), mCellBean.launchAction, mCellBean.acceptAction))
-            return;
-        if (IntentUtils.execStartActivity(getContext(), mCellBean.clickevent)) return;
-        if (!IntentUtils.execStartPackage(getContext(), mCellBean.launchAction)) {
-//            Toast.makeText(getContext(), getContext().getResources().getString(R.string.startAppFailed), Toast.LENGTH_SHORT).show();
+        if (IntentUtils.execStartPackage(getContext(), mCellBean.send.packName, mCellBean.send.className)) {
+        } else if (!IntentUtils.execStartPackage(getContext(), mCellBean.send.packName)) {
         }
     }
 

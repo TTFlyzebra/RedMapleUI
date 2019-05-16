@@ -10,7 +10,9 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.flyzebra.flyui.bean.CellBean;
+import com.flyzebra.flyui.bean.ImageBean;
 import com.flyzebra.flyui.bean.PageBean;
+import com.flyzebra.flyui.bean.TextBean;
 import com.flyzebra.flyui.bean.ThemeBean;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.pageanimtor.PageTransformerCube;
@@ -127,22 +129,36 @@ public class ThemeView extends FrameLayout implements ITheme {
         cellBean.y = (int) (cellBean.y * screenScacle) + moveY - top;
         cellBean.width = (int) (cellBean.width * screenScacle);
         cellBean.height = (int) (cellBean.height * screenScacle);
-        cellBean.textSize = (int) (cellBean.textSize * screenScacle);
-        cellBean.mLeft = (int) (cellBean.mLeft * screenScacle);
-        cellBean.mTop = (int) (cellBean.mTop * screenScacle);
-        cellBean.mRight = (int) (cellBean.mRight * screenScacle);
-        cellBean.mBottom = (int) (cellBean.mBottom * screenScacle);
+        if (cellBean.texts != null && !cellBean.texts.isEmpty()) {
+            for (TextBean textBean : cellBean.texts) {
+                textBean.textSize = (int) (textBean.textSize * screenScacle);
+                textBean.left = (int) (textBean.left * screenScacle);
+                textBean.top = (int) (textBean.top * screenScacle);
+                textBean.right = (int) (textBean.right * screenScacle);
+                textBean.bottom = (int) (textBean.bottom * screenScacle);
+            }
+        }
+
+        if (cellBean.images != null && !cellBean.images.isEmpty()) {
+            for (ImageBean imageBean : cellBean.images) {
+                imageBean.left = (int) (imageBean.left * screenScacle);
+                imageBean.top = (int) (imageBean.top * screenScacle);
+                imageBean.right = (int) (imageBean.right * screenScacle);
+                imageBean.bottom = (int) (imageBean.bottom * screenScacle);
+            }
+        }
+
         if (cellBean.subCells != null && cellBean.subCells.size() > 0) {
             for (CellBean subCellBean : cellBean.subCells) {
                 convertCellBeanPix(subCellBean, 0, 0, 0, 0);
             }
         }
 
-        if (cellBean.cellpage != null && cellBean.cellpage.cellList != null) {
-            for (CellBean subCellBean : cellBean.cellpage.cellList) {
-                convertCellBeanPix(subCellBean, 0, 0, 0, 0);
-            }
-        }
+//        if (cellBean.cellpage != null && cellBean.cellpage.cellList != null) {
+//            for (CellBean subCellBean : cellBean.cellpage.cellList) {
+//                convertCellBeanPix(subCellBean, 0, 0, 0, 0);
+//            }
+//        }
     }
 
     private void upView() {

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.flyzebra.flyui.R;
 import com.flyzebra.flyui.bean.CellBean;
+import com.flyzebra.flyui.bean.TextBean;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.utils.RtlTools;
 
@@ -59,16 +60,16 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener {
     public void setTitles(CellBean mCellBean) {
         removeAllViews();
         if (mCellBean == null || mCellBean.subCells == null || mCellBean.subCells.isEmpty()) return;
-        textViews = new TextView[mCellBean.subCells.size()];
+        textViews = new TextView[mCellBean.texts.size()];
         for (int i = 0; i < textViews.length; i++) {
-            CellBean subCell = mCellBean.subCells.get(i);
+            TextBean textBean = mCellBean.texts.get(i);
             LayoutParams lp = new LayoutParams(childWidth, height);
             lp.setMarginStart(i * childWidth);
             textViews[i] = new TextView(context);
             textViews[i].setGravity(Gravity.CENTER);
-            textViews[i].setText(subCell.textTitle.getText());
+            textViews[i].setText(textBean.text.getText());
             textViews[i].setTag(i);
-            textViews[i].setTextSize(TypedValue.COMPLEX_UNIT_PX, subCell.textSize);
+            textViews[i].setTextSize(TypedValue.COMPLEX_UNIT_PX, textBean.textSize);
             textViews[i].setOnClickListener(FlyTabView.this);
             textViews[i].setTextColor(colorStateList);
             addView(textViews[i], lp);
