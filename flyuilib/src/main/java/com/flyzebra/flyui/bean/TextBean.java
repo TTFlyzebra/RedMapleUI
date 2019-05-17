@@ -2,6 +2,7 @@ package com.flyzebra.flyui.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.view.Gravity;
 
 /**
  * Author FlyZebra
@@ -21,6 +22,19 @@ public class TextBean implements Parcelable {
     public int gravity;
     public String recv;
     public String send;
+
+    public int getGravity() {
+        switch (gravity) {
+            case 0:
+                return Gravity.CENTER;
+            case 1:
+                return Gravity.START;
+            case 2:
+                return Gravity.END;
+            default:
+                return Gravity.CENTER;
+        }
+    }
 
     protected TextBean(Parcel in) {
         textSize = in.readInt();
