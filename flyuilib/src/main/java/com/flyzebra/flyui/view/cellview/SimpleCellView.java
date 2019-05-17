@@ -11,6 +11,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,17 +28,33 @@ import com.flyzebra.flyui.view.customview.FlyImageView;
 import com.flyzebra.flyui.view.customview.FlyTextView;
 import com.flyzebra.flyui.view.customview.MirrorView;
 
-public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchListener, View.OnClickListener {
+public class SimpleCellView extends FrameLayout implements ICell, View.OnTouchListener, View.OnClickListener {
     private CellBean mCellBean;
     private FlyImageView imageView;
     private MirrorView mirrorView;
     private TextView textView;
     private Handler mHandler = new Handler();
 
-    public SimpeCellView(Context context) {
+    public SimpleCellView(Context context) {
         super(context);
-        initView(context);
-        focusChange(false);
+    }
+
+    @Override
+    public void setCellBean(CellBean cellBean) {
+        this.mCellBean = cellBean;
+        verify(cellBean);
+    }
+
+    @Override
+    public void verify(CellBean cellBean) {
+        if(cellBean==null) return;
+        loadingRes(cellBean);
+
+    }
+
+    @Override
+    public void loadingRes(CellBean cellBean) {
+        initView(getContext());
     }
 
     @Override
@@ -47,47 +64,42 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
         addView(imageView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         textView = new FlyTextView(context);
         addView(textView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-    }
-
-    @Override
-    public void upData(CellBean cellBean) {
-        FlyLog.v(cellBean.toString());
-        this.mCellBean = cellBean;
-        if (cellBean.width > 0 || cellBean.height > 0) {
+        if (mCellBean.width > 0 || mCellBean.height > 0) {
             LayoutParams params = (LayoutParams) imageView.getLayoutParams();
-            params.width = cellBean.width;
-            params.height = cellBean.height;
+            params.width = mCellBean.width;
+            params.height = mCellBean.height;
             imageView.setLayoutParams(params);
         }
 
-        if(cellBean.texts.get(0).bottom<0){
+        if(mCellBean.texts.get(0).bottom<0){
             LayoutParams params = (LayoutParams) getLayoutParams();
-            params.height = params.height - cellBean.texts.get(0).bottom;
+            params.height = params.height - mCellBean.texts.get(0).bottom;
             setLayoutParams(params);
         }
 
         try {
-            textView.setTextColor(Color.parseColor(cellBean.texts.get(0).textColor));
+            textView.setTextColor(Color.parseColor(mCellBean.texts.get(0).textColor));
         } catch (Exception e) {
             textView.setTextColor(0xffffffff);
         }
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, cellBean.texts.get(0).textSize);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mCellBean.texts.get(0).textSize);
         LayoutParams params2 = (LayoutParams) textView.getLayoutParams();
         params2.gravity = Gravity.BOTTOM;
-        params2.leftMargin = cellBean.texts.get(0).left;
-        params2.topMargin = cellBean.texts.get(0).top;
-        params2.rightMargin = cellBean.texts.get(0).right;
-        params2.bottomMargin = Math.max(0, cellBean.texts.get(0).bottom);
-        params2.height = (int) (cellBean.texts.get(0).textSize * 2.5f);
+        params2.leftMargin = mCellBean.texts.get(0).left;
+        params2.topMargin = mCellBean.texts.get(0).top;
+        params2.rightMargin = mCellBean.texts.get(0).right;
+        params2.bottomMargin = Math.max(0, mCellBean.texts.get(0).bottom);
+        params2.height = (int) (mCellBean.texts.get(0).textSize * 2.5f);
         textView.setLayoutParams(params2);
-        textView.setGravity(mCellBean.getTextGravity());
+//        textView.setGravity(mCellBean.getTextGravity());
         textView.setLines(2);
         setOnClickListener(this);
         setOnTouchListener(this);
-        upView();
+        refreshView(mCellBean);
     }
 
-    public void upView() {
+    @Override
+    public void refreshView(CellBean cellBean) {
         if (mCellBean == null) {
             FlyLog.e("error! beacuse cellBean is empey!");
             return;
@@ -135,7 +147,7 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
      * 启动优先级，包名+类名>Action>包名
      */
     @Override
-    public void doEvent() {
+    public void onClick() {
         if(mCellBean.send==null){
             return;
         }
@@ -145,7 +157,11 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
     }
 
     @Override
-    public void bindMirrorView(MirrorView mirrorView) {
+    public void bindMirrorView(ViewGroup viewGroup, ViewGroup.LayoutParams lpMirror) {
+        MirrorView mirrorView = new MirrorView(getContext());
+        mirrorView.setScaleType(ImageView.ScaleType.FIT_XY);
+        mirrorView.setRefHeight(MirrorView.MIRRORHIGHT);
+        viewGroup.addView(mirrorView, lpMirror);
         this.mirrorView = mirrorView;
     }
 
@@ -175,9 +191,9 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
 
     private void focusChange(boolean flag) {
         if (flag) {
+            imageView.setColorFilter(0x3FFFFFFF);
             mHandler.removeCallbacks(show);
             mHandler.postDelayed(show, 300);
-            imageView.setColorFilter(0x3FFFFFFF);
         } else {
             imageView.clearColorFilter();
         }
@@ -185,7 +201,7 @@ public class SimpeCellView extends FrameLayout implements ICell, View.OnTouchLis
 
     @Override
     public void onClick(View v) {
-        doEvent();
+        onClick();
     }
 
     @Override

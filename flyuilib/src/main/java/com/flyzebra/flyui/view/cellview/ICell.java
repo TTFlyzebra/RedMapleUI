@@ -1,33 +1,53 @@
 package com.flyzebra.flyui.view.cellview;
 
 import android.content.Context;
+import android.view.ViewGroup;
 
 import com.flyzebra.flyui.bean.CellBean;
-import com.flyzebra.flyui.view.customview.MirrorView;
 
 
 public interface ICell {
 
     /**
-     * 初始化布局
+     * 设置数据
+     * @param cellBean
+     */
+    void setCellBean(CellBean cellBean);
+
+
+    /**
+     * 校验CellBean数据是否完整
+     * @param cellBean
+     */
+    void verify(CellBean cellBean);
+
+
+    /**
+     * 加载所需资源到内存
+     * @param cellBean
+     */
+    void loadingRes(CellBean cellBean);
+
+
+    /**
+     * 创建View
      * @param context
      */
     void initView(Context context);
 
     /**
-     * 更新数据
-     * @param cellBean
+     * 更新View
      */
-    void upData(CellBean cellBean);
+    void refreshView(CellBean cellBean);
 
     /**
-     * 执行事件
+     * 执行点击事件
      */
-    void doEvent();
+    void onClick();
 
     /**
      * 绑定设置镜像图片
-     * @param mirrorView
+     * @param viewGroup
      */
-    void bindMirrorView(MirrorView mirrorView);
+    void bindMirrorView(ViewGroup viewGroup,ViewGroup.LayoutParams lpMirror);
 }

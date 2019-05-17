@@ -18,55 +18,17 @@ public class CellViewFactory {
     public static ICell createView(Context context, CellBean cellBean) {
         ICell iCellView;
         switch (cellBean.celltype) {
-            case CellType.TYPE_IMAGE:
-                iCellView = new ImageCellView(context);
-                break;
-            case CellType.TYPE_APP_RADIO:
-                iCellView = new SimpeCellView(context);
-                break;
-            case CellType.TYPE_APP_TIME:
-                iCellView = new SimpeCellView(context);
-                break;
-            case CellType.TYPE_APP_MEDIA:
-                iCellView = new SimpeCellView(context);
-                break;
-            case CellType.TYPE_APP_MIRRORIMG:
-                iCellView = new MirrorCellView(context);
-                break;
-            case CellType.TYPE_APP_NAV:
-                iCellView = new NavCellView(context);
-                break;
-            case CellType.TYPE_SEEKBAR:
-                iCellView = new SeekbarCellView(context);
-                break;
-            case CellType.TYPE_PAGE:
-                iCellView = new SimpeCellView(context);
-                break;
-            case CellType.TYPE_SWITH:
-                iCellView = new SimpeCellView(context);
-                break;
-            case CellType.TYPE_TEXT:
-                iCellView = new TextCellView(context);
-                break;
-            case CellType.TYPE_LISTVIEW:
-                iCellView = new SimpeCellView(context);
-                break;
-            case CellType.TYPE_ANIMTOR:
-                iCellView = new AnimtorCellView(context);
-                break;
-            case CellType.TYPE_FRAGMENT:
-                iCellView = new SimpeCellView(context);
-                break;
-            case CellType.TYPE_FRAGMENT_NAV:
-                iCellView = new SimpeCellView(context);
-                break;
-            case CellType.TYPE_GROUP_LIST:
-                iCellView = new SimpeCellView(context);
-                break;
             case CellType.TYPE_APP_NORMAL:
             default:
-                iCellView = new SimpeCellView(context);
+                boolean hasText = cellBean.texts != null && !cellBean.texts.isEmpty();
+                boolean hasImage = cellBean.images != null && !cellBean.images.isEmpty();
+                iCellView = hasImage && hasText ? new SimpleCellView(context)
+                        : hasText ? new SimpleTextCellView(context)
+                        : hasImage ? new SimpleImageCellView(context)
+                        : new SimpleCellView(context);
                 break;
+            case CellType.TYPE_APP_NAV:
+                iCellView = new SimpleNavCellView(context);
         }
         return iCellView;
     }

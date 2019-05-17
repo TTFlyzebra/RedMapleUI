@@ -5,9 +5,9 @@ import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.flyzebra.flyui.Flyui;
-import com.flyzebra.flyui.IAction;
-import com.flyzebra.flyui.config.ActionKey;
-import com.flyzebra.flyui.module.FlyAction;
+import com.flyzebra.flyui.event.ActionKey;
+import com.flyzebra.flyui.event.FlyAction;
+import com.flyzebra.flyui.event.IAction;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Music;
@@ -42,7 +42,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
         flyui = new Flyui(this);
         flyui.onCreate();
         musicPlayer.addListener(this);
-        FlyAction.notifyAction(ActionKey.CHANGE_PAGER_WITH_RESID, "music_fm01");
+        FlyAction.handleAction(ActionKey.CHANGE_PAGER_WITH_RESID, "music_fm01");
     }
 
     @Override
@@ -84,7 +84,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
                 if (obj instanceof Integer) {
                     flag = ((int) obj) == 0 ? 1 : 0;
                 }
-                FlyAction.notifyAction(ActionKey.MSG_MENU_STATUS, flag);
+                FlyAction.handleAction(ActionKey.MSG_MENU_STATUS, flag);
                 break;
             case ActionKey.KEY_LOOP:
                 musicPlayer.switchLoopStatus();
@@ -102,14 +102,14 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
     @Override
     public void notifyPathChange(String path) {
         FlyLog.d("notifyPathChange path=%s", path);
-        FlyAction.notifyAction(ActionKey.STORE_URL, path);
+        FlyAction.handleAction(ActionKey.STORE_URL, path);
         if (isStop) return;
         if (!musicPlayer.getPlayUrl().startsWith(path)) {
             musicPlayer.destory();
         }
         musicPlayer.playSaveUrlByPath(path);
         musicList.clear();
-        FlyAction.notifyAction(ActionKey.MUSIC_LIST, new ArrayList<>());
+        FlyAction.handleAction(ActionKey.MUSIC_LIST, new ArrayList<>());
         super.notifyPathChange(path);
     }
 
@@ -184,24 +184,24 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
         }
         int playStauts = (musicPlayer.getPlayStatus() == MusicPlayer.STATUS_STARTPLAY
                 || musicPlayer.getPlayStatus() == MusicPlayer.STATUS_PLAYING) ? 1 : 0;
-        FlyAction.notifyAction(ActionKey.MSG_PLAY_STATUS, playStauts);
+        FlyAction.handleAction(ActionKey.MSG_PLAY_STATUS, playStauts);
     }
 
     @Override
     public void loopStatusChange(int staut) {
-        FlyAction.notifyAction(ActionKey.MSG_LOOP_STATUS, staut);
+        FlyAction.handleAction(ActionKey.MSG_LOOP_STATUS, staut);
     }
 
     @Override
     public void playtime(long current, long total) {
-        FlyAction.notifyAction(ActionKey.MUSIC_TIME, new long[]{current, total});
+        FlyAction.handleAction(ActionKey.MUSIC_TIME, new long[]{current, total});
     }
 
     @Override
     public void storageList(List<StorageInfo> storageList) {
         super.storageList(storageList);
         if (storageList != null) {
-            FlyAction.notifyAction(ActionKey.SUM_STORE, "存储器\n(" + storageList.size() + ")");
+            FlyAction.handleAction(ActionKey.SUM_STORE, "存储器\n(" + storageList.size() + ")");
         }
         List<Map<Integer, Object>> list = new ArrayList<>();
         for (StorageInfo storageInfo : storageList) {
@@ -220,7 +220,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
             map.put(ActionKey.RES_URL, imageKey);
             list.add(map);
         }
-        FlyAction.notifyAction(ActionKey.STORE_LIST, list);
+        FlyAction.handleAction(ActionKey.STORE_LIST, list);
     }
 
     private void notifyCurrentMusic() {
@@ -229,15 +229,15 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
             final int i = musicPlayer.getPlayPos();
             if (i >= 0 && i < musicList.size()) {
                 Music music = musicList.get(i);
-                FlyAction.notifyAction(ActionKey.MUSIC_NAME, music.name);
-                FlyAction.notifyAction(ActionKey.MUSIC_ALBUM, music.album);
-                FlyAction.notifyAction(ActionKey.MUSIC_ARTIST, music.artist);
-                FlyAction.notifyAction(ActionKey.MUSIC_URL, music.url);
+                FlyAction.handleAction(ActionKey.MUSIC_NAME, music.name);
+                FlyAction.handleAction(ActionKey.MUSIC_ALBUM, music.album);
+                FlyAction.handleAction(ActionKey.MUSIC_ARTIST, music.artist);
+                FlyAction.handleAction(ActionKey.MUSIC_URL, music.url);
             } else {
-                FlyAction.notifyAction(ActionKey.MUSIC_NAME, "");
-                FlyAction.notifyAction(ActionKey.MUSIC_ALBUM, "");
-                FlyAction.notifyAction(ActionKey.MUSIC_ARTIST, "");
-                FlyAction.notifyAction(ActionKey.MUSIC_URL, "");
+                FlyAction.handleAction(ActionKey.MUSIC_NAME, "");
+                FlyAction.handleAction(ActionKey.MUSIC_ALBUM, "");
+                FlyAction.handleAction(ActionKey.MUSIC_ARTIST, "");
+                FlyAction.handleAction(ActionKey.MUSIC_URL, "");
             }
         } catch (Exception e) {
             FlyLog.e(e.toString());
@@ -259,8 +259,8 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
             map.put(ActionKey.MUSIC_ARTIST, music.artist);
             listSingle.add(map);
         }
-        FlyAction.notifyAction(ActionKey.MUSIC_SUM, "单曲\n(" + listSingle.size() + ")");
-        FlyAction.notifyAction(ActionKey.MUSIC_LIST, listSingle);
+        FlyAction.handleAction(ActionKey.MUSIC_SUM, "单曲\n(" + listSingle.size() + ")");
+        FlyAction.handleAction(ActionKey.MUSIC_LIST, listSingle);
 
 
         //列表分类
@@ -283,9 +283,9 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
             }
             mFolderHashMap.get(path).add(music);
         }
-        FlyAction.notifyAction(ActionKey.MUSIC_SUM_ARTIST, "歌手\n(" + mArtistHashMap.size() + ")");
-        FlyAction.notifyAction(ActionKey.MUSIC_SUM_ALBUM, "专辑\n(" + mAlbumHashMap.size() + ")");
-        FlyAction.notifyAction(ActionKey.MUSIC_SUM_FOLDER, "文件夹\n(" + mFolderHashMap.size() + ")");
+        FlyAction.handleAction(ActionKey.MUSIC_SUM_ARTIST, "歌手\n(" + mArtistHashMap.size() + ")");
+        FlyAction.handleAction(ActionKey.MUSIC_SUM_ALBUM, "专辑\n(" + mAlbumHashMap.size() + ")");
+        FlyAction.handleAction(ActionKey.MUSIC_SUM_FOLDER, "文件夹\n(" + mFolderHashMap.size() + ")");
 
         //歌手列表
         List<String> artistGroupList = new ArrayList<>(mArtistHashMap.keySet());
@@ -321,7 +321,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
                 }
             }
         }
-        FlyAction.notifyAction(ActionKey.MUSIC_LIST_ARTIST, listArtist);
+        FlyAction.handleAction(ActionKey.MUSIC_LIST_ARTIST, listArtist);
 
         //专辑列表
         List<String> albumGroupList = new ArrayList<>(mAlbumHashMap.keySet());
@@ -357,7 +357,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
                 }
             }
         }
-        FlyAction.notifyAction(ActionKey.MUSIC_LIST_ALBUM, listAlbum);
+        FlyAction.handleAction(ActionKey.MUSIC_LIST_ALBUM, listAlbum);
 
         //文件夹列表
         List<String> folderGroupList = new ArrayList<>(mFolderHashMap.keySet());
@@ -401,7 +401,7 @@ public class MusicActivity extends BaseActivity implements IAction, IMusicPlayer
                 }
             }
         }
-        FlyAction.notifyAction(ActionKey.MUSIC_LIST_FOLDER, listFolder);
+        FlyAction.handleAction(ActionKey.MUSIC_LIST_FOLDER, listFolder);
         FlyLog.d("notifyMusicList end use time =" + (System.currentTimeMillis() - time) + "ms");
     }
 

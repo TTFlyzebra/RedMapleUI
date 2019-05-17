@@ -66,7 +66,7 @@ public class SimpleTvView extends RelativeLayout implements ITvView{
     @Override
     public void createLogoView(LogoEntity logoEntity,IDiskCache iDiskCache) {
         if(logoEntity!=null){
-            FlyLog.d("create logo! %s",logoEntity.toString());
+            FlyLog.d("setCellBean logo! %s",logoEntity.toString());
             ImageView imageView = new ImageView(mContext);
             LayoutParams lp = new LayoutParams(logoEntity.getWidth(),logoEntity.getHeight());
             lp.leftMargin = logoEntity.getX();
@@ -76,7 +76,7 @@ public class SimpleTvView extends RelativeLayout implements ITvView{
             addView(imageView);
             Glide.with(mContext).load(logoEntity.getImgUrl()).into(imageView);
         }else{
-            FlyLog.d("logoEntiy data is null, do't create logo!");
+            FlyLog.d("logoEntiy data is null, do't setCellBean logo!");
         }
     }
 

@@ -2,22 +2,20 @@ package com.flyzebra.flyui.view.themeview;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.PageBean;
 import com.flyzebra.flyui.bean.ThemeBean;
-import com.flyzebra.flyui.module.FlyClass;
 import com.flyzebra.flyui.utils.FlyLog;
-import com.flyzebra.flyui.view.base.BaseViewPager;
-import com.flyzebra.flyui.view.cellview.NavCellView;
 import com.flyzebra.flyui.view.pageview.SimplePageView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PagesViewPager extends BaseViewPager {
+public class PagesViewPager extends ViewPager {
     private List<PageBean> pageList = new ArrayList<>();
     private ThemeBean themeBean;
     private MyPgaeAdapter myPgaeAdapter = new MyPgaeAdapter();
@@ -63,20 +61,6 @@ public class PagesViewPager extends BaseViewPager {
 
     public void selectCell(CellBean cell) {
 
-    }
-
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        NavCellView navCellView = FlyClass.get(NavCellView.class);
-        if (navCellView != null) {
-            navCellView.setViewPager(this);
-        }
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
     }
 
     public class MyPgaeAdapter extends PagerAdapter {

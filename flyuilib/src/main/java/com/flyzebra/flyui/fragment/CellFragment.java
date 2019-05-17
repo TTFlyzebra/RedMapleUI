@@ -35,7 +35,7 @@ public class CellFragment extends Fragment {
         mCellBean = (CellBean) args.get(CELL);
         if(mCellBean!=null){
             ICell view =  CellViewFactory.createView(getActivity(),mCellBean);
-            view.upData(mCellBean);
+            view.setCellBean(mCellBean);
             return (View) view;
         }else{
             return super.onCreateView(inflater, container, savedInstanceState);

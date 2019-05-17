@@ -8,6 +8,8 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -16,16 +18,15 @@ import com.bumptech.glide.request.transition.Transition;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.ThemeBean;
 import com.flyzebra.flyui.chache.UpdataVersion;
-import com.flyzebra.flyui.module.FlyAction;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.customview.FlyImageView;
 import com.flyzebra.flyui.view.customview.MirrorView;
 
-public class ImageCellView extends FlyImageView implements ICell, View.OnTouchListener, View.OnClickListener {
+public class SimpleImageCellView extends FlyImageView implements ICell, View.OnTouchListener, View.OnClickListener {
     protected CellBean mCellBean;
     private MirrorView mirrorView;
 
-    public ImageCellView(Context context) {
+    public SimpleImageCellView(Context context) {
         super(context);
         initView(context);
     }
@@ -37,13 +38,23 @@ public class ImageCellView extends FlyImageView implements ICell, View.OnTouchLi
     }
 
     @Override
-    public void upData(CellBean cellBean) {
+    public void setCellBean(CellBean cellBean) {
         this.mCellBean = cellBean;
         if (mCellBean.send != null) {
             setOnClickListener(this);
             setOnTouchListener(this);
         }
-        upView();
+        refreshView(cellBean);
+    }
+
+    @Override
+    public void verify(CellBean cellBean) {
+
+    }
+
+    @Override
+    public void loadingRes(CellBean cellBean) {
+
     }
 
     @Override
@@ -52,7 +63,8 @@ public class ImageCellView extends FlyImageView implements ICell, View.OnTouchLi
         focusChange(!enabled);
     }
 
-    public void upView() {
+    @Override
+    public void refreshView(CellBean cellBean) {
         showImageUrl(mCellBean.images.get(0).url);
     }
 
@@ -76,20 +88,24 @@ public class ImageCellView extends FlyImageView implements ICell, View.OnTouchLi
     }
 
     @Override
-    public void doEvent() {
-        FlyLog.d("doEvent event=" + mCellBean.send.eventId);
-        FlyAction.notifyAction(mCellBean.send.eventId);
+    public void onClick() {
+        FlyLog.d("onClick event=" + mCellBean.send.eventId);
+//        FlyAction.handleAction(mCellBean.send.eventId);
     }
 
     @Override
-    public void bindMirrorView(MirrorView mirrorView) {
+    public void bindMirrorView(ViewGroup viewGroup, ViewGroup.LayoutParams lpMirror) {
+        MirrorView mirrorView = new MirrorView(getContext());
+        mirrorView.setScaleType(ImageView.ScaleType.FIT_XY);
+        mirrorView.setRefHeight(MirrorView.MIRRORHIGHT);
+        viewGroup.addView(mirrorView, lpMirror);
         this.mirrorView = mirrorView;
     }
 
     @Override
     public void onClick(View v) {
         setEnabled(false);
-        doEvent();
+        onClick();
         setEnabled(true);
     }
 

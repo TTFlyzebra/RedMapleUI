@@ -7,11 +7,11 @@
 //import android.view.MotionEvent;
 //import android.widget.FrameLayout;
 //
-//import com.flyzebra.flyui.IAction;
+//import com.flyzebra.flyui.event.IAction;
 //import com.flyzebra.flyui.bean.CellBean;
-//import com.flyzebra.flyui.config.ActionKey;
+//import com.flyzebra.flyui.event.ActionKey;
 //import com.flyzebra.flyui.config.Gravity;
-//import com.flyzebra.flyui.module.FlyAction;
+//import com.flyzebra.flyui.event.FlyAction;
 //import com.flyzebra.flyui.utils.FlyLog;
 //import com.flyzebra.flyui.utils.RtlTools;
 //import com.flyzebra.flyui.view.customview.MirrorView;
@@ -29,7 +29,7 @@
 //        @Override
 //        public void run() {
 //            FlyLog.d("hide Menu Task run");
-//            FlyAction.notifyAction(ActionKey.MSG_MENU_STATUS, 0);
+//            FlyAction.handleAction(ActionKey.MSG_MENU_STATUS, 0);
 //        }
 //    };
 //
@@ -43,12 +43,12 @@
 //    }
 //
 //    @Override
-//    public void upData(CellBean cellBean) {
+//    public void setCellBean(CellBean cellBean) {
 //        this.mCellBean = cellBean;
 //        if (mCellBean != null && mCellBean.cellpage != null) {
 //            SimplePageView simplePageView = new SimplePageView(getContext());
 //            addView(simplePageView);
-//            simplePageView.upData(mCellBean.cellpage);
+//            simplePageView.setCellBean(mCellBean.cellpage);
 //        }
 //
 //        try {
@@ -59,7 +59,7 @@
 //    }
 //
 //    @Override
-//    public void doEvent() {
+//    public void onClick() {
 //
 //    }
 //
@@ -84,9 +84,9 @@
 //        FlyAction.register(this);
 //        if (mCellBean.recvAction == ActionKey.MSG_MENU_STATUS) {
 //            goAnimtor(false, 0);
-//            FlyAction.notifyAction(ActionKey.MSG_MENU_STATUS, 0);
+//            FlyAction.handleAction(ActionKey.MSG_MENU_STATUS, 0);
 //        } else if (mCellBean.recvAction > 0) {
-//            onAction(mCellBean.recvAction);
+//            handleAction(mCellBean.recvAction);
 //        }
 //    }
 //
@@ -98,7 +98,7 @@
 //    }
 //
 //    @Override
-//    public boolean onAction(int key) {
+//    public boolean handleAction(int key) {
 //        if (mCellBean == null || mCellBean.recvAction != key) return false;
 //        switch (key) {
 //            case ActionKey.MSG_MENU_STATUS:

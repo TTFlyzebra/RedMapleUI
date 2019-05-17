@@ -197,9 +197,9 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
                 if (version != null) {
                     VersionBean bean = GsonUtils.json2Object(version, VersionBean.class);
                     if (bean != null) {
-                        localVersion = bean.getVersion();
-                        if (bean.getVersionInterval() > UPDATE_MIN_IINTERVAL) {
-                            UPDATE_IINTERVAL = bean.getVersionInterval() * 1000;
+                        localVersion = bean.version;
+                        if (bean.versionInterval > UPDATE_MIN_IINTERVAL) {
+                            UPDATE_IINTERVAL = bean.versionInterval * 1000;
                         }
                     }
                 }
@@ -207,9 +207,9 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
                 if (object != null) {
                     VersionBean bean = GsonUtils.json2Object(object.toString(), VersionBean.class);
                     if (bean != null && bean.isValid()) {
-                        newVersion = bean.getVersion();
-                        if (bean.getVersionInterval() > UPDATE_MIN_IINTERVAL) {
-                            UPDATE_IINTERVAL = bean.getVersionInterval() * 1000;
+                        newVersion = bean.version;
+                        if (bean.versionInterval > UPDATE_MIN_IINTERVAL) {
+                            UPDATE_IINTERVAL = bean.versionInterval * 1000;
                         }
                     }
                 }

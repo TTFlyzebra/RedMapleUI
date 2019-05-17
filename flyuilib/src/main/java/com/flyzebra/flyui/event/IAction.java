@@ -1,4 +1,4 @@
-package com.flyzebra.flyui;
+package com.flyzebra.flyui.event;
 
 /**
  * Author FlyZebra
@@ -6,5 +6,5 @@ package com.flyzebra.flyui;
  * Describ:
  **/
 public interface IAction {
-    boolean onAction(int key);
+    boolean handleAction(byte[] key);
 }

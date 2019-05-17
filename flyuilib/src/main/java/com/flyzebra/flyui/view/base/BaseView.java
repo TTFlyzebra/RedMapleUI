@@ -1,38 +1,39 @@
 package com.flyzebra.flyui.view.base;
 
 import android.content.Context;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.util.AttributeSet;
 import android.view.View;
 
-import com.flyzebra.flyui.module.FlyClass;
+import com.flyzebra.flyui.event.FlyAction;
+import com.flyzebra.flyui.event.IAction;
+import com.flyzebra.flyui.utils.FlyLog;
 
 /**
  * Author FlyZebra
- * 2019/3/26 9:27
+ * 2019/5/17 15:15
  * Describ:
  **/
-public class BaseView extends View{
+public abstract class BaseView extends View implements IAction {
     public BaseView(Context context) {
         super(context);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public BaseView(Context context,  AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
-
     @Override
     protected void onAttachedToWindow() {
+        FlyLog.d("onAttachedToWindow");
         super.onAttachedToWindow();
-        FlyClass.register(getClass(),this);
+        FlyAction.register(this);
     }
-
 
     @Override
     protected void onDetachedFromWindow() {
-        FlyClass.unregister(getClass());
+        FlyLog.d("onDetachedFromWindow");
+        FlyAction.unregister(this);
         super.onDetachedFromWindow();
     }
+
+    @Override
+    public boolean handleAction(byte[] key) {
+        return false;
+    }
+
 }

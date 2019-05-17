@@ -282,7 +282,7 @@ public class TvPageLayout extends ViewGroup {
         for (int i = 0; i < cellEntityList.size(); i++) {
             final int currentItem = i;
             final CellEntity cellEntity = cellEntityList.get(i);
-            FlyLog.d("create Cell=%s",cellEntity.toString());
+            FlyLog.d("setCellBean Cell=%s",cellEntity.toString());
             final ITvPageItemView view = TvPageViewItemFactory.createView(context, iDiskCache, mBitmapCache, cellEntity,resId);
             if(view ==null){
                 continue;

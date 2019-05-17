@@ -10,9 +10,8 @@ import com.flyzebra.flyui.chache.DiskCache;
 import com.flyzebra.flyui.chache.IDiskCache;
 import com.flyzebra.flyui.chache.IUpdataVersion;
 import com.flyzebra.flyui.chache.UpdataVersion;
-import com.flyzebra.flyui.config.ActionKey;
-import com.flyzebra.flyui.module.FlyAction;
-import com.flyzebra.flyui.module.FlyClass;
+import com.flyzebra.flyui.event.FlyAction;
+import com.flyzebra.flyui.event.IAction;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.themeview.ThemeView;
 
@@ -32,7 +31,7 @@ public class Flyui implements IUpdataVersion.CheckCacheResult, IUpdataVersion.Up
     }
 
     public void onCreate() {
-        FlyLog.d("onCreate");
+        FlyLog.d("setCellBean");
         mThemeView = new ThemeView(activity);
         activity.addContentView(mThemeView,new ViewGroup.LayoutParams(-1,-1));
         mThemeView.onCreate(activity);
@@ -59,7 +58,6 @@ public class Flyui implements IUpdataVersion.CheckCacheResult, IUpdataVersion.Up
         }
         mThemeView.onDestory();
         iUpDataVersion.cancelAllTasks();
-        FlyClass.clear();
         FlyAction.clear();
     }
 
@@ -90,7 +88,6 @@ public class Flyui implements IUpdataVersion.CheckCacheResult, IUpdataVersion.Up
 
     private void upView(ThemeBean themeBean) {
         mThemeView.upData(themeBean);
-        FlyAction.notifyAction(ActionKey.REFRESH);
     }
 
     public String getApplicationName(Activity activity) {

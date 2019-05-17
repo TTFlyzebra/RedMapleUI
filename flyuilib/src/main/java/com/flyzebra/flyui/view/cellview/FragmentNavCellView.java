@@ -6,10 +6,10 @@
 //import android.widget.FrameLayout;
 //import android.widget.LinearLayout;
 //
-//import com.flyzebra.flyui.IAction;
+//import com.flyzebra.flyui.event.IAction;
 //import com.flyzebra.flyui.bean.CellBean;
-//import com.flyzebra.flyui.config.ActionKey;
-//import com.flyzebra.flyui.module.FlyAction;
+//import com.flyzebra.flyui.event.ActionKey;
+//import com.flyzebra.flyui.event.FlyAction;
 //import com.flyzebra.flyui.utils.FlyLog;
 //import com.flyzebra.flyui.view.customview.FlyTabView;
 //import com.flyzebra.flyui.view.customview.MirrorView;
@@ -33,7 +33,7 @@
 //    }
 //
 //    @Override
-//    public void upData(CellBean cellBean) {
+//    public void setCellBean(CellBean cellBean) {
 //        this.mCellBean = cellBean;
 //        if (mCellBean != null && mCellBean.subCells.size() > 0) {
 //            flyTabView = new FlyTabView(getContext());
@@ -44,7 +44,7 @@
 //            flyTabView.setOnItemClickListener(new FlyTabView.OnItemClickListener() {
 //                @Override
 //                public void onItemClick(View v) {
-//                    FlyAction.notifyAction(ActionKey.CHANGE_PAGER_WITH_RESID, mCellBean.subCells.get((Integer) v.getTag()).resId);
+//                    FlyAction.handleAction(ActionKey.CHANGE_PAGER_WITH_RESID, mCellBean.subCells.get((Integer) v.getTag()).resId);
 //                }
 //            });
 //
@@ -65,7 +65,7 @@
 //    }
 //
 //    @Override
-//    public void doEvent() {
+//    public void onClick() {
 //
 //    }
 //
@@ -87,7 +87,7 @@
 //    }
 //
 //    @Override
-//    public boolean onAction(int key) {
+//    public boolean handleAction(int key) {
 //        if (mCellBean == null || mCellBean.subCells == null || mCellBean.subCells.isEmpty())
 //            return false;
 //        if (key == ActionKey.CHANGE_PAGER_WITH_RESID) {

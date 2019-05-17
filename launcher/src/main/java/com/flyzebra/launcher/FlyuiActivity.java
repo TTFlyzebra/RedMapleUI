@@ -10,13 +10,12 @@ import android.text.TextUtils;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.flyzebra.flyui.GlideApp;
-import com.flyzebra.flyui.IAction;
 import com.flyzebra.flyui.bean.ThemeBean;
 import com.flyzebra.flyui.chache.DiskCache;
 import com.flyzebra.flyui.chache.IDiskCache;
 import com.flyzebra.flyui.chache.IUpdataVersion;
 import com.flyzebra.flyui.chache.UpdataVersion;
-import com.flyzebra.flyui.module.FlyAction;
+import com.flyzebra.flyui.event.IAction;
 import com.flyzebra.flyui.utils.AppUtil;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.utils.SysproUtils;
@@ -57,12 +56,6 @@ public class FlyuiActivity extends Activity implements IAction, IUpdataVersion.C
     }
 
     @Override
-    protected void onStart() {
-        FlyAction.notifyAction(1, null);
-        super.onStart();
-    }
-
-    @Override
     protected void onDestroy() {
         FlyLog.d();
         mThemeView.onDestory();
@@ -97,8 +90,6 @@ public class FlyuiActivity extends Activity implements IAction, IUpdataVersion.C
         iUpDataVersion.forceUpVersion(this);
     }
 
-    private Drawable drawable;
-
     private void upView(ThemeBean themeBean) {
         mThemeView.upData(themeBean);
         if (TextUtils.isEmpty(themeBean.imageurl)) {
@@ -123,7 +114,7 @@ public class FlyuiActivity extends Activity implements IAction, IUpdataVersion.C
     }
 
     @Override
-    public boolean onAction(int key) {
+    public boolean handleAction(byte[] key) {
         return false;
     }
 }

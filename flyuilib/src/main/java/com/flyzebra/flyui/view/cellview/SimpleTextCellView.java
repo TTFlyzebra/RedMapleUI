@@ -4,21 +4,21 @@ import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.TypedValue;
+import android.view.ViewGroup;
 
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.TextBean;
 import com.flyzebra.flyui.view.customview.FlyTextView;
-import com.flyzebra.flyui.view.customview.MirrorView;
 
 /**
  * Author FlyZebra
  * 2019/4/3 16:22
  * Describ:
  **/
-public class TextCellView extends FlyTextView implements ICell {
+public class SimpleTextCellView extends FlyTextView implements ICell {
     public CellBean mCellBean;
 
-    public TextCellView(Context context) {
+    public SimpleTextCellView(Context context) {
         super(context);
     }
 
@@ -28,7 +28,12 @@ public class TextCellView extends FlyTextView implements ICell {
     }
 
     @Override
-    public void upData(CellBean cellBean) {
+    public void refreshView(CellBean cellBean) {
+
+    }
+
+    @Override
+    public void setCellBean(CellBean cellBean) {
         this.mCellBean = cellBean;
         if(mCellBean.texts==null||mCellBean.texts.isEmpty()) return;
         TextBean textBean = mCellBean.texts.get(0);
@@ -51,13 +56,19 @@ public class TextCellView extends FlyTextView implements ICell {
     }
 
     @Override
-    public void doEvent() {
-
+    public void verify(CellBean cellBean) {
     }
 
     @Override
-    public void bindMirrorView(MirrorView mirrorView) {
+    public void loadingRes(CellBean cellBean) {
+    }
 
+    @Override
+    public void onClick() {
+    }
+
+    @Override
+    public void bindMirrorView(ViewGroup viewGroup, ViewGroup.LayoutParams lpMirror) {
     }
 
     @Override

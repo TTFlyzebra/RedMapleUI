@@ -13,12 +13,12 @@
 //import com.bumptech.glide.load.engine.DiskCacheStrategy;
 //import com.bumptech.glide.request.target.BitmapImageViewTarget;
 //import com.bumptech.glide.request.transition.Transition;
-//import com.flyzebra.flyui.IAction;
+//import com.flyzebra.flyui.event.IAction;
 //import com.flyzebra.flyui.bean.CellBean;
 //import com.flyzebra.flyui.bean.ThemeBean;
 //import com.flyzebra.flyui.chache.UpdataVersion;
-//import com.flyzebra.flyui.config.ActionKey;
-//import com.flyzebra.flyui.module.FlyAction;
+//import com.flyzebra.flyui.event.ActionKey;
+//import com.flyzebra.flyui.event.FlyAction;
 //import com.flyzebra.flyui.utils.FlyLog;
 //import com.flyzebra.flyui.view.customview.FlyImageView;
 //import com.flyzebra.flyui.view.customview.MirrorView;
@@ -38,14 +38,14 @@
 //    }
 //
 //    @Override
-//    public void upData(CellBean cellBean) {
+//    public void setCellBean(CellBean cellBean) {
 //        this.mCellBean = cellBean;
 //        if (mCellBean.send!=null) {
 //            setOnClickListener(this);
 //            setOnTouchListener(this);
 //        }
 //        setScaleType(ScaleType.CENTER);
-//        upView();
+//        refreshView();
 //    }
 //
 //    @Override
@@ -54,7 +54,7 @@
 //        focusChange(!enabled);
 //    }
 //
-//    public void upView() {
+//    public void refreshView(CellBean cellBean) {
 //        switch (mCellBean.recv) {
 //            case ActionKey.MSG_PLAY_STATUS:
 //            case ActionKey.MSG_MENU_STATUS:
@@ -98,10 +98,10 @@
 //    }
 //
 //    @Override
-//    public void doEvent() {
-//        FlyLog.d("doEvent event=" + mCellBean.sendAction);
+//    public void onClick() {
+//        FlyLog.d("onClick event=" + mCellBean.sendAction);
 //        if (mCellBean.sendAction > 0) {
-//            FlyAction.notifyAction(mCellBean.sendAction);
+//            FlyAction.handleAction(mCellBean.sendAction);
 //        }
 //    }
 //
@@ -113,7 +113,7 @@
 //    @Override
 //    public void onClick(View v) {
 //        setEnabled(false);
-//        doEvent();
+//        onClick();
 //        setEnabled(true);
 //    }
 //
@@ -181,7 +181,7 @@
 //    }
 //
 //    @Override
-//    public boolean onAction(int key) {
+//    public boolean handleAction(int key) {
 //        if (mCellBean == null || key != mCellBean.recvAction) return false;
 //        switch (mCellBean.recvAction) {
 //            case ActionKey.MSG_PLAY_STATUS:

@@ -4,9 +4,9 @@ import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.flyzebra.flyui.Flyui;
-import com.flyzebra.flyui.IAction;
-import com.flyzebra.flyui.config.ActionKey;
-import com.flyzebra.flyui.module.FlyAction;
+import com.flyzebra.flyui.event.ActionKey;
+import com.flyzebra.flyui.event.FlyAction;
+import com.flyzebra.flyui.event.IAction;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.StorageInfo;
@@ -31,7 +31,7 @@ public class VideoActivity extends BaseActivity implements IAction {
         flyui = new Flyui(this);
         flyui.onCreate();
         ijkVideoView = findViewById(R.id.video_play);
-        FlyAction.notifyAction(ActionKey.CHANGE_PAGER_WITH_RESID,"music_fm01");
+        FlyAction.handleAction(ActionKey.CHANGE_PAGER_WITH_RESID,"music_fm01");
     }
 
     @Override
@@ -61,7 +61,7 @@ public class VideoActivity extends BaseActivity implements IAction {
                 if(obj instanceof String){
                     ijkVideoView.setVideoPath((String) obj);
                     ijkVideoView.start();
-                    FlyAction.notifyAction(ActionKey.VIDEO_URL, obj);
+                    FlyAction.handleAction(ActionKey.VIDEO_URL, obj);
                 }
                 break;
             case ActionKey.KEY_MENU:
@@ -70,7 +70,7 @@ public class VideoActivity extends BaseActivity implements IAction {
                 if (obj instanceof Integer) {
                     flag = ((int) obj) == 0 ? 1 : 0;
                 }
-                FlyAction.notifyAction(ActionKey.MSG_MENU_STATUS, flag);
+                FlyAction.handleAction(ActionKey.MSG_MENU_STATUS, flag);
                 break;
             case ActionKey.KEY_LOOP:
                 break;
@@ -87,10 +87,10 @@ public class VideoActivity extends BaseActivity implements IAction {
     @Override
     public void notifyPathChange(String path) {
         FlyLog.d("notifyPathChange path=%s", path);
-        FlyAction.notifyAction(ActionKey.STORE_URL,path);
+        FlyAction.handleAction(ActionKey.STORE_URL,path);
         if (isStop) return;
         videoList.clear();
-        FlyAction.notifyAction(ActionKey.VIDEO_LIST, new ArrayList<>());
+        FlyAction.handleAction(ActionKey.VIDEO_LIST, new ArrayList<>());
         super.notifyPathChange(path);
     }
 
@@ -114,7 +114,7 @@ public class VideoActivity extends BaseActivity implements IAction {
             map.put(ActionKey.RES_URL, imageKey);
             list.add(map);
         }
-        FlyAction.notifyAction(ActionKey.STORE_LIST, list);
+        FlyAction.handleAction(ActionKey.STORE_LIST, list);
     }
 
     @Override
@@ -135,7 +135,7 @@ public class VideoActivity extends BaseActivity implements IAction {
                 map.put(ActionKey.VIDEO_URL, video.url);
                 list.add(map);
             }
-            FlyAction.notifyAction(ActionKey.VIDEO_LIST, list);
+            FlyAction.handleAction(ActionKey.VIDEO_LIST, list);
         }catch (Exception e){
             FlyLog.e(e.toString());
         }

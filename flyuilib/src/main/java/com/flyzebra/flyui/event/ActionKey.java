@@ -1,4 +1,4 @@
-package com.flyzebra.flyui.config;
+package com.flyzebra.flyui.event;
 
 /**
  * Author FlyZebra

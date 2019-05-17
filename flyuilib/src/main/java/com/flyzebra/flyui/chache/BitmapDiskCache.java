@@ -105,7 +105,7 @@ public class BitmapDiskCache implements ICache<Bitmap> {
                 e.printStackTrace();
             }
         }
-//        FlyLog.d("create bitmap url = %s, success=" + flag,key);
+//        FlyLog.d("setCellBean bitmap url = %s, success=" + flag,key);
     }
 
     private int getAppVersion(Context context) {

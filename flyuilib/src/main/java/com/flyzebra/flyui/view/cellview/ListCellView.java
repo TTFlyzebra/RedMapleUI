@@ -18,12 +18,12 @@
 //import com.bumptech.glide.load.engine.DiskCacheStrategy;
 //import com.bumptech.glide.request.target.CustomTarget;
 //import com.bumptech.glide.request.transition.Transition;
-//import com.flyzebra.flyui.IAction;
+//import com.flyzebra.flyui.event.IAction;
 //import com.flyzebra.flyui.bean.CellBean;
 //import com.flyzebra.flyui.bean.ThemeBean;
 //import com.flyzebra.flyui.chache.UpdataVersion;
-//import com.flyzebra.flyui.config.ActionKey;
-//import com.flyzebra.flyui.module.FlyAction;
+//import com.flyzebra.flyui.event.ActionKey;
+//import com.flyzebra.flyui.event.FlyAction;
 //import com.flyzebra.flyui.module.RecycleViewDivider;
 //import com.flyzebra.flyui.utils.FlyLog;
 //import com.flyzebra.flyui.view.customview.MarqueeTextView;
@@ -60,7 +60,7 @@
 //    }
 //
 //    @Override
-//    public void upData(CellBean cellBean) {
+//    public void setCellBean(CellBean cellBean) {
 //        FlyLog.d("ListCellView x=%d,y=%d", cellBean.x, cellBean.y);
 //        mCellBean = cellBean;
 //        for (CellBean resCellBen : mCellBean.subCells) {
@@ -75,12 +75,12 @@
 //                    @Override
 //                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
 //                        mDefaultDrawables.put(subcell.cellId, resource);
-//                        upView();
+//                        refreshView();
 //                    }
 //
 //                    @Override
 //                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
-//                        upView();
+//                        refreshView();
 //                    }
 //
 //                    @Override
@@ -89,11 +89,11 @@
 //                });
 //                break;
 //            }
-//            upView();
+//            refreshView();
 //        }
 //    }
 //
-//    public void upView() {
+//    public void refreshView(CellBean cellBean) {
 //        int num = mCellBean.width / mCellBean.subCells.get(0).width;
 //        if (num > 1) {
 //            GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), num);
@@ -117,7 +117,7 @@
 //            public void onItemClick(View view) {
 //                int pos = (int) view.getTag();
 //                try {
-//                    FlyAction.notifyAction(mCellBean.subCells.get(0).sendAction, mList.get(pos).get(mCellBean.subCells.get(0).recvAction));
+//                    FlyAction.handleAction(mCellBean.subCells.get(0).sendAction, mList.get(pos).get(mCellBean.subCells.get(0).recvAction));
 //                } catch (Exception e) {
 //                    FlyLog.e(e.toString());
 //                }
@@ -150,7 +150,7 @@
 //    }
 //
 //    @Override
-//    public void doEvent() {
+//    public void onClick() {
 //
 //    }
 //
@@ -208,7 +208,7 @@
 //                if (cellBean.celltype == CellType.TYPE_TEXT) {
 //                    FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(cellBean.width, cellBean.height);
 //                    TextView textView = (TextView) CellViewFactory.createView(getContext(), cellBean);
-//                    ((ICell) textView).upData(cellBean);
+//                    ((ICell) textView).setCellBean(cellBean);
 //                    textView.setId(cellBean.cellId);
 //                    textView.setPadding(0, 0, 0, 0);
 //                    lp.setMargins(cellBean.mLeft, cellBean.mTop, cellBean.mRight, cellBean.mBottom);
@@ -216,7 +216,7 @@
 //                } else if (cellBean.celltype == CellType.TYPE_IMAGE) {
 //                    FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(cellBean.width, cellBean.height);
 //                    ImageView imageView = (ImageView) CellViewFactory.createView(getContext(), cellBean);
-//                    ((ICell) imageView).upData(cellBean);
+//                    ((ICell) imageView).setCellBean(cellBean);
 //                    imageView.setId(cellBean.cellId);
 //                    imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
 //                    imageView.setPadding(0, 0, 0, 0);
@@ -353,7 +353,7 @@
 //    }
 //
 //    @Override
-//    public boolean onAction(int key) {
+//    public boolean handleAction(int key) {
 //        if (mCellBean == null) return false;
 //        Object obj = FlyAction.getValue(key);
 //        if (key == mCellBean.recvAction) {

@@ -3,12 +3,10 @@ package com.flyzebra.flyui.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.view.Gravity;
-import android.widget.ImageView;
 
 import java.util.List;
 
-public class CellBean implements Parcelable {
+public class CellBean implements Parcelable{
     public int cellId;
     public int celltype;
     public int resId;
@@ -18,8 +16,8 @@ public class CellBean implements Parcelable {
     public int height;
     public String backColor;
     public String filterColor;
-    public String recv;
-    public EventBean send;
+    public RecvBean recv;
+    public SendBean send;
     public List<TextBean> texts;
     public List<ImageBean> images;
     public List<PageBean> pages;
@@ -30,13 +28,17 @@ public class CellBean implements Parcelable {
         cellId = in.readInt();
         celltype = in.readInt();
         resId = in.readInt();
+        x = in.readInt();
+        y = in.readInt();
         width = in.readInt();
         height = in.readInt();
         backColor = in.readString();
         filterColor = in.readString();
-        recv = in.readString();
-        x = in.readInt();
-        y = in.readInt();
+        recv = in.readParcelable(RecvBean.class.getClassLoader());
+        send = in.readParcelable(SendBean.class.getClassLoader());
+        texts = in.createTypedArrayList(TextBean.CREATOR);
+        images = in.createTypedArrayList(ImageBean.CREATOR);
+        subCells = in.createTypedArrayList(CellBean.CREATOR);
         remark = in.readString();
     }
 
@@ -52,14 +54,6 @@ public class CellBean implements Parcelable {
         }
     };
 
-    public int getTextGravity() {
-        return Gravity.CENTER;
-    }
-
-    public ImageView.ScaleType getImageGravity() {
-        return ImageView.ScaleType.FIT_XY;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -70,13 +64,17 @@ public class CellBean implements Parcelable {
         dest.writeInt(cellId);
         dest.writeInt(celltype);
         dest.writeInt(resId);
+        dest.writeInt(x);
+        dest.writeInt(y);
         dest.writeInt(width);
         dest.writeInt(height);
         dest.writeString(backColor);
         dest.writeString(filterColor);
-        dest.writeString(recv);
-        dest.writeInt(x);
-        dest.writeInt(y);
+        dest.writeParcelable(recv, flags);
+        dest.writeParcelable(send, flags);
+        dest.writeTypedList(texts);
+        dest.writeTypedList(images);
+        dest.writeTypedList(subCells);
         dest.writeString(remark);
     }
 }

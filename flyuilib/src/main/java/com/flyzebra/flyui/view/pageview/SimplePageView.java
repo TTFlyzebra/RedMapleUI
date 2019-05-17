@@ -6,7 +6,6 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.PageBean;
@@ -88,11 +87,7 @@ public class SimplePageView extends FrameLayout implements IPage {
                 lp.topMargin = sy + pageBean.y + (i / pageBean.columns) * (pageBean.itemHeight + pageBean.itemPadding * 2) + pageBean.itemPadding;
 
             } else {
-//                if (cellBean.texts!=null&&!cellBean.texts.isEmpty()&&cellBean.texts.get(0).bottom<=0) {
-//                    lp = new LayoutParams(cellBean.width, cellBean.height - cellBean.texts.get(0).bottom);
-//                } else {
                 lp = new LayoutParams(cellBean.width, cellBean.height);
-//                }
                 lp.setMarginStart(cellBean.x);
                 lp.topMargin = cellBean.y;
             }
@@ -110,13 +105,11 @@ public class SimplePageView extends FrameLayout implements IPage {
                     lpMirror.setMarginStart(cellBean.x);
                     lpMirror.topMargin = lp.topMargin + cellBean.height;
                 }
-                MirrorView mirrorView = new MirrorView(getContext());
-                mirrorView.setScaleType(ImageView.ScaleType.FIT_XY);
-                iCellView.bindMirrorView(mirrorView);
-                mirrorView.setRefHeight(MirrorView.MIRRORHIGHT);
-                addView(mirrorView, lpMirror);
+
+                iCellView.bindMirrorView(SimplePageView.this,lpMirror);
+
             }
-            iCellView.upData(cellBean);
+            iCellView.setCellBean(cellBean);
         }
     }
 

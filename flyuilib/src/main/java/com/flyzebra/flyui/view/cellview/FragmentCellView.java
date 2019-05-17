@@ -7,10 +7,10 @@
 //import android.view.View;
 //import android.widget.FrameLayout;
 //
-//import com.flyzebra.flyui.IAction;
+//import com.flyzebra.flyui.event.IAction;
 //import com.flyzebra.flyui.bean.CellBean;
-//import com.flyzebra.flyui.config.ActionKey;
-//import com.flyzebra.flyui.module.FlyAction;
+//import com.flyzebra.flyui.event.ActionKey;
+//import com.flyzebra.flyui.event.FlyAction;
 //import com.flyzebra.flyui.utils.FlyLog;
 //import com.flyzebra.flyui.view.customview.MirrorView;
 //
@@ -33,7 +33,7 @@
 //    }
 //
 //    @Override
-//    public void upData(CellBean cellBean) {
+//    public void setCellBean(CellBean cellBean) {
 //        if (cellBean == null) {
 //            removeAllViews();
 //            return;
@@ -60,7 +60,7 @@
 //    }
 //
 //    @Override
-//    public void doEvent() {
+//    public void onClick() {
 //
 //    }
 //
@@ -83,7 +83,7 @@
 //    }
 //
 //    @Override
-//    public boolean onAction(int key) {
+//    public boolean handleAction(int key) {
 //        if (mCellBean == null || mCellBean.cellpage == null || mCellBean.cellpage.cellList == null || mCellBean.cellpage.cellList.isEmpty())
 //            return false;
 //        if (key == ActionKey.CHANGE_PAGER_WITH_RESID) {
@@ -107,7 +107,7 @@
 //                removeAllViews();
 //                ICell view = CellViewFactory.createView(getContext(), cellBean);
 //                addView((View) view);
-//                view.upData(cellBean);
+//                view.setCellBean(cellBean);
 //            }
 //        });
 ////        try {

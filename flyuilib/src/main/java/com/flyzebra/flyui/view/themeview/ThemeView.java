@@ -208,7 +208,7 @@ public class ThemeView extends FrameLayout implements ITheme {
 
     @Override
     public void upData(ThemeBean themeBean) {
-        FlyLog.d("upData");
+        FlyLog.d("setCellBean");
         removeAllViews();
         mThemeBean = themeBean;
         matchResolution();

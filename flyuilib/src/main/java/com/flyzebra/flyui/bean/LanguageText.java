@@ -1,10 +1,12 @@
 package com.flyzebra.flyui.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.TextUtils;
 
 import java.util.Locale;
 
-public class LanguageText {
+public class LanguageText implements Parcelable {
     public String zh_rCN;
     public String zh_rTW;
     public String en;
@@ -24,29 +26,38 @@ public class LanguageText {
     public String es;
     public String pt;
 
-    @Override
-    public String toString() {
-        return "Language{" +
-                "zh='" + zh_rCN + '\'' +
-                ", zh_TW='" + zh_rTW + '\'' +
-                ", en='" + en + '\'' +
-                ", ru='" + ru + '\'' +
-                ", el='" + el + '\'' +
-                ", pl='" + pl + '\'' +
-                ", tr='" + tr + '\'' +
-                ", ar='" + ar + '\'' +
-                ", fa='" + fa + '\'' +
-                ", ro='" + ro + '\'' +
-                ", fr='" + fr + '\'' +
-                ", hu='" + hu + '\'' +
-                ", it='" + it + '\'' +
-                ", th='" + th + '\'' +
-                ", de='" + de + '\'' +
-                ", uk='" + uk + '\'' +
-                ", es='" + es + '\'' +
-                ", pt='" + pt + '\'' +
-                '}';
+    protected LanguageText(Parcel in) {
+        zh_rCN = in.readString();
+        zh_rTW = in.readString();
+        en = in.readString();
+        ru = in.readString();
+        el = in.readString();
+        pl = in.readString();
+        tr = in.readString();
+        ar = in.readString();
+        fa = in.readString();
+        ro = in.readString();
+        fr = in.readString();
+        hu = in.readString();
+        it = in.readString();
+        th = in.readString();
+        de = in.readString();
+        uk = in.readString();
+        es = in.readString();
+        pt = in.readString();
     }
+
+    public static final Creator<LanguageText> CREATOR = new Creator<LanguageText>() {
+        @Override
+        public LanguageText createFromParcel(Parcel in) {
+            return new LanguageText(in);
+        }
+
+        @Override
+        public LanguageText[] newArray(int size) {
+            return new LanguageText[size];
+        }
+    };
 
     public String getText() {
         String text = "";
@@ -98,5 +109,32 @@ public class LanguageText {
         text =  TextUtils.isEmpty(text)?zh_rCN:text;
         text = text.replace("\\n","\n");
         return text;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(zh_rCN);
+        dest.writeString(zh_rTW);
+        dest.writeString(en);
+        dest.writeString(ru);
+        dest.writeString(el);
+        dest.writeString(pl);
+        dest.writeString(tr);
+        dest.writeString(ar);
+        dest.writeString(fa);
+        dest.writeString(ro);
+        dest.writeString(fr);
+        dest.writeString(hu);
+        dest.writeString(it);
+        dest.writeString(th);
+        dest.writeString(de);
+        dest.writeString(uk);
+        dest.writeString(es);
+        dest.writeString(pt);
     }
 }

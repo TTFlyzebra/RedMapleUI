@@ -6,9 +6,9 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.flyzebra.flyui.Flyui;
-import com.flyzebra.flyui.IAction;
-import com.flyzebra.flyui.config.ActionKey;
-import com.flyzebra.flyui.module.FlyAction;
+import com.flyzebra.flyui.event.ActionKey;
+import com.flyzebra.flyui.event.FlyAction;
+import com.flyzebra.flyui.event.IAction;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.FloderImage;
@@ -42,7 +42,7 @@ public class PhotoActivity extends BaseActivity implements IAction {
         imageView = findViewById(R.id.imageview);
         flyui = new Flyui(this);
         flyui.onCreate();
-        FlyAction.notifyAction(ActionKey.CHANGE_PAGER_WITH_RESID,"music_fm01");
+        FlyAction.handleAction(ActionKey.CHANGE_PAGER_WITH_RESID,"music_fm01");
     }
 
     @Override
@@ -64,7 +64,7 @@ public class PhotoActivity extends BaseActivity implements IAction {
             case ActionKey.KEY_URL:
                 obj = FlyAction.getValue(ActionKey.KEY_URL);
                 if(obj instanceof String){
-                    FlyAction.notifyAction(ActionKey.IMAGE_URL, obj);
+                    FlyAction.handleAction(ActionKey.IMAGE_URL, obj);
                 }
                 break;
             case ActionKey.IMAGE_URL:
@@ -82,7 +82,7 @@ public class PhotoActivity extends BaseActivity implements IAction {
                 if (obj instanceof Integer) {
                     flag = ((int) obj) == 0 ? 1 : 0;
                 }
-                FlyAction.notifyAction(ActionKey.MSG_MENU_STATUS, flag);
+                FlyAction.handleAction(ActionKey.MSG_MENU_STATUS, flag);
                 break;
             case ActionKey.KEY_STORE:
                 obj = FlyAction.getValue(ActionKey.KEY_STORE);
@@ -97,13 +97,13 @@ public class PhotoActivity extends BaseActivity implements IAction {
     @Override
     public void notifyPathChange(String path) {
         FlyLog.d("notifyPathChange path=%s", path);
-        FlyAction.notifyAction(ActionKey.STORE_URL,path);
+        FlyAction.handleAction(ActionKey.STORE_URL,path);
         if (isStop) return;
         mAllList.clear();
         mHashSet.clear();
         mAdapterList.clear();
         imageList.clear();
-        FlyAction.notifyAction(ActionKey.IMAGE_LIST, new ArrayList<>());
+        FlyAction.handleAction(ActionKey.IMAGE_LIST, new ArrayList<>());
         super.notifyPathChange(path);
     }
 
@@ -127,7 +127,7 @@ public class PhotoActivity extends BaseActivity implements IAction {
             map.put(ActionKey.RES_URL, imageKey);
             list.add(map);
         }
-        FlyAction.notifyAction(ActionKey.STORE_LIST, list);
+        FlyAction.handleAction(ActionKey.STORE_LIST, list);
     }
 
     @Override
@@ -156,8 +156,8 @@ public class PhotoActivity extends BaseActivity implements IAction {
             map.put(ActionKey.IMAGE_URL, image.url);
             listSingle.add(map);
         }
-//        FlyAction.notifyAction(ActionKey.MUSIC_SUM, "单曲\n(" + listSingle.size() + ")");
-        FlyAction.notifyAction(ActionKey.IMAGE_LIST, listSingle);
+//        FlyAction.handleAction(ActionKey.MUSIC_SUM, "单曲\n(" + listSingle.size() + ")");
+        FlyAction.handleAction(ActionKey.IMAGE_LIST, listSingle);
 
 
         //列表分类
@@ -169,7 +169,7 @@ public class PhotoActivity extends BaseActivity implements IAction {
             }
             mFolderHashMap.get(path).add(image);
         }
-//        FlyAction.notifyAction(ActionKey.MUSIC_SUM_FOLDER, "文件夹\n(" + mFolderHashMap.size() + ")");
+//        FlyAction.handleAction(ActionKey.MUSIC_SUM_FOLDER, "文件夹\n(" + mFolderHashMap.size() + ")");
 
         //文件夹列表
         List<String> folderGroupList = new ArrayList<>(mFolderHashMap.keySet());
@@ -212,7 +212,7 @@ public class PhotoActivity extends BaseActivity implements IAction {
                 }
             }
         }
-        FlyAction.notifyAction(ActionKey.IMAGE_LIST_FOLDER, listFolder);
+        FlyAction.handleAction(ActionKey.IMAGE_LIST_FOLDER, listFolder);
         FlyLog.d("notifyMusicList end use time =" + (System.currentTimeMillis() - time) + "ms");
     }
 

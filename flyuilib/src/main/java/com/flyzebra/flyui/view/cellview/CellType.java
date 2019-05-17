@@ -2,13 +2,13 @@ package com.flyzebra.flyui.view.cellview;
 
 public interface CellType {
     /**
-     *背景图片
+     *通用控件
      */
-    int TYPE_IMAGE = 0;
+    int TYPE_APP_NORMAL = 0;
     /**
      * 普通应用
      */
-    int TYPE_APP_NORMAL = 1;
+    int TYPE_IMAGE = 1;
     /**
      * 收音机应用
      */
