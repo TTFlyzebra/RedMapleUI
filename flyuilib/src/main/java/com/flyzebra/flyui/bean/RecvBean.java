@@ -9,12 +9,23 @@ import android.os.Parcelable;
  * Describ:
  **/
 public class RecvBean implements Parcelable {
-    public int eventId;
-    public int eventContent;
+    public String recvId;
+    public String recvContent;
 
     protected RecvBean(Parcel in) {
-        eventId = in.readInt();
-        eventContent = in.readInt();
+        recvId = in.readString();
+        recvContent = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(recvId);
+        dest.writeString(recvContent);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<RecvBean> CREATOR = new Creator<RecvBean>() {
@@ -28,15 +39,4 @@ public class RecvBean implements Parcelable {
             return new RecvBean[size];
         }
     };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(eventId);
-        dest.writeInt(eventContent);
-    }
 }

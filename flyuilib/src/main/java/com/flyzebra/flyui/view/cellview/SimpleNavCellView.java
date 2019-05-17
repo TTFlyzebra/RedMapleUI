@@ -15,6 +15,8 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.chache.UpdataVersion;
+import com.flyzebra.flyui.event.FlyAction;
+import com.flyzebra.flyui.utils.ByteTools;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.base.BaseView;
 
@@ -27,7 +29,7 @@ import com.flyzebra.flyui.view.base.BaseView;
 public class SimpleNavCellView extends BaseView implements ICell {
     private CellBean mCellBean;
     private Paint paint;
-    private int sumItem = 20;
+    private int sumItem = 0;
     private int currentItem = 1;
     private Bitmap nav_on;
     private Bitmap nav_off;
@@ -111,6 +113,24 @@ public class SimpleNavCellView extends BaseView implements ICell {
 
     @Override
     public boolean handleAction(byte[] key) {
+        if (mCellBean.recv != null && mCellBean.recv.recvId != null) {
+            if (mCellBean.recv.recvId.equals(ByteTools.bytes2HexString(key))) {
+                switch (mCellBean.recv.recvId) {
+                    case "400301":
+                        FlyLog.d("handle event=400301");
+                        Object obj = FlyAction.getValue(key);
+                        if (obj instanceof byte[]) {
+                            byte[] data = (byte[]) obj;
+                            if (data.length > 1) {
+                                setCurrentItem(data[0]);
+                                setSumItem(data[1]);
+                                postInvalidate();
+                            }
+                        }
+                        break;
+                }
+            }
+        }
         return false;
     }
 

@@ -1,5 +1,6 @@
 package com.flyzebra.flyui.event;
 
+import com.flyzebra.flyui.utils.ByteTools;
 import com.flyzebra.flyui.utils.FlyLog;
 
 import java.util.ArrayList;
@@ -14,17 +15,25 @@ import java.util.Map;
  **/
 public class FlyAction {
     private static final List<IAction> flyuiEvents = new ArrayList<>();
-    private static final Map<byte[], Object> saveKey = new Hashtable<>();
+    private static final Map<String, Object> saveKey = new Hashtable<>();
 
     public static FlyAction getInstance() {
         return FlyAction.FlyActionHolder.sInstance;
     }
 
     public static Object saveValue(byte[] key, Object obj) {
-        return saveKey.put(key, obj);
+        return saveKey.put(ByteTools.bytes2HexString(key), obj);
     }
 
     public static Object getValue(byte[] key) {
+        return saveKey.get(ByteTools.bytes2HexString(key));
+    }
+
+    public static Object saveValue(String key, Object obj) {
+        return saveKey.put(key, obj);
+    }
+
+    public static Object getValue(String key) {
         return saveKey.get(key);
     }
 
@@ -33,8 +42,12 @@ public class FlyAction {
         getInstance().registerMe(flyuiAction);
     }
 
+    public static void register(IAction flyuiAction, byte[] key) {
+        getInstance().registerMe(flyuiAction);
+    }
+
     private void registerMe(IAction flyuiAction) {
-        if(flyuiAction!=null){
+        if (flyuiAction != null) {
             synchronized (flyuiEvents) {
                 flyuiEvents.add(flyuiAction);
             }
@@ -47,7 +60,7 @@ public class FlyAction {
     }
 
     private void unregisterMe(IAction flyuiAction) {
-        if(flyuiAction!=null){
+        if (flyuiAction != null) {
             synchronized (flyuiEvents) {
                 flyuiEvents.remove(flyuiAction);
             }
@@ -57,6 +70,10 @@ public class FlyAction {
 
     private static class FlyActionHolder {
         static final FlyAction sInstance = new FlyAction();
+    }
+
+    public static void handleAction(String key) {
+        getInstance().handleAll(ByteTools.hexString2Bytes(key));
     }
 
     public static void handleAction(byte[] key) {
