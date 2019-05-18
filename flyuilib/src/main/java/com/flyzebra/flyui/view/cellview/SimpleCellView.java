@@ -23,7 +23,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.chache.UpdataVersion;
 import com.flyzebra.flyui.utils.FlyLog;
-import com.flyzebra.flyui.utils.IntentUtils;
+import com.flyzebra.flyui.utils.IntentUtil;
 import com.flyzebra.flyui.view.customview.FlyImageView;
 import com.flyzebra.flyui.view.customview.FlyTextView;
 import com.flyzebra.flyui.view.customview.MirrorView;
@@ -46,10 +46,10 @@ public class SimpleCellView extends FrameLayout implements ICell, View.OnTouchLi
     }
 
     @Override
-    public void verify(CellBean cellBean) {
-        if(cellBean==null) return;
+    public boolean verify(CellBean cellBean) {
+        if(cellBean==null) return false;
         loadingRes(cellBean);
-
+        return true;
     }
 
     @Override
@@ -151,8 +151,8 @@ public class SimpleCellView extends FrameLayout implements ICell, View.OnTouchLi
         if(mCellBean.send==null){
             return;
         }
-        if (IntentUtils.execStartPackage(getContext(), mCellBean.send.packName, mCellBean.send.className)) {
-        } else if (!IntentUtils.execStartPackage(getContext(), mCellBean.send.packName)) {
+        if (IntentUtil.execStartPackage(getContext(), mCellBean.send.packName, mCellBean.send.className)) {
+        } else if (!IntentUtil.execStartPackage(getContext(), mCellBean.send.packName)) {
         }
     }
 

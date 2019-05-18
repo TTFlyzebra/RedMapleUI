@@ -44,7 +44,7 @@
 //            flyTabView.setOnItemClickListener(new FlyTabView.OnItemClickListener() {
 //                @Override
 //                public void onItemClick(View v) {
-//                    FlyAction.handleAction(ActionKey.CHANGE_PAGER_WITH_RESID, mCellBean.subCells.get((Integer) v.getTag()).resId);
+//                    FlyAction.sendEvent(ActionKey.CHANGE_PAGER_WITH_RESID, mCellBean.subCells.get((Integer) v.getTag()).resId);
 //                }
 //            });
 //
@@ -87,7 +87,7 @@
 //    }
 //
 //    @Override
-//    public boolean handleAction(int key) {
+//    public boolean sendEvent(int key) {
 //        if (mCellBean == null || mCellBean.subCells == null || mCellBean.subCells.isEmpty())
 //            return false;
 //        if (key == ActionKey.CHANGE_PAGER_WITH_RESID) {

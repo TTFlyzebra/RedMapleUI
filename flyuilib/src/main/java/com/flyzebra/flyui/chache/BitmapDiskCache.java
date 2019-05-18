@@ -6,7 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import com.flyzebra.flyui.utils.EncodeHelper;
+import com.flyzebra.flyui.utils.EncodeUtil;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.jakewharton.disklrucache.DiskLruCache;
 
@@ -52,7 +52,7 @@ public class BitmapDiskCache implements ICache<Bitmap> {
         DiskLruCache.Snapshot snapShot = null;
         InputStream is = null;
         try {
-            snapShot = mDiskLruCache.get(EncodeHelper.md5(key));
+            snapShot = mDiskLruCache.get(EncodeUtil.md5(key));
             if (snapShot != null) {
                 is = snapShot.getInputStream(0);
                 bitmap = BitmapFactory.decodeStream(is);
@@ -84,7 +84,7 @@ public class BitmapDiskCache implements ICache<Bitmap> {
         boolean flag = false;
         OutputStream outputStream = null;
         try {
-            DiskLruCache.Editor editor = mDiskLruCache.edit(EncodeHelper.md5(key));
+            DiskLruCache.Editor editor = mDiskLruCache.edit(EncodeUtil.md5(key));
             if (editor == null) return;
             outputStream = editor.newOutputStream(0);
             if (bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)) {

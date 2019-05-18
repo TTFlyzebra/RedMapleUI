@@ -1,6 +1,6 @@
 package com.flyzebra.flyui.event;
 
-import com.flyzebra.flyui.utils.ByteTools;
+import com.flyzebra.flyui.utils.ByteUtil;
 import com.flyzebra.flyui.utils.FlyLog;
 
 import java.util.ArrayList;
@@ -13,20 +13,20 @@ import java.util.Map;
  * 2019/3/25 14:36
  * Describ:
  **/
-public class FlyAction {
-    private static final List<IAction> flyuiEvents = new ArrayList<>();
+public class FlyEvent {
+    private static final List<IFlyEvent> flyuiEvents = new ArrayList<>();
     private static final Map<String, Object> saveKey = new Hashtable<>();
 
-    public static FlyAction getInstance() {
-        return FlyAction.FlyActionHolder.sInstance;
+    public static FlyEvent getInstance() {
+        return FlyEvent.FlyActionHolder.sInstance;
     }
 
     public static Object saveValue(byte[] key, Object obj) {
-        return saveKey.put(ByteTools.bytes2HexString(key), obj);
+        return saveKey.put(ByteUtil.bytes2HexString(key), obj);
     }
 
     public static Object getValue(byte[] key) {
-        return saveKey.get(ByteTools.bytes2HexString(key));
+        return saveKey.get(ByteUtil.bytes2HexString(key));
     }
 
     public static Object saveValue(String key, Object obj) {
@@ -38,15 +38,15 @@ public class FlyAction {
     }
 
 
-    public static void register(IAction flyuiAction) {
+    public static void register(IFlyEvent flyuiAction) {
         getInstance().registerMe(flyuiAction);
     }
 
-    public static void register(IAction flyuiAction, byte[] key) {
+    public static void register(IFlyEvent flyuiAction, byte[] key) {
         getInstance().registerMe(flyuiAction);
     }
 
-    private void registerMe(IAction flyuiAction) {
+    private void registerMe(IFlyEvent flyuiAction) {
         if (flyuiAction != null) {
             synchronized (flyuiEvents) {
                 flyuiEvents.add(flyuiAction);
@@ -55,11 +55,11 @@ public class FlyAction {
         }
     }
 
-    public static void unregister(IAction flyuiAction) {
+    public static void unregister(IFlyEvent flyuiAction) {
         getInstance().unregisterMe(flyuiAction);
     }
 
-    private void unregisterMe(IAction flyuiAction) {
+    private void unregisterMe(IFlyEvent flyuiAction) {
         if (flyuiAction != null) {
             synchronized (flyuiEvents) {
                 flyuiEvents.remove(flyuiAction);
@@ -69,22 +69,25 @@ public class FlyAction {
     }
 
     private static class FlyActionHolder {
-        static final FlyAction sInstance = new FlyAction();
+        static final FlyEvent sInstance = new FlyEvent();
     }
 
-    public static void handleAction(String key) {
-        getInstance().handleAll(ByteTools.hexString2Bytes(key));
+    public static void sendEvent(String key) {
+        getInstance().sendEventToClient(ByteUtil.hexString2Bytes(key));
     }
 
-    public static void handleAction(byte[] key) {
-        getInstance().handleAll(key);
+    public static void sendEvent(byte[] key) {
+        getInstance().sendEventToClient(key);
     }
 
 
-    private void handleAll(byte[] key) {
+    private void sendEventToClient(byte[] key) {
+        FlyLog.d("send event=%s", ByteUtil.bytes2HexString(key));
         synchronized (flyuiEvents) {
-            for (IAction flyuiAction : flyuiEvents) {
-                flyuiAction.handleAction(key);
+            for (IFlyEvent flyuiAction : flyuiEvents) {
+                if (flyuiAction.recvEvent(key)) {
+                    break;
+                }
             }
         }
     }

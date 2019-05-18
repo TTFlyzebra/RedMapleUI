@@ -48,8 +48,8 @@ public class SimpleImageCellView extends FlyImageView implements ICell, View.OnT
     }
 
     @Override
-    public void verify(CellBean cellBean) {
-
+    public boolean verify(CellBean cellBean) {
+        return true;
     }
 
     @Override
@@ -90,7 +90,7 @@ public class SimpleImageCellView extends FlyImageView implements ICell, View.OnT
     @Override
     public void onClick() {
         FlyLog.d("onClick event=" + mCellBean.send.eventId);
-//        FlyAction.handleAction(mCellBean.send.eventId);
+//        FlyAction.sendEvent(mCellBean.send.eventId);
     }
 
     @Override

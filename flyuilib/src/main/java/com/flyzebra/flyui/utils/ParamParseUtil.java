@@ -20,8 +20,8 @@ import java.util.Map;
  * <p/>
  * Created by lenovo on 2016/6/24.
  */
-public class IntentParamParseUtils {
-    private final static String TAG = IntentParamParseUtils.class.getSimpleName();
+public class ParamParseUtil {
+    private final static String TAG = ParamParseUtil.class.getSimpleName();
     private final static String DEFAULT_PARAM_DIVIDER = "#";
     private final static String DEFAULT_VALUE_DIVIDER = "=";
 

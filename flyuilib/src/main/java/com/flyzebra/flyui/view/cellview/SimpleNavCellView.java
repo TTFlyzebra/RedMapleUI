@@ -7,7 +7,6 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -15,10 +14,12 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.chache.UpdataVersion;
-import com.flyzebra.flyui.event.FlyAction;
-import com.flyzebra.flyui.utils.ByteTools;
+import com.flyzebra.flyui.event.FlyEvent;
+import com.flyzebra.flyui.utils.ByteUtil;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.base.BaseView;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
@@ -27,12 +28,12 @@ import com.flyzebra.flyui.view.base.BaseView;
  * Describ:
  **/
 public class SimpleNavCellView extends BaseView implements ICell {
-    private CellBean mCellBean;
     private Paint paint;
     private int sumItem = 0;
     private int currentItem = 1;
     private Bitmap nav_on;
     private Bitmap nav_off;
+    private AtomicInteger count = new AtomicInteger(0);
 
     public SimpleNavCellView(Context context) {
         super(context);
@@ -40,30 +41,25 @@ public class SimpleNavCellView extends BaseView implements ICell {
 
 
     @Override
-    public void setCellBean(CellBean cellBean) {
-        FlyLog.d("setCellBean");
-        this.mCellBean = cellBean;
-        verify(mCellBean);
+    public boolean verify(CellBean mCellBean) {
+        return (mCellBean != null && mCellBean.images != null && mCellBean.images.size() > 1);
     }
 
     @Override
-    public void verify(CellBean mCellBean) {
-        if (mCellBean != null && mCellBean.images != null && mCellBean.images.size() > 1) {
-            loadingRes(mCellBean);
-        }
-    }
-
-    @Override
-    public void loadingRes(CellBean mCellBean) {
+    public void loadingRes(CellBean cellBean) {
+        count.incrementAndGet();
+        count.incrementAndGet();
         Glide.with(getContext())
                 .asBitmap()
-                .load(UpdataVersion.getNativeFilePath(mCellBean.images.get(0).url))
+                .load(UpdataVersion.getNativeFilePath(cellBean.images.get(0).url))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(new CustomTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                         nav_on = resource;
-                        postInvalidate();
+                        if (count.decrementAndGet() <= 0) {
+                            postInvalidate();
+                        }
                     }
 
                     @Override
@@ -74,13 +70,15 @@ public class SimpleNavCellView extends BaseView implements ICell {
 
         Glide.with(getContext())
                 .asBitmap()
-                .load(UpdataVersion.getNativeFilePath(mCellBean.images.get(1).url))
+                .load(UpdataVersion.getNativeFilePath(cellBean.images.get(1).url))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(new CustomTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                         nav_off = resource;
-                        postInvalidate();
+                        if (count.decrementAndGet() <= 0) {
+                            postInvalidate();
+                        }
                     }
 
                     @Override
@@ -88,48 +86,26 @@ public class SimpleNavCellView extends BaseView implements ICell {
 
                     }
                 });
-        initView(getContext());
-    }
-
-    @Override
-    public void initView(Context context) {
-        initPaint();
-        refreshView(mCellBean);
     }
 
 
     @Override
-    public void refreshView(CellBean cellBean) {
-
-    }
-
-    @Override
-    public void onClick() {
-    }
-
-    @Override
-    public void bindMirrorView(ViewGroup viewGroup, ViewGroup.LayoutParams lpMirror) {
-    }
-
-    @Override
-    public boolean handleAction(byte[] key) {
-        if (mCellBean.recv != null && mCellBean.recv.recvId != null) {
-            if (mCellBean.recv.recvId.equals(ByteTools.bytes2HexString(key))) {
-                switch (mCellBean.recv.recvId) {
-                    case "400301":
-                        FlyLog.d("handle event=400301");
-                        Object obj = FlyAction.getValue(key);
-                        if (obj instanceof byte[]) {
-                            byte[] data = (byte[]) obj;
-                            if (data.length > 1) {
-                                setCurrentItem(data[0]);
-                                setSumItem(data[1]);
-                                postInvalidate();
-                            }
-                        }
-                        break;
+    public boolean recvEvent(byte[] key) {
+        if (mCellBean==null||mCellBean.recv == null || mCellBean.recv.recvId == null) return false;
+        if (!mCellBean.recv.recvId.equals(ByteUtil.bytes2HexString(key))) return false;
+        switch (mCellBean.recv.recvId) {
+            case "400301":
+                Object obj = FlyEvent.getValue(key);
+                if (obj instanceof byte[]) {
+                    byte[] data = (byte[]) obj;
+                    if (data.length > 1) {
+                        setCurrentItem(data[0]);
+                        setSumItem(data[1]);
+                        postInvalidate();
+                    }
                 }
-            }
+                FlyLog.d("handle event=400301");
+                break;
         }
         return false;
     }

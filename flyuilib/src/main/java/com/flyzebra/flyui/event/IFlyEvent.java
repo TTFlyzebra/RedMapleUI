@@ -5,6 +5,6 @@ package com.flyzebra.flyui.event;
  * 2019/3/26 16:55
  * Describ:
  **/
-public interface IAction {
-    boolean handleAction(byte[] key);
+public interface IFlyEvent {
+    boolean recvEvent(byte[] key);
 }

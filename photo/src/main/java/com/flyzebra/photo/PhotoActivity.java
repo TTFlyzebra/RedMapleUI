@@ -6,9 +6,9 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.flyzebra.flyui.Flyui;
-import com.flyzebra.flyui.event.ActionKey;
-import com.flyzebra.flyui.event.FlyAction;
-import com.flyzebra.flyui.event.IAction;
+import com.flyzebra.flyui.event.FlyEvent;
+import com.flyzebra.flyui.event.FlyEventKey;
+import com.flyzebra.flyui.event.IFlyEvent;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.FloderImage;
@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class PhotoActivity extends BaseActivity implements IAction {
+public class PhotoActivity extends BaseActivity implements IFlyEvent {
     public Flyui flyui;
     private ArrayList<Image> imageList = new ArrayList<>();
     private List<FloderImage> mAllList = new ArrayList<>();
@@ -42,7 +42,7 @@ public class PhotoActivity extends BaseActivity implements IAction {
         imageView = findViewById(R.id.imageview);
         flyui = new Flyui(this);
         flyui.onCreate();
-        FlyAction.handleAction(ActionKey.CHANGE_PAGER_WITH_RESID,"music_fm01");
+        FlyEvent.handleAction(FlyEventKey.CHANGE_PAGER_WITH_RESID,"music_fm01");
     }
 
     @Override
@@ -55,20 +55,20 @@ public class PhotoActivity extends BaseActivity implements IAction {
     public boolean onAction(int key) {
         Object obj;
         switch (key) {
-            case ActionKey.KEY_PLAY:
+            case FlyEventKey.KEY_PLAY:
                 break;
-            case ActionKey.KEY_NEXT:
+            case FlyEventKey.KEY_NEXT:
                 break;
-            case ActionKey.KEY_PREV:
+            case FlyEventKey.KEY_PREV:
                 break;
-            case ActionKey.KEY_URL:
-                obj = FlyAction.getValue(ActionKey.KEY_URL);
+            case FlyEventKey.KEY_URL:
+                obj = FlyEvent.getValue(FlyEventKey.KEY_URL);
                 if(obj instanceof String){
-                    FlyAction.handleAction(ActionKey.IMAGE_URL, obj);
+                    FlyEvent.handleAction(FlyEventKey.IMAGE_URL, obj);
                 }
                 break;
-            case ActionKey.IMAGE_URL:
-                obj = FlyAction.getValue(ActionKey.IMAGE_URL);
+            case FlyEventKey.IMAGE_URL:
+                obj = FlyEvent.getValue(FlyEventKey.IMAGE_URL);
                 if(obj instanceof String) {
                     Glide.with(this)
                             .load(obj)
@@ -76,16 +76,16 @@ public class PhotoActivity extends BaseActivity implements IAction {
                             .into(imageView);
                 }
                 break;
-            case ActionKey.KEY_MENU:
+            case FlyEventKey.KEY_MENU:
                 int flag = 0;
-                obj = FlyAction.getValue(ActionKey.MSG_MENU_STATUS);
+                obj = FlyEvent.getValue(FlyEventKey.MSG_MENU_STATUS);
                 if (obj instanceof Integer) {
                     flag = ((int) obj) == 0 ? 1 : 0;
                 }
-                FlyAction.handleAction(ActionKey.MSG_MENU_STATUS, flag);
+                FlyEvent.handleAction(FlyEventKey.MSG_MENU_STATUS, flag);
                 break;
-            case ActionKey.KEY_STORE:
-                obj = FlyAction.getValue(ActionKey.KEY_STORE);
+            case FlyEventKey.KEY_STORE:
+                obj = FlyEvent.getValue(FlyEventKey.KEY_STORE);
                 if(obj instanceof String){
                     usbMediaScan.openStorager(new StorageInfo((String) obj));
                 }
@@ -97,13 +97,13 @@ public class PhotoActivity extends BaseActivity implements IAction {
     @Override
     public void notifyPathChange(String path) {
         FlyLog.d("notifyPathChange path=%s", path);
-        FlyAction.handleAction(ActionKey.STORE_URL,path);
+        FlyEvent.handleAction(FlyEventKey.STORE_URL,path);
         if (isStop) return;
         mAllList.clear();
         mHashSet.clear();
         mAdapterList.clear();
         imageList.clear();
-        FlyAction.handleAction(ActionKey.IMAGE_LIST, new ArrayList<>());
+        FlyEvent.handleAction(FlyEventKey.IMAGE_LIST, new ArrayList<>());
         super.notifyPathChange(path);
     }
 
@@ -114,8 +114,8 @@ public class PhotoActivity extends BaseActivity implements IAction {
         for (StorageInfo storageInfo : storageList) {
             if (TextUtils.isEmpty(storageInfo.mPath)) break;
             Map<Integer, Object> map = new Hashtable<>();
-            map.put(ActionKey.STORE_NAME, storageInfo.mDescription);
-            map.put(ActionKey.STORE_URL, storageInfo.mPath);
+            map.put(FlyEventKey.STORE_NAME, storageInfo.mDescription);
+            map.put(FlyEventKey.STORE_URL, storageInfo.mPath);
             String imageKey;
             if (storageInfo.mPath.equals("/storage")) {
                 imageKey = "DISK_ALL";
@@ -124,10 +124,10 @@ public class PhotoActivity extends BaseActivity implements IAction {
             } else {
                 imageKey = "DISK_USB";
             }
-            map.put(ActionKey.RES_URL, imageKey);
+            map.put(FlyEventKey.RES_URL, imageKey);
             list.add(map);
         }
-        FlyAction.handleAction(ActionKey.STORE_LIST, list);
+        FlyEvent.handleAction(FlyEventKey.STORE_LIST, list);
     }
 
     @Override
@@ -152,12 +152,12 @@ public class PhotoActivity extends BaseActivity implements IAction {
         List<Map<Integer, Object>> listSingle = new ArrayList<>();
         for (Image image : imageList) {
             Map<Integer, Object> map = new Hashtable<>();
-            map.put(ActionKey.IMAGE_NAME, StringTools.getNameByPath(image.url));
-            map.put(ActionKey.IMAGE_URL, image.url);
+            map.put(FlyEventKey.IMAGE_NAME, StringTools.getNameByPath(image.url));
+            map.put(FlyEventKey.IMAGE_URL, image.url);
             listSingle.add(map);
         }
-//        FlyAction.handleAction(ActionKey.MUSIC_SUM, "单曲\n(" + listSingle.size() + ")");
-        FlyAction.handleAction(ActionKey.IMAGE_LIST, listSingle);
+//        FlyAction.sendEvent(ActionKey.MUSIC_SUM, "单曲\n(" + listSingle.size() + ")");
+        FlyEvent.handleAction(FlyEventKey.IMAGE_LIST, listSingle);
 
 
         //列表分类
@@ -169,7 +169,7 @@ public class PhotoActivity extends BaseActivity implements IAction {
             }
             mFolderHashMap.get(path).add(image);
         }
-//        FlyAction.handleAction(ActionKey.MUSIC_SUM_FOLDER, "文件夹\n(" + mFolderHashMap.size() + ")");
+//        FlyAction.sendEvent(ActionKey.MUSIC_SUM_FOLDER, "文件夹\n(" + mFolderHashMap.size() + ")");
 
         //文件夹列表
         List<String> folderGroupList = new ArrayList<>(mFolderHashMap.keySet());
@@ -196,23 +196,23 @@ public class PhotoActivity extends BaseActivity implements IAction {
                     String pathName = last > 0 ? path.substring(last + 1, path.length()) : path;
                     String pathPath = last > 0 ? path.substring(0, last) : path;
                     Map<Integer, Object> map1 = new Hashtable<>();
-                    map1.put(ActionKey.IMAGE_URL, path);
-                    map1.put(ActionKey.FOLODER_NAME, pathName);
-                    map1.put(ActionKey.FOLODER_PATH, pathPath);
-                    map1.put(ActionKey.FOLODER_NUM, "(" + list.size() + ")");
-                    map1.put(ActionKey.GROUP_TYPE, 0);
+                    map1.put(FlyEventKey.IMAGE_URL, path);
+                    map1.put(FlyEventKey.FOLODER_NAME, pathName);
+                    map1.put(FlyEventKey.FOLODER_PATH, pathPath);
+                    map1.put(FlyEventKey.FOLODER_NUM, "(" + list.size() + ")");
+                    map1.put(FlyEventKey.GROUP_TYPE, 0);
                     listFolder.add(map1);
                 }
                 for (Image image : list) {
                     Map<Integer, Object> map2 = new Hashtable<>();
-                    map2.put(ActionKey.IMAGE_NAME, StringTools.getNameByPath(image.url));
-                    map2.put(ActionKey.IMAGE_URL, image.url);
-                    map2.put(ActionKey.GROUP_TYPE, 1);
+                    map2.put(FlyEventKey.IMAGE_NAME, StringTools.getNameByPath(image.url));
+                    map2.put(FlyEventKey.IMAGE_URL, image.url);
+                    map2.put(FlyEventKey.GROUP_TYPE, 1);
                     listFolder.add(map2);
                 }
             }
         }
-        FlyAction.handleAction(ActionKey.IMAGE_LIST_FOLDER, listFolder);
+        FlyEvent.handleAction(FlyEventKey.IMAGE_LIST_FOLDER, listFolder);
         FlyLog.d("notifyMusicList end use time =" + (System.currentTimeMillis() - time) + "ms");
     }
 

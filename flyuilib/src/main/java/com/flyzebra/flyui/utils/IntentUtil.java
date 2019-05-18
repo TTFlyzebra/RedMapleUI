@@ -22,7 +22,7 @@ import java.util.Map;
  *
  * Created by FlyZebra on 2016/6/22.
  */
-public class IntentUtils {
+public class IntentUtil {
 
     /**
      * 执行shell指令
@@ -98,7 +98,7 @@ public class IntentUtils {
     public static void execSendBroadcast(Context context, String action, String cmd) {
         FlyLog.d("sendBroadcast  action:" + action + " cmd:" + cmd);
         Intent it = new Intent(action);
-        Bundle bundle = IntentParamParseUtils.parseBundle(cmd);
+        Bundle bundle = ParamParseUtil.parseBundle(cmd);
         it.putExtras(bundle);
         context.sendBroadcast(it);
     }
@@ -212,7 +212,7 @@ public class IntentUtils {
                 if (i != null) {//安装的apk可能没有配置android.intent.category.LAUNCHER
                     i.addFlags(flag);
                     if (!TextUtils.isEmpty(data)) {
-                        Bundle bundle = IntentParamParseUtils.parseBundle(data);
+                        Bundle bundle = ParamParseUtil.parseBundle(data);
                         i.putExtras(bundle);
                     }
                     context.startActivity(i);
@@ -248,7 +248,7 @@ public class IntentUtils {
             ComponentName cn = new ComponentName(packageName, className);
             intent.setComponent(cn);
             if (!TextUtils.isEmpty(data)) {
-                Bundle bundle = IntentParamParseUtils.parseBundle(data);
+                Bundle bundle = ParamParseUtil.parseBundle(data);
                 intent.putExtras(bundle);
             }
             @SuppressLint("WrongConstant")

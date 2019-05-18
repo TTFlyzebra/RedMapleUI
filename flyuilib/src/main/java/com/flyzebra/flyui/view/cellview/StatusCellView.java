@@ -101,7 +101,7 @@
 //    public void onClick() {
 //        FlyLog.d("onClick event=" + mCellBean.sendAction);
 //        if (mCellBean.sendAction > 0) {
-//            FlyAction.handleAction(mCellBean.sendAction);
+//            FlyAction.sendEvent(mCellBean.sendAction);
 //        }
 //    }
 //
@@ -181,7 +181,7 @@
 //    }
 //
 //    @Override
-//    public boolean handleAction(int key) {
+//    public boolean sendEvent(int key) {
 //        if (mCellBean == null || key != mCellBean.recvAction) return false;
 //        switch (mCellBean.recvAction) {
 //            case ActionKey.MSG_PLAY_STATUS:

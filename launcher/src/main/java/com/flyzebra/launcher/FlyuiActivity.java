@@ -15,10 +15,10 @@ import com.flyzebra.flyui.chache.DiskCache;
 import com.flyzebra.flyui.chache.IDiskCache;
 import com.flyzebra.flyui.chache.IUpdataVersion;
 import com.flyzebra.flyui.chache.UpdataVersion;
-import com.flyzebra.flyui.event.IAction;
+import com.flyzebra.flyui.event.IFlyEvent;
 import com.flyzebra.flyui.utils.AppUtil;
 import com.flyzebra.flyui.utils.FlyLog;
-import com.flyzebra.flyui.utils.SysproUtils;
+import com.flyzebra.flyui.utils.SysproUtil;
 import com.flyzebra.flyui.view.themeview.ThemeView;
 
 /**
@@ -26,7 +26,7 @@ import com.flyzebra.flyui.view.themeview.ThemeView;
  * 2019/3/20 10:55
  * Describ:
  **/
-public class FlyuiActivity extends Activity implements IAction, IUpdataVersion.CheckCacheResult, IUpdataVersion.UpResult {
+public class FlyuiActivity extends Activity implements IFlyEvent, IUpdataVersion.CheckCacheResult, IUpdataVersion.UpResult {
 
     private ThemeView mThemeView;
     public IUpdataVersion iUpDataVersion;
@@ -43,8 +43,8 @@ public class FlyuiActivity extends Activity implements IAction, IUpdataVersion.C
         iUpDataVersion = new UpdataVersion(getApplicationContext(), iDiskCache) {
             @Override
             public void initApi() {
-                String url = SysproUtils.get(FlyuiActivity.this, SysproUtils.Property.URL_BASE, "http://192.168.1.119:801/uiweb");
-                String areaCode = SysproUtils.get(FlyuiActivity.this, SysproUtils.Property.AREA_CODE, "0");
+                String url = SysproUtil.get(FlyuiActivity.this, SysproUtil.Property.URL_BASE, "http://192.168.1.119:801/uiweb");
+                String areaCode = SysproUtil.get(FlyuiActivity.this, SysproUtil.Property.AREA_CODE, "0");
                 String version = AppUtil.getVersionName(FlyuiActivity.this);
                 token = "12345678";
                 ApiUrl = url;
@@ -114,7 +114,7 @@ public class FlyuiActivity extends Activity implements IAction, IUpdataVersion.C
     }
 
     @Override
-    public boolean handleAction(byte[] key) {
+    public boolean recvEvent(byte[] key) {
         return false;
     }
 }

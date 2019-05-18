@@ -14,7 +14,7 @@ import com.flyzebra.flyui.R;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.TextBean;
 import com.flyzebra.flyui.utils.FlyLog;
-import com.flyzebra.flyui.utils.RtlTools;
+import com.flyzebra.flyui.utils.RtlUtil;
 
 
 public class FlyTabView extends FrameLayout implements View.OnClickListener {
@@ -146,7 +146,7 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener {
                 switch (orientation) {
                     case LinearLayout.HORIZONTAL:
                         int x = childWidth * focusPos;
-                        if (RtlTools.isLayoutRtl(this)) {
+                        if (RtlUtil.isLayoutRtl(this)) {
                             x = -x;
                         }
                         focusView.animate().translationX(x).setDuration(duration).start();

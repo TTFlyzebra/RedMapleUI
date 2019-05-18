@@ -8,7 +8,7 @@ import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 
 import com.flyzebra.flyui.http.HttpDownFile;
-import com.flyzebra.flyui.utils.EncodeHelper;
+import com.flyzebra.flyui.utils.EncodeUtil;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.jakewharton.disklrucache.DiskLruCache;
 
@@ -69,7 +69,7 @@ public class DiskCache implements IDiskCache {
         DiskLruCache.Snapshot snapShot = null;
         InputStream is = null;
         try {
-            snapShot = mDiskLruCache.get(EncodeHelper.md5(imgUrl));
+            snapShot = mDiskLruCache.get(EncodeUtil.md5(imgUrl));
             if (snapShot != null) {
                 is = snapShot.getInputStream(0);
                 bitmap = BitmapFactory.decodeStream(is);
@@ -97,7 +97,7 @@ public class DiskCache implements IDiskCache {
         boolean flag = false;
         OutputStream outputStream = null;
         try {
-            DiskLruCache.Editor editor = mDiskLruCache.edit(EncodeHelper.md5(url));
+            DiskLruCache.Editor editor = mDiskLruCache.edit(EncodeUtil.md5(url));
             if (editor == null) return false;
             outputStream = editor.newOutputStream(0);
             if (bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)) {
@@ -138,7 +138,7 @@ public class DiskCache implements IDiskCache {
         boolean flag = false;
         OutputStream outputStream = null;
         try {
-            String key = EncodeHelper.md5(imgUrl);
+            String key = EncodeUtil.md5(imgUrl);
             DiskLruCache.Editor editor = mDiskLruCache.edit(key);
             if (editor == null) {
                 FlyLog.d("DiskLruCache 初始化Editor失败");
@@ -196,7 +196,7 @@ public class DiskCache implements IDiskCache {
     public boolean delFileUrl(String url) {
         boolean flag = false;
         try {
-            flag = mDiskLruCache.remove(EncodeHelper.md5(url));
+            flag = mDiskLruCache.remove(EncodeUtil.md5(url));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -207,7 +207,7 @@ public class DiskCache implements IDiskCache {
     public boolean delFileKey(String key) {
         boolean flag = false;
         try {
-            flag = mDiskLruCache.remove(EncodeHelper.md5(key));
+            flag = mDiskLruCache.remove(EncodeUtil.md5(key));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -223,10 +223,10 @@ public class DiskCache implements IDiskCache {
         if (imgUrl.startsWith("file:///android_asset")) {
             return imgUrl;
         }
-        String path = "file://" + savePath + File.separator + EncodeHelper.md5(imgUrl) + ".0";
+        String path = "file://" + savePath + File.separator + EncodeUtil.md5(imgUrl) + ".0";
         File file = new File(URI.create(path));
         if (!file.exists()) {
-            path = DEFAULT_ASSETS_PATH + EncodeHelper.md5(imgUrl) + ".0";
+            path = DEFAULT_ASSETS_PATH + EncodeUtil.md5(imgUrl) + ".0";
         }
         return path;
     }
@@ -239,7 +239,7 @@ public class DiskCache implements IDiskCache {
         InputStream in = null;
         BufferedReader input = null;
         try {
-            snapShot = mDiskLruCache.get(EncodeHelper.md5(key));
+            snapShot = mDiskLruCache.get(EncodeUtil.md5(key));
             if (snapShot != null) {
                 in = snapShot.getInputStream(0);
                 input = new BufferedReader(new InputStreamReader(in));
@@ -276,7 +276,7 @@ public class DiskCache implements IDiskCache {
         boolean flag = false;
         OutputStream outputStream = null;
         try {
-            DiskLruCache.Editor editor = mDiskLruCache.edit(EncodeHelper.md5(key));
+            DiskLruCache.Editor editor = mDiskLruCache.edit(EncodeUtil.md5(key));
             if (editor == null) return false;
             outputStream = editor.newOutputStream(0);
             byte[] bytes = str.getBytes("utf-8");
@@ -308,7 +308,7 @@ public class DiskCache implements IDiskCache {
         ObjectOutputStream objectOutputStream = null;
 
         try {
-            DiskLruCache.Editor editor = mDiskLruCache.edit(EncodeHelper.md5(key));
+            DiskLruCache.Editor editor = mDiskLruCache.edit(EncodeUtil.md5(key));
             if (editor == null) return false;
             outputStream = editor.newOutputStream(0);
             objectOutputStream = new ObjectOutputStream(outputStream);
@@ -340,7 +340,7 @@ public class DiskCache implements IDiskCache {
         DiskLruCache.Snapshot snapShot = null;
         InputStream in = null;
         try {
-            snapShot = mDiskLruCache.get(EncodeHelper.md5(key));
+            snapShot = mDiskLruCache.get(EncodeUtil.md5(key));
             if (snapShot != null) {
                 in = snapShot.getInputStream(0);
                 ObjectInputStream objectInputStream = new ObjectInputStream(in);
@@ -365,7 +365,7 @@ public class DiskCache implements IDiskCache {
 
     @Override
     public boolean checkFileExist(String imgUrl) {
-        String fileName = savePath + File.separator + EncodeHelper.md5(imgUrl) + ".0";
+        String fileName = savePath + File.separator + EncodeUtil.md5(imgUrl) + ".0";
         File file = new File(fileName);
         return file.exists();
     }

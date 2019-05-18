@@ -1,8 +1,8 @@
 package com.flyzebra.flyui.view.base;
 
 import android.content.Context;
-import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.event.FlyEvent;
@@ -10,15 +10,10 @@ import com.flyzebra.flyui.event.IFlyEvent;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.cellview.ICell;
 
-/**
- * Author FlyZebra
- * 2019/5/17 15:15
- * Describ:
- **/
-public abstract class BaseView extends View implements IFlyEvent, ICell {
+public abstract class BaseLayoutCellView extends FrameLayout implements IFlyEvent, ICell {
     protected CellBean mCellBean;
 
-    public BaseView(Context context) {
+    public BaseLayoutCellView(Context context) {
         super(context);
     }
 
@@ -80,4 +75,5 @@ public abstract class BaseView extends View implements IFlyEvent, ICell {
     public boolean recvEvent(byte[] key) {
         return false;
     }
+
 }

@@ -25,7 +25,7 @@ public class CellViewFactory {
                 iCellView = hasImage && hasText ? new SimpleCellView(context)
                         : hasText ? new SimpleTextCellView(context)
                         : hasImage ? new SimpleImageCellView(context)
-                        : new SimpleCellView(context);
+                        : new SimpleLayoutCellView(context);
                 break;
             case CellType.TYPE_APP_NAV:
                 iCellView = new SimpleNavCellView(context);

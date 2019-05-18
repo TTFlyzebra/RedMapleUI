@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 
 /**
  */
-public class SysproUtils {
+public class SysproUtil {
 
     /**
      * 系统属性相关常量
@@ -76,7 +76,6 @@ public class SysproUtils {
 
         }catch( Exception e ){
             FlyLog.e(e.toString());
-            //TODO
         }
 
     }

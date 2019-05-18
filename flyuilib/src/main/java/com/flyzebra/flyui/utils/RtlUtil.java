@@ -5,7 +5,7 @@ import android.view.View;
 
 import java.util.Locale;
 
-public class RtlTools {
+public class RtlUtil {
 
     public static boolean isRtl() {
         return TextUtils.getLayoutDirectionFromLocale(Locale.getDefault()) == View.LAYOUT_DIRECTION_RTL;

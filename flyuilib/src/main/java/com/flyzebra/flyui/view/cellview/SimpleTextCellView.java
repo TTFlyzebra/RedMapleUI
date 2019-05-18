@@ -56,7 +56,8 @@ public class SimpleTextCellView extends FlyTextView implements ICell {
     }
 
     @Override
-    public void verify(CellBean cellBean) {
+    public boolean verify(CellBean cellBean) {
+        return true;
     }
 
     @Override

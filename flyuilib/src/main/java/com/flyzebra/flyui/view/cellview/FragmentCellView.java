@@ -83,7 +83,7 @@
 //    }
 //
 //    @Override
-//    public boolean handleAction(int key) {
+//    public boolean sendEvent(int key) {
 //        if (mCellBean == null || mCellBean.cellpage == null || mCellBean.cellpage.cellList == null || mCellBean.cellpage.cellList.isEmpty())
 //            return false;
 //        if (key == ActionKey.CHANGE_PAGER_WITH_RESID) {

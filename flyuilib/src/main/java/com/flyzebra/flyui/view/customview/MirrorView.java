@@ -7,7 +7,7 @@ import android.os.Looper;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-import com.flyzebra.flyui.utils.BitmapUtils;
+import com.flyzebra.flyui.utils.BitmapUtil;
 import com.flyzebra.flyui.utils.FlyLog;
 
 import java.util.concurrent.ExecutorService;
@@ -77,7 +77,7 @@ public class MirrorView extends ImageView {
             public void run() {
                 try {
                     if (mBitmap != null) {
-                        mBitmap = BitmapUtils.createReflectedImage(mBitmap, mRefHeight);
+                        mBitmap = BitmapUtil.createReflectedImage(mBitmap, mRefHeight);
                     }else{
                         FlyLog.d("mBitmap null for createReflectedImage");
                     }

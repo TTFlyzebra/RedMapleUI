@@ -5,7 +5,7 @@ package com.flyzebra.flyui.utils;
  * 2019/5/17 17:20
  * Describ:
  **/
-public class ByteTools {
+public class ByteUtil {
     public static String bytes2HexString(byte[] bytes) {
         if (bytes == null || bytes.length == 1) {
             return null;

@@ -263,7 +263,7 @@
 //                        }
 //                    } else {
 //                        ItemBean itemBean = itemBeans.get(type);
-//                        FlyAction.handleAction(itemBean.cellBean.sendAction, mShowList.get(pos).get(itemBean.cellBean.recvAction));
+//                        FlyAction.sendEvent(itemBean.cellBean.sendAction, mShowList.get(pos).get(itemBean.cellBean.recvAction));
 //                    }
 //                }
 //            });
@@ -467,7 +467,7 @@
 //    }
 //
 //    @Override
-//    public boolean handleAction(int key) {
+//    public boolean sendEvent(int key) {
 //        if (mCellBean == null || mCellBean.subCells == null || mCellBean.subCells.isEmpty() || mAllList == null || mAllList.isEmpty())
 //            return false;
 //        Object obj = FlyAction.getValue(key);

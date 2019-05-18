@@ -5,7 +5,7 @@ package com.flyzebra.flyui.event;
  * 2019/4/2 15:17
  * Describ:
  **/
-public interface ActionKey {
+public interface FlyEventKey {
     int REFRESH = 9000;
     int CHANGE_PAGER_WITH_RESID = 1018;
     int GROUP_TYPE =  9001;

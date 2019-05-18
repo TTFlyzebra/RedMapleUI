@@ -13,10 +13,10 @@ import com.flyzebra.flyui.bean.ThemeBean;
 import com.flyzebra.flyui.bean.VersionBean;
 import com.flyzebra.flyui.http.FlyOkHttp;
 import com.flyzebra.flyui.http.IHttp;
-import com.flyzebra.flyui.utils.EncodeHelper;
+import com.flyzebra.flyui.utils.EncodeUtil;
 import com.flyzebra.flyui.utils.FileUtil;
 import com.flyzebra.flyui.utils.FlyLog;
-import com.flyzebra.flyui.utils.GsonUtils;
+import com.flyzebra.flyui.utils.GsonUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -142,7 +142,7 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
         } else {
             SAVE_PATH = "file://" + iDiskCache.getSavePath();
         }
-        mThemeBean = GsonUtils.json2Object(mThemeBeanJson, ThemeBean.class);
+        mThemeBean = GsonUtil.json2Object(mThemeBeanJson, ThemeBean.class);
         return mThemeBean;
     }
 
@@ -195,7 +195,7 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
             public void succeed(final Object object) {
                 String version = iDiskCache.getString(VERSION_KEY);
                 if (version != null) {
-                    VersionBean bean = GsonUtils.json2Object(version, VersionBean.class);
+                    VersionBean bean = GsonUtil.json2Object(version, VersionBean.class);
                     if (bean != null) {
                         localVersion = bean.version;
                         if (bean.versionInterval > UPDATE_MIN_IINTERVAL) {
@@ -205,7 +205,7 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
                 }
                 String newVersion = null;
                 if (object != null) {
-                    VersionBean bean = GsonUtils.json2Object(object.toString(), VersionBean.class);
+                    VersionBean bean = GsonUtil.json2Object(object.toString(), VersionBean.class);
                     if (bean != null && bean.isValid()) {
                         newVersion = bean.version;
                         if (bean.versionInterval > UPDATE_MIN_IINTERVAL) {
@@ -259,7 +259,7 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
             @Override
             public void succeed(Object object) {
                 mThemeJson = object.toString();
-                ThemeBean bean = GsonUtils.json2Object(mThemeJson, ThemeBean.class);
+                ThemeBean bean = GsonUtil.json2Object(mThemeJson, ThemeBean.class);
                 if (bean == null) {
                     mHandler.post(new Runnable() {
                         @Override
@@ -354,7 +354,7 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
     private void addSaveFileNames(CellBean cellBean) {
         if(cellBean.images!=null&&cellBean.images.size()>0){
             for(ImageBean imageBean:cellBean.images){
-                files.add(EncodeHelper.md5(imageBean.url) + ".0");
+                files.add(EncodeUtil.md5(imageBean.url) + ".0");
             }
         }
         if (cellBean.subCells != null) {
@@ -481,10 +481,10 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
         files.clear();
         files.add("journal");
         if (mThemeBean == null) return;
-        files.add(EncodeHelper.md5(VERSION_KEY) + ".0");
-        files.add(EncodeHelper.md5(TEMPLATE_KEY) + ".0");
+        files.add(EncodeUtil.md5(VERSION_KEY) + ".0");
+        files.add(EncodeUtil.md5(TEMPLATE_KEY) + ".0");
         if (mThemeBean.pageList == null) return;
-        files.add(EncodeHelper.md5(mThemeBean.imageurl) + ".0");
+        files.add(EncodeUtil.md5(mThemeBean.imageurl) + ".0");
         //TOPPAGE
         if (mThemeBean.topPage != null && mThemeBean.topPage.cellList != null) {
             for (CellBean cellBean : mThemeBean.topPage.cellList) {
@@ -493,7 +493,7 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
         }
         //PAGE
         for (PageBean pageBean : mThemeBean.pageList) {
-            files.add(EncodeHelper.md5(pageBean.imageurl) + ".0");
+            files.add(EncodeUtil.md5(pageBean.imageurl) + ".0");
             for (CellBean cellBean : pageBean.cellList) {
                 addSaveFileNames(cellBean);
             }
@@ -531,7 +531,7 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
         String value = null;
         InputStream is = null;
         try {
-            is = mContext.getAssets().open(ASSETS_PATH + EncodeHelper.md5(key) + ".0");
+            is = mContext.getAssets().open(ASSETS_PATH + EncodeUtil.md5(key) + ".0");
             value = FileUtil.readFile(is);
         } catch (IOException e) {
             FlyLog.e("getAssets failed!");
@@ -551,7 +551,7 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
     private static String SAVE_PATH = "file:///android_asset/zebra";
 
     public static String getNativeFilePath(String imgUrl) {
-        return SAVE_PATH + File.separator + EncodeHelper.md5(imgUrl) + ".0";
+        return SAVE_PATH + File.separator + EncodeUtil.md5(imgUrl) + ".0";
     }
 
 }

@@ -19,7 +19,7 @@ public interface ICell {
      * 校验CellBean数据是否完整
      * @param cellBean
      */
-    void verify(CellBean cellBean);
+    boolean verify(CellBean cellBean);
 
 
     /**

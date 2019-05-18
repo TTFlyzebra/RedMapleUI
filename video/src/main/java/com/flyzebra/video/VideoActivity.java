@@ -4,9 +4,9 @@ import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.flyzebra.flyui.Flyui;
-import com.flyzebra.flyui.event.ActionKey;
-import com.flyzebra.flyui.event.FlyAction;
-import com.flyzebra.flyui.event.IAction;
+import com.flyzebra.flyui.event.FlyEvent;
+import com.flyzebra.flyui.event.FlyEventKey;
+import com.flyzebra.flyui.event.IFlyEvent;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.StorageInfo;
@@ -19,7 +19,7 @@ import java.util.Map;
 
 import tcking.github.com.giraffeplayer.IjkVideoView;
 
-public class VideoActivity extends BaseActivity implements IAction {
+public class VideoActivity extends BaseActivity implements IFlyEvent {
     public Flyui flyui;
     public IjkVideoView ijkVideoView;
     private ArrayList<Video> videoList = new ArrayList<>();
@@ -31,7 +31,7 @@ public class VideoActivity extends BaseActivity implements IAction {
         flyui = new Flyui(this);
         flyui.onCreate();
         ijkVideoView = findViewById(R.id.video_play);
-        FlyAction.handleAction(ActionKey.CHANGE_PAGER_WITH_RESID,"music_fm01");
+        FlyEvent.handleAction(FlyEventKey.CHANGE_PAGER_WITH_RESID,"music_fm01");
     }
 
     @Override
@@ -45,37 +45,37 @@ public class VideoActivity extends BaseActivity implements IAction {
     public boolean onAction(int key) {
         Object obj;
         switch (key) {
-            case ActionKey.KEY_PLAY:
+            case FlyEventKey.KEY_PLAY:
                 break;
-            case ActionKey.KEY_NEXT:
+            case FlyEventKey.KEY_NEXT:
                 break;
-            case ActionKey.KEY_PREV:
+            case FlyEventKey.KEY_PREV:
                 break;
-            case ActionKey.KEY_SEEK:
-                obj = FlyAction.getValue(ActionKey.KEY_SEEK);
+            case FlyEventKey.KEY_SEEK:
+                obj = FlyEvent.getValue(FlyEventKey.KEY_SEEK);
                 if (obj instanceof Integer) {
                 }
                 break;
-            case ActionKey.KEY_URL:
-                obj = FlyAction.getValue(ActionKey.KEY_URL);
+            case FlyEventKey.KEY_URL:
+                obj = FlyEvent.getValue(FlyEventKey.KEY_URL);
                 if(obj instanceof String){
                     ijkVideoView.setVideoPath((String) obj);
                     ijkVideoView.start();
-                    FlyAction.handleAction(ActionKey.VIDEO_URL, obj);
+                    FlyEvent.handleAction(FlyEventKey.VIDEO_URL, obj);
                 }
                 break;
-            case ActionKey.KEY_MENU:
+            case FlyEventKey.KEY_MENU:
                 int flag = 0;
-                obj = FlyAction.getValue(ActionKey.MSG_MENU_STATUS);
+                obj = FlyEvent.getValue(FlyEventKey.MSG_MENU_STATUS);
                 if (obj instanceof Integer) {
                     flag = ((int) obj) == 0 ? 1 : 0;
                 }
-                FlyAction.handleAction(ActionKey.MSG_MENU_STATUS, flag);
+                FlyEvent.handleAction(FlyEventKey.MSG_MENU_STATUS, flag);
                 break;
-            case ActionKey.KEY_LOOP:
+            case FlyEventKey.KEY_LOOP:
                 break;
-            case ActionKey.KEY_STORE:
-                obj = FlyAction.getValue(ActionKey.KEY_STORE);
+            case FlyEventKey.KEY_STORE:
+                obj = FlyEvent.getValue(FlyEventKey.KEY_STORE);
                 if(obj instanceof String){
                     usbMediaScan.openStorager(new StorageInfo((String) obj));
                 }
@@ -87,10 +87,10 @@ public class VideoActivity extends BaseActivity implements IAction {
     @Override
     public void notifyPathChange(String path) {
         FlyLog.d("notifyPathChange path=%s", path);
-        FlyAction.handleAction(ActionKey.STORE_URL,path);
+        FlyEvent.handleAction(FlyEventKey.STORE_URL,path);
         if (isStop) return;
         videoList.clear();
-        FlyAction.handleAction(ActionKey.VIDEO_LIST, new ArrayList<>());
+        FlyEvent.handleAction(FlyEventKey.VIDEO_LIST, new ArrayList<>());
         super.notifyPathChange(path);
     }
 
@@ -101,8 +101,8 @@ public class VideoActivity extends BaseActivity implements IAction {
         for (StorageInfo storageInfo : storageList) {
             if (TextUtils.isEmpty(storageInfo.mPath)) break;
             Map<Integer, Object> map = new Hashtable<>();
-            map.put(ActionKey.STORE_NAME, storageInfo.mDescription);
-            map.put(ActionKey.STORE_URL, storageInfo.mPath);
+            map.put(FlyEventKey.STORE_NAME, storageInfo.mDescription);
+            map.put(FlyEventKey.STORE_URL, storageInfo.mPath);
             String imageKey;
             if (storageInfo.mPath.equals("/storage")) {
                 imageKey = "DISK_ALL";
@@ -111,10 +111,10 @@ public class VideoActivity extends BaseActivity implements IAction {
             } else {
                 imageKey = "DISK_USB";
             }
-            map.put(ActionKey.RES_URL, imageKey);
+            map.put(FlyEventKey.RES_URL, imageKey);
             list.add(map);
         }
-        FlyAction.handleAction(ActionKey.STORE_LIST, list);
+        FlyEvent.handleAction(FlyEventKey.STORE_LIST, list);
     }
 
     @Override
@@ -132,10 +132,10 @@ public class VideoActivity extends BaseActivity implements IAction {
             List<Map<Integer, Object>> list = new ArrayList<>();
             for (Video video : videoList) {
                 Map<Integer, Object> map = new Hashtable<>();
-                map.put(ActionKey.VIDEO_URL, video.url);
+                map.put(FlyEventKey.VIDEO_URL, video.url);
                 list.add(map);
             }
-            FlyAction.handleAction(ActionKey.VIDEO_LIST, list);
+            FlyEvent.handleAction(FlyEventKey.VIDEO_LIST, list);
         }catch (Exception e){
             FlyLog.e(e.toString());
         }

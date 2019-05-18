@@ -29,7 +29,7 @@
 //        @Override
 //        public void run() {
 //            FlyLog.d("hide Menu Task run");
-//            FlyAction.handleAction(ActionKey.MSG_MENU_STATUS, 0);
+//            FlyAction.sendEvent(ActionKey.MSG_MENU_STATUS, 0);
 //        }
 //    };
 //
@@ -84,9 +84,9 @@
 //        FlyAction.register(this);
 //        if (mCellBean.recvAction == ActionKey.MSG_MENU_STATUS) {
 //            goAnimtor(false, 0);
-//            FlyAction.handleAction(ActionKey.MSG_MENU_STATUS, 0);
+//            FlyAction.sendEvent(ActionKey.MSG_MENU_STATUS, 0);
 //        } else if (mCellBean.recvAction > 0) {
-//            handleAction(mCellBean.recvAction);
+//            sendEvent(mCellBean.recvAction);
 //        }
 //    }
 //
@@ -98,7 +98,7 @@
 //    }
 //
 //    @Override
-//    public boolean handleAction(int key) {
+//    public boolean sendEvent(int key) {
 //        if (mCellBean == null || mCellBean.recvAction != key) return false;
 //        switch (key) {
 //            case ActionKey.MSG_MENU_STATUS:

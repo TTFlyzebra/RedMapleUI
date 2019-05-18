@@ -136,7 +136,7 @@
 //            seekBar.setVisibility(VISIBLE);
 //        }
 //
-//        handleAction(ActionKey.MUSIC_TIME);
+//        sendEvent(ActionKey.MUSIC_TIME);
 //
 //    }
 //
@@ -191,7 +191,7 @@
 //    }
 //
 //    @Override
-//    public boolean handleAction(int key) {
+//    public boolean sendEvent(int key) {
 //        if (mCellBean == null) return false;
 //        Object obj = FlyAction.getValue(key);
 //        switch (key) {
@@ -239,6 +239,6 @@
 //
 //    @Override
 //    public void onStopTrackingTouch(SeekBar seekBar) {
-//        FlyAction.handleAction(ActionKey.KEY_SEEK, seekBar.getProgress());
+//        FlyAction.sendEvent(ActionKey.KEY_SEEK, seekBar.getProgress());
 //    }
 //}

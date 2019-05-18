@@ -117,7 +117,7 @@
 //            public void onItemClick(View view) {
 //                int pos = (int) view.getTag();
 //                try {
-//                    FlyAction.handleAction(mCellBean.subCells.get(0).sendAction, mList.get(pos).get(mCellBean.subCells.get(0).recvAction));
+//                    FlyAction.sendEvent(mCellBean.subCells.get(0).sendAction, mList.get(pos).get(mCellBean.subCells.get(0).recvAction));
 //                } catch (Exception e) {
 //                    FlyLog.e(e.toString());
 //                }
@@ -353,7 +353,7 @@
 //    }
 //
 //    @Override
-//    public boolean handleAction(int key) {
+//    public boolean sendEvent(int key) {
 //        if (mCellBean == null) return false;
 //        Object obj = FlyAction.getValue(key);
 //        if (key == mCellBean.recvAction) {

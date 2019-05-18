@@ -31,8 +31,8 @@ import java.io.ByteArrayOutputStream;
 /**
  * Created by lenovo on 2016/6/30.
  */
-public class BitmapUtils {
-    public final static String TAG = BitmapUtils.class.getSimpleName();
+public class BitmapUtil {
+    public final static String TAG = BitmapUtil.class.getSimpleName();
 
     public static Drawable toDrawable(Bitmap bitmap) {
         if (bitmap == null) {
