@@ -58,7 +58,6 @@ public class DateCellView extends SimpleCellView {
             mTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    FlyLog.d("mTimer task run....");
                     String tmpTime = getCurrentDate("HH:mm");
                     String tmpDate = getCurrentDate("yyyy-MM-dd");
                     String tmpWeek = getCurrentDate("E");
