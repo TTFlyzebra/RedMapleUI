@@ -39,7 +39,6 @@ public class SimpleNavCellView extends BaseView implements ICell {
         super(context);
     }
 
-
     @Override
     public boolean verify(CellBean mCellBean) {
         return (mCellBean != null && mCellBean.images != null && mCellBean.images.size() > 1);
@@ -91,21 +90,24 @@ public class SimpleNavCellView extends BaseView implements ICell {
 
     @Override
     public boolean recvEvent(byte[] key) {
-        if (mCellBean==null||mCellBean.recv == null || mCellBean.recv.recvId == null) return false;
-        if (!mCellBean.recv.recvId.equals(ByteUtil.bytes2HexString(key))) return false;
-        switch (mCellBean.recv.recvId) {
-            case "400301":
-                Object obj = FlyEvent.getValue(key);
-                if (obj instanceof byte[]) {
-                    byte[] data = (byte[]) obj;
-                    if (data.length > 1) {
-                        setCurrentItem(data[0]);
-                        setSumItem(data[1]);
-                        postInvalidate();
-                    }
+        if (mCellBean == null || mCellBean.recv == null || mCellBean.recv.recvId == null) {
+            return false;
+        }
+        if (!mCellBean.recv.recvId.equals(ByteUtil.bytes2HexString(key))) {
+            return false;
+        }
+        if (EVENT_NAV.equals(mCellBean.recv.recvId)) {
+            Object obj = FlyEvent.getValue(key);
+            if (obj instanceof byte[]) {
+                byte[] data = (byte[]) obj;
+                if (data.length > 1) {
+                    setCurrentItem(data[0]);
+                    setSumItem(data[1]);
+                    postInvalidate();
                 }
-                FlyLog.d("handle event=400301");
-                break;
+            }
+            FlyLog.d("handle event=" + EVENT_NAV);
+            return false;
         }
         return false;
     }
@@ -114,7 +116,7 @@ public class SimpleNavCellView extends BaseView implements ICell {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (sumItem > 0 && nav_on != null && nav_off != null && mCellBean.width > 0 && mCellBean.height > 0) {
+        if (mCellBean != null && sumItem > 0 && nav_on != null && nav_off != null && mCellBean.width > 0 && mCellBean.height > 0) {
             float x = mCellBean.width / 2 - (sumItem * mCellBean.height) + mCellBean.height / 2;
             if (paint == null) {
                 initPaint();

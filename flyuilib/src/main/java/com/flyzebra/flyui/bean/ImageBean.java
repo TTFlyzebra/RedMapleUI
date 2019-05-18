@@ -2,6 +2,7 @@ package com.flyzebra.flyui.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.widget.ImageView;
 
 /**
  * Author FlyZebra
@@ -35,6 +36,23 @@ public class ImageBean implements Parcelable {
         send = in.readString();
     }
 
+    public ImageView.ScaleType getScaleType() {
+        switch (scaleType) {
+            case 0:
+                return ImageView.ScaleType.FIT_XY;
+            case 1:
+                return ImageView.ScaleType.FIT_CENTER;
+            case 2:
+                return ImageView.ScaleType.CENTER;
+            case 3:
+                return ImageView.ScaleType.CENTER_CROP;
+            case 4:
+                return ImageView.ScaleType.CENTER_INSIDE;
+            default:
+                return ImageView.ScaleType.CENTER;
+        }
+    }
+
     public static final Creator<ImageBean> CREATOR = new Creator<ImageBean>() {
         @Override
         public ImageBean createFromParcel(Parcel in) {
@@ -66,4 +84,6 @@ public class ImageBean implements Parcelable {
         dest.writeString(recv);
         dest.writeString(send);
     }
+
+
 }

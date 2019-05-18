@@ -16,7 +16,7 @@ public interface CellType {
     /**
      * 时间
      */
-    int TYPE_APP_TIME = 3;
+    int TYPE_APP_DATE = 3;
     /**
      * 媒体小部件
      */
@@ -58,6 +58,7 @@ public interface CellType {
 
 
     int TYPE_FRAGMENT_NAV = 14 ;
+
 
     int TYPE_GROUP_LIST = 15 ;
 

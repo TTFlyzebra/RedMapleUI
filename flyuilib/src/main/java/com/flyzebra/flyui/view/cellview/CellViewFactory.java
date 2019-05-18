@@ -18,17 +18,23 @@ public class CellViewFactory {
     public static ICell createView(Context context, CellBean cellBean) {
         ICell iCellView;
         switch (cellBean.celltype) {
-            case CellType.TYPE_APP_NORMAL:
-            default:
-                boolean hasText = cellBean.texts != null && !cellBean.texts.isEmpty();
-                boolean hasImage = cellBean.images != null && !cellBean.images.isEmpty();
-                iCellView = hasImage && hasText ? new SimpleCellView(context)
-                        : hasText ? new SimpleTextCellView(context)
-                        : hasImage ? new SimpleImageCellView(context)
-                        : new SimpleLayoutCellView(context);
-                break;
             case CellType.TYPE_APP_NAV:
                 iCellView = new SimpleNavCellView(context);
+                break;
+            case CellType.TYPE_APP_MIRRORIMG:
+                iCellView = new MirrorCellView(context);
+                break;
+            case CellType.TYPE_APP_DATE:
+                iCellView = new DateCellView(context);
+                break;
+            default:
+                boolean isText = cellBean.texts != null && cellBean.texts.size() == 1;
+                boolean isImage = cellBean.images != null && cellBean.images.size() == 1;
+                iCellView = isImage && isText ? new SimpleCellView(context)
+                        : isText ? new SimpleTextCellView(context)
+                        : isImage ? new SimpleImageCellView(context)
+                        : new SimpleCellView(context);
+                break;
         }
         return iCellView;
     }

@@ -10,6 +10,7 @@ import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.PageBean;
 import com.flyzebra.flyui.bean.ThemeBean;
 import com.flyzebra.flyui.event.FlyEvent;
+import com.flyzebra.flyui.event.IFlyEvent;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.pageview.SimplePageView;
 
@@ -98,9 +99,8 @@ public class PagesViewPager extends ViewPager {
 
         @Override
         public void setPrimaryItem(ViewGroup container, int position, Object object) {
-            String key = "400301";
-            FlyEvent.saveValue(key, new byte[]{(byte) position, (byte) (getCount() - 2)});
-            FlyEvent.sendEvent(key);
+            FlyEvent.saveValue(IFlyEvent.EVENT_NAV, new byte[]{(byte) position, (byte) (getCount() - 2)});
+            FlyEvent.sendEvent(IFlyEvent.EVENT_NAV);
             //循环滚动
             try {
                 if (position == 0 && pageList != null && pageList.size() > 1) {

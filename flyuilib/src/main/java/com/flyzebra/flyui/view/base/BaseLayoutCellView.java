@@ -38,6 +38,7 @@ public abstract class BaseLayoutCellView extends FrameLayout implements IFlyEven
         if (verify(mCellBean)) {
             initView(getContext());
             loadingRes(mCellBean);
+            refreshView(mCellBean);
         }
     }
 

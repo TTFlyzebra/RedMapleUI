@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,81 +15,77 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.flyzebra.flyui.bean.CellBean;
-import com.flyzebra.flyui.bean.ThemeBean;
 import com.flyzebra.flyui.chache.UpdataVersion;
-import com.flyzebra.flyui.utils.FlyLog;
-import com.flyzebra.flyui.view.customview.FlyImageView;
+import com.flyzebra.flyui.utils.IntentUtil;
+import com.flyzebra.flyui.view.base.BaseImageCellView;
 import com.flyzebra.flyui.view.customview.MirrorView;
 
-public class SimpleImageCellView extends FlyImageView implements ICell, View.OnTouchListener, View.OnClickListener {
-    protected CellBean mCellBean;
+public class SimpleImageCellView extends BaseImageCellView implements View.OnTouchListener, View.OnClickListener {
     private MirrorView mirrorView;
+    private Handler mHandler = new Handler();
 
     public SimpleImageCellView(Context context) {
         super(context);
         initView(context);
     }
 
+
     @Override
-    public void initView(Context context) {
-        focusChange(false);
-        setScaleType(ScaleType.CENTER);
+    public boolean verify(CellBean cellBean) {
+        return !(cellBean == null ||
+                cellBean.images == null ||
+                cellBean.images.isEmpty());
     }
 
     @Override
-    public void setCellBean(CellBean cellBean) {
-        this.mCellBean = cellBean;
+    public void initView(Context context) {
+        setScaleType(mCellBean.images.get(0).getScaleType());
         if (mCellBean.send != null) {
             setOnClickListener(this);
             setOnTouchListener(this);
         }
-        refreshView(cellBean);
-    }
-
-    @Override
-    public boolean verify(CellBean cellBean) {
-        return true;
-    }
-
-    @Override
-    public void loadingRes(CellBean cellBean) {
-
-    }
-
-    @Override
-    public void setEnabled(boolean enabled) {
-        super.setEnabled(enabled);
-        focusChange(!enabled);
     }
 
     @Override
     public void refreshView(CellBean cellBean) {
-        showImageUrl(mCellBean.images.get(0).url);
-    }
-
-    private void showImageUrl(String imageurl) {
-        if (TextUtils.isEmpty(imageurl)) return;
-        String url = UpdataVersion.getNativeFilePath(imageurl);
+        String imageurl = UpdataVersion.getNativeFilePath(cellBean.images.get(0).url);
         Glide.with(getContext())
                 .asBitmap()
-                .load(url)
-                .override(mCellBean.width, mCellBean.height)
+                .load(imageurl)
+                .override(cellBean.images.get(0).width, cellBean.images.get(0).height)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .centerInside()
                 .into(new BitmapImageViewTarget(this) {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                         setImageBitmap(resource);
                         if (mirrorView != null) {
-                            mirrorView.showImage(resource);
+                            setDrawingCacheEnabled(true);
+                            Bitmap bmp = getDrawingCache();
+                            if (bmp == null) {
+                                measure(MeasureSpec.makeMeasureSpec(mCellBean.width, MeasureSpec.EXACTLY),
+                                        MeasureSpec.makeMeasureSpec(mCellBean.height, MeasureSpec.EXACTLY));
+                                layout(0, 0, getMeasuredWidth(), getMeasuredHeight());
+                                buildDrawingCache();
+                                bmp = getDrawingCache();
+                            }
+                            mirrorView.showImage(bmp);
                         }
                     }
                 });
     }
 
+    /**
+     * 启动优先级，包名+类名>Action>包名
+     */
     @Override
     public void onClick() {
-        FlyLog.d("onClick event=" + mCellBean.send.eventId);
-//        FlyAction.sendEvent(mCellBean.send.eventId);
+        if (mCellBean.send == null) {
+            return;
+        }
+        if (IntentUtil.execStartPackage(getContext(), mCellBean.send.packName, mCellBean.send.className)) {
+        } else if (!IntentUtil.execStartPackage(getContext(), mCellBean.send.packName)) {
+        }
     }
 
     @Override
@@ -102,12 +97,12 @@ public class SimpleImageCellView extends FlyImageView implements ICell, View.OnT
         this.mirrorView = mirrorView;
     }
 
-    @Override
-    public void onClick(View v) {
-        setEnabled(false);
-        onClick();
-        setEnabled(true);
-    }
+    private Runnable show = new Runnable() {
+        @Override
+        public void run() {
+            focusChange(false);
+        }
+    };
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
@@ -128,12 +123,23 @@ public class SimpleImageCellView extends FlyImageView implements ICell, View.OnT
 
     private void focusChange(boolean flag) {
         if (flag) {
+            setColorFilter(0x3FFFFFFF);
             mHandler.removeCallbacks(show);
             mHandler.postDelayed(show, 300);
-            setColorFilter(ThemeBean.filterColor);
         } else {
             clearColorFilter();
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        onClick();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        mHandler.removeCallbacksAndMessages(null);
+        super.onDetachedFromWindow();
     }
 
     private boolean isTouchPointInView(View view, int x, int y) {
@@ -150,29 +156,6 @@ public class SimpleImageCellView extends FlyImageView implements ICell, View.OnT
             return true;
         }
         return false;
-    }
-
-    private Handler mHandler = new Handler();
-    private Runnable show = new Runnable() {
-        @Override
-        public void run() {
-            focusChange(false);
-        }
-    };
-
-
-    @Override
-    protected void onAttachedToWindow() {
-        FlyLog.d("onAttachedToWindow");
-        super.onAttachedToWindow();
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        FlyLog.d("onDetachedFromWindow");
-        mHandler.removeCallbacksAndMessages(null);
-        focusChange(false);
-        super.onDetachedFromWindow();
     }
 
 }

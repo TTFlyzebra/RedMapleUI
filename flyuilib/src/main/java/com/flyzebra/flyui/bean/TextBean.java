@@ -10,16 +10,16 @@ import android.view.Gravity;
  * Describ:
  **/
 public class TextBean implements Parcelable {
-    public int textSize;
-    public int textLines;
+    public int textSize =24;
+    public int textLines = 1;
     public String textColor;
     public String filterColor;
     public LanguageText text;
-    public int left;
-    public int top;
-    public int right;
-    public int bottom;
-    public int gravity;
+    public int left = 0;
+    public int top = 0;
+    public int right = 0;
+    public int bottom = 0;
+    public int gravity = 0;
     public String recv;
     public String send;
 
