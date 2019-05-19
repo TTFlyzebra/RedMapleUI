@@ -30,29 +30,8 @@ public class DateCellView extends SimpleCellView {
     }
 
     @Override
-    public void refreshView(CellBean cellBean) {
-        super.refreshView(cellBean);
-        try {
-            FlyLog.d("up time");
-            if(textViewList.size()>=3) {
-                textViewList.get(0).setText(time);
-                textViewList.get(1).setText(date);
-                textViewList.get(2).setText(week);
-            }
-        } catch (Exception e) {
-            FlyLog.e(e.toString());
-        }
-    }
-
-    private static String getCurrentDate(String dateFormat) {
-        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, Locale.getDefault());
-        Date date = new Date(System.currentTimeMillis());
-        return sdf.format(date);
-    }
-
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
+    public void initView(Context context) {
+        super.initView(context);
         if (mTimer == null) {
             mTimer = new Timer();
             mTimer.schedule(new TimerTask() {
@@ -79,6 +58,28 @@ public class DateCellView extends SimpleCellView {
             }, 0, 1000);
         }
     }
+
+    @Override
+    public void refreshView(CellBean cellBean) {
+        super.refreshView(cellBean);
+        try {
+            FlyLog.d("up time");
+            if(textViewList.size()>=3) {
+                textViewList.get(0).setText(time);
+                textViewList.get(1).setText(date);
+                textViewList.get(2).setText(week);
+            }
+        } catch (Exception e) {
+            FlyLog.e(e.toString());
+        }
+    }
+
+    private static String getCurrentDate(String dateFormat) {
+        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, Locale.getDefault());
+        Date date = new Date(System.currentTimeMillis());
+        return sdf.format(date);
+    }
+
     @Override
     protected void onDetachedFromWindow() {
         mHandler.removeCallbacksAndMessages(null);
