@@ -11,16 +11,22 @@ import android.os.Parcelable;
 public class RecvBean implements Parcelable {
     public String recvId;
     public String recvContent;
+    public String visibleContent;
+    public String disVisibleContent;
 
     protected RecvBean(Parcel in) {
         recvId = in.readString();
         recvContent = in.readString();
+        visibleContent = in.readString();
+        disVisibleContent = in.readString();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(recvId);
         dest.writeString(recvContent);
+        dest.writeString(visibleContent);
+        dest.writeString(disVisibleContent);
     }
 
     @Override

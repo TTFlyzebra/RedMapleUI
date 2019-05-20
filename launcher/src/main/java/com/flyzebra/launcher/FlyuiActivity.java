@@ -20,6 +20,7 @@ import com.flyzebra.flyui.utils.AppUtil;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.utils.SysproUtil;
 import com.flyzebra.flyui.view.themeview.ThemeView;
+import com.flyzebra.launcher.mediainfo.MediaInfo;
 
 /**
  * Author FlyZebra
@@ -31,6 +32,7 @@ public class FlyuiActivity extends Activity implements IFlyEvent, IUpdataVersion
     private ThemeView mThemeView;
     public IUpdataVersion iUpDataVersion;
     public IDiskCache iDiskCache;
+    private MediaInfo mediaInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,9 @@ public class FlyuiActivity extends Activity implements IFlyEvent, IUpdataVersion
             }
         };
         iUpDataVersion.forceUpVersion(this);
+
+        mediaInfo = new MediaInfo(this);
+        mediaInfo.onCreate();
     }
 
     @Override
@@ -60,6 +65,7 @@ public class FlyuiActivity extends Activity implements IFlyEvent, IUpdataVersion
         FlyLog.d();
         mThemeView.onDestory();
         iUpDataVersion.cancelAllTasks();
+        mediaInfo.onDestory();
         super.onDestroy();
     }
 

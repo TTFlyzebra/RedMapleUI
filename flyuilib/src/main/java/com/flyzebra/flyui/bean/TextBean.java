@@ -20,21 +20,8 @@ public class TextBean implements Parcelable {
     public int right = 0;
     public int bottom = 0;
     public int gravity = 0;
-    public String recv;
-    public String send;
-
-    public int getGravity() {
-        switch (gravity) {
-            case 0:
-                return Gravity.CENTER;
-            case 1:
-                return Gravity.START;
-            case 2:
-                return Gravity.END;
-            default:
-                return Gravity.CENTER;
-        }
-    }
+    public RecvBean recv;
+    public SendBean send;
 
     protected TextBean(Parcel in) {
         textSize = in.readInt();
@@ -47,25 +34,8 @@ public class TextBean implements Parcelable {
         right = in.readInt();
         bottom = in.readInt();
         gravity = in.readInt();
-        recv = in.readString();
-        send = in.readString();
-    }
-
-    public static final Creator<TextBean> CREATOR = new Creator<TextBean>() {
-        @Override
-        public TextBean createFromParcel(Parcel in) {
-            return new TextBean(in);
-        }
-
-        @Override
-        public TextBean[] newArray(int size) {
-            return new TextBean[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
+        recv = in.readParcelable(RecvBean.class.getClassLoader());
+        send = in.readParcelable(SendBean.class.getClassLoader());
     }
 
     @Override
@@ -80,7 +50,38 @@ public class TextBean implements Parcelable {
         dest.writeInt(right);
         dest.writeInt(bottom);
         dest.writeInt(gravity);
-        dest.writeString(recv);
-        dest.writeString(send);
+        dest.writeParcelable(recv, flags);
+        dest.writeParcelable(send, flags);
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<TextBean> CREATOR = new Creator<TextBean>() {
+        @Override
+        public TextBean createFromParcel(Parcel in) {
+            return new TextBean(in);
+        }
+
+        @Override
+        public TextBean[] newArray(int size) {
+            return new TextBean[size];
+        }
+    };
+
+    public int getGravity() {
+        switch (gravity) {
+            case 0:
+                return Gravity.CENTER;
+            case 1:
+                return Gravity.START;
+            case 2:
+                return Gravity.END;
+            default:
+                return Gravity.CENTER;
+        }
+    }
+
 }

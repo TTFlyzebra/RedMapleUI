@@ -26,7 +26,6 @@ public class SimpleImageCellView extends BaseImageCellView implements View.OnTou
 
     public SimpleImageCellView(Context context) {
         super(context);
-        initView(context);
     }
 
 

@@ -35,4 +35,5 @@ dependencies {
         exclude group: 'com.google.code.gson'
     }
     implementation 'com.squareup.retrofit2:adapter-rxjava:2.4.0'
+    compileOnly files('libs/framework.jar')
 }

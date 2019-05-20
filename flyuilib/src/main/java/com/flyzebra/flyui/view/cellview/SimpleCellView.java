@@ -23,8 +23,8 @@ import com.flyzebra.flyui.bean.TextBean;
 import com.flyzebra.flyui.chache.UpdataVersion;
 import com.flyzebra.flyui.utils.IntentUtil;
 import com.flyzebra.flyui.view.base.BaseLayoutCellView;
+import com.flyzebra.flyui.view.base.TextBeanView;
 import com.flyzebra.flyui.view.customview.FlyImageView;
-import com.flyzebra.flyui.view.customview.FlyTextView;
 import com.flyzebra.flyui.view.customview.MirrorView;
 
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public class SimpleCellView extends BaseLayoutCellView implements View.OnTouchLi
 
     @Override
     public boolean verify(CellBean cellBean) {
-        return mCellBean!=null&&((mCellBean.texts!=null&&!mCellBean.texts.isEmpty())||(mCellBean.images!=null&&!mCellBean.images.isEmpty()));
+        return mCellBean!=null;
     }
 
     @Override
@@ -51,42 +51,47 @@ public class SimpleCellView extends BaseLayoutCellView implements View.OnTouchLi
         textViewList.clear();
         removeAllViews();
 
-        for (ImageBean imageBean : mCellBean.images) {
-            ImageView imageView = new FlyImageView(context);
-            imageView.setScaleType(imageBean.getScaleType());
-            int width = (mCellBean.width - imageBean.right) - imageBean.left;
-            int height = (mCellBean.height - imageBean.bottom) - imageBean.top;
-            LayoutParams lp = new LayoutParams(width == 0 ? mCellBean.width : width, height == 0 ? mCellBean.height : height);
-            lp.leftMargin = imageBean.left;
-            lp.topMargin = imageBean.top;
-            addView(imageView, lp);
-            imageViewList.add(imageView);
+        if(mCellBean.images!=null) {
+            for (ImageBean imageBean : mCellBean.images) {
+                ImageView imageView = new FlyImageView(context);
+                imageView.setScaleType(imageBean.getScaleType());
+                int width = (mCellBean.width - imageBean.right) - imageBean.left;
+                int height = (mCellBean.height - imageBean.bottom) - imageBean.top;
+                LayoutParams lp = new LayoutParams(width == 0 ? mCellBean.width : width, height == 0 ? mCellBean.height : height);
+                lp.leftMargin = imageBean.left;
+                lp.topMargin = imageBean.top;
+                addView(imageView, lp);
+                imageViewList.add(imageView);
+            }
         }
 
-        for (TextBean textBean : mCellBean.texts) {
-            TextView textView = new FlyTextView(context);
-            try {
-                textView.setTextColor(Color.parseColor(textBean.textColor));
-            } catch (Exception e) {
-                textView.setTextColor(0xffffffff);
+        if(mCellBean.texts!=null) {
+            for (TextBean textBean : mCellBean.texts) {
+                TextView textView = new TextBeanView(context);
+                try {
+                    textView.setTextColor(Color.parseColor(textBean.textColor));
+                } catch (Exception e) {
+                    textView.setTextColor(0xffffffff);
+                }
+                ((TextBeanView) textView).setTextBean(textBean);
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textBean.textSize);
+                textView.setGravity(textBean.getGravity());
+                if (textBean.textLines <= 0) {
+                    textView.setLines(1);
+                } else {
+                    textView.setLines(textBean.textLines);
+                }
+                if (textBean.text != null) {
+                    textView.setText(textBean.text.getText());
+                }
+                int width = (mCellBean.width - textBean.right) - textBean.left;
+                int height = (mCellBean.height - textBean.bottom) - textBean.top;
+                LayoutParams lp = new LayoutParams(width == 0 ? mCellBean.width : width, height == 0 ? mCellBean.height : height);
+                lp.leftMargin = textBean.left;
+                lp.topMargin = textBean.top;
+                addView(textView, lp);
+                textViewList.add(textView);
             }
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textBean.textSize);
-            textView.setGravity(textBean.getGravity());
-            if (textBean.textLines <= 0) {
-                textView.setLines(1);
-            } else {
-                textView.setLines(textBean.textLines);
-            }
-            if (textBean.text != null) {
-                textView.setText(textBean.text.getText());
-            }
-            int width = (mCellBean.width - textBean.right) - textBean.left;
-            int height = (mCellBean.height - textBean.bottom) - textBean.top;
-            LayoutParams lp = new LayoutParams(width == 0 ? mCellBean.width : width, height == 0 ? mCellBean.height : height);
-            lp.leftMargin = textBean.left;
-            lp.topMargin = textBean.top;
-            addView(textView, lp);
-            textViewList.add(textView);
         }
 
         if (mCellBean.send != null) {
@@ -97,6 +102,7 @@ public class SimpleCellView extends BaseLayoutCellView implements View.OnTouchLi
 
     @Override
     public void refreshView(CellBean cellBean) {
+        if(cellBean.images==null)  return;
         for (int i = 0; i < cellBean.images.size(); i++) {
             String imageurl = UpdataVersion.getNativeFilePath(cellBean.images.get(i).url);
             final ImageView imageView = imageViewList.get(i);

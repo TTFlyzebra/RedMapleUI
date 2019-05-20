@@ -12,7 +12,7 @@ public interface CellType {
     /**
      * 收音机应用
      */
-    int TYPE_APP_RADIO = 2;
+    int TYPE_NUM_TEXT = 2;
     /**
      * 时间
      */

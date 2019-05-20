@@ -4,7 +4,7 @@ import com.flyzebra.flyui.utils.ByteUtil;
 import com.flyzebra.flyui.utils.FlyLog;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +15,7 @@ import java.util.Map;
  **/
 public class FlyEvent {
     private static final List<IFlyEvent> flyuiEvents = new ArrayList<>();
-    private static final Map<String, Object> saveKey = new Hashtable<>();
+    private static final Map<String, Object> saveKey = new HashMap<>();
 
     public static FlyEvent getInstance() {
         return FlyEvent.FlyActionHolder.sInstance;
@@ -77,6 +77,16 @@ public class FlyEvent {
     }
 
     public static void sendEvent(byte[] key) {
+        getInstance().sendEventToClient(key);
+    }
+
+    public static void sendEvent(String key,Object obj) {
+        saveValue(key,obj);
+        getInstance().sendEventToClient(ByteUtil.hexString2Bytes(key));
+    }
+
+    public static void sendEvent(byte[] key,Object obj) {
+        saveValue(key,obj);
         getInstance().sendEventToClient(key);
     }
 

@@ -27,6 +27,12 @@ public class CellViewFactory {
             case CellType.TYPE_APP_DATE:
                 iCellView = new DateCellView(context);
                 break;
+            case CellType.TYPE_APP_MEDIA:
+                iCellView = new MediaInfoCellView(context);
+                return iCellView;
+            case CellType.TYPE_NUM_TEXT:
+                iCellView = new NumTextCellView(context);
+                return iCellView;
             default:
                 boolean isText = cellBean.texts != null && cellBean.texts.size() == 1;
                 boolean isImage = cellBean.images != null && cellBean.images.size() == 1;

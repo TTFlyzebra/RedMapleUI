@@ -33,5 +33,4 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation files('libs/disklrucache.jar')
     implementation 'com.android.support:recyclerview-v7:27.1.1'
-    compileOnly files('libs/framework.jar')
 }
