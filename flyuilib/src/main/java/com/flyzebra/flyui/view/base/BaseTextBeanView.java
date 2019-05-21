@@ -14,10 +14,10 @@ import com.flyzebra.flyui.view.customview.FlyTextView;
  * 2019/5/20 16:08
  * Describ:
  **/
-public class TextBeanView extends FlyTextView implements IFlyEvent {
+public class BaseTextBeanView extends FlyTextView implements IFlyEvent {
     private TextBean textBean;
 
-    public TextBeanView(Context context) {
+    public BaseTextBeanView(Context context) {
         super(context);
     }
 

@@ -28,7 +28,7 @@
 //    }
 //
 //    @Override
-//    public void initView(Context context) {
+//    public void init(CellBean cellBean) {
 //
 //    }
 //

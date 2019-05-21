@@ -33,8 +33,8 @@ public class DateCellView extends SimpleCellView {
     }
 
     @Override
-    public void initView(Context context) {
-        super.initView(context);
+    public void init(CellBean cellBean) {
+        super.init(cellBean);
         textStr = new String[mCellBean.texts.size()];
         for (int i = 0; i < textStr.length; i++) textStr[i] = "";
         if (mTimer == null) {
@@ -62,7 +62,7 @@ public class DateCellView extends SimpleCellView {
                         mHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                refreshView(mCellBean);
+                                refresh(mCellBean);
                             }
                         });
                     }
@@ -105,8 +105,8 @@ public class DateCellView extends SimpleCellView {
     }
 
     @Override
-    public void refreshView(CellBean cellBean) {
-        super.refreshView(cellBean);
+    public void refresh(CellBean cellBean) {
+        super.refresh(cellBean);
         try {
             FlyLog.d("up time");
             for (int i = 0; i < textViewList.size(); i++) {

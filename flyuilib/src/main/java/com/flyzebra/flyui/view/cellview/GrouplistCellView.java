@@ -60,11 +60,11 @@
 //
 //    public GrouplistCellView(Context context) {
 //        super(context);
-//        initView(context);
+//        init(context);
 //    }
 //
 //    @Override
-//    public void initView(Context context) {
+//    public void init(CellBean cellBean) {
 //    }
 //
 //    @Override
@@ -126,12 +126,12 @@
 //
 //    public void checkLoadingFinish() {
 //        if (meLoading.get() <= 0) {
-//            refreshView();
+//            refresh();
 //        }
 //    }
 //
-//    public void refreshView(CellBean cellBean) {
-//        FlyLog.d("refreshView");
+//    public void refresh(CellBean cellBean) {
+//        FlyLog.d("refresh");
 //        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), maxColumn);
 //        setLayoutManager(gridLayoutManager);
 //        adapter = new FlyAdapter();

@@ -1,6 +1,5 @@
 package com.flyzebra.flyui.view.cellview;
 
-import android.content.Context;
 import android.view.ViewGroup;
 
 import com.flyzebra.flyui.bean.CellBean;
@@ -31,14 +30,14 @@ public interface ICell {
 
     /**
      * 创建View
-     * @param context
+     * @param cellBean
      */
-    void initView(Context context);
+    void init(CellBean cellBean);
 
     /**
      * 更新View
      */
-    void refreshView(CellBean cellBean);
+    void refresh(CellBean cellBean);
 
     /**
      * 执行点击事件

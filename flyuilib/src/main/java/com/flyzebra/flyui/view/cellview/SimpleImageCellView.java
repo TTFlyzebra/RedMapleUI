@@ -40,7 +40,7 @@ public class SimpleImageCellView extends BaseImageCellView implements View.OnTou
     }
 
     @Override
-    public void initView(Context context) {
+    public void init(CellBean cellBean) {
         setScaleType(mCellBean.images.get(0).getScaleType());
         if (mCellBean.send != null) {
             setOnClickListener(this);
@@ -49,7 +49,7 @@ public class SimpleImageCellView extends BaseImageCellView implements View.OnTou
     }
 
     @Override
-    public void refreshView(CellBean cellBean) {
+    public void refresh(CellBean cellBean) {
         String imageurl = UpdataVersion.getNativeFilePath(cellBean.images.get(0).url);
         Glide.with(getContext())
                 .asBitmap()

@@ -52,11 +52,11 @@
 //
 //    public ListCellView(Context context) {
 //        super(context);
-//        initView(context);
+//        init(context);
 //    }
 //
 //    @Override
-//    public void initView(Context context) {
+//    public void init(CellBean cellBean) {
 //    }
 //
 //    @Override
@@ -75,12 +75,12 @@
 //                    @Override
 //                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
 //                        mDefaultDrawables.put(subcell.cellId, resource);
-//                        refreshView();
+//                        refresh();
 //                    }
 //
 //                    @Override
 //                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
-//                        refreshView();
+//                        refresh();
 //                    }
 //
 //                    @Override
@@ -89,11 +89,11 @@
 //                });
 //                break;
 //            }
-//            refreshView();
+//            refresh();
 //        }
 //    }
 //
-//    public void refreshView(CellBean cellBean) {
+//    public void refresh(CellBean cellBean) {
 //        int num = mCellBean.width / mCellBean.subCells.get(0).width;
 //        if (num > 1) {
 //            GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), num);

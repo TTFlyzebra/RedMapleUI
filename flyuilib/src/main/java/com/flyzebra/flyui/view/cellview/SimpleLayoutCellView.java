@@ -29,15 +29,14 @@ public class SimpleLayoutCellView extends FrameLayout implements ICell, View.OnC
 
     @Override
     public void loadingRes(CellBean cellBean) {
-        initView(getContext());
     }
 
     @Override
-    public void initView(Context context) {
+    public void init(CellBean cellBean) {
     }
 
     @Override
-    public void refreshView(CellBean cellBean) {
+    public void refresh(CellBean cellBean) {
     }
 
     @Override

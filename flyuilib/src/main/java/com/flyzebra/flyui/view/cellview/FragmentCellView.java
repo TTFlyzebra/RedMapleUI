@@ -25,11 +25,11 @@
 //
 //    public FragmentCellView(Context context) {
 //        super(context);
-//        initView(context);
+//        init(context);
 //    }
 //
 //    @Override
-//    public void initView(Context context) {
+//    public void init(CellBean cellBean) {
 //    }
 //
 //    @Override

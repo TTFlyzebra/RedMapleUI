@@ -100,10 +100,13 @@ public class MediaInfo {
             public void onMediaEvent(String action, Bundle extras) {
                 FlyLog.d("onMediaEvent action=%s,extras=" + extras, action);
                 try {
-                    int fmType = extras.getInt("Band");
-                    FlyEvent.sendEvent("100211", new byte[]{(byte) fmType});
+                    int fmCode = extras.getInt("Band");
+                    String fmType = fmCode == 0 ? "FM1" : fmCode == 1 ? "FM2" : fmCode == 2 ? "FM3" : fmCode == 3 ? "AM1" : "AM2";
                     String fmName = extras.getString("name");
+                    String fmKzMz = fmCode < 3 ? "MHz" : "KHz";
+                    FlyEvent.sendEvent("100211", fmType);
                     FlyEvent.sendEvent("100212", fmName);
+                    FlyEvent.sendEvent("100213", fmKzMz);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

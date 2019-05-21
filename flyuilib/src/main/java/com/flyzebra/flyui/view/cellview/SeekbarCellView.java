@@ -44,10 +44,10 @@ public class SeekbarCellView extends BaseLayoutCellView implements SeekBar.OnSee
     }
 
     @Override
-    public void initView(Context context) {
+    public void init(CellBean cellBean) {
         FlyLog.d("seekbar");
 //        setClipChildren(false);
-        seekBar = new SeekBar(context);
+        seekBar = new SeekBar(getContext());
         LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         addView(seekBar, lp);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

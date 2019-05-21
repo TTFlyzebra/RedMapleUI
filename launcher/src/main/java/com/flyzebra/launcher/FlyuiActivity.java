@@ -65,12 +65,13 @@ public class FlyuiActivity extends Activity implements IFlyEvent, IUpdataVersion
     @Override
     protected void onDestroy() {
         FlyLog.d();
+        mediaInfo.onDestory();
         mThemeView.onDestory();
         iUpDataVersion.cancelAllTasks();
-        mediaInfo.onDestory();
         FlyEvent.unregister(this);
         FlyEvent.clear();
         super.onDestroy();
+        System.exit(0);
     }
 
 
@@ -101,7 +102,7 @@ public class FlyuiActivity extends Activity implements IFlyEvent, IUpdataVersion
     }
 
     private void upView(ThemeBean themeBean) {
-        FlyEvent.clear();
+        FlyEvent.unregisterAll();
         FlyEvent.register(this);
         mThemeView.upData(themeBean);
         if (TextUtils.isEmpty(themeBean.imageurl)) {

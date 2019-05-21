@@ -46,6 +46,10 @@ public class FlyEvent {
         getInstance().registerMe(flyuiAction);
     }
 
+    public static void unregisterAll() {
+        flyuiEvents.clear();
+    }
+
     private void registerMe(IFlyEvent flyuiAction) {
         if (flyuiAction != null) {
             synchronized (flyuiEvents) {
@@ -80,13 +84,13 @@ public class FlyEvent {
         getInstance().sendEventToClient(key);
     }
 
-    public static void sendEvent(String key,Object obj) {
-        saveValue(key,obj);
+    public static void sendEvent(String key, Object obj) {
+        saveValue(key, obj);
         getInstance().sendEventToClient(ByteUtil.hexString2Bytes(key));
     }
 
-    public static void sendEvent(byte[] key,Object obj) {
-        saveValue(key,obj);
+    public static void sendEvent(byte[] key, Object obj) {
+        saveValue(key, obj);
         getInstance().sendEventToClient(key);
     }
 

@@ -25,7 +25,7 @@ import com.flyzebra.flyui.chache.UpdataVersion;
 import com.flyzebra.flyui.event.FlyEvent;
 import com.flyzebra.flyui.utils.IntentUtil;
 import com.flyzebra.flyui.view.base.BaseLayoutCellView;
-import com.flyzebra.flyui.view.base.TextBeanView;
+import com.flyzebra.flyui.view.base.BaseTextBeanView;
 import com.flyzebra.flyui.view.customview.FlyImageView;
 import com.flyzebra.flyui.view.customview.MirrorView;
 
@@ -48,14 +48,14 @@ public class SimpleCellView extends BaseLayoutCellView implements View.OnTouchLi
     }
 
     @Override
-    public void initView(Context context) {
+    public void init(CellBean cellBean) {
         imageViewList.clear();
         textViewList.clear();
         removeAllViews();
 
         if(mCellBean.images!=null) {
             for (ImageBean imageBean : mCellBean.images) {
-                ImageView imageView = new FlyImageView(context);
+                ImageView imageView = new FlyImageView(getContext());
                 imageView.setScaleType(imageBean.getScaleType());
                 int width = (mCellBean.width - imageBean.right) - imageBean.left;
                 int height = (mCellBean.height - imageBean.bottom) - imageBean.top;
@@ -69,13 +69,13 @@ public class SimpleCellView extends BaseLayoutCellView implements View.OnTouchLi
 
         if(mCellBean.texts!=null) {
             for (TextBean textBean : mCellBean.texts) {
-                TextView textView = new TextBeanView(context);
+                TextView textView = new BaseTextBeanView(getContext());
                 try {
                     textView.setTextColor(Color.parseColor(textBean.textColor));
                 } catch (Exception e) {
                     textView.setTextColor(0xffffffff);
                 }
-                ((TextBeanView) textView).setTextBean(textBean);
+                ((BaseTextBeanView) textView).setTextBean(textBean);
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textBean.textSize);
                 textView.setGravity(textBean.getGravity());
                 if (textBean.textLines <= 0) {
@@ -103,7 +103,7 @@ public class SimpleCellView extends BaseLayoutCellView implements View.OnTouchLi
     }
 
     @Override
-    public void refreshView(CellBean cellBean) {
+    public void refresh(CellBean cellBean) {
         if(cellBean.images==null)  return;
         for (int i = 0; i < cellBean.images.size(); i++) {
             String imageurl = UpdataVersion.getNativeFilePath(cellBean.images.get(i).url);

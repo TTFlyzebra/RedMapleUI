@@ -41,9 +41,9 @@ public abstract class BaseView extends View implements IFlyEvent, ICell {
         FlyLog.d("setCellBean");
         this.mCellBean = cellBean;
         if (verify(mCellBean)) {
-            initView(getContext());
+            init(mCellBean);
             loadingRes(mCellBean);
-            refreshView(mCellBean);
+            refresh(mCellBean);
         }
     }
 
@@ -53,7 +53,7 @@ public abstract class BaseView extends View implements IFlyEvent, ICell {
     }
 
     @Override
-    public void initView(Context context) {
+    public void init(CellBean cellBean) {
 
     }
 
@@ -63,7 +63,7 @@ public abstract class BaseView extends View implements IFlyEvent, ICell {
     }
 
     @Override
-    public void refreshView(CellBean cellBean) {
+    public void refresh(CellBean cellBean) {
 
     }
 

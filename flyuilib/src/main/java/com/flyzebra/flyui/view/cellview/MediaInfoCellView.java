@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -32,8 +33,16 @@ public class MediaInfoCellView extends SimpleCellView {
     }
 
     @Override
+    public void init(CellBean cellBean) {
+        super.init(cellBean);
+        if(mCellBean.recv!=null&&!TextUtils.isEmpty(mCellBean.recv.recvId)){
+            recvEvent(ByteUtil.hexString2Bytes(mCellBean.recv.recvId));
+        }
+    }
+
+    @Override
     public void loadingRes(CellBean cellBean) {
-        if (cellBean.images == null && mCellBean.images.isEmpty()) return;
+        if (cellBean.images == null || cellBean.images.isEmpty()) return;
         String imageurl = UpdataVersion.getNativeFilePath(cellBean.images.get(0).url);
         Glide.with(getContext())
                 .asBitmap()
@@ -45,12 +54,7 @@ public class MediaInfoCellView extends SimpleCellView {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                         defBitmap = resource;
-                        refreshView(mCellBean);
-                        try{
-                            FlyEvent.sendEvent(mCellBean.recv.recvId);
-                        }catch (Exception e){
-                            FlyLog.e(e.toString());
-                        }
+                        refresh(mCellBean);
                     }
 
                     @Override
@@ -61,7 +65,7 @@ public class MediaInfoCellView extends SimpleCellView {
     }
 
     @Override
-    public void refreshView(CellBean cellBean) {
+    public void refresh(CellBean cellBean) {
         //设置图片
         if (!imageViewList.isEmpty()) {
             if (bitmap == null) {
@@ -90,7 +94,7 @@ public class MediaInfoCellView extends SimpleCellView {
                 FlyLog.d("handle 100227 imageBytes=" + imageBytes);
                 if (imageBytes == null) {
                     bitmap = null;
-                    refreshView(mCellBean);
+                    refresh(mCellBean);
                 } else {
                     new Thread(new Runnable() {
                         @Override
@@ -104,7 +108,7 @@ public class MediaInfoCellView extends SimpleCellView {
                             mHandler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    refreshView(mCellBean);
+                                    refresh(mCellBean);
                                     FlyLog.d("handle 100227 finish; bitmap=" + bitmap);
                                 }
                             });

@@ -29,11 +29,11 @@
 //
 //    public StatusCellView(Context context) {
 //        super(context);
-//        initView(context);
+//        init(context);
 //    }
 //
 //    @Override
-//    public void initView(Context context) {
+//    public void init(CellBean cellBean) {
 //        focusChange(false);
 //    }
 //
@@ -45,7 +45,7 @@
 //            setOnTouchListener(this);
 //        }
 //        setScaleType(ScaleType.CENTER);
-//        refreshView();
+//        refresh();
 //    }
 //
 //    @Override
@@ -54,7 +54,7 @@
 //        focusChange(!enabled);
 //    }
 //
-//    public void refreshView(CellBean cellBean) {
+//    public void refresh(CellBean cellBean) {
 //        switch (mCellBean.recv) {
 //            case ActionKey.MSG_PLAY_STATUS:
 //            case ActionKey.MSG_MENU_STATUS:

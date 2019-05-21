@@ -136,11 +136,11 @@ public class NumTextCellView extends BaseView {
 
     public void setText(String text) {
         this.text = text;
-        refreshView(mCellBean);
+        refresh(mCellBean);
     }
 
     @Override
-    public void refreshView(CellBean cellBean) {
+    public void refresh(CellBean cellBean) {
         if (TextUtils.isEmpty(text)) return;
         int count = 0;
         for (int i = 0; i < text.length(); i++) {

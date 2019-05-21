@@ -24,10 +24,10 @@ public class MirrorCellView extends SimpleCellView {
     }
 
     @Override
-    public void initView(Context context) {
-        super.initView(context);
+    public void init(CellBean cellBean) {
+        super.init(cellBean);
         ImageBean imageBean = mCellBean.images.get(0);
-        mirrorImageView = new MirrorView(context);
+        mirrorImageView = new MirrorView(getContext());
         mirrorImageView.setScaleType(ImageView.ScaleType.FIT_XY);
         mirrorImageView.setAlpha(0.4f);
         int width = (mCellBean.width - imageBean.right) - imageBean.left;
@@ -37,8 +37,8 @@ public class MirrorCellView extends SimpleCellView {
         addView(mirrorImageView, lp);
     }
 
-    public void refreshView(CellBean cellBean) {
-        super.refreshView(cellBean);
+    public void refresh(CellBean cellBean) {
+        super.refresh(cellBean);
         String imageurl = UpdataVersion.getNativeFilePath(mCellBean.images.get(0).url);
         Glide.with(getContext())
                 .asBitmap()

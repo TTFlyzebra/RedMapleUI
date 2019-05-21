@@ -22,7 +22,7 @@ public class CellViewFactory {
                 iCellView = new SimpleNavCellView(context);
                 break;
             case CellType.TYPE_IMAGE_TEXT:
-                iCellView = new ImageTextCellView(context);
+                iCellView = new SingleImageTextCellView(context);
                 return iCellView;
             case CellType.TYPE_NUM_TEXT:
                 iCellView = new NumTextCellView(context);

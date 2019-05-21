@@ -30,7 +30,7 @@ public class SimpleTextCellView extends BaseTextCellView {
     }
 
     @Override
-    public void initView(Context context) {
+    public void init(CellBean cellBean) {
         TextBean textBean = mCellBean.texts.get(0);
         try {
             setTextColor(Color.parseColor(textBean.textColor));
