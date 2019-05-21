@@ -89,6 +89,7 @@ public class MediaInfo {
 
             @Override
             public void onID3(String title, String artist, String album, byte[] artWork) {
+                FlyLog.d("title=%s, artist=%s,album=%s,artWork" + artWork,title,artist,album);
                 FlyEvent.sendEvent("100222", title);
                 FlyEvent.sendEvent("100223", artist);
                 FlyEvent.sendEvent("100224", album);

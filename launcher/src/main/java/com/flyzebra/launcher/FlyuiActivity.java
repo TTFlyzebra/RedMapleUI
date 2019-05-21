@@ -15,8 +15,10 @@ import com.flyzebra.flyui.chache.DiskCache;
 import com.flyzebra.flyui.chache.IDiskCache;
 import com.flyzebra.flyui.chache.IUpdataVersion;
 import com.flyzebra.flyui.chache.UpdataVersion;
+import com.flyzebra.flyui.event.FlyEvent;
 import com.flyzebra.flyui.event.IFlyEvent;
 import com.flyzebra.flyui.utils.AppUtil;
+import com.flyzebra.flyui.utils.ByteUtil;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.utils.SysproUtil;
 import com.flyzebra.flyui.view.themeview.ThemeView;
@@ -66,6 +68,8 @@ public class FlyuiActivity extends Activity implements IFlyEvent, IUpdataVersion
         mThemeView.onDestory();
         iUpDataVersion.cancelAllTasks();
         mediaInfo.onDestory();
+        FlyEvent.unregister(this);
+        FlyEvent.clear();
         super.onDestroy();
     }
 
@@ -97,6 +101,8 @@ public class FlyuiActivity extends Activity implements IFlyEvent, IUpdataVersion
     }
 
     private void upView(ThemeBean themeBean) {
+        FlyEvent.clear();
+        FlyEvent.register(this);
         mThemeView.upData(themeBean);
         if (TextUtils.isEmpty(themeBean.imageurl)) {
             getWindow().getDecorView().setBackground(null);
@@ -121,6 +127,16 @@ public class FlyuiActivity extends Activity implements IFlyEvent, IUpdataVersion
 
     @Override
     public boolean recvEvent(byte[] key) {
+        String id = ByteUtil.bytes2HexString(key);
+        FlyLog.d("recvEvetn key=%s",id);
+        switch (id){
+            case "200302":
+                mediaInfo.playPrev();
+                break;
+            case "200303":
+                mediaInfo.playNext();
+                break;
+        }
         return false;
     }
 }

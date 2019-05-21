@@ -21,6 +21,12 @@ public class CellViewFactory {
             case CellType.TYPE_APP_NAV:
                 iCellView = new SimpleNavCellView(context);
                 break;
+            case CellType.TYPE_IMAGE_TEXT:
+                iCellView = new ImageTextCellView(context);
+                return iCellView;
+            case CellType.TYPE_NUM_TEXT:
+                iCellView = new NumTextCellView(context);
+                return iCellView;
             case CellType.TYPE_APP_MIRRORIMG:
                 iCellView = new MirrorCellView(context);
                 break;
@@ -30,9 +36,10 @@ public class CellViewFactory {
             case CellType.TYPE_APP_MEDIA:
                 iCellView = new MediaInfoCellView(context);
                 return iCellView;
-            case CellType.TYPE_NUM_TEXT:
-                iCellView = new NumTextCellView(context);
+            case CellType.TYPE_SEEKBAR:
+                iCellView = new SeekbarCellView(context);
                 return iCellView;
+            case CellType.TYPE_APP_NORMAL:
             default:
                 boolean isText = cellBean.texts != null && cellBean.texts.size() == 1;
                 boolean isImage = cellBean.images != null && cellBean.images.size() == 1;

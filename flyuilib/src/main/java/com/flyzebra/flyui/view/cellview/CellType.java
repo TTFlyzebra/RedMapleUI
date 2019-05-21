@@ -8,7 +8,7 @@ public interface CellType {
     /**
      * 普通应用
      */
-    int TYPE_IMAGE = 1;
+    int TYPE_IMAGE_TEXT = 1;
     /**
      * 收音机应用
      */

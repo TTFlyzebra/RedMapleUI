@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.ImageBean;
 import com.flyzebra.flyui.bean.TextBean;
 import com.flyzebra.flyui.chache.UpdataVersion;
+import com.flyzebra.flyui.event.FlyEvent;
 import com.flyzebra.flyui.utils.IntentUtil;
 import com.flyzebra.flyui.view.base.BaseLayoutCellView;
 import com.flyzebra.flyui.view.base.TextBeanView;
@@ -140,8 +142,9 @@ public class SimpleCellView extends BaseLayoutCellView implements View.OnTouchLi
     public void onClick() {
         if (mCellBean.send == null) {
             return;
-        }
-        if (IntentUtil.execStartPackage(getContext(), mCellBean.send.packName, mCellBean.send.className)) {
+        }if(!TextUtils.isEmpty(mCellBean.send.eventId)){
+            FlyEvent.sendEvent(mCellBean.send.eventId);
+        }else if (IntentUtil.execStartPackage(getContext(), mCellBean.send.packName, mCellBean.send.className)) {
         } else if (!IntentUtil.execStartPackage(getContext(), mCellBean.send.packName)) {
         }
     }

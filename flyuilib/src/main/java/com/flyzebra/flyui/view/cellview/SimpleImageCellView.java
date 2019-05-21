@@ -2,9 +2,11 @@ package com.flyzebra.flyui.view.cellview;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.chache.UpdataVersion;
+import com.flyzebra.flyui.event.FlyEvent;
 import com.flyzebra.flyui.utils.IntentUtil;
 import com.flyzebra.flyui.view.base.BaseImageCellView;
 import com.flyzebra.flyui.view.customview.MirrorView;
@@ -82,7 +85,9 @@ public class SimpleImageCellView extends BaseImageCellView implements View.OnTou
         if (mCellBean.send == null) {
             return;
         }
-        if (IntentUtil.execStartPackage(getContext(), mCellBean.send.packName, mCellBean.send.className)) {
+        if(!TextUtils.isEmpty(mCellBean.send.eventId)){
+            FlyEvent.sendEvent(mCellBean.send.eventId);
+        }else if (IntentUtil.execStartPackage(getContext(), mCellBean.send.packName, mCellBean.send.className)) {
         } else if (!IntentUtil.execStartPackage(getContext(), mCellBean.send.packName)) {
         }
     }
@@ -122,7 +127,11 @@ public class SimpleImageCellView extends BaseImageCellView implements View.OnTou
 
     private void focusChange(boolean flag) {
         if (flag) {
-            setColorFilter(0x3FFFFFFF);
+            try {
+                setColorFilter(Color.parseColor(mCellBean.filterColor));
+            }catch (Exception e){
+                setColorFilter(0x3FFFFFFF);
+            }
             mHandler.removeCallbacks(show);
             mHandler.postDelayed(show, 300);
         } else {
