@@ -18,24 +18,26 @@ import com.flyzebra.flyui.event.FlyEvent;
 import com.flyzebra.flyui.event.IFlyEvent;
 import com.flyzebra.flyui.utils.ByteUtil;
 import com.flyzebra.flyui.utils.FlyLog;
-import com.flyzebra.flyui.view.customview.FlyImageView;
+import com.flyzebra.flyui.view.customview.ShapeImageView;
 
 /**
  * Author FlyZebra
  * 2019/5/20 16:08
  * Describ:
  **/
-public class BaseImageBeanView extends FlyImageView implements IFlyEvent, View.OnTouchListener {
+public class BaseImageBeanView extends ShapeImageView implements IFlyEvent, View.OnTouchListener {
     private ImageBean mImageBean;
     private Handler mHandler = new Handler(Looper.getMainLooper());
-    public Bitmap bitmap = null;
+    public Bitmap mBitmap = null;
 
     public BaseImageBeanView(Context context) {
         super(context);
     }
 
     public void setmImageBean(final ImageBean imageBean) {
+        if(mImageBean==null) return;
         mImageBean = imageBean;
+        setShapeType(imageBean.shapeType);
         if (mImageBean != null && mImageBean.send != null && !TextUtils.isEmpty(mImageBean.send.eventId)) {
             setOnClickListener(new OnClickListener() {
                 @Override
@@ -90,6 +92,10 @@ public class BaseImageBeanView extends FlyImageView implements IFlyEvent, View.O
         FlyLog.v("onAttachedToWindow");
         super.onAttachedToWindow();
         FlyEvent.register(this);
+        if (mImageBean == null || mImageBean.recv == null || mImageBean.recv.recvId == null) {
+            return;
+        }
+        recvEvent(ByteUtil.hexString2Bytes(mImageBean.recv.recvId));
     }
 
     @Override
@@ -132,25 +138,26 @@ public class BaseImageBeanView extends FlyImageView implements IFlyEvent, View.O
                 final byte[] imageBytes = (byte[]) FlyEvent.getValue(mImageBean.recv.recvId);
                 FlyLog.d("handle 100227 imageBytes=" + imageBytes);
                 if (imageBytes == null) {
+                    mBitmap = null;
                     setDefImageBitmap();
                 } else {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
                             try {
-                                bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+                                mBitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
                             } catch (Exception e) {
                                 FlyLog.e(e.toString());
                                 return;
                             }
-                            if (bitmap == null) return;
+                            if (mBitmap == null) return;
                             mHandler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (bitmap != null) {
-                                        setImageBitmap(bitmap);
+                                    if (mBitmap != null) {
+                                        setImageBitmap(mBitmap);
                                     }
-                                    FlyLog.d("handle 100227 finish; bitmap=" + bitmap);
+                                    FlyLog.d("handle 100227 finish; bitmap=" + mBitmap);
                                 }
                             });
                         }

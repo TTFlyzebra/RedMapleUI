@@ -19,6 +19,7 @@ public class ImageBean implements Parcelable {
     public int right;
     public int bottom;
     public int scaleType;
+    public int shapeType;
     public RecvBean recv;
     public SendBean send;
 

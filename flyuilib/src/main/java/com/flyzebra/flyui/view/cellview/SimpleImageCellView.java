@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -65,7 +66,9 @@ public class SimpleImageCellView extends BaseImageCellView implements View.OnTou
                 .into(new BitmapImageViewTarget(this) {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        setImageBitmap(resource);
+                        if (mBitmap == null){
+                            setImageBitmap(resource);
+                        }
                         if (mirrorView != null) {
                             setDrawingCacheEnabled(true);
                             Bitmap bmp = getDrawingCache();
@@ -78,6 +81,11 @@ public class SimpleImageCellView extends BaseImageCellView implements View.OnTou
                             }
                             mirrorView.showImage(bmp);
                         }
+                    }
+
+                    @Override
+                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                        super.onLoadFailed(errorDrawable);
                     }
                 });
     }
@@ -150,6 +158,15 @@ public class SimpleImageCellView extends BaseImageCellView implements View.OnTou
     }
 
     @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (mCellBean == null || mCellBean.images.isEmpty()) return;
+        ImageBean imageBean = mCellBean.images.get(0);
+        if (imageBean == null || imageBean.recv == null || imageBean.recv.recvId == null) return ;
+        recvEvent(ByteUtil.hexString2Bytes(imageBean.recv.recvId));
+    }
+
+    @Override
     protected void onDetachedFromWindow() {
         mHandler.removeCallbacksAndMessages(null);
         super.onDetachedFromWindow();
@@ -173,7 +190,7 @@ public class SimpleImageCellView extends BaseImageCellView implements View.OnTou
 
     @Override
     public boolean recvEvent(byte[] key) {
-        if (mCellBean == null && mCellBean.images.isEmpty()) return false;
+        if (mCellBean == null || mCellBean.images.isEmpty()) return false;
         ImageBean imageBean = mCellBean.images.get(0);
         if (imageBean == null || imageBean.recv == null || imageBean.recv.recvId == null) {
             return false;
@@ -188,6 +205,7 @@ public class SimpleImageCellView extends BaseImageCellView implements View.OnTou
                 final byte[] imageBytes = (byte[]) FlyEvent.getValue(imageBean.recv.recvId);
                 FlyLog.d("handle 100227 imageBytes=" + imageBytes);
                 if (imageBytes == null) {
+                    mBitmap = null;
                     refresh(mCellBean);
                 } else {
                     new Thread(new Runnable() {

@@ -7,10 +7,10 @@ package com.flyzebra.flyui.utils;
  **/
 public class ByteUtil {
     public static String bytes2HexString(byte[] bytes) {
-        if (bytes == null || bytes.length == 1) {
+        if (bytes == null || bytes.length == 0) {
             return null;
         }
-        StringBuilder sb = new StringBuilder("");
+        StringBuilder sb = new StringBuilder();
         for (byte aByte : bytes) {
             String hv = Integer.toHexString(aByte & 0xFF);
             if (hv.length() < 2) {

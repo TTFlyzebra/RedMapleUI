@@ -147,7 +147,7 @@ public class SimpleCellView extends BaseLayoutCellView implements View.OnTouchLi
         if (!TextUtils.isEmpty(mCellBean.send.eventId)) {
             FlyEvent.sendEvent(mCellBean.send.eventId);
         } else if (IntentUtil.execStartPackage(getContext(), mCellBean.send.packName, mCellBean.send.className)) {
-        } else if (!IntentUtil.execStartPackage(getContext(), mCellBean.send.packName)) {
+        } else if (IntentUtil.execStartPackage(getContext(), mCellBean.send.packName)) {
         }
     }
 
@@ -187,7 +187,11 @@ public class SimpleCellView extends BaseLayoutCellView implements View.OnTouchLi
     private void focusChange(boolean flag) {
         if (flag) {
             for (ImageView imageView : imageViewList) {
-                imageView.setColorFilter(0x3FFFFFFF);
+                try {
+                    imageView.setColorFilter(Color.parseColor(mCellBean.filterColor));
+                } catch (Exception e) {
+                    imageView.setColorFilter(0x3FFFFFFF);
+                }
             }
             mHandler.removeCallbacks(show);
             mHandler.postDelayed(show, 300);

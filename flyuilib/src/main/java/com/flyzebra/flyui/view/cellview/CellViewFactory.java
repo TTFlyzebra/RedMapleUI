@@ -41,12 +41,13 @@ public class CellViewFactory {
                 return iCellView;
             case CellType.TYPE_APP_NORMAL:
             default:
-                boolean isText = cellBean.texts != null && cellBean.texts.size() == 1;
-                boolean isImage = cellBean.images != null && cellBean.images.size() == 1;
-                iCellView = isImage && isText ? new SimpleCellView(context)
-                        : isText ? new SimpleTextCellView(context)
-                        : isImage ? new SimpleImageCellView(context)
-                        : new SimpleCellView(context);
+//                boolean isText = cellBean.texts != null && cellBean.texts.size() == 1;
+//                boolean isImage = cellBean.images != null && cellBean.images.size() == 1;
+//                iCellView = isImage && isText ? new SimpleCellView(context)
+//                        : isText ? new SimpleTextCellView(context)
+//                        : isImage ? new SimpleImageCellView(context)
+//                        : new SimpleCellView(context);
+                iCellView = new SimpleCellView(context);
                 break;
         }
         return iCellView;

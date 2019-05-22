@@ -129,8 +129,10 @@ public class FlyuiActivity extends Activity implements IFlyEvent, IUpdataVersion
     @Override
     public boolean recvEvent(byte[] key) {
         String id = ByteUtil.bytes2HexString(key);
-        FlyLog.d("recvEvetn key=%s",id);
         switch (id){
+            case "200301":
+                mediaInfo.playPasue();
+                break;
             case "200302":
                 mediaInfo.playPrev();
                 break;
