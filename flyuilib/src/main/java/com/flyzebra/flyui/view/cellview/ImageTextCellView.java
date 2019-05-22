@@ -16,10 +16,10 @@ import com.flyzebra.flyui.utils.ByteUtil;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.base.BaseImageCellView;
 
-public class SingleImageTextCellView extends BaseImageCellView {
+public class ImageTextCellView extends BaseImageCellView {
     private String[] contents;
 
-    public SingleImageTextCellView(Context context) {
+    public ImageTextCellView(Context context) {
         super(context);
     }
 

@@ -2,6 +2,7 @@ package com.flyzebra.flyui.view.cellview;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -17,8 +18,11 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.flyzebra.flyui.bean.CellBean;
+import com.flyzebra.flyui.bean.ImageBean;
 import com.flyzebra.flyui.chache.UpdataVersion;
 import com.flyzebra.flyui.event.FlyEvent;
+import com.flyzebra.flyui.utils.ByteUtil;
+import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.utils.IntentUtil;
 import com.flyzebra.flyui.view.base.BaseImageCellView;
 import com.flyzebra.flyui.view.customview.MirrorView;
@@ -26,6 +30,7 @@ import com.flyzebra.flyui.view.customview.MirrorView;
 public class SimpleImageCellView extends BaseImageCellView implements View.OnTouchListener, View.OnClickListener {
     private MirrorView mirrorView;
     private Handler mHandler = new Handler();
+    private Bitmap mBitmap;
 
     public SimpleImageCellView(Context context) {
         super(context);
@@ -85,9 +90,9 @@ public class SimpleImageCellView extends BaseImageCellView implements View.OnTou
         if (mCellBean.send == null) {
             return;
         }
-        if(!TextUtils.isEmpty(mCellBean.send.eventId)){
+        if (!TextUtils.isEmpty(mCellBean.send.eventId)) {
             FlyEvent.sendEvent(mCellBean.send.eventId);
-        }else if (IntentUtil.execStartPackage(getContext(), mCellBean.send.packName, mCellBean.send.className)) {
+        } else if (IntentUtil.execStartPackage(getContext(), mCellBean.send.packName, mCellBean.send.className)) {
         } else if (!IntentUtil.execStartPackage(getContext(), mCellBean.send.packName)) {
         }
     }
@@ -129,7 +134,7 @@ public class SimpleImageCellView extends BaseImageCellView implements View.OnTou
         if (flag) {
             try {
                 setColorFilter(Color.parseColor(mCellBean.filterColor));
-            }catch (Exception e){
+            } catch (Exception e) {
                 setColorFilter(0x3FFFFFFF);
             }
             mHandler.removeCallbacks(show);
@@ -166,4 +171,50 @@ public class SimpleImageCellView extends BaseImageCellView implements View.OnTou
         return false;
     }
 
+    @Override
+    public boolean recvEvent(byte[] key) {
+        if (mCellBean == null && mCellBean.images.isEmpty()) return false;
+        ImageBean imageBean = mCellBean.images.get(0);
+        if (imageBean == null || imageBean.recv == null || imageBean.recv.recvId == null) {
+            return false;
+        }
+        if (!imageBean.recv.recvId.equals(ByteUtil.bytes2HexString(key))) {
+            return false;
+        }
+        switch (imageBean.recv.recvId) {
+            case "100201":
+                break;
+            case "100227":
+                final byte[] imageBytes = (byte[]) FlyEvent.getValue(imageBean.recv.recvId);
+                FlyLog.d("handle 100227 imageBytes=" + imageBytes);
+                if (imageBytes == null) {
+                    refresh(mCellBean);
+                } else {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                mBitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+                            } catch (Exception e) {
+                                FlyLog.e(e.toString());
+                                return;
+                            }
+                            if (mBitmap == null) return;
+                            mHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (mBitmap != null) {
+                                        setImageBitmap(mBitmap);
+                                    }
+                                    FlyLog.d("handle 100227 finish; bitmap=" + mBitmap);
+                                }
+                            });
+                        }
+                    }).start();
+                }
+                break;
+
+        }
+        return false;
+    }
 }

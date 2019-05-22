@@ -54,52 +54,6 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
     }
 
     @Override
-    public boolean onAction(int key) {
-        Object obj;
-        switch (key) {
-            case FlyEventKey.KEY_PLAY:
-                musicPlayer.playPause();
-                break;
-            case FlyEventKey.KEY_NEXT:
-                musicPlayer.playNext();
-                break;
-            case FlyEventKey.KEY_PREV:
-                musicPlayer.playPrev();
-                break;
-            case FlyEventKey.KEY_SEEK:
-                obj = FlyEvent.getValue(FlyEventKey.KEY_SEEK);
-                if (obj instanceof Integer) {
-                    musicPlayer.seekTo((int) obj);
-                }
-                break;
-            case FlyEventKey.KEY_URL:
-                obj = FlyEvent.getValue(FlyEventKey.KEY_URL);
-                if (!musicPlayer.getPlayUrl().equals(obj)) {
-                    musicPlayer.play((String) obj);
-                }
-                break;
-            case FlyEventKey.KEY_MENU:
-                int flag = 0;
-                obj = FlyEvent.getValue(FlyEventKey.MSG_MENU_STATUS);
-                if (obj instanceof Integer) {
-                    flag = ((int) obj) == 0 ? 1 : 0;
-                }
-                FlyEvent.handleAction(FlyEventKey.MSG_MENU_STATUS, flag);
-                break;
-            case FlyEventKey.KEY_LOOP:
-                musicPlayer.switchLoopStatus();
-                break;
-            case FlyEventKey.KEY_STORE:
-                obj = FlyEvent.getValue(FlyEventKey.KEY_STORE);
-                if (obj instanceof String) {
-                    usbMediaScan.openStorager(new StorageInfo((String) obj));
-                }
-                break;
-        }
-        return false;
-    }
-
-    @Override
     public void notifyPathChange(String path) {
         FlyLog.d("notifyPathChange path=%s", path);
         FlyEvent.handleAction(FlyEventKey.STORE_URL, path);
@@ -401,8 +355,53 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
                 }
             }
         }
-        FlyEvent.handleAction(FlyEventKey.MUSIC_LIST_FOLDER, listFolder);
+        FlyEvent.sendEvent(FlyEventKey.MUSIC_LIST_FOLDER, listFolder);
         FlyLog.d("notifyMusicList end use time =" + (System.currentTimeMillis() - time) + "ms");
     }
 
+    @Override
+    public boolean recvEvent(byte[] key) {
+        Object obj;
+        switch (key) {
+            case FlyEventKey.KEY_PLAY:
+                musicPlayer.playPause();
+                break;
+            case FlyEventKey.KEY_NEXT:
+                musicPlayer.playNext();
+                break;
+            case FlyEventKey.KEY_PREV:
+                musicPlayer.playPrev();
+                break;
+            case FlyEventKey.KEY_SEEK:
+                obj = FlyEvent.getValue(FlyEventKey.KEY_SEEK);
+                if (obj instanceof Integer) {
+                    musicPlayer.seekTo((int) obj);
+                }
+                break;
+            case FlyEventKey.KEY_URL:
+                obj = FlyEvent.getValue(FlyEventKey.KEY_URL);
+                if (!musicPlayer.getPlayUrl().equals(obj)) {
+                    musicPlayer.play((String) obj);
+                }
+                break;
+            case FlyEventKey.KEY_MENU:
+                int flag = 0;
+                obj = FlyEvent.getValue(FlyEventKey.MSG_MENU_STATUS);
+                if (obj instanceof Integer) {
+                    flag = ((int) obj) == 0 ? 1 : 0;
+                }
+                FlyEvent.handleAction(FlyEventKey.MSG_MENU_STATUS, flag);
+                break;
+            case FlyEventKey.KEY_LOOP:
+                musicPlayer.switchLoopStatus();
+                break;
+            case FlyEventKey.KEY_STORE:
+                obj = FlyEvent.getValue(FlyEventKey.KEY_STORE);
+                if (obj instanceof String) {
+                    usbMediaScan.openStorager(new StorageInfo((String) obj));
+                }
+                break;
+        }
+        return false;
+    }
 }

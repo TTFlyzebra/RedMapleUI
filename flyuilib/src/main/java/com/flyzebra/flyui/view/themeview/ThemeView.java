@@ -183,7 +183,7 @@ public class ThemeView extends FrameLayout implements ITheme {
                     pagesView.setPageTransformer(true, null);
                     break;
             }
-            pagesView.setOffscreenPageLimit(10);
+            pagesView.setOffscreenPageLimit(20);
             pagesView.upData(mThemeBean);
         }
 

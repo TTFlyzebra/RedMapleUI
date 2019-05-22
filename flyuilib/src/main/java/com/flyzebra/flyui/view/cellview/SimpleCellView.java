@@ -24,9 +24,9 @@ import com.flyzebra.flyui.bean.TextBean;
 import com.flyzebra.flyui.chache.UpdataVersion;
 import com.flyzebra.flyui.event.FlyEvent;
 import com.flyzebra.flyui.utils.IntentUtil;
+import com.flyzebra.flyui.view.base.BaseImageBeanView;
 import com.flyzebra.flyui.view.base.BaseLayoutCellView;
 import com.flyzebra.flyui.view.base.BaseTextBeanView;
-import com.flyzebra.flyui.view.customview.FlyImageView;
 import com.flyzebra.flyui.view.customview.MirrorView;
 
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ public class SimpleCellView extends BaseLayoutCellView implements View.OnTouchLi
 
     @Override
     public boolean verify(CellBean cellBean) {
-        return mCellBean!=null;
+        return mCellBean != null;
     }
 
     @Override
@@ -53,9 +53,10 @@ public class SimpleCellView extends BaseLayoutCellView implements View.OnTouchLi
         textViewList.clear();
         removeAllViews();
 
-        if(mCellBean.images!=null) {
+        if (mCellBean.images != null) {
             for (ImageBean imageBean : mCellBean.images) {
-                ImageView imageView = new FlyImageView(getContext());
+                ImageView imageView = new BaseImageBeanView(getContext());
+                ((BaseImageBeanView) imageView).setmImageBean(imageBean);
                 imageView.setScaleType(imageBean.getScaleType());
                 int width = (mCellBean.width - imageBean.right) - imageBean.left;
                 int height = (mCellBean.height - imageBean.bottom) - imageBean.top;
@@ -67,7 +68,7 @@ public class SimpleCellView extends BaseLayoutCellView implements View.OnTouchLi
             }
         }
 
-        if(mCellBean.texts!=null) {
+        if (mCellBean.texts != null) {
             for (TextBean textBean : mCellBean.texts) {
                 TextView textView = new BaseTextBeanView(getContext());
                 try {
@@ -104,14 +105,14 @@ public class SimpleCellView extends BaseLayoutCellView implements View.OnTouchLi
 
     @Override
     public void refresh(CellBean cellBean) {
-        if(cellBean.images==null)  return;
+        if (cellBean.images == null) return;
         for (int i = 0; i < cellBean.images.size(); i++) {
             String imageurl = UpdataVersion.getNativeFilePath(cellBean.images.get(i).url);
             final ImageView imageView = imageViewList.get(i);
             Glide.with(getContext())
                     .asBitmap()
                     .load(imageurl)
-                    .override(cellBean.images.get(i).width,cellBean.images.get(i).height)
+                    .override(cellBean.images.get(i).width, cellBean.images.get(i).height)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .centerInside()
                     .into(new BitmapImageViewTarget(imageView) {
@@ -142,9 +143,10 @@ public class SimpleCellView extends BaseLayoutCellView implements View.OnTouchLi
     public void onClick() {
         if (mCellBean.send == null) {
             return;
-        }if(!TextUtils.isEmpty(mCellBean.send.eventId)){
+        }
+        if (!TextUtils.isEmpty(mCellBean.send.eventId)) {
             FlyEvent.sendEvent(mCellBean.send.eventId);
-        }else if (IntentUtil.execStartPackage(getContext(), mCellBean.send.packName, mCellBean.send.className)) {
+        } else if (IntentUtil.execStartPackage(getContext(), mCellBean.send.packName, mCellBean.send.className)) {
         } else if (!IntentUtil.execStartPackage(getContext(), mCellBean.send.packName)) {
         }
     }
