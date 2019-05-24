@@ -86,9 +86,10 @@ public class LoopPlayCellView extends BaseLayoutCellView implements View.OnTouch
                 TextView textView = new BaseTextBeanView(getContext());
                 ((BaseTextBeanView) textView).setTextBean(textBean);
                 int tw = (imageBean.width - textBean.right) - textBean.left;
-                int th = (imageBean.height - textBean.bottom) - textBean.top;
+                int top = 250 * imageBean.height / 350;
+                int th = (imageBean.height - textBean.bottom) - top;
                 LayoutParams tlp = new LayoutParams(tw == 0 ? imageBean.width : tw, th == 0 ? imageBean.height : th);
-                tlp.topMargin = textBean.top * imageBean.height / 350;
+                tlp.topMargin = top;
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textBean.textSize * imageBean.height / 350);
                 views[i].addTextView(textView, tlp);
 
