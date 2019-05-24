@@ -39,6 +39,9 @@ public class CellViewFactory {
             case CellType.TYPE_SEEKBAR:
                 iCellView = new SeekbarCellView(context);
                 return iCellView;
+            case CellType.TYPE_LOOPPLAY:
+                iCellView = new LoopPlayCellView(context);
+                return iCellView;
             case CellType.TYPE_APP_NORMAL:
             default:
 //                boolean isText = cellBean.texts != null && cellBean.texts.size() == 1;

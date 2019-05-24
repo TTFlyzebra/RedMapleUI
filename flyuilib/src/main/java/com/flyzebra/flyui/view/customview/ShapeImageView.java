@@ -123,6 +123,9 @@ public class ShapeImageView extends FlyImageView {
                     canvas.drawCircle(width / 2, height / 2, circleRid - borderWidth / 2, borderPaint);
                     break;
                 case 2:
+                    mBitmapShader = new BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+                    mBitmapShader.setLocalMatrix(getMatrix(width, height, mBitmap.getWidth(), mBitmap.getHeight()));
+                    bitmapPaint.setShader(mBitmapShader);
                     initHexagonPath();
                     canvas.drawPath(mHexagonPath, bitmapPaint);
                     canvas.drawPath(mHexagonPath, borderPaint);

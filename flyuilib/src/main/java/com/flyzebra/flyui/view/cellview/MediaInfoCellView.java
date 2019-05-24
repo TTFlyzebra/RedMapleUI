@@ -3,7 +3,6 @@ package com.flyzebra.flyui.view.cellview;
 import android.content.Context;
 
 import com.flyzebra.flyui.bean.CellBean;
-import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.base.BaseViewFunc;
 
 
@@ -27,12 +26,10 @@ public class MediaInfoCellView extends SimpleCellView {
         if (mCellBean == null || mCellBean.recv == null || mCellBean.recv.recvId == null) {
             return false;
         }
-        FlyLog.d("handle event=" + mCellBean.recv.recvId);
         BaseViewFunc.handVisible(this, key, mCellBean.recv);
         for (int i= 0;i<imageViewList.size();i++) {
             BaseViewFunc.handVisible(imageViewList.get(i),key,mCellBean.images.get(i).recv);
         }
-        FlyLog.d("finish handle event=" + mCellBean.recv.recvId);
         return false;
     }
 

@@ -1,6 +1,8 @@
 package com.flyzebra.flyui.view.base;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.util.TypedValue;
 
 import com.flyzebra.flyui.bean.TextBean;
 import com.flyzebra.flyui.event.FlyEvent;
@@ -37,7 +39,24 @@ public class BaseTextBeanView extends FlyTextView implements IFlyEvent {
 
     public void setTextBean(TextBean textBean) {
         this.textBean = textBean;
-        if (textBean == null || textBean.recv == null || textBean.recv.recvId == null) {
+        if (textBean == null) return;
+        try {
+            setTextColor(Color.parseColor(textBean.textColor));
+        } catch (Exception e) {
+            setTextColor(0xffffffff);
+        }
+        setTextSize(TypedValue.COMPLEX_UNIT_PX, textBean.textSize);
+        setGravity(textBean.getGravity());
+        if (textBean.textLines <= 0) {
+            setLines(1);
+        } else {
+            setLines(textBean.textLines);
+        }
+        if (textBean.text != null) {
+            setText(textBean.text.getText());
+            FlyLog.d("Set text="+textBean.text.getText());
+        }
+        if (textBean.recv == null || textBean.recv.recvId == null) {
             return;
         }
         Object obj = FlyEvent.getValue(textBean.recv.recvId);

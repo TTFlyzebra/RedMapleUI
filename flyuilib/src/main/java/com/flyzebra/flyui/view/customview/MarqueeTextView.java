@@ -1,9 +1,11 @@
 package com.flyzebra.flyui.view.customview;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
+@SuppressLint("AppCompatCustomView")
 public class MarqueeTextView extends TextView {
 
     public MarqueeTextView(Context context) {

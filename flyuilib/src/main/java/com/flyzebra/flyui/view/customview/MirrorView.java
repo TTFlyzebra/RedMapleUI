@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 
 import com.flyzebra.flyui.utils.BitmapUtil;
 import com.flyzebra.flyui.utils.FlyLog;
@@ -16,7 +15,7 @@ import java.util.concurrent.Executors;
 /**
  * 倒影显示控件
  */
-public class MirrorView extends ImageView {
+public class MirrorView extends ShapeImageView {
     public static final int MIRRORHIGHT = 60;
     private int mRefHeight = MIRRORHIGHT;
     private Handler mHander = new Handler(Looper.getMainLooper());

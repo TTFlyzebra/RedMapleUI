@@ -7,6 +7,7 @@ import com.flyzebra.flyui.bean.RecvBean;
 import com.flyzebra.flyui.event.FlyEvent;
 import com.flyzebra.flyui.event.IFlyEvent;
 import com.flyzebra.flyui.utils.ByteUtil;
+import com.flyzebra.flyui.utils.FlyLog;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -24,7 +25,11 @@ public class BaseViewFunc {
     }
 
     public static void handVisible(View view, byte[] key, RecvBean recv) {
-        if (recv != null && !TextUtils.isEmpty(recv.recvId) && recv.recvId.equals(ByteUtil.bytes2HexString(key))) {
+        if (recv != null
+                && !TextUtils.isEmpty(recv.recvId)
+                && (!TextUtils.isEmpty(recv.visibleContent) || !TextUtils.isEmpty(recv.disVisibleContent))
+                && recv.recvId.equals(ByteUtil.bytes2HexString(key))) {
+            FlyLog.d("handle event=" + recv.recvId);
             Object obj = FlyEvent.getValue(key);
             if (!TextUtils.isEmpty(recv.disVisibleContent)) {
                 String str = null;
@@ -59,6 +64,7 @@ public class BaseViewFunc {
                     }
                 }
             }
+            FlyLog.d("finish handle event=" + recv.recvId);
         }
     }
 }

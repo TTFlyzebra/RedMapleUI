@@ -34,9 +34,9 @@ public interface CellType {
      */
     int TYPE_SEEKBAR = 7;
     /**
-     * 组合控件
+     * 轮播控件
      */
-    int TYPE_PAGE = 8;
+    int TYPE_LOOPPLAY = 8;
     /**
      * 可根据条件变化的控件
      */

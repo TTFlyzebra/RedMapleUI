@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +56,6 @@ public class SimpleCellView extends BaseLayoutCellView implements View.OnTouchLi
             for (ImageBean imageBean : mCellBean.images) {
                 ImageView imageView = new BaseImageBeanView(getContext());
                 ((BaseImageBeanView) imageView).setmImageBean(imageBean);
-                imageView.setScaleType(imageBean.getScaleType());
                 int width = (mCellBean.width - imageBean.right) - imageBean.left;
                 int height = (mCellBean.height - imageBean.bottom) - imageBean.top;
                 LayoutParams lp = new LayoutParams(width == 0 ? mCellBean.width : width, height == 0 ? mCellBean.height : height);
@@ -71,22 +69,7 @@ public class SimpleCellView extends BaseLayoutCellView implements View.OnTouchLi
         if (mCellBean.texts != null) {
             for (TextBean textBean : mCellBean.texts) {
                 TextView textView = new BaseTextBeanView(getContext());
-                try {
-                    textView.setTextColor(Color.parseColor(textBean.textColor));
-                } catch (Exception e) {
-                    textView.setTextColor(0xffffffff);
-                }
                 ((BaseTextBeanView) textView).setTextBean(textBean);
-                textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textBean.textSize);
-                textView.setGravity(textBean.getGravity());
-                if (textBean.textLines <= 0) {
-                    textView.setLines(1);
-                } else {
-                    textView.setLines(textBean.textLines);
-                }
-                if (textBean.text != null) {
-                    textView.setText(textBean.text.getText());
-                }
                 int width = (mCellBean.width - textBean.right) - textBean.left;
                 int height = (mCellBean.height - textBean.bottom) - textBean.top;
                 LayoutParams lp = new LayoutParams(width == 0 ? mCellBean.width : width, height == 0 ? mCellBean.height : height);

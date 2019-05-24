@@ -9,16 +9,20 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.flyzebra.flyui.bean.CellBean;
+import com.flyzebra.flyui.bean.TextBean;
 import com.flyzebra.flyui.event.FlyEvent;
 import com.flyzebra.flyui.utils.ByteUtil;
-import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.base.BaseLayoutCellView;
+import com.flyzebra.flyui.view.base.BaseTextBeanView;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import static android.graphics.drawable.ClipDrawable.HORIZONTAL;
@@ -33,6 +37,7 @@ public class SeekbarCellView extends BaseLayoutCellView implements SeekBar.OnSee
     private Drawable draw1 = null;
     private Drawable draw2 = null;
     private Drawable draw3 = null;
+    protected List<TextView> textViewList = new ArrayList<>();
 
     public SeekbarCellView(Context context) {
         super(context);
@@ -45,14 +50,32 @@ public class SeekbarCellView extends BaseLayoutCellView implements SeekBar.OnSee
 
     @Override
     public void init(CellBean cellBean) {
-        FlyLog.d("seekbar");
 //        setClipChildren(false);
+
+        textViewList.clear();
+        removeAllViews();
+
+        if (mCellBean.texts != null) {
+            for (TextBean textBean : mCellBean.texts) {
+                TextView textView = new BaseTextBeanView(getContext());
+                ((BaseTextBeanView) textView).setTextBean(textBean);
+                int width = (mCellBean.width - textBean.right) - textBean.left;
+                int height = (mCellBean.height - textBean.bottom) - textBean.top;
+                LayoutParams lp = new LayoutParams(width == 0 ? mCellBean.width : width, height == 0 ? mCellBean.height : height);
+                lp.leftMargin = textBean.left;
+                lp.topMargin = textBean.top;
+                addView(textView, lp);
+                textViewList.add(textView);
+            }
+        }
+
         seekBar = new SeekBar(getContext());
-        LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+        LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, 10);
         addView(seekBar, lp);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             seekBar.setSplitTrack(false);
         }
+        seekBar.setMinimumHeight(10);
         seekBar.setOnSeekBarChangeListener(this);
     }
 
@@ -124,12 +147,15 @@ public class SeekbarCellView extends BaseLayoutCellView implements SeekBar.OnSee
             case "100226":
                 Object obj = FlyEvent.getValue(key);
                 if (obj instanceof byte[]) {
-                    FlyLog.d("SeekBar recv=%s", ByteUtil.bytes2HexString((byte[]) obj));
                     int c = ByteUtil.bytes2Int((byte[]) obj, 0);
                     int t = ByteUtil.bytes2Int((byte[]) obj, 4);
-                    FlyLog.d("SeekBar c=%d,t=%d", c, t);
                     seekBar.setMax(t);
                     seekBar.setProgress(c);
+
+                    if(textViewList.size()>1){
+                        textViewList.get(0).setText(generateTime(c));
+                        textViewList.get(1).setText(generateTime(t));
+                    }
                 }
                 return false;
             default:
@@ -137,9 +163,9 @@ public class SeekbarCellView extends BaseLayoutCellView implements SeekBar.OnSee
         }
     }
 
-    private String generateTime(long time) {
+    private String generateTime(int time) {
         time = Math.min(Math.max(time, 0), 359999000);
-        int totalSeconds = (int) (time / 1000);
+        int totalSeconds = time;
         int seconds = totalSeconds % 60;
         int minutes = (totalSeconds / 60) % 60;
         int hours = totalSeconds / 3600;

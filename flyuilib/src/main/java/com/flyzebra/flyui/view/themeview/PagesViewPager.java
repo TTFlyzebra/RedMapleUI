@@ -3,12 +3,14 @@ package com.flyzebra.flyui.view.themeview;
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.PageBean;
 import com.flyzebra.flyui.bean.ThemeBean;
+import com.flyzebra.flyui.config.GV;
 import com.flyzebra.flyui.event.FlyEvent;
 import com.flyzebra.flyui.event.IFlyEvent;
 import com.flyzebra.flyui.utils.FlyLog;
@@ -55,6 +57,15 @@ public class PagesViewPager extends ViewPager {
             myPgaeAdapter.notifyDataSetChanged();
         }
 
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        if(GV.viewPage_scoller){
+            return super.onInterceptTouchEvent(ev);
+        }else{
+            return false;
+        }
     }
 
     public void selectPage(int page) {

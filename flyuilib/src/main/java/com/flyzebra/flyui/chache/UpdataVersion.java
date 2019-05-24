@@ -317,11 +317,13 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
         final List<PageBean> pageList = themeBean.pageList;
         mDownImageList.clear();
         addDownImageUrl(mThemeBean.imageurl);
+        //TopPage
         if (mThemeBean.topPage != null && mThemeBean.topPage.cellList != null) {
             for (CellBean cellBean : mThemeBean.topPage.cellList) {
                 addCellImageUrls(cellBean);
             }
         }
+        //AllPage
         for (PageBean pageBean : pageList) {
             addDownImageUrl(pageBean.imageurl);
             for (CellBean cellBean : pageBean.cellList) {
@@ -449,7 +451,7 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
                         upResult.upVersionOK(mThemeBean);
                 }
             });
-            DelNoUseFiles();
+//            DelNoUseFiles();
             /**
              * 回收资源
              */
