@@ -145,6 +145,8 @@ public class ThemeView extends FrameLayout implements ITheme {
                 imageBean.top = (int) (imageBean.top * screenScacle);
                 imageBean.right = (int) (imageBean.right * screenScacle);
                 imageBean.bottom = (int) (imageBean.bottom * screenScacle);
+                imageBean.width = (int) (imageBean.width * screenScacle);
+                imageBean.height = (int) (imageBean.height * screenScacle);
             }
         }
 

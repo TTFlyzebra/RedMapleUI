@@ -1,9 +1,11 @@
 package com.flyzebra.flyui.view.cellview;
 
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.ArrayMap;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,16 +36,20 @@ import java.util.Map;
  * Describ:
  **/
 public class LoopPlayCellView extends BaseLayoutCellView implements View.OnTouchListener {
+    private int screenWidth = 1024;
+    private int screenHeigh = 600;
     private float countScrollX = 0;
     private int childWidth = 200;
-    private int showSumItem = 5;
-    private int currentItem = 3;
     private float mouseDownX = 0;
     private MyView views[];
 
     public LoopPlayCellView(Context context) {
         super(context);
         setOnTouchListener(this);
+        DisplayMetrics dm = new DisplayMetrics();
+        ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(dm);
+        screenWidth = dm.widthPixels;
+        screenHeigh = dm.heightPixels;
     }
 
     @Override
@@ -67,9 +73,8 @@ public class LoopPlayCellView extends BaseLayoutCellView implements View.OnTouch
         //TODO:加入判断机制
         try {
             removeAllViews();
-            childWidth = mCellBean.images.get(showSumItem - 1).width;
-            showSumItem = mCellBean.images.size();
-            views = new MyView[showSumItem];
+            childWidth = mCellBean.images.get(2).width;
+            views = new MyView[mCellBean.images.size()];
             for (int i = 0; i < views.length; i++) {
                 views[i] = new MyView(getContext());
                 ImageBean imageBean = cellBean.images.get(i);
@@ -86,11 +91,11 @@ public class LoopPlayCellView extends BaseLayoutCellView implements View.OnTouch
                 TextView textView = new BaseTextBeanView(getContext());
                 ((BaseTextBeanView) textView).setTextBean(textBean);
                 int tw = (imageBean.width - textBean.right) - textBean.left;
-                int top = 250 * imageBean.height / 350;
+                int top = textBean.top * imageBean.height / mCellBean.images.get(2).height;
                 int th = (imageBean.height - textBean.bottom) - top;
                 LayoutParams tlp = new LayoutParams(tw == 0 ? imageBean.width : tw, th == 0 ? imageBean.height : th);
                 tlp.topMargin = top;
-                textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textBean.textSize * imageBean.height / 350);
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textBean.textSize * imageBean.height / mCellBean.images.get(2).height);
                 views[i].addTextView(textView, tlp);
 
             }
@@ -107,42 +112,43 @@ public class LoopPlayCellView extends BaseLayoutCellView implements View.OnTouch
     }
 
 
-    private void setViewPoint(float count) {
+    private void setViewPoint(int count, int during) {
+        FlyLog.d("setViewPoing sss %d", count);
         countScrollX = count % (childWidth * mCellBean.images.size());
         if (countScrollX < 0) {
             countScrollX = countScrollX + childWidth * mCellBean.images.size();
         }
         int num = (int) (countScrollX / childWidth);
-        float go = countScrollX % childWidth / childWidth;
-        if (go > 0) {
-            for (int i = 0; i < views.length; i++) {
-                //X坐标
-                int maxGoX = mCellBean.images.get((i + num) % mCellBean.images.size()).left;
-                int minGoX = (int) ((mCellBean.images.get((i + num + 1) % mCellBean.images.size()).left - maxGoX) * go);
-                views[i].animate().x(maxGoX + minGoX).setDuration(0).start();
-                //Y坐标
-                int maxGoY = mCellBean.images.get((i + num) % mCellBean.images.size()).top;
-                int minGoY = (int) ((mCellBean.images.get((i + num + 1) % mCellBean.images.size()).top - maxGoY) * go);
-                views[i].animate().y(maxGoY + minGoY).setDuration(0).start();
+        float go = countScrollX % (float) childWidth / (float) childWidth;
+//        if (go > 0) {
+        for (int i = 0; i < views.length; i++) {
+            //X坐标
+            int maxGoX = mCellBean.images.get((i + num) % mCellBean.images.size()).left;
+            int minGoX = (int) ((mCellBean.images.get((i + num + 1) % mCellBean.images.size()).left - maxGoX) * go);
+            views[i].animate().x(maxGoX + minGoX).setDuration(during).start();
+            //Y坐标
+            int maxGoY = mCellBean.images.get((i + num) % mCellBean.images.size()).top;
+            int minGoY = (int) ((mCellBean.images.get((i + num + 1) % mCellBean.images.size()).top - maxGoY) * go);
+            views[i].animate().y(maxGoY + minGoY).setDuration(during).start();
 
-                ViewWrapper viewWrapper = new ViewWrapper(views[i]);
-                //宽度
-                int maxGoW = mCellBean.images.get((i + num) % mCellBean.images.size()).width;
-                int minGoW = (int) ((mCellBean.images.get((i + num + 1) % mCellBean.images.size()).width - maxGoW) * go);
-                ObjectAnimator.ofInt(viewWrapper, "width", views[i].getWidth(), maxGoW + minGoW).setDuration(0).start();
-                //高度
+            ViewWrapper viewWrapper = new ViewWrapper(views[i]);
+            //宽度
+            int maxGoW = mCellBean.images.get((i + num) % mCellBean.images.size()).width;
+            int minGoW = (int) ((mCellBean.images.get((i + num + 1) % mCellBean.images.size()).width - maxGoW) * go);
+            ObjectAnimator.ofInt(viewWrapper, "width", views[i].getWidth(), maxGoW + minGoW).setDuration(during).start();
+            //高度
 
-                int maxGoH = mCellBean.images.get((i + num) % mCellBean.images.size()).height;
-                int minGoH = (int) ((mCellBean.images.get((i + num + 1) % mCellBean.images.size()).height - maxGoH) * go);
-                ObjectAnimator.ofInt(viewWrapper, "height", views[i].getHeight(), maxGoH + minGoH).setDuration(0).start();
-                FlyLog.d("countScrollX=%f,go=%f,maxGo=%d,minGo = %d", countScrollX, go, maxGoX, minGoX);
+            int maxGoH = mCellBean.images.get((i + num) % mCellBean.images.size()).height;
+            int minGoH = (int) ((mCellBean.images.get((i + num + 1) % mCellBean.images.size()).height - maxGoH) * go);
+            ObjectAnimator.ofInt(viewWrapper, "height", views[i].getHeight(), maxGoH + minGoH).setDuration(during).start();
+            FlyLog.d("countScrollX=%f,go=%f,maxGo=%d,minGo = %d", countScrollX, go, maxGoX, minGoX);
 
-                bringAllViewToFront();
+            bringAllViewToFront();
 
-            }
-        } else {
-            FlyLog.d("no go=%f", go);
         }
+//        } else {
+//            FlyLog.d("no go=%f", go);
+//        }
     }
 
     private void bringAllViewToFront() {
@@ -189,8 +195,14 @@ public class LoopPlayCellView extends BaseLayoutCellView implements View.OnTouch
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         FlyLog.d("touch x=%f,y=%f", event.getX(), event.getY());
-        if (event.getX() > 924 || event.getX() < 100) return false;
-        if (event.getY() > 500 || event.getY() < 100) return false;
+        if (event.getX() > (924*screenWidth/1024) || event.getX() < (100*screenWidth/1024)) {
+            adjustPoint();
+            return false;
+        }
+        if (event.getY() > (500*screenHeigh/600) || event.getY() < (100*screenHeigh/600)) {
+            adjustPoint();
+            return false;
+        }
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 mouseDownX = event.getX();
@@ -199,12 +211,25 @@ public class LoopPlayCellView extends BaseLayoutCellView implements View.OnTouch
                 float move_X = event.getX() - mouseDownX;
                 countScrollX += move_X;
                 mouseDownX = event.getX();
-                setViewPoint(countScrollX);
+                setViewPoint((int) countScrollX, 0);
                 break;
             case MotionEvent.ACTION_UP:
+                adjustPoint();
                 break;
         }
         return true;
+    }
+
+    private void adjustPoint() {
+        if (countScrollX % childWidth > (childWidth / 2)) {
+            int pos = (int) (countScrollX - countScrollX % childWidth + childWidth);
+            setViewPoint(pos, 300);
+            FlyLog.d("setViewPoint sss r %d", pos);
+        } else {
+            int pos = (int) (countScrollX - countScrollX % childWidth);
+            setViewPoint(pos, 300);
+            FlyLog.d("setViewPoint sss l %d", pos);
+        }
     }
 
     class MyView extends FrameLayout {
@@ -253,10 +278,14 @@ public class LoopPlayCellView extends BaseLayoutCellView implements View.OnTouch
         public void setHeight(int height) {
             rView.getLayoutParams().height = height;
             rView.imageView.getLayoutParams().height = height;
-            LayoutParams layoutParams = (LayoutParams) rView.textView.getLayoutParams();
-            layoutParams.topMargin = 250 * height / 350;
-            rView.textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, 24 * height / 350);
-            rView.textView.setLayoutParams(layoutParams);
+            try {
+                LayoutParams layoutParams = (LayoutParams) rView.textView.getLayoutParams();
+                layoutParams.topMargin = mCellBean.texts.get(0).top * height / mCellBean.images.get(2).height;
+                rView.textView.setLayoutParams(layoutParams);
+                rView.textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, 24 * height / mCellBean.images.get(2).height);
+            }catch (Exception e){
+                FlyLog.e(e.toString());
+            }
             rView.requestLayout();
         }
     }
