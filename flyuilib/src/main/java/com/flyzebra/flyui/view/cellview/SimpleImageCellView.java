@@ -8,7 +8,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +23,8 @@ import com.flyzebra.flyui.chache.UpdataVersion;
 import com.flyzebra.flyui.event.FlyEvent;
 import com.flyzebra.flyui.utils.ByteUtil;
 import com.flyzebra.flyui.utils.FlyLog;
-import com.flyzebra.flyui.utils.IntentUtil;
 import com.flyzebra.flyui.view.base.BaseImageCellView;
+import com.flyzebra.flyui.view.base.BaseViewFunc;
 import com.flyzebra.flyui.view.customview.MirrorView;
 
 public class SimpleImageCellView extends BaseImageCellView implements View.OnTouchListener, View.OnClickListener {
@@ -95,14 +94,7 @@ public class SimpleImageCellView extends BaseImageCellView implements View.OnTou
      */
     @Override
     public void onClick() {
-        if (mCellBean.send == null) {
-            return;
-        }
-        if (!TextUtils.isEmpty(mCellBean.send.eventId)) {
-            FlyEvent.sendEvent(mCellBean.send.eventId);
-        } else if (IntentUtil.execStartPackage(getContext(), mCellBean.send.packName, mCellBean.send.className)) {
-        } else if (!IntentUtil.execStartPackage(getContext(), mCellBean.send.packName)) {
-        }
+        BaseViewFunc.onClick(getContext(),mCellBean.send);
     }
 
     @Override

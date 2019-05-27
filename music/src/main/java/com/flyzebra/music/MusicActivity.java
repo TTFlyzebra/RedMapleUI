@@ -42,7 +42,7 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
         flyui = new Flyui(this);
         flyui.onCreate();
         musicPlayer.addListener(this);
-        FlyEvent.handleAction(FlyEventKey.CHANGE_PAGER_WITH_RESID, "music_fm01");
+        FlyEvent.sendEvent(FlyEventKey.CHANGE_PAGER_WITH_RESID, "music_fm01");
     }
 
     @Override
@@ -56,14 +56,14 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
     @Override
     public void notifyPathChange(String path) {
         FlyLog.d("notifyPathChange path=%s", path);
-        FlyEvent.handleAction(FlyEventKey.STORE_URL, path);
+        FlyEvent.sendEvent(FlyEventKey.STORE_URL, path);
         if (isStop) return;
         if (!musicPlayer.getPlayUrl().startsWith(path)) {
             musicPlayer.destory();
         }
         musicPlayer.playSaveUrlByPath(path);
         musicList.clear();
-        FlyEvent.handleAction(FlyEventKey.MUSIC_LIST, new ArrayList<>());
+        FlyEvent.sendEvent(FlyEventKey.MUSIC_LIST, new ArrayList<>());
         super.notifyPathChange(path);
     }
 
@@ -138,24 +138,24 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
         }
         int playStauts = (musicPlayer.getPlayStatus() == MusicPlayer.STATUS_STARTPLAY
                 || musicPlayer.getPlayStatus() == MusicPlayer.STATUS_PLAYING) ? 1 : 0;
-        FlyEvent.handleAction(FlyEventKey.MSG_PLAY_STATUS, playStauts);
+        FlyEvent.sendEvent(FlyEventKey.MSG_PLAY_STATUS, playStauts);
     }
 
     @Override
     public void loopStatusChange(int staut) {
-        FlyEvent.handleAction(FlyEventKey.MSG_LOOP_STATUS, staut);
+        FlyEvent.sendEvent(FlyEventKey.MSG_LOOP_STATUS, staut);
     }
 
     @Override
     public void playtime(long current, long total) {
-        FlyEvent.handleAction(FlyEventKey.MUSIC_TIME, new long[]{current, total});
+        FlyEvent.sendEvent(FlyEventKey.MUSIC_TIME, new long[]{current, total});
     }
 
     @Override
     public void storageList(List<StorageInfo> storageList) {
         super.storageList(storageList);
         if (storageList != null) {
-            FlyEvent.handleAction(FlyEventKey.SUM_STORE, "存储器\n(" + storageList.size() + ")");
+            FlyEvent.sendEvent(FlyEventKey.SUM_STORE, "存储器\n(" + storageList.size() + ")");
         }
         List<Map<Integer, Object>> list = new ArrayList<>();
         for (StorageInfo storageInfo : storageList) {
@@ -174,7 +174,7 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
             map.put(FlyEventKey.RES_URL, imageKey);
             list.add(map);
         }
-        FlyEvent.handleAction(FlyEventKey.STORE_LIST, list);
+        FlyEvent.sendEvent(FlyEventKey.STORE_LIST, list);
     }
 
     private void notifyCurrentMusic() {
@@ -183,15 +183,15 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
             final int i = musicPlayer.getPlayPos();
             if (i >= 0 && i < musicList.size()) {
                 Music music = musicList.get(i);
-                FlyEvent.handleAction(FlyEventKey.MUSIC_NAME, music.name);
-                FlyEvent.handleAction(FlyEventKey.MUSIC_ALBUM, music.album);
-                FlyEvent.handleAction(FlyEventKey.MUSIC_ARTIST, music.artist);
-                FlyEvent.handleAction(FlyEventKey.MUSIC_URL, music.url);
+                FlyEvent.sendEvent(FlyEventKey.MUSIC_NAME, music.name);
+                FlyEvent.sendEvent(FlyEventKey.MUSIC_ALBUM, music.album);
+                FlyEvent.sendEvent(FlyEventKey.MUSIC_ARTIST, music.artist);
+                FlyEvent.sendEvent(FlyEventKey.MUSIC_URL, music.url);
             } else {
-                FlyEvent.handleAction(FlyEventKey.MUSIC_NAME, "");
-                FlyEvent.handleAction(FlyEventKey.MUSIC_ALBUM, "");
-                FlyEvent.handleAction(FlyEventKey.MUSIC_ARTIST, "");
-                FlyEvent.handleAction(FlyEventKey.MUSIC_URL, "");
+                FlyEvent.sendEvent(FlyEventKey.MUSIC_NAME, "");
+                FlyEvent.sendEvent(FlyEventKey.MUSIC_ALBUM, "");
+                FlyEvent.sendEvent(FlyEventKey.MUSIC_ARTIST, "");
+                FlyEvent.sendEvent(FlyEventKey.MUSIC_URL, "");
             }
         } catch (Exception e) {
             FlyLog.e(e.toString());
@@ -213,8 +213,8 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
             map.put(FlyEventKey.MUSIC_ARTIST, music.artist);
             listSingle.add(map);
         }
-        FlyEvent.handleAction(FlyEventKey.MUSIC_SUM, "单曲\n(" + listSingle.size() + ")");
-        FlyEvent.handleAction(FlyEventKey.MUSIC_LIST, listSingle);
+        FlyEvent.sendEvent(FlyEventKey.MUSIC_SUM, "单曲\n(" + listSingle.size() + ")");
+        FlyEvent.sendEvent(FlyEventKey.MUSIC_LIST, listSingle);
 
 
         //列表分类
@@ -237,9 +237,9 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
             }
             mFolderHashMap.get(path).add(music);
         }
-        FlyEvent.handleAction(FlyEventKey.MUSIC_SUM_ARTIST, "歌手\n(" + mArtistHashMap.size() + ")");
-        FlyEvent.handleAction(FlyEventKey.MUSIC_SUM_ALBUM, "专辑\n(" + mAlbumHashMap.size() + ")");
-        FlyEvent.handleAction(FlyEventKey.MUSIC_SUM_FOLDER, "文件夹\n(" + mFolderHashMap.size() + ")");
+        FlyEvent.sendEvent(FlyEventKey.MUSIC_SUM_ARTIST, "歌手\n(" + mArtistHashMap.size() + ")");
+        FlyEvent.sendEvent(FlyEventKey.MUSIC_SUM_ALBUM, "专辑\n(" + mAlbumHashMap.size() + ")");
+        FlyEvent.sendEvent(FlyEventKey.MUSIC_SUM_FOLDER, "文件夹\n(" + mFolderHashMap.size() + ")");
 
         //歌手列表
         List<String> artistGroupList = new ArrayList<>(mArtistHashMap.keySet());
@@ -275,7 +275,7 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
                 }
             }
         }
-        FlyEvent.handleAction(FlyEventKey.MUSIC_LIST_ARTIST, listArtist);
+        FlyEvent.sendEvent(FlyEventKey.MUSIC_LIST_ARTIST, listArtist);
 
         //专辑列表
         List<String> albumGroupList = new ArrayList<>(mAlbumHashMap.keySet());
@@ -311,7 +311,7 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
                 }
             }
         }
-        FlyEvent.handleAction(FlyEventKey.MUSIC_LIST_ALBUM, listAlbum);
+        FlyEvent.sendEvent(FlyEventKey.MUSIC_LIST_ALBUM, listAlbum);
 
         //文件夹列表
         List<String> folderGroupList = new ArrayList<>(mFolderHashMap.keySet());
@@ -390,7 +390,7 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
                 if (obj instanceof Integer) {
                     flag = ((int) obj) == 0 ? 1 : 0;
                 }
-                FlyEvent.handleAction(FlyEventKey.MSG_MENU_STATUS, flag);
+                FlyEvent.sendEvent(FlyEventKey.MSG_MENU_STATUS, flag);
                 break;
             case FlyEventKey.KEY_LOOP:
                 musicPlayer.switchLoopStatus();

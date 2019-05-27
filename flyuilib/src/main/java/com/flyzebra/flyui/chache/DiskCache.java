@@ -284,7 +284,7 @@ public class DiskCache implements IDiskCache {
             editor.commit();
             mDiskLruCache.flush();
             flag = true;
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             try {

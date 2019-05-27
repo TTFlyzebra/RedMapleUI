@@ -1,5 +1,6 @@
 package com.flyzebra.flyui.utils;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -130,6 +131,18 @@ public class AppUtil {
             FlyLog.e(e.toString());
         }
         return true;
+    }
+
+    public static String getApplicationName(Activity activity) {
+        PackageManager packageManager = null;
+        ApplicationInfo applicationInfo = null;
+        try {
+            packageManager = activity.getApplicationContext().getPackageManager();
+            applicationInfo = packageManager.getApplicationInfo(activity.getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            FlyLog.e(e.toString());
+        }
+        return (String) packageManager.getApplicationLabel(applicationInfo);
     }
 
 }

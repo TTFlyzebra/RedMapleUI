@@ -12,7 +12,8 @@ public interface IUpdataVersion {
     /**
      * 每次请求前调用此函数设置请求API地址
      */
-    void initApi();
+    void initApi(String url, String themeApi, String token);
+
 
     /**
      * 设置使用的碰盘缓存
@@ -53,7 +54,6 @@ public interface IUpdataVersion {
      * 取消所有网络请求线程
      */
     void cancelAllTasks();
-
 
 
     interface UpResult {

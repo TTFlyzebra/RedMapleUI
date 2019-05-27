@@ -18,7 +18,6 @@ import com.flyzebra.flyui.event.FlyEvent;
 import com.flyzebra.flyui.event.IFlyEvent;
 import com.flyzebra.flyui.utils.ByteUtil;
 import com.flyzebra.flyui.utils.FlyLog;
-import com.flyzebra.flyui.utils.IntentUtil;
 import com.flyzebra.flyui.view.customview.ShapeImageView;
 
 /**
@@ -174,10 +173,6 @@ public class BaseImageBeanView extends ShapeImageView implements IFlyEvent, View
 
     @Override
     public void onClick(View v) {
-        if (!TextUtils.isEmpty(mImageBean.send.eventId)) {
-            FlyEvent.sendEvent(mImageBean.send.eventId);
-        } else if (IntentUtil.execStartPackage(getContext(), mImageBean.send.packName, mImageBean.send.className)) {
-        } else if (IntentUtil.execStartPackage(getContext(), mImageBean.send.packName)) {
-        }
+        BaseViewFunc.onClick(getContext(),mImageBean.send);
     }
 }

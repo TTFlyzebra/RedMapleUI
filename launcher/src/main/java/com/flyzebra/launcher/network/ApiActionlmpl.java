@@ -3,6 +3,8 @@ package com.flyzebra.launcher.network;
 
 import com.flyzebra.flyui.bean.ThemeBean;
 
+import java.util.List;
+
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -17,8 +19,8 @@ public class ApiActionlmpl implements ApiAction {
     }
 
     @Override
-    public void doTheme(String appname, Subscriber<ThemeBean> subscriber) {
-        mNetService.doTheme(appname)
+    public void doTheme(Subscriber<List<ThemeBean>> subscriber) {
+        mNetService.doTheme()
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -24,6 +24,11 @@ public class MirrorCellView extends SimpleCellView {
     }
 
     @Override
+    public boolean verify(CellBean cellBean) {
+        return mCellBean!=null&&mCellBean.images!=null&&mCellBean.images.size()>0;
+    }
+
+    @Override
     public void init(CellBean cellBean) {
         super.init(cellBean);
         ImageBean imageBean = mCellBean.images.get(0);

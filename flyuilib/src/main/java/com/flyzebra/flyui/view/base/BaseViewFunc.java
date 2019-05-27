@@ -1,13 +1,16 @@
 package com.flyzebra.flyui.view.base;
 
+import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
 
 import com.flyzebra.flyui.bean.RecvBean;
+import com.flyzebra.flyui.bean.SendBean;
 import com.flyzebra.flyui.event.FlyEvent;
 import com.flyzebra.flyui.event.IFlyEvent;
 import com.flyzebra.flyui.utils.ByteUtil;
 import com.flyzebra.flyui.utils.FlyLog;
+import com.flyzebra.flyui.utils.IntentUtil;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -65,6 +68,21 @@ public class BaseViewFunc {
                 }
             }
             FlyLog.d("finish handle event=" + recv.recvId);
+        }
+    }
+
+    public static void onClick(Context context,SendBean send) {
+        if (send == null) {
+            return;
+        }
+        if (!TextUtils.isEmpty(send.eventId)) {
+            if(!TextUtils.isEmpty(send.eventContent)){
+                FlyEvent.sendEvent(send.eventId,send.eventContent);
+            }else{
+                FlyEvent.sendEvent(send.eventId);
+            }
+        } else if (IntentUtil.execStartPackage(context, send.packName, send.className)) {
+        } else if (IntentUtil.execStartPackage(context, send.packName)) {
         }
     }
 }

@@ -15,6 +15,7 @@ public class ThemeBean {
     public String themeName;
     public String themeType;
     public String imageurl = "";
+    public String exampleurl = "";
     public List<PageBean> pageList;
     public PageBean topPage;
     public int left = 0;

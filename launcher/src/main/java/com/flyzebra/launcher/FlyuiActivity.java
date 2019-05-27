@@ -1,6 +1,7 @@
 package com.flyzebra.launcher;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,6 +25,8 @@ import com.flyzebra.flyui.utils.SysproUtil;
 import com.flyzebra.flyui.view.themeview.ThemeView;
 import com.flyzebra.launcher.mediainfo.MediaInfo;
 
+import java.util.Locale;
+
 /**
  * Author FlyZebra
  * 2019/3/20 10:55
@@ -35,6 +38,7 @@ public class FlyuiActivity extends Activity implements IFlyEvent, IUpdataVersion
     public IUpdataVersion iUpDataVersion;
     public IDiskCache iDiskCache;
     private MediaInfo mediaInfo;
+    private String themeName = "Launcher-AP1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,22 +48,34 @@ public class FlyuiActivity extends Activity implements IFlyEvent, IUpdataVersion
         setContentView(mThemeView);
         mThemeView.onCreate(this);
         iDiskCache = new DiskCache().init(this);
-        iUpDataVersion = new UpdataVersion(getApplicationContext(), iDiskCache) {
-            @Override
-            public void initApi() {
-                String url = SysproUtil.get(FlyuiActivity.this, SysproUtil.Property.URL_BASE, "http://192.168.1.119:801/uiweb");
-                String areaCode = SysproUtil.get(FlyuiActivity.this, SysproUtil.Property.AREA_CODE, "0");
-                String version = AppUtil.getVersionName(FlyuiActivity.this);
-                token = "12345678";
-                ApiUrl = url;
-                ApiVersion = "/api/version?areaCode=" + areaCode + "&type=launcher&version=" + version;
-                ApiTheme = "/api/app?appname=Launcher-AP1&areaCode=" + areaCode + "&type=launcher&version=" + version;
-            }
-        };
-        iUpDataVersion.forceUpVersion(this);
-
+        iUpDataVersion = new UpdataVersion(getApplicationContext(), iDiskCache);
         mediaInfo = new MediaInfo(this);
         mediaInfo.onCreate();
+
+        openByIntent(getIntent());
+    }
+
+    private void openByIntent(Intent intent) {
+        String url = SysproUtil.get(FlyuiActivity.this, SysproUtil.Property.URL_BASE, "http://192.168.1.119:801/uiweb");
+        String format = "/api/app?type=%s&themeName=%s&token=%s";
+        String version = AppUtil.getVersionName(FlyuiActivity.this);
+        String type = AppUtil.getApplicationName(FlyuiActivity.this);
+        if (intent != null) {
+            String str = intent.getStringExtra("THEME_NAME");
+            if (!TextUtils.isEmpty(str)) {
+                themeName = str;
+            }
+        }
+        String themeApi = String.format(Locale.CHINESE, format, type, themeName, version);
+        String token = "12345678";
+        iUpDataVersion.initApi(url, themeApi, token);
+        iUpDataVersion.forceUpVersion(this);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        openByIntent(getIntent());
     }
 
     @Override
@@ -71,7 +87,6 @@ public class FlyuiActivity extends Activity implements IFlyEvent, IUpdataVersion
         FlyEvent.unregister(this);
         FlyEvent.clear();
         super.onDestroy();
-        System.exit(0);
     }
 
 
@@ -110,17 +125,17 @@ public class FlyuiActivity extends Activity implements IFlyEvent, IUpdataVersion
         } else {
             GlideApp.with(this)
                     .load(themeBean.imageurl)
-                    .override(1024,600)
+                    .override(1024, 600)
                     .into(new CustomTarget<Drawable>() {
                         @Override
                         public synchronized void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                             getWindow().getDecorView().setBackground(resource);
-                            FlyLog.d("resource="+resource.getBounds());
+                            FlyLog.d("resource=" + resource.getBounds());
                         }
 
                         @Override
                         public void onLoadCleared(@Nullable Drawable placeholder) {
-                            FlyLog.d("placeholder="+placeholder);
+                            FlyLog.d("placeholder=" + placeholder);
                         }
                     });
         }
@@ -129,7 +144,7 @@ public class FlyuiActivity extends Activity implements IFlyEvent, IUpdataVersion
     @Override
     public boolean recvEvent(byte[] key) {
         String id = ByteUtil.bytes2HexString(key);
-        switch (id){
+        switch (id) {
             case "200301":
                 mediaInfo.playPasue();
                 break;

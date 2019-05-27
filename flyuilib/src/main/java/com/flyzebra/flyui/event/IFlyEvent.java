@@ -6,6 +6,5 @@ package com.flyzebra.flyui.event;
  * Describ:
  **/
 public interface IFlyEvent {
-    String EVENT_NAV = "400301";
     boolean recvEvent(byte[] key);
 }

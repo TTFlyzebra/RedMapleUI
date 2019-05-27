@@ -3,23 +3,22 @@ package com.flyzebra.flyui.view.themeview;
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.PageBean;
 import com.flyzebra.flyui.bean.ThemeBean;
-import com.flyzebra.flyui.config.GV;
 import com.flyzebra.flyui.event.FlyEvent;
 import com.flyzebra.flyui.event.IFlyEvent;
+import com.flyzebra.flyui.utils.ByteUtil;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.pageview.SimplePageView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PagesViewPager extends ViewPager {
+public class PagesViewPager extends ViewPager implements IFlyEvent {
     private List<PageBean> pageList = new ArrayList<>();
     private ThemeBean themeBean;
     private MyPgaeAdapter myPgaeAdapter = new MyPgaeAdapter();
@@ -27,6 +26,20 @@ public class PagesViewPager extends ViewPager {
     public PagesViewPager(Context context) {
         super(context);
         init(context);
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        FlyLog.v("onAttachedToWindow");
+        super.onAttachedToWindow();
+        FlyEvent.register(this);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        FlyLog.v("onDetachedFromWindow");
+        FlyEvent.unregister(this);
+        super.onDetachedFromWindow();
     }
 
     private void init(Context context) {
@@ -59,21 +72,29 @@ public class PagesViewPager extends ViewPager {
 
     }
 
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if(GV.viewPage_scoller){
-            return super.onInterceptTouchEvent(ev);
-        }else{
-            return false;
-        }
-    }
-
     public void selectPage(int page) {
 
     }
 
     public void selectCell(CellBean cell) {
 
+    }
+
+    @Override
+    public boolean recvEvent(byte[] key) {
+        switch (ByteUtil.bytes2HexString(key)) {
+            case "400301":
+                Object obj = FlyEvent.getValue(key);
+                if (obj instanceof String) {
+                    byte[] data = ByteUtil.hexString2Bytes((String) obj);
+                    if (data.length > 1) {
+                        int page = data[0];
+                        setCurrentItem(page,false);
+                    }
+                }
+                break;
+        }
+        return false;
     }
 
     public class MyPgaeAdapter extends PagerAdapter {
@@ -110,8 +131,8 @@ public class PagesViewPager extends ViewPager {
 
         @Override
         public void setPrimaryItem(ViewGroup container, int position, Object object) {
-            FlyEvent.saveValue(IFlyEvent.EVENT_NAV, new byte[]{(byte) position, (byte) (getCount() - 2)});
-            FlyEvent.sendEvent(IFlyEvent.EVENT_NAV);
+            FlyEvent.saveValue("400301", new byte[]{(byte) position, (byte) (getCount() - 2)});
+            FlyEvent.sendEvent("400301");
             //循环滚动
             try {
                 if (position == 0 && pageList != null && pageList.size() > 1) {

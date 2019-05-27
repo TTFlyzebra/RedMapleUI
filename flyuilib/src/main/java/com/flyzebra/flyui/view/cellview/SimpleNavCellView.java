@@ -96,7 +96,7 @@ public class SimpleNavCellView extends BaseView implements ICell {
         if (!mCellBean.recv.recvId.equals(ByteUtil.bytes2HexString(key))) {
             return false;
         }
-        if (EVENT_NAV.equals(mCellBean.recv.recvId)) {
+        if ("400301".equals(mCellBean.recv.recvId)) {
             Object obj = FlyEvent.getValue(key);
             if (obj instanceof byte[]) {
                 byte[] data = (byte[]) obj;
@@ -106,7 +106,7 @@ public class SimpleNavCellView extends BaseView implements ICell {
                     postInvalidate();
                 }
             }
-            FlyLog.d("handle event=" + EVENT_NAV);
+            FlyLog.d("handle event=400301");
             return false;
         }
         return false;

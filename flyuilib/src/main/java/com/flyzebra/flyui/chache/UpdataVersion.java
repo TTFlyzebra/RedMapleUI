@@ -86,12 +86,14 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
 
 
     @Override
-    public void initApi() {
+    public void initApi(String url, String themeApi, String token) {
+        ApiUrl = url;
+        ApiTheme = themeApi;
+        this.token = token;
     }
 
 
     private boolean checkUrl() {
-        initApi();
         return ApiUrl.startsWith("http://") || ApiUrl.startsWith("https://");
     }
 
