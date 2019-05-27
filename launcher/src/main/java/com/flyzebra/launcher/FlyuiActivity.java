@@ -56,7 +56,7 @@ public class FlyuiActivity extends Activity implements IFlyEvent, IUpdataVersion
     }
 
     private void openByIntent(Intent intent) {
-        String url = SysproUtil.get(FlyuiActivity.this, SysproUtil.Property.URL_BASE, "http://192.168.1.119:801/uiweb");
+        String url = SysproUtil.get(FlyuiActivity.this, SysproUtil.Property.URL_BASE, "http://192.168.1.88/uiweb");
         String format = "/api/app?type=%s&themeName=%s&token=%s";
         String version = AppUtil.getVersionName(FlyuiActivity.this);
         String type = AppUtil.getApplicationName(FlyuiActivity.this);
@@ -75,6 +75,7 @@ public class FlyuiActivity extends Activity implements IFlyEvent, IUpdataVersion
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        setIntent(intent);
         openByIntent(getIntent());
     }
 
@@ -156,5 +157,10 @@ public class FlyuiActivity extends Activity implements IFlyEvent, IUpdataVersion
                 break;
         }
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this,MainActivity.class));
     }
 }
