@@ -1,5 +1,7 @@
 package com.flyzebra.flyui.bean;
 
+import android.text.TextUtils;
+
 import java.util.List;
 
 /**
@@ -44,6 +46,6 @@ public class ThemeBean {
     }
 
     public boolean isValid() {
-        return true;
+        return pageList != null && !TextUtils.isEmpty(themeName);
     }
 }

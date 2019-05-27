@@ -18,30 +18,31 @@ import com.flyzebra.flyui.event.FlyEvent;
 import com.flyzebra.flyui.event.IFlyEvent;
 import com.flyzebra.flyui.utils.ByteUtil;
 import com.flyzebra.flyui.utils.FlyLog;
-import com.flyzebra.flyui.utils.IntentUtil;
-import com.flyzebra.flyui.view.customview.ShapeImageView;
+import com.flyzebra.flyui.view.customview.FlyImageView;
 
 /**
  * Author FlyZebra
  * 2019/5/20 16:08
  * Describ:
  **/
-public class BaseImageBeanView extends ShapeImageView implements IFlyEvent, View.OnClickListener, View.OnTouchListener {
+public class BaseMediaImageBeanView extends FlyImageView implements IFlyEvent, View.OnTouchListener {
     private ImageBean mImageBean;
     private Handler mHandler = new Handler(Looper.getMainLooper());
     public Bitmap mBitmap = null;
 
-    public BaseImageBeanView(Context context) {
+    public BaseMediaImageBeanView(Context context) {
         super(context);
     }
 
     public void setmImageBean(final ImageBean imageBean) {
-        if (imageBean == null) return;
         mImageBean = imageBean;
-        setScaleType(imageBean.getScaleType());
-        setShapeType(imageBean.shapeType);
-        if (mImageBean != null && mImageBean.send != null) {
-            setOnClickListener(this);
+        if (mImageBean != null && mImageBean.send != null && !TextUtils.isEmpty(mImageBean.send.eventId)) {
+            setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FlyEvent.sendEvent(mImageBean.send.eventId);
+                }
+            });
             setOnTouchListener(this);
         }
     }
@@ -70,7 +71,7 @@ public class BaseImageBeanView extends ShapeImageView implements IFlyEvent, View
         return false;
     }
 
-    protected void focusChange(boolean flag) {
+    private void focusChange(boolean flag) {
         if (flag) {
             try {
                 setColorFilter(Color.parseColor(mImageBean.filterColor));
@@ -131,7 +132,6 @@ public class BaseImageBeanView extends ShapeImageView implements IFlyEvent, View
         switch (mImageBean.recv.recvId) {
             case "100201":
                 break;
-            //接受到了图片内容
             case "100227":
                 final byte[] imageBytes = (byte[]) FlyEvent.getValue(mImageBean.recv.recvId);
                 FlyLog.d("handle 100227 imageBytes=" + imageBytes);
@@ -170,14 +170,5 @@ public class BaseImageBeanView extends ShapeImageView implements IFlyEvent, View
     private void setDefImageBitmap() {
         if (mImageBean == null || TextUtils.isEmpty(mImageBean.url)) return;
         Glide.with(getContext()).load(UpdataVersion.getNativeFilePath(mImageBean.url)).diskCacheStrategy(DiskCacheStrategy.NONE).into(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (!TextUtils.isEmpty(mImageBean.send.eventId)) {
-            FlyEvent.sendEvent(mImageBean.send.eventId);
-        } else if (IntentUtil.execStartPackage(getContext(), mImageBean.send.packName, mImageBean.send.className)) {
-        } else if (IntentUtil.execStartPackage(getContext(), mImageBean.send.packName)) {
-        }
     }
 }

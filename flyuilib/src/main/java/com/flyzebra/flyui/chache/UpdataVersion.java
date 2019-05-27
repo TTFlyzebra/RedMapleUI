@@ -324,10 +324,12 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
             }
         }
         //AllPage
-        for (PageBean pageBean : pageList) {
-            addDownImageUrl(pageBean.imageurl);
-            for (CellBean cellBean : pageBean.cellList) {
-                addCellImageUrls(cellBean);
+        if(pageList!=null) {
+            for (PageBean pageBean : pageList) {
+                addDownImageUrl(pageBean.imageurl);
+                for (CellBean cellBean : pageBean.cellList) {
+                    addCellImageUrls(cellBean);
+                }
             }
         }
         downloadAllImage(mDownImageList);
