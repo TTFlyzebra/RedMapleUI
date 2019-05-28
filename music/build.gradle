@@ -57,4 +57,5 @@ dependencies {
     debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.3'
     implementation project(path: ':flyuilib')
     implementation project(path: ':flymedialib')
+    compile project(path: ':mp3id3library')
 }

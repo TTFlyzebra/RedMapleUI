@@ -8,6 +8,7 @@ import com.flyzebra.flyui.Flyui;
 import com.flyzebra.flyui.event.FlyEvent;
 import com.flyzebra.flyui.event.FlyEventKey;
 import com.flyzebra.flyui.event.IFlyEvent;
+import com.flyzebra.flyui.utils.ByteUtil;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Music;
@@ -16,6 +17,8 @@ import com.jancar.media.model.listener.IMusicPlayerListener;
 import com.jancar.media.model.musicplayer.IMusicPlayer;
 import com.jancar.media.model.musicplayer.MusicPlayer;
 import com.jancar.media.utils.StringTools;
+import com.mpatric.mp3agic.ID3v2;
+import com.mpatric.mp3agic.Mp3File;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,7 +45,7 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
         flyui = new Flyui(this);
         flyui.onCreate();
         musicPlayer.addListener(this);
-        FlyEvent.sendEvent(FlyEventKey.CHANGE_PAGER_WITH_RESID, "music_fm01");
+//        FlyEvent.sendEvent(FlyEventKey.CHANGE_PAGER_WITH_RESID, "music_fm01");
     }
 
     @Override
@@ -56,14 +59,14 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
     @Override
     public void notifyPathChange(String path) {
         FlyLog.d("notifyPathChange path=%s", path);
-        FlyEvent.sendEvent(FlyEventKey.STORE_URL, path);
+        FlyEvent.sendEvent("10FF05", path);
         if (isStop) return;
         if (!musicPlayer.getPlayUrl().startsWith(path)) {
             musicPlayer.destory();
         }
         musicPlayer.playSaveUrlByPath(path);
         musicList.clear();
-        FlyEvent.sendEvent(FlyEventKey.MUSIC_LIST, new ArrayList<>());
+        notifyMusicList();
         super.notifyPathChange(path);
     }
 
@@ -129,6 +132,7 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
         FlyLog.d("statu=%d", statu);
         switch (statu) {
             case MusicPlayer.STATUS_COMPLETED:
+                break;
             case MusicPlayer.STATUS_STARTPLAY:
                 notifyCurrentMusic();
                 break;
@@ -136,27 +140,32 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
             case MusicPlayer.STATUS_PAUSE:
                 break;
         }
-        int playStauts = (musicPlayer.getPlayStatus() == MusicPlayer.STATUS_STARTPLAY
-                || musicPlayer.getPlayStatus() == MusicPlayer.STATUS_PLAYING) ? 1 : 0;
-        FlyEvent.sendEvent(FlyEventKey.MSG_PLAY_STATUS, playStauts);
+        byte playStauts = (musicPlayer.getPlayStatus() == MusicPlayer.STATUS_STARTPLAY
+                || musicPlayer.getPlayStatus() == MusicPlayer.STATUS_PLAYING) ? (byte) 1 : (byte) 0;
+        FlyEvent.sendEvent("100225", new byte[]{playStauts});
     }
 
     @Override
     public void loopStatusChange(int staut) {
-        FlyEvent.sendEvent(FlyEventKey.MSG_LOOP_STATUS, staut);
+        FlyEvent.sendEvent("100228", new byte[]{(byte) staut});
     }
 
     @Override
     public void playtime(long current, long total) {
-        FlyEvent.sendEvent(FlyEventKey.MUSIC_TIME, new long[]{current, total});
+        byte[] bt1 = ByteUtil.intToBytes((int) (current / 1000));
+        byte[] bt2 = ByteUtil.intToBytes((int) (total / 1000));
+        byte[] bt3 = new byte[bt1.length + bt2.length];
+        System.arraycopy(bt1, 0, bt3, 0, bt1.length);
+        System.arraycopy(bt2, 0, bt3, bt1.length, bt2.length);
+        FlyEvent.sendEvent("100226", bt3);
     }
 
     @Override
     public void storageList(List<StorageInfo> storageList) {
         super.storageList(storageList);
-        if (storageList != null) {
-            FlyEvent.sendEvent(FlyEventKey.SUM_STORE, "存储器\n(" + storageList.size() + ")");
-        }
+//        if (storageList != null) {
+//            FlyEvent.sendEvent(FlyEventKey.SUM_STORE, "存储器\n(" + storageList.size() + ")");
+//        }
         List<Map<Integer, Object>> list = new ArrayList<>();
         for (StorageInfo storageInfo : storageList) {
             if (TextUtils.isEmpty(storageInfo.mPath)) break;
@@ -174,7 +183,7 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
             map.put(FlyEventKey.RES_URL, imageKey);
             list.add(map);
         }
-        FlyEvent.sendEvent(FlyEventKey.STORE_LIST, list);
+        FlyEvent.sendEvent("10FF01", list);
     }
 
     private void notifyCurrentMusic() {
@@ -183,15 +192,17 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
             final int i = musicPlayer.getPlayPos();
             if (i >= 0 && i < musicList.size()) {
                 Music music = musicList.get(i);
-                FlyEvent.sendEvent(FlyEventKey.MUSIC_NAME, music.name);
-                FlyEvent.sendEvent(FlyEventKey.MUSIC_ALBUM, music.album);
-                FlyEvent.sendEvent(FlyEventKey.MUSIC_ARTIST, music.artist);
-                FlyEvent.sendEvent(FlyEventKey.MUSIC_URL, music.url);
+                FlyEvent.sendEvent("100222", music.name);
+                FlyEvent.sendEvent("100224", music.album);
+                FlyEvent.sendEvent("100223", music.artist);
+                FlyEvent.sendEvent("100221", music.url);
+                notifyMp3Bitmap(music.url);
             } else {
-                FlyEvent.sendEvent(FlyEventKey.MUSIC_NAME, "");
-                FlyEvent.sendEvent(FlyEventKey.MUSIC_ALBUM, "");
-                FlyEvent.sendEvent(FlyEventKey.MUSIC_ARTIST, "");
-                FlyEvent.sendEvent(FlyEventKey.MUSIC_URL, "");
+                FlyEvent.sendEvent("100222", "");
+                FlyEvent.sendEvent("100224", "");
+                FlyEvent.sendEvent("100223", "");
+                FlyEvent.sendEvent("100221", "");
+                FlyEvent.sendEvent("100227", null);
             }
         } catch (Exception e) {
             FlyLog.e(e.toString());
@@ -202,19 +213,19 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
         long time = System.currentTimeMillis();
         FlyLog.d("notifyMusicList start");
         //单曲列表
-        List<Map<Integer, Object>> listSingle = new ArrayList<>();
+        List<Map<String, Object>> listSingle = new ArrayList<>();
         for (Music music : musicList) {
             music.artist = TextUtils.isEmpty(music.artist) ? getString(R.string.no_artist) : music.artist;
             music.album = TextUtils.isEmpty(music.album) ? getString(R.string.no_album) : music.album;
             music.name = TextUtils.isEmpty(music.name) ? StringTools.getNameByPath(music.url) : music.name;
-            Map<Integer, Object> map = new Hashtable<>();
-            map.put(FlyEventKey.MUSIC_URL, music.url);
-            map.put(FlyEventKey.MUSIC_NAME, music.name);
-            map.put(FlyEventKey.MUSIC_ARTIST, music.artist);
+            Map<String, Object> map = new Hashtable<>();
+            map.put("100221", music.url);
+            map.put("100222", music.name);
+            map.put("100223", music.artist);
             listSingle.add(map);
         }
-        FlyEvent.sendEvent(FlyEventKey.MUSIC_SUM, "单曲\n(" + listSingle.size() + ")");
-        FlyEvent.sendEvent(FlyEventKey.MUSIC_LIST, listSingle);
+//        FlyEvent.sendEvent(FlyEventKey.MUSIC_SUM, "单曲\n(" + listSingle.size() + ")");
+        FlyEvent.sendEvent("100229", listSingle);
 
 
         //列表分类
@@ -237,9 +248,9 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
             }
             mFolderHashMap.get(path).add(music);
         }
-        FlyEvent.sendEvent(FlyEventKey.MUSIC_SUM_ARTIST, "歌手\n(" + mArtistHashMap.size() + ")");
-        FlyEvent.sendEvent(FlyEventKey.MUSIC_SUM_ALBUM, "专辑\n(" + mAlbumHashMap.size() + ")");
-        FlyEvent.sendEvent(FlyEventKey.MUSIC_SUM_FOLDER, "文件夹\n(" + mFolderHashMap.size() + ")");
+//        FlyEvent.sendEvent(FlyEventKey.MUSIC_SUM_ARTIST, "歌手\n(" + mArtistHashMap.size() + ")");
+//        FlyEvent.sendEvent(FlyEventKey.MUSIC_SUM_ALBUM, "专辑\n(" + mAlbumHashMap.size() + ")");
+//        FlyEvent.sendEvent(FlyEventKey.MUSIC_SUM_FOLDER, "文件夹\n(" + mFolderHashMap.size() + ")");
 
         //歌手列表
         List<String> artistGroupList = new ArrayList<>(mArtistHashMap.keySet());
@@ -254,28 +265,28 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
                 }
             }
         });
-        List<Map<Integer, Object>> listArtist = new ArrayList<>();
+        List<Map<String, Object>> listArtist = new ArrayList<>();
         for (String key : artistGroupList) {
             List<Music> list = mArtistHashMap.get(key);
             if (list != null && !list.isEmpty()) {
-                Map<Integer, Object> map1 = new Hashtable<>();
-                map1.put(FlyEventKey.MUSIC_URL, list.get(0).url);
-                map1.put(FlyEventKey.MUSIC_NAME, list.get(0).name);
-                map1.put(FlyEventKey.MUSIC_ARTIST, list.get(0).artist);
-                map1.put(FlyEventKey.FOLODER_NUM, "(" + list.size() + "首)");
-                map1.put(FlyEventKey.GROUP_TYPE, 0);
+                Map<String, Object> map1 = new Hashtable<>();
+                map1.put("100221", list.get(0).url);
+                map1.put("100222", list.get(0).name);
+                map1.put("100223", list.get(0).artist);
+                map1.put("10FFF1", "(" + list.size() + "首)");
+                map1.put("10FF02", 0);
                 listArtist.add(map1);
                 for (Music music : list) {
-                    Map<Integer, Object> map2 = new Hashtable<>();
-                    map2.put(FlyEventKey.MUSIC_URL, music.url);
-                    map2.put(FlyEventKey.MUSIC_NAME, music.name);
-                    map2.put(FlyEventKey.MUSIC_ARTIST, music.artist);
-                    map2.put(FlyEventKey.GROUP_TYPE, 1);
+                    Map<String, Object> map2 = new Hashtable<>();
+                    map2.put("100221", music.url);
+                    map2.put("100222", music.name);
+                    map2.put("100223", music.artist);
+                    map2.put("10FF02", 1);
                     listArtist.add(map2);
                 }
             }
         }
-        FlyEvent.sendEvent(FlyEventKey.MUSIC_LIST_ARTIST, listArtist);
+        FlyEvent.sendEvent("100230", listArtist);
 
         //专辑列表
         List<String> albumGroupList = new ArrayList<>(mAlbumHashMap.keySet());
@@ -290,28 +301,28 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
                 }
             }
         });
-        List<Map<Integer, Object>> listAlbum = new ArrayList<>();
+        List<Map<String, Object>> listAlbum = new ArrayList<>();
         for (String key : albumGroupList) {
             List<Music> list = mAlbumHashMap.get(key);
             if (list != null && !list.isEmpty()) {
-                Map<Integer, Object> map1 = new Hashtable<>();
-                map1.put(FlyEventKey.MUSIC_URL, list.get(0).url);
-                map1.put(FlyEventKey.MUSIC_NAME, list.get(0).name);
-                map1.put(FlyEventKey.MUSIC_ALBUM, list.get(0).album);
-                map1.put(FlyEventKey.FOLODER_NUM, "(" + list.size() + "首)");
-                map1.put(FlyEventKey.GROUP_TYPE, 0);
+                Map<String, Object> map1 = new Hashtable<>();
+                map1.put("100221", list.get(0).url);
+                map1.put("100222", list.get(0).name);
+                map1.put("100224", list.get(0).album);
+                map1.put("10FFF1", "(" + list.size() + "首)");
+                map1.put("10FF02", 0);
                 listAlbum.add(map1);
                 for (Music music : list) {
-                    Map<Integer, Object> map2 = new Hashtable<>();
-                    map2.put(FlyEventKey.MUSIC_URL, music.url);
-                    map2.put(FlyEventKey.MUSIC_NAME, music.name);
-                    map2.put(FlyEventKey.MUSIC_ALBUM, music.album);
-                    map2.put(FlyEventKey.GROUP_TYPE, 1);
+                    Map<String, Object> map2 = new Hashtable<>();
+                    map2.put("100221", music.url);
+                    map2.put("100222", music.name);
+                    map2.put("100224", music.album);
+                    map2.put("10FF02", 1);
                     listAlbum.add(map2);
                 }
             }
         }
-        FlyEvent.sendEvent(FlyEventKey.MUSIC_LIST_ALBUM, listAlbum);
+        FlyEvent.sendEvent("100231", listAlbum);
 
         //文件夹列表
         List<String> folderGroupList = new ArrayList<>(mFolderHashMap.keySet());
@@ -326,7 +337,7 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
                 }
             }
         });
-        List<Map<Integer, Object>> listFolder = new ArrayList<>();
+        List<Map<String, Object>> listFolder = new ArrayList<>();
         for (String key : folderGroupList) {
             List<Music> list = mFolderHashMap.get(key);
             if (list != null && !list.isEmpty()) {
@@ -337,71 +348,91 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
                     last = path.lastIndexOf(File.separator);
                     String pathName = last > 0 ? path.substring(last + 1, path.length()) : path;
                     String pathPath = last > 0 ? path.substring(0, last) : path;
-                    Map<Integer, Object> map1 = new Hashtable<>();
-                    map1.put(FlyEventKey.MUSIC_URL, list.get(0).url);
-                    map1.put(FlyEventKey.MUSIC_NAME, list.get(0).name);
-                    map1.put(FlyEventKey.FOLODER_NAME, pathName);
-                    map1.put(FlyEventKey.FOLODER_PATH, pathPath);
-                    map1.put(FlyEventKey.FOLODER_NUM, "(" + list.size() + "首)");
-                    map1.put(FlyEventKey.GROUP_TYPE, 0);
+                    Map<String, Object> map1 = new Hashtable<>();
+                    map1.put("100221", list.get(0).url);
+                    map1.put("100222", list.get(0).name);
+                    map1.put("10FF03", pathName);
+                    map1.put("10FF04", pathPath);
+                    map1.put("10FFF1", "(" + list.size() + "首)");
+                    map1.put("10FF02", 0);
                     listFolder.add(map1);
                 }
                 for (Music music : list) {
-                    Map<Integer, Object> map2 = new Hashtable<>();
-                    map2.put(FlyEventKey.MUSIC_URL, music.url);
-                    map2.put(FlyEventKey.MUSIC_NAME, music.name);
-                    map2.put(FlyEventKey.GROUP_TYPE, 1);
+                    Map<String, Object> map2 = new Hashtable<>();
+                    map2.put("100221", music.url);
+                    map2.put("100222", music.name);
+                    map2.put("10FF02", 1);
                     listFolder.add(map2);
                 }
             }
         }
-        FlyEvent.sendEvent(FlyEventKey.MUSIC_LIST_FOLDER, listFolder);
+        FlyEvent.sendEvent("100232", listFolder);
         FlyLog.d("notifyMusicList end use time =" + (System.currentTimeMillis() - time) + "ms");
     }
 
     @Override
     public boolean recvEvent(byte[] key) {
         Object obj;
-        switch (key) {
-            case FlyEventKey.KEY_PLAY:
+        switch (ByteUtil.bytes2HexString(key)) {
+            case "200301":
                 musicPlayer.playPause();
                 break;
-            case FlyEventKey.KEY_NEXT:
+            case "200303":
                 musicPlayer.playNext();
                 break;
-            case FlyEventKey.KEY_PREV:
+            case "200302":
                 musicPlayer.playPrev();
                 break;
-            case FlyEventKey.KEY_SEEK:
-                obj = FlyEvent.getValue(FlyEventKey.KEY_SEEK);
+            case "200306":
+                obj = FlyEvent.getValue(key);
                 if (obj instanceof Integer) {
                     musicPlayer.seekTo((int) obj);
                 }
                 break;
-            case FlyEventKey.KEY_URL:
-                obj = FlyEvent.getValue(FlyEventKey.KEY_URL);
+            case "300101":
+                obj = FlyEvent.getValue(key);
                 if (!musicPlayer.getPlayUrl().equals(obj)) {
                     musicPlayer.play((String) obj);
                 }
                 break;
-            case FlyEventKey.KEY_MENU:
-                int flag = 0;
-                obj = FlyEvent.getValue(FlyEventKey.MSG_MENU_STATUS);
+            case "400200":
+                byte flag = 0;
+                obj = FlyEvent.getValue(key);
                 if (obj instanceof Integer) {
-                    flag = ((int) obj) == 0 ? 1 : 0;
+                    flag = ((int) obj) == 0 ? (byte) 1 : 0;
                 }
-                FlyEvent.sendEvent(FlyEventKey.MSG_MENU_STATUS, flag);
+                FlyEvent.sendEvent(key, new byte[]{flag});
                 break;
-            case FlyEventKey.KEY_LOOP:
+            case "200305":
                 musicPlayer.switchLoopStatus();
                 break;
-            case FlyEventKey.KEY_STORE:
-                obj = FlyEvent.getValue(FlyEventKey.KEY_STORE);
+            case "300104":
+                obj = FlyEvent.getValue(key);
                 if (obj instanceof String) {
                     usbMediaScan.openStorager(new StorageInfo((String) obj));
                 }
                 break;
         }
         return false;
+    }
+
+    private void notifyMp3Bitmap(final String url) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (url.toLowerCase().endsWith(".mp3")) {
+                        FlyLog.d("start get id3 info url=%s", url);
+                        Mp3File mp3file = new Mp3File(url);
+                        if (mp3file.hasId3v2Tag()) {
+                            ID3v2 id3v2Tag = mp3file.getId3v2Tag();
+                            FlyEvent.sendEvent("100227", id3v2Tag.getAlbumImage());
+                        }
+                    }
+                } catch (Exception e) {
+                    FlyLog.e(e.toString());
+                }
+            }
+        }).start();
     }
 }

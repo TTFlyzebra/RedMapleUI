@@ -21,6 +21,7 @@ import com.flyzebra.flyui.event.IFlyEvent;
 import com.flyzebra.flyui.utils.AppUtil;
 import com.flyzebra.flyui.utils.ByteUtil;
 import com.flyzebra.flyui.utils.FlyLog;
+import com.flyzebra.flyui.utils.SPUtil;
 import com.flyzebra.flyui.utils.SysproUtil;
 import com.flyzebra.flyui.view.themeview.ThemeView;
 import com.flyzebra.launcher.mediainfo.MediaInfo;
@@ -36,7 +37,7 @@ public class FlyuiActivity extends Activity implements IFlyEvent, IUpdataVersion
     public IUpdataVersion iUpDataVersion;
     public IDiskCache iDiskCache;
     private MediaInfo mediaInfo;
-    private String themeName = "Launcher-AP1";
+    private String themeName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +55,11 @@ public class FlyuiActivity extends Activity implements IFlyEvent, IUpdataVersion
     }
 
     private void openByIntent(Intent intent) {
+        String themeName = (String) SPUtil.get(this, "themeName", "Launcher-AP1");
         String url = SysproUtil.get(FlyuiActivity.this, SysproUtil.Property.URL_BASE, "http://192.168.1.119:801/uiweb");
         String token = "1234567890";
         String ApiTheme = "/api/app?type=%s&themeName=%s&version=%s";
-        String type=AppUtil.getApplicationName(this);
+        String type = AppUtil.getApplicationName(this);
         String version = AppUtil.getVersionName(this);
         if (intent != null) {
             String str = intent.getStringExtra("THEME_NAME");
@@ -65,8 +67,10 @@ public class FlyuiActivity extends Activity implements IFlyEvent, IUpdataVersion
                 themeName = new String(str);
             }
         }
-        iUpDataVersion.initApi(url, ApiTheme,type,themeName,version,token);
-        iUpDataVersion.forceUpVersion(this);
+        if (!TextUtils.isEmpty(themeName) && !themeName.equals(this.themeName)) {
+            iUpDataVersion.initApi(url, ApiTheme, type, themeName, version, token);
+            iUpDataVersion.forceUpVersion(this);
+        }
     }
 
     @Override
@@ -115,6 +119,8 @@ public class FlyuiActivity extends Activity implements IFlyEvent, IUpdataVersion
     }
 
     private void upView(ThemeBean themeBean) {
+        this.themeName = themeBean.themeName;
+        SPUtil.set(this, "themeName", themeName);
         FlyEvent.unregisterAll();
         FlyEvent.register(this);
         mThemeView.upData(themeBean);
@@ -158,6 +164,6 @@ public class FlyuiActivity extends Activity implements IFlyEvent, IUpdataVersion
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this,MainActivity.class));
+        startActivity(new Intent(this, MainActivity.class));
     }
 }

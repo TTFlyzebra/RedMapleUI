@@ -25,14 +25,12 @@ public class BaseTextBeanView extends FlyTextView implements IFlyEvent {
 
     @Override
     protected void onAttachedToWindow() {
-        FlyLog.v("onAttachedToWindow");
         super.onAttachedToWindow();
         FlyEvent.register(this);
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        FlyLog.v("onDetachedFromWindow");
         FlyEvent.unregister(this);
         super.onDetachedFromWindow();
     }
@@ -54,7 +52,6 @@ public class BaseTextBeanView extends FlyTextView implements IFlyEvent {
         }
         if (textBean.text != null) {
             setText(textBean.text.getText());
-            FlyLog.d("Set text="+textBean.text.getText());
         }
         if (textBean.recv == null || textBean.recv.recvId == null) {
             return;

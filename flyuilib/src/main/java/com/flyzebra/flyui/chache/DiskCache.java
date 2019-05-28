@@ -273,6 +273,7 @@ public class DiskCache implements IDiskCache {
 
     @Override
     public boolean saveString(String str, String key) {
+        if(TextUtils.isEmpty(str)) return false;
         boolean flag = false;
         OutputStream outputStream = null;
         try {

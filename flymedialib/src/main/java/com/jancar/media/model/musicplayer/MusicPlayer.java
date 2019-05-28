@@ -407,7 +407,7 @@ public class MusicPlayer implements IMusicPlayer,
 
     @Override
     public void switchLoopStatus() {
-        mLoopStatus = (mLoopStatus + 1) % LOOP_SUM;
+        mLoopStatus = (mLoopStatus + 1) % 4;
         SPUtil.set(mContext, "LOOPSTATUS", mLoopStatus);
         for (IMusicPlayerListener iMusicPlayerListener : listeners) {
             iMusicPlayerListener.loopStatusChange(mLoopStatus);

@@ -45,7 +45,7 @@ public class SeekbarCellView extends BaseLayoutCellView implements SeekBar.OnSee
 
     @Override
     public boolean verify(CellBean cellBean) {
-        return true;
+        return mCellBean!=null&&mCellBean.images!=null&&mCellBean.images.size()>2;
     }
 
     @Override
@@ -70,12 +70,14 @@ public class SeekbarCellView extends BaseLayoutCellView implements SeekBar.OnSee
         }
 
         seekBar = new SeekBar(getContext());
-        LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, 10);
+        LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, mCellBean.height);
+        lp.setMarginStart(mCellBean.images.get(0).left);
+        lp.setMarginEnd(mCellBean.images.get(0).right);
         addView(seekBar, lp);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             seekBar.setSplitTrack(false);
         }
-        seekBar.setMinimumHeight(10);
+        seekBar.setMinimumHeight(mCellBean.height);
         seekBar.setOnSeekBarChangeListener(this);
     }
 
@@ -124,18 +126,19 @@ public class SeekbarCellView extends BaseLayoutCellView implements SeekBar.OnSee
 
     private void loadBitmapFinish() {
         if (draw1 != null && draw2 != null && draw3 != null) {
-            seekBar.setThumb(draw1);
             Drawable[] drawables = new Drawable[3];
-            drawables[0] = draw2;
-            ClipDrawable clipDrawable = new ClipDrawable(draw2, Gravity.START, HORIZONTAL);
+            drawables[0] = draw1;
+            ClipDrawable clipDrawable = new ClipDrawable(draw1, Gravity.START, HORIZONTAL);
             drawables[1] = clipDrawable;
-            clipDrawable = new ClipDrawable(draw3, Gravity.START, HORIZONTAL);
+            clipDrawable = new ClipDrawable(draw2, Gravity.START, HORIZONTAL);
             drawables[2] = clipDrawable;
             LayerDrawable layerDrawable = new LayerDrawable(drawables);
             layerDrawable.setId(0, android.R.id.background);
             layerDrawable.setId(1, android.R.id.secondaryProgress);
             layerDrawable.setId(2, android.R.id.progress);
             seekBar.setProgressDrawable(layerDrawable);
+
+            seekBar.setThumb(draw3);
         }
     }
 

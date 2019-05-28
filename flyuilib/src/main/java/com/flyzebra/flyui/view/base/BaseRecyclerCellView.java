@@ -1,8 +1,8 @@
 package com.flyzebra.flyui.view.base;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.event.FlyEvent;
@@ -10,10 +10,10 @@ import com.flyzebra.flyui.event.IFlyEvent;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.cellview.ICell;
 
-public abstract class BaseLayoutCellView extends FrameLayout implements IFlyEvent, ICell {
+public abstract class BaseRecyclerCellView extends RecyclerView implements IFlyEvent, ICell {
     protected CellBean mCellBean;
 
-    public BaseLayoutCellView(Context context) {
+    public BaseRecyclerCellView(Context context) {
         super(context);
     }
 
