@@ -8,5 +8,5 @@ import java.util.List;
 import rx.Subscriber;
 
 public interface ApiAction {
-    void doTheme(Subscriber<List<ThemeBean>> subscriber);
+    void doTheme(String type,Subscriber<List<ThemeBean>> subscriber);
 }

@@ -19,8 +19,8 @@ public class ApiActionlmpl implements ApiAction {
     }
 
     @Override
-    public void doTheme(Subscriber<List<ThemeBean>> subscriber) {
-        mNetService.doTheme()
+    public void doTheme(String type,Subscriber<List<ThemeBean>> subscriber) {
+        mNetService.doTheme(type)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

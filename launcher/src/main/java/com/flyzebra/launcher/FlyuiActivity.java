@@ -56,7 +56,7 @@ public class FlyuiActivity extends Activity implements IFlyEvent, IUpdataVersion
     }
 
     private void openByIntent(Intent intent) {
-        String url = SysproUtil.get(FlyuiActivity.this, SysproUtil.Property.URL_BASE, "http://192.168.1.88/uiweb");
+        String url = SysproUtil.get(FlyuiActivity.this, SysproUtil.Property.URL_BASE, "http://192.168.1.119:801/uiweb");
         String format = "/api/app?type=%s&themeName=%s&token=%s";
         String version = AppUtil.getVersionName(FlyuiActivity.this);
         String type = AppUtil.getApplicationName(FlyuiActivity.this);

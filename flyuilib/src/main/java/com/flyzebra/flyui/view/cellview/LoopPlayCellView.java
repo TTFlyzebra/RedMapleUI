@@ -23,6 +23,7 @@ import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.ImageBean;
 import com.flyzebra.flyui.bean.TextBean;
 import com.flyzebra.flyui.chache.UpdataVersion;
+import com.flyzebra.flyui.config.GV;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.base.BaseImageBeanView;
 import com.flyzebra.flyui.view.base.BaseLayoutCellView;
@@ -58,17 +59,25 @@ public class LoopPlayCellView extends BaseLayoutCellView {
         ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(dm);
         screenWidth = dm.widthPixels;
         screenHeigh = dm.heightPixels;
+        setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
 
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        GV.viewPage_scoller = false;
     }
 
     @Override
     protected void onDetachedFromWindow() {
         mHandler.removeCallbacksAndMessages(null);
+        GV.viewPage_scoller = true;
         super.onDetachedFromWindow();
     }
 

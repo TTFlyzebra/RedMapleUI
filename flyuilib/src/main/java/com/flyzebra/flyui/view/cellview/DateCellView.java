@@ -1,6 +1,7 @@
 package com.flyzebra.flyui.view.cellview;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
@@ -68,6 +69,14 @@ public class DateCellView extends SimpleCellView {
                     }
                 }
             }, 0, 1000);
+        }
+
+        try {
+            if(!TextUtils.isEmpty(mCellBean.backColor)){
+                setBackgroundColor(Color.parseColor(mCellBean.backColor));
+            }
+        } catch (Exception e) {
+            FlyLog.e("error! parseColor exception!" + e.toString());
         }
     }
 

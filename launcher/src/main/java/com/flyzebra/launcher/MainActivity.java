@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.flyzebra.flyui.bean.ThemeBean;
+import com.flyzebra.flyui.utils.AppUtil;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.launcher.network.ApiAction;
 import com.flyzebra.launcher.network.ApiActionlmpl;
@@ -28,6 +29,7 @@ public class MainActivity extends Activity implements Adapater.OnItemClickListen
     private Adapater adapater;
     private List<ThemeBean> list = new ArrayList<>();
     private ApiAction apiAction;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         FlyLog.d("onCreate");
@@ -36,9 +38,9 @@ public class MainActivity extends Activity implements Adapater.OnItemClickListen
         apiAction = new ApiActionlmpl();
 
         recyclerView = findViewById(R.id.ac_main_rv01);
-        GridLayoutManager layoutManager = new GridLayoutManager(this,2);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layoutManager);
-        adapater = new Adapater(this,list);
+        adapater = new Adapater(this, list);
         recyclerView.setAdapter(adapater);
 
         adapater.setOnItemClickListener(this);
@@ -47,20 +49,20 @@ public class MainActivity extends Activity implements Adapater.OnItemClickListen
     @Override
     protected void onStart() {
         super.onStart();
-        apiAction.doTheme(new Subscriber<List<ThemeBean>>() {
+        apiAction.doTheme(AppUtil.getApplicationName(this),new Subscriber<List<ThemeBean>>() {
             @Override
             public void onCompleted() {
-
+                FlyLog.d("onCompleted");
             }
 
             @Override
             public void onError(Throwable e) {
-
+                FlyLog.d(e.toString());
             }
 
             @Override
             public void onNext(List<ThemeBean> themeBeans) {
-                FlyLog.d("themeBeans="+themeBeans);
+                FlyLog.d("themeBeans=" + themeBeans);
                 list.clear();
                 list.addAll(themeBeans);
                 adapater.notifyDataSetChanged();
@@ -84,7 +86,7 @@ public class MainActivity extends Activity implements Adapater.OnItemClickListen
             Intent intent = new Intent(this, FlyuiActivity.class);
             intent.putExtra("THEME_NAME", list.get(pos).themeName);
             startActivity(intent);
-        }catch (Exception e){
+        } catch (Exception e) {
             FlyLog.e(e.toString());
         }
     }
