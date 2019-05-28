@@ -12,7 +12,7 @@ public interface IUpdataVersion {
     /**
      * 每次请求前调用此函数设置请求API地址
      */
-    void initApi(String url, String themeApi, String token);
+    void initApi(String apiUrl, String apiTheme, String type, String themeName, String version, String token);
 
 
     /**

@@ -25,8 +25,6 @@ import com.flyzebra.flyui.utils.SysproUtil;
 import com.flyzebra.flyui.view.themeview.ThemeView;
 import com.flyzebra.launcher.mediainfo.MediaInfo;
 
-import java.util.Locale;
-
 /**
  * Author FlyZebra
  * 2019/3/20 10:55
@@ -57,18 +55,17 @@ public class FlyuiActivity extends Activity implements IFlyEvent, IUpdataVersion
 
     private void openByIntent(Intent intent) {
         String url = SysproUtil.get(FlyuiActivity.this, SysproUtil.Property.URL_BASE, "http://192.168.1.119:801/uiweb");
-        String format = "/api/app?type=%s&themeName=%s&token=%s";
-        String version = AppUtil.getVersionName(FlyuiActivity.this);
-        String type = AppUtil.getApplicationName(FlyuiActivity.this);
+        String token = "1234567890";
+        String ApiTheme = "/api/app?type=%s&themeName=%s&version=%s";
+        String type=AppUtil.getApplicationName(this);
+        String version = AppUtil.getVersionName(this);
         if (intent != null) {
             String str = intent.getStringExtra("THEME_NAME");
             if (!TextUtils.isEmpty(str)) {
-                themeName = str;
+                themeName = new String(str);
             }
         }
-        String themeApi = String.format(Locale.CHINESE, format, type, themeName, version);
-        String token = "12345678";
-        iUpDataVersion.initApi(url, themeApi, token);
+        iUpDataVersion.initApi(url, ApiTheme,type,themeName,version,token);
         iUpDataVersion.forceUpVersion(this);
     }
 

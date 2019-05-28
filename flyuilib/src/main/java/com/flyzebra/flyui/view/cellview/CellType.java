@@ -20,7 +20,7 @@ public interface CellType {
     /**
      * 媒体小部件
      */
-    int TYPE_APP_MEDIA = 4;
+    int TYPE_APP_CONTROL = 4;
     /**
      * 可镜像的小部件
      */

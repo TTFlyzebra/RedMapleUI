@@ -33,8 +33,8 @@ public class CellViewFactory {
             case CellType.TYPE_APP_DATE:
                 iCellView = new DateCellView(context);
                 break;
-            case CellType.TYPE_APP_MEDIA:
-                iCellView = new MediaInfoCellView(context);
+            case CellType.TYPE_APP_CONTROL:
+                iCellView = new ControlCellView(context);
                 return iCellView;
             case CellType.TYPE_SEEKBAR:
                 iCellView = new SeekbarCellView(context);

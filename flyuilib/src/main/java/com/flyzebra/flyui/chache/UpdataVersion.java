@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -36,6 +37,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
 
     private static final String ASSETS_PATH = "zebra/";
+    private String themeName;
     private Context mContext;
     private IDiskCache iDiskCache;
     private UpResult upResult;
@@ -52,9 +54,11 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private static ExecutorService executor = Executors.newFixedThreadPool(1);
     private static final HandlerThread sWorkerThread = new HandlerThread("flyui-task");
+
     static {
         sWorkerThread.start();
     }
+
     private static final Handler tHandler = new Handler(sWorkerThread.getLooper());
     private boolean isUPVeriosnRunning = false;
 
@@ -86,9 +90,10 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
 
 
     @Override
-    public void initApi(String url, String themeApi, String token) {
-        ApiUrl = url;
-        ApiTheme = themeApi;
+    public void initApi(String apiUrl, String apiThemeFormat, String type, String themeName, String version, String token) {
+        ApiUrl = apiUrl;
+        this.themeName = themeName;
+        ApiTheme = String.format(Locale.CHINESE, apiThemeFormat, type, themeName, version);
         this.token = token;
     }
 
@@ -133,9 +138,9 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
     }
 
     private ThemeBean getThemeBean() {
-        String mThemeBeanJson = iDiskCache.getString(TEMPLATE_KEY);
+        String mThemeBeanJson = iDiskCache.getString(themeName+TEMPLATE_KEY);
         if (TextUtils.isEmpty(mThemeBeanJson)) {
-            mThemeBeanJson = getAssetsFileString(TEMPLATE_KEY);
+            mThemeBeanJson = getAssetsFileString(themeName+TEMPLATE_KEY);
             if (TextUtils.isEmpty(mThemeBeanJson)) {
                 SAVE_PATH = "file://" + iDiskCache.getSavePath();
             } else {
@@ -195,7 +200,7 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
         FlyOkHttp.getInstance().getString(urlAPI, HTTPTAG, new IHttp.HttpResult() {
             @Override
             public void succeed(final Object object) {
-                String version = iDiskCache.getString(VERSION_KEY);
+                String version = iDiskCache.getString(themeName+VERSION_KEY);
                 if (version != null) {
                     VersionBean bean = GsonUtil.json2Object(version, VersionBean.class);
                     if (bean != null) {
@@ -326,7 +331,7 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
             }
         }
         //AllPage
-        if(pageList!=null) {
+        if (pageList != null) {
             for (PageBean pageBean : pageList) {
                 addDownImageUrl(pageBean.imageurl);
                 for (CellBean cellBean : pageBean.cellList) {
@@ -338,8 +343,8 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
     }
 
     private void addCellImageUrls(CellBean cellBean) {
-        if(cellBean.images!=null&&cellBean.images.size()>0){
-            for(ImageBean imageBean:cellBean.images){
+        if (cellBean.images != null && cellBean.images.size() > 0) {
+            for (ImageBean imageBean : cellBean.images) {
                 addDownImageUrl(imageBean.url);
             }
         }
@@ -358,8 +363,8 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
     }
 
     private void addSaveFileNames(CellBean cellBean) {
-        if(cellBean.images!=null&&cellBean.images.size()>0){
-            for(ImageBean imageBean:cellBean.images){
+        if (cellBean.images != null && cellBean.images.size() > 0) {
+            for (ImageBean imageBean : cellBean.images) {
                 files.add(EncodeUtil.md5(imageBean.url) + ".0");
             }
         }
@@ -443,8 +448,8 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
                 }
             });
         } else {
-            iDiskCache.saveString(localVersion, VERSION_KEY);
-            iDiskCache.saveString(mThemeJson, TEMPLATE_KEY);
+            iDiskCache.saveString(localVersion, themeName+VERSION_KEY);
+            iDiskCache.saveString(mThemeJson, themeName+TEMPLATE_KEY);
             //保存资源json文件
             FlyLog.d("upVersion OK!");
             mHandler.post(new Runnable() {

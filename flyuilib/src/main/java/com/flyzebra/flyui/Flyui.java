@@ -14,8 +14,6 @@ import com.flyzebra.flyui.utils.AppUtil;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.themeview.ThemeView;
 
-import java.util.Locale;
-
 /**
  * Author FlyZebra
  * 2019/4/4 11:31
@@ -43,9 +41,11 @@ public class Flyui implements IUpdataVersion.CheckCacheResult, IUpdataVersion.Up
         iUpDataVersion = new UpdataVersion(activity.getApplicationContext(), iDiskCache);
         String token = "1234567890";
         String ApiUrl = "http://192.168.1.119:801/uiweb";
-        String format = "/api/app?type=%s&themeName=%s&version=%s";
-        String ApiTheme = String.format(Locale.CHINESE, format, AppUtil.getApplicationName(activity), "", AppUtil.getVersionName(activity));
-        iUpDataVersion.initApi(ApiUrl, ApiTheme, token);
+        String ApiTheme = "/api/app?type=%s&themeName=%s&version=%s";
+        String type=AppUtil.getApplicationName(activity);
+        String themeName="";
+        String version = AppUtil.getVersionName(activity);
+        iUpDataVersion.initApi(ApiUrl, ApiTheme,type,themeName,version, token);
         iUpDataVersion.forceUpVersion(this);
     }
 

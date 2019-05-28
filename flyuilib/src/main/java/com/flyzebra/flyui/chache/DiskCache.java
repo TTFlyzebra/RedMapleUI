@@ -23,7 +23,6 @@ import java.io.OutputStream;
 import java.net.URI;
 
 
-
 /**
  * 网络图片下载到本地磁盘缓存实现，对比本地已下载的文件，只下载未下载的图片，
  * <p/>
@@ -122,6 +121,7 @@ public class DiskCache implements IDiskCache {
         return flag;
     }
 
+
     /**
      * 为避免重复下载，考虑各种复杂的网络情况，
      * 先以临时文件名下载，下载完成后改为能正确取用的文件名
@@ -129,7 +129,7 @@ public class DiskCache implements IDiskCache {
      * NOTE:多线程不安全
      */
     @Override
-    public synchronized boolean saveBitmapFromImgurl( String imgUrl) {
+    public synchronized boolean saveBitmapFromImgurl(String imgUrl) {
         if (checkFileExist(imgUrl)) {
             FlyLog.d("图片文件已经存在：" + imgUrl);
             return true;
@@ -156,10 +156,10 @@ public class DiskCache implements IDiskCache {
                 if (file.length() > 0) {
                     FlyLog.d(imgUrl + ",文件下载完成，文件名为：" + file.getAbsolutePath());
                     flag = true;
-                }else{
+                } else {
                     FlyLog.d(imgUrl + ",文件下载失败，文件名为：" + file.getAbsolutePath());
                     boolean del = file.delete();
-                    FlyLog.d("删除文件" + file.getAbsolutePath()+"---删除成功:"+del);
+                    FlyLog.d("删除文件" + file.getAbsolutePath() + "---删除成功:" + del);
                     deleteFileSafely(file);
                 }
             } else {
@@ -367,6 +367,9 @@ public class DiskCache implements IDiskCache {
     public boolean checkFileExist(String imgUrl) {
         String fileName = savePath + File.separator + EncodeUtil.md5(imgUrl) + ".0";
         File file = new File(fileName);
+        if (file.length() < 10) {
+            return false;
+        }
         return file.exists();
     }
 

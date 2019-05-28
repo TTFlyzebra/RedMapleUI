@@ -44,11 +44,7 @@ public class MainActivity extends Activity implements Adapater.OnItemClickListen
         recyclerView.setAdapter(adapater);
 
         adapater.setOnItemClickListener(this);
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
         apiAction.doTheme(AppUtil.getApplicationName(this),new Subscriber<List<ThemeBean>>() {
             @Override
             public void onCompleted() {
@@ -68,6 +64,11 @@ public class MainActivity extends Activity implements Adapater.OnItemClickListen
                 adapater.notifyDataSetChanged();
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     @Override
