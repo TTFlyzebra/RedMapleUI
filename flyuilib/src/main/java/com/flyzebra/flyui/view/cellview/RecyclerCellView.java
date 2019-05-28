@@ -21,6 +21,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.ThemeBean;
 import com.flyzebra.flyui.chache.UpdataVersion;
+import com.flyzebra.flyui.event.FlyEvent;
 import com.flyzebra.flyui.module.RecycleViewDivider;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.base.BaseRecyclerCellView;
@@ -109,7 +110,7 @@ public class RecyclerCellView extends BaseRecyclerCellView {
         setAdapter(adapter);
 
         try {
-            setBackgroundColor(Color.parseColor(mCellBean.backcolor));
+            setBackgroundColor(Color.parseColor(mCellBean.backColor));
         } catch (Exception e) {
             FlyLog.d("error! parseColor exception!" + e.toString());
         }
@@ -119,14 +120,14 @@ public class RecyclerCellView extends BaseRecyclerCellView {
             public void onItemClick(View view) {
                 int pos = (int) view.getTag();
                 try {
-                    FlyAction.sendEvent(mCellBean.subCells.get(0).sendAction, mList.get(pos).get(mCellBean.subCells.get(0).recvAction));
+                    FlyEvent.sendEvent(mCellBean.subCells.get(0).sendAction, mList.get(pos).get(mCellBean.subCells.get(0).recvAction));
                 } catch (Exception e) {
                     FlyLog.e(e.toString());
                 }
             }
         });
 
-        Object obj = FlyAction.getValue(mCellBean.recvAction);
+        Object obj = FlyEvent.getValue(mCellBean.recvAction);
         if (obj instanceof List) {
             mList.clear();
             try {
@@ -137,7 +138,7 @@ public class RecyclerCellView extends BaseRecyclerCellView {
             refresh();
         }
         if (mCellBean.subCells != null && mCellBean.subCells.size() > 0) {
-            obj = FlyAction.getValue(mCellBean.subCells.get(0).recvAction);
+            obj = FlyEvent.getValue(mCellBean.subCells.get(0).recvAction);
             if (obj instanceof String) {
                 itemKey = (String) obj;
                 for (int i = 0; i < mList.size(); i++) {
@@ -340,20 +341,20 @@ public class RecyclerCellView extends BaseRecyclerCellView {
     protected void onAttachedToWindow() {
         FlyLog.d("onAttachedToWindow");
         super.onAttachedToWindow();
-        FlyAction.register(this);
+        FlyEvent.register(this);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         FlyLog.d("onDetachedFromWindow");
-        FlyAction.unregister(this);
+        FlyEvent.unregister(this);
         super.onDetachedFromWindow();
     }
 
     @Override
     public boolean sendEvent(int key) {
         if (mCellBean == null) return false;
-        Object obj = FlyAction.getValue(key);
+        Object obj = FlyEvent.getValue(key);
         if (key == mCellBean.recvAction) {
             if (obj instanceof List) {
                 mList.clear();
@@ -367,7 +368,7 @@ public class RecyclerCellView extends BaseRecyclerCellView {
         }
 
         if (mCellBean.subCells != null && mCellBean.subCells.size() > 0 && key == mCellBean.subCells.get(0).recvAction) {
-            obj = FlyAction.getValue(mCellBean.subCells.get(0).recvAction);
+            obj = FlyEvent.getValue(mCellBean.subCells.get(0).recvAction);
             if (obj instanceof String) {
                 itemKey = (String) obj;
                 for (int i = 0; i < mList.size(); i++) {
