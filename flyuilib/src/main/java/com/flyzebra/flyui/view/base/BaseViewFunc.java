@@ -42,7 +42,7 @@ public class BaseViewFunc {
                     str = (String) obj;
                 }
                 if (TextUtils.isEmpty(str)) {
-                    view.setVisibility(GONE);
+                    view.setVisibility(VISIBLE);
                 } else {
                     if (recv.disVisibleContent.contains(str)) {
                         view.setVisibility(GONE);
