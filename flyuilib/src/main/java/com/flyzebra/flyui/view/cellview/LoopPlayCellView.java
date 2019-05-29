@@ -219,6 +219,7 @@ public class LoopPlayCellView extends BaseLayoutCellView {
                 String imageurl = UpdataVersion.getNativeFilePath(cellBean.images.get(i).url);
                 Glide.with(getContext())
                         .load(imageurl)
+                        .override(cellBean.images.get(2).width,cellBean.images.get(2).height)
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .centerInside()
                         .into(views[i].imageView);

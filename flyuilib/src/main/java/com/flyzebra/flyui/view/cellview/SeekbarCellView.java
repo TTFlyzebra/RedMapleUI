@@ -70,14 +70,16 @@ public class SeekbarCellView extends BaseLayoutCellView implements SeekBar.OnSee
         }
 
         seekBar = new SeekBar(getContext());
-        LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, mCellBean.height);
+        LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, mCellBean.images.get(0).height);
+        lp.topMargin = mCellBean.images.get(0).top;
+        lp.bottomMargin = mCellBean.images.get(0).bottom;
         lp.setMarginStart(mCellBean.images.get(0).left);
         lp.setMarginEnd(mCellBean.images.get(0).right);
         addView(seekBar, lp);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             seekBar.setSplitTrack(false);
         }
-        seekBar.setMinimumHeight(mCellBean.height);
+        seekBar.setMinimumHeight(mCellBean.images.get(0).height);
         seekBar.setOnSeekBarChangeListener(this);
     }
 
