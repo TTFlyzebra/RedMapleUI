@@ -42,6 +42,12 @@ public class CellViewFactory {
             case CellType.TYPE_LOOPPLAY:
                 iCellView = new LoopPlayCellView(context);
                 return iCellView;
+            case CellType.TYPE_LISTVIEW:
+                iCellView = new RecyclerCellView(context);
+                return iCellView;
+            case CellType.TYPE_ANIMTOR:
+                iCellView = new AnimtorCellView(context);
+                return iCellView;
             case CellType.TYPE_APP_NORMAL:
             default:
 //                boolean isText = cellBean.texts != null && cellBean.texts.size() == 1;

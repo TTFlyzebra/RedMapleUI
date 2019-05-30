@@ -10,10 +10,11 @@ import android.view.Gravity;
  * Describ:
  **/
 public class TextBean implements Parcelable {
+    public int textId = 0;
     public int textSize =24;
     public int textLines = 1;
     public String textColor;
-    public String filterColor;
+    public String textFilter;
     public LanguageText text;
     public int left = 0;
     public int top = 0;
@@ -27,7 +28,7 @@ public class TextBean implements Parcelable {
         textSize = in.readInt();
         textLines = in.readInt();
         textColor = in.readString();
-        filterColor = in.readString();
+        textFilter = in.readString();
         text = in.readParcelable(LanguageText.class.getClassLoader());
         left = in.readInt();
         top = in.readInt();
@@ -43,7 +44,7 @@ public class TextBean implements Parcelable {
         dest.writeInt(textSize);
         dest.writeInt(textLines);
         dest.writeString(textColor);
-        dest.writeString(filterColor);
+        dest.writeString(textFilter);
         dest.writeParcelable(text, flags);
         dest.writeInt(left);
         dest.writeInt(top);

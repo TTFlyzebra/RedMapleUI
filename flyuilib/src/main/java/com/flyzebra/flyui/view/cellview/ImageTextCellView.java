@@ -34,7 +34,7 @@ public class ImageTextCellView extends BaseImageCellView {
     @Override
     public void init(CellBean cellBean) {
         try {
-            contents = cellBean.recv.recvContent.split("#");
+            contents = cellBean.recv.visibleContent.split("#");
             recvEvent(ByteUtil.hexString2Bytes(mCellBean.recv.recvId));
         } catch (Exception e) {
             FlyLog.e(e.toString());
@@ -63,7 +63,7 @@ public class ImageTextCellView extends BaseImageCellView {
                         break;
                     }
                 }
-                if(num>=0&&num<mCellBean.images.size()){
+                if (num >= 0 && num < mCellBean.images.size()) {
                     String imageurl = UpdataVersion.getNativeFilePath(mCellBean.images.get(num).url);
                     Glide.with(getContext())
                             .asBitmap()

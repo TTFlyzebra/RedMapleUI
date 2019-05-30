@@ -2,6 +2,7 @@ package com.flyzebra.flyui.view.base;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.util.TypedValue;
 
 import com.flyzebra.flyui.bean.TextBean;
@@ -38,11 +39,7 @@ public class BaseTextBeanView extends FlyTextView implements IFlyEvent {
     public void setTextBean(TextBean textBean) {
         this.textBean = textBean;
         if (textBean == null) return;
-        try {
-            setTextColor(Color.parseColor(textBean.textColor));
-        } catch (Exception e) {
-            setTextColor(0xffffffff);
-        }
+        setSelected(false);
         setTextSize(TypedValue.COMPLEX_UNIT_PX, textBean.textSize);
         setGravity(textBean.getGravity());
         if (textBean.textLines <= 0) {
@@ -53,14 +50,20 @@ public class BaseTextBeanView extends FlyTextView implements IFlyEvent {
         if (textBean.text != null) {
             setText(textBean.text.getText());
         }
-        if (textBean.recv == null || textBean.recv.recvId == null) {
-            return;
+        if (textBean.recv != null) {
+            if (!TextUtils.isEmpty(textBean.recv.recvId)) {
+                recvEvent(ByteUtil.hexString2Bytes(textBean.recv.recvId));
+            }
+
+            if (!TextUtils.isEmpty(textBean.recv.keyId)) {
+                try {
+                    setId(Integer.valueOf(textBean.recv.keyId, 16));
+                } catch (Exception e) {
+                    FlyLog.e(e.toString());
+                }
+            }
         }
-        Object obj = FlyEvent.getValue(textBean.recv.recvId);
-        if(obj instanceof String){
-            FlyLog.d("Set recv text="+obj);
-            setText((String) obj);
-        }
+
     }
 
     @Override
@@ -68,14 +71,32 @@ public class BaseTextBeanView extends FlyTextView implements IFlyEvent {
         if (textBean == null || textBean.recv == null || textBean.recv.recvId == null) {
             return false;
         }
-        if (!textBean.recv.recvId.equals(ByteUtil.bytes2HexString(key))) {
+        String strKey = ByteUtil.bytes2HexString(key);
+        if (!textBean.recv.recvId.equals(strKey)) {
             return false;
         }
-        Object obj = FlyEvent.getValue(key);
-        if(obj instanceof String){
-            FlyLog.d("Set recv text="+obj);
-            setText((String) obj);
+        switch (strKey) {
+            default:
+                Object obj = FlyEvent.getValue(key);
+                if (obj instanceof String) {
+                    FlyLog.d("Set recv text=" + obj);
+                    setText((String) obj);
+                }
+                break;
         }
         return false;
+    }
+
+    @Override
+    public void setSelected(boolean selected) {
+        super.setSelected(selected);
+        if (textBean != null) {
+            try {
+                setTextColor(Color.parseColor(selected ? textBean.textFilter : textBean.textColor));
+            } catch (Exception e) {
+                setTextColor(0xFFFFFFFF);
+                FlyLog.e(e.toString());
+            }
+        }
     }
 }

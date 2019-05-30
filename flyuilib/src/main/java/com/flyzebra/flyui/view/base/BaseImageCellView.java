@@ -44,7 +44,7 @@ public abstract class BaseImageCellView extends FlyImageView implements IFlyEven
 
     @Override
     public boolean verify(CellBean cellBean) {
-        return false;
+        return mCellBean!=null&&mCellBean.images!=null&&mCellBean.images.size()>0;
     }
 
     @Override

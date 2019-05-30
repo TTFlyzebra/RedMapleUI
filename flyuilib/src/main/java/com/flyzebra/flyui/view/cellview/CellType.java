@@ -40,18 +40,12 @@ public interface CellType {
     /**
      * 可根据条件变化的控件
      */
-    int TYPE_SWITH = 9;
+    int TYPE_LISTVIEW = 9;
 
     /**
-     * 可根据条件变化的控件
+     * 动画控件
      */
-    int TYPE_TEXT = 10;
-
-
-    int TYPE_LISTVIEW = 11;
-
-
-    int TYPE_ANIMTOR = 12;
+    int TYPE_ANIMTOR = 10;
 
 
     int TYPE_FRAGMENT= 13;

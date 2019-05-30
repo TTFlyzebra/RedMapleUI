@@ -10,6 +10,7 @@ import android.widget.ImageView;
  * Describ:
  **/
 public class ImageBean implements Parcelable {
+    public int imageId = 0;
     public int width;
     public int height;
     public String url;

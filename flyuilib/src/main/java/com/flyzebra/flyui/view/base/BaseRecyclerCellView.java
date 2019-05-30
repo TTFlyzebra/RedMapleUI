@@ -43,7 +43,7 @@ public abstract class BaseRecyclerCellView extends RecyclerView implements IFlyE
 
     @Override
     public boolean verify(CellBean cellBean) {
-        return false;
+        return mCellBean!=null;
     }
 
     @Override
