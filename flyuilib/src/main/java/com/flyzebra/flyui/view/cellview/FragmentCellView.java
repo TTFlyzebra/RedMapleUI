@@ -65,7 +65,7 @@ public class FragmentCellView extends BaseLayoutCellView {
                             }
                             replaceFragment(page);
                         } else {
-                            replaceFragment(1);
+                            replaceFragment(0);
                         }
                         break;
                 }

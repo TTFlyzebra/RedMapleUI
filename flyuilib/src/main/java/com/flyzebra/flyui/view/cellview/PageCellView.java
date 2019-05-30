@@ -5,15 +5,10 @@
 //import android.os.Handler;
 //import android.os.Looper;
 //import android.view.MotionEvent;
-//import android.widget.FrameLayout;
 //
-//import com.flyzebra.flyui.event.IAction;
 //import com.flyzebra.flyui.bean.CellBean;
-//import com.flyzebra.flyui.event.ActionKey;
-//import com.flyzebra.flyui.config.Gravity;
-//import com.flyzebra.flyui.event.FlyAction;
 //import com.flyzebra.flyui.utils.FlyLog;
-//import com.flyzebra.flyui.utils.RtlTools;
+//import com.flyzebra.flyui.view.base.BaseLayoutCellView;
 //import com.flyzebra.flyui.view.customview.MirrorView;
 //import com.flyzebra.flyui.view.pageview.SimplePageView;
 //
@@ -22,8 +17,7 @@
 // * 2019/4/2 16:15
 // * Describ:
 // **/
-//public class PageCellView extends FrameLayout implements ICell, IAction {
-//    private CellBean mCellBean;
+//public class PageCellView extends BaseLayoutCellView {
 //    private static Handler sHander = new Handler(Looper.getMainLooper());
 //    private static Runnable hideMenuTask = new Runnable() {
 //        @Override
@@ -39,11 +33,6 @@
 //
 //    @Override
 //    public void init(CellBean cellBean) {
-//
-//    }
-//
-//    @Override
-//    public void setCellBean(CellBean cellBean) {
 //        this.mCellBean = cellBean;
 //        if (mCellBean != null && mCellBean.cellpage != null) {
 //            SimplePageView simplePageView = new SimplePageView(getContext());
@@ -58,15 +47,6 @@
 //        }
 //    }
 //
-//    @Override
-//    public void onClick() {
-//
-//    }
-//
-//    @Override
-//    public void bindMirrorView(MirrorView mirrorView) {
-//
-//    }
 //
 //    @Override
 //    public boolean dispatchTouchEvent(MotionEvent ev) {
