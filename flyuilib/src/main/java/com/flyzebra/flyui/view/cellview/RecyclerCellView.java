@@ -140,7 +140,7 @@ public class RecyclerCellView extends BaseRecyclerCellView {
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             SimplePageView simplePageView = new SimplePageView(getContext());
-            simplePageView.upData(mCellBean.pages.get(0));
+            simplePageView.setPageBean(mCellBean.pages.get(0));
             return new ViewHolder(simplePageView);
         }
 

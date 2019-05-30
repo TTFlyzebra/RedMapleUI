@@ -135,7 +135,7 @@ public class PagesViewPager extends ViewPager implements IFlyEvent {
             SimplePageView simplePageView = new SimplePageView(getContext());
             simplePageView.setTag(position);
             simplePageView.showMirror(themeBean.isMirror != 0);
-            simplePageView.upData(pageList.get(position));
+            simplePageView.setPageBean(pageList.get(position));
             container.addView(simplePageView);
             return simplePageView;
         }

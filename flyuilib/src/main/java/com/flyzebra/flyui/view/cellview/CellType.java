@@ -48,8 +48,9 @@ public interface CellType {
     int TYPE_ANIMTOR = 10;
 
 
-    int TYPE_FRAGMENT= 13;
+    int TYPE_FRAGMENT= 11;
 
+    int TYPE_PAGE = 12;
 
     int TYPE_FRAGMENT_NAV = 14 ;
 

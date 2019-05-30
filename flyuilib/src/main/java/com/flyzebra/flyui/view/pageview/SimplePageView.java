@@ -51,7 +51,7 @@ public class SimplePageView extends FrameLayout implements IPage {
 
 
     @Override
-    public void upData(PageBean pageBean) {
+    public void setPageBean(PageBean pageBean) {
         this.pageBean = pageBean;
         List<CellBean> appInfoList = pageBean.cellList;
         if (appInfoList == null || appInfoList.isEmpty()) return;

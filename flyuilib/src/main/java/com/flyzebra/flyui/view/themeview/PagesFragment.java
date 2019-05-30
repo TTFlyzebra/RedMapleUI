@@ -95,7 +95,7 @@ public class PagesFragment extends ViewPager {
             SimplePageView simplePageView = new SimplePageView(getContext());
             simplePageView.setTag(position);
             simplePageView.showMirror(themeBean.isMirror != 0);
-            simplePageView.upData(pageList.get(position));
+            simplePageView.setPageBean(pageList.get(position));
             container.addView(simplePageView);
             return simplePageView;
         }
