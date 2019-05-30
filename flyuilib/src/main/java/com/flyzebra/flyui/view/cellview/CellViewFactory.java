@@ -51,6 +51,9 @@ public class CellViewFactory {
             case CellType.TYPE_FRAGMENT:
                 iCellView = new FragmentCellView(context);
                 return iCellView;
+            case CellType.TYPE_PAGE:
+                iCellView = new PageCellView(context);
+                return iCellView;
             case CellType.TYPE_APP_NORMAL:
             default:
 //                boolean isText = cellBean.texts != null && cellBean.texts.size() == 1;

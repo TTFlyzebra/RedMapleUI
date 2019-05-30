@@ -1,118 +1,107 @@
-//package com.flyzebra.flyui.view.cellview;
-//
-//import android.content.Context;
-//import android.graphics.Color;
-//import android.os.Handler;
-//import android.os.Looper;
-//import android.view.MotionEvent;
-//
-//import com.flyzebra.flyui.bean.CellBean;
-//import com.flyzebra.flyui.utils.FlyLog;
-//import com.flyzebra.flyui.view.base.BaseLayoutCellView;
-//import com.flyzebra.flyui.view.customview.MirrorView;
-//import com.flyzebra.flyui.view.pageview.SimplePageView;
-//
-///**
-// * Author FlyZebra
-// * 2019/4/2 16:15
-// * Describ:
-// **/
-//public class PageCellView extends BaseLayoutCellView {
-//    private static Handler sHander = new Handler(Looper.getMainLooper());
-//    private static Runnable hideMenuTask = new Runnable() {
-//        @Override
-//        public void run() {
-//            FlyLog.d("hide Menu Task run");
-//            FlyAction.sendEvent(ActionKey.MSG_MENU_STATUS, 0);
-//        }
-//    };
-//
-//    public PageCellView(Context context) {
-//        super(context);
-//    }
-//
-//    @Override
-//    public void init(CellBean cellBean) {
-//        this.mCellBean = cellBean;
-//        if (mCellBean != null && mCellBean.cellpage != null) {
-//            SimplePageView simplePageView = new SimplePageView(getContext());
-//            addView(simplePageView);
-//            simplePageView.setCellBean(mCellBean.cellpage);
-//        }
-//
-//        try {
-//            setBackgroundColor(Color.parseColor(mCellBean.backcolor));
-//        } catch (Exception e) {
-//            FlyLog.d("error! parseColor exception!" + e.toString());
-//        }
-//    }
-//
-//
-//    @Override
-//    public boolean dispatchTouchEvent(MotionEvent ev) {
-//        //TODO:处理弹出菜单
-//        if (mCellBean.recvAction == ActionKey.MSG_MENU_STATUS) {
-//            sHander.removeCallbacks(hideMenuTask);
-//            sHander.postDelayed(hideMenuTask, 5000);
-//        }
-//        return super.dispatchTouchEvent(ev);
-//    }
-//
-//    @Override
-//    protected void onAttachedToWindow() {
-//        super.onAttachedToWindow();
-//        FlyAction.register(this);
-//        if (mCellBean.recvAction == ActionKey.MSG_MENU_STATUS) {
-//            goAnimtor(false, 0);
-//            FlyAction.sendEvent(ActionKey.MSG_MENU_STATUS, 0);
-//        } else if (mCellBean.recvAction > 0) {
-//            sendEvent(mCellBean.recvAction);
-//        }
-//    }
-//
-//    @Override
-//    protected void onDetachedFromWindow() {
-//        sHander.removeCallbacksAndMessages(null);
-//        FlyAction.unregister(this);
-//        super.onDetachedFromWindow();
-//    }
-//
-//    @Override
-//    public boolean sendEvent(int key) {
-//        if (mCellBean == null || mCellBean.recvAction != key) return false;
-//        switch (key) {
-//            case ActionKey.MSG_MENU_STATUS:
-//                Object obj = FlyAction.getValue(key);
-//                FlyLog.d("cellid=%d,key=%d,obj=" + obj, mCellBean.cellId, key);
-//                if (obj instanceof Integer) {
-//                    goAnimtor((Integer) obj > 0, 300);
-//                }
-//                return false;
-//        }
-//        return false;
-//    }
-//
-//    private void goAnimtor(final boolean isShow, long during) {
-//        FlyLog.d("isShow=" + isShow);
-//        if (isShow) {
-//            sHander.removeCallbacks(hideMenuTask);
-//            sHander.postDelayed(hideMenuTask, 5000);
-//        } else {
-//            sHander.removeCallbacks(hideMenuTask);
-//        }
-//        switch (mCellBean.gravity) {
-//            case Gravity.LEFT:
-//                break;
-//            case Gravity.RIGHT:
-//                boolean isRtl = RtlTools.isRtl();
-//                animate().translationX(isShow ? 0 : (isRtl ? -(mCellBean.width - mCellBean.mLeft + mCellBean.mRight)
-//                        : (mCellBean.width - mCellBean.mLeft + mCellBean.mRight))
-//                ).setDuration(during).start();
-//                break;
-//            case Gravity.TOP:
-//                break;a
-//            case Gravity.BOTTOM:
-//                break;
-//        }
-//    }
-//}
+package com.flyzebra.flyui.view.cellview;
+
+import android.content.Context;
+import android.graphics.Color;
+import android.os.Handler;
+import android.os.Looper;
+import android.text.TextUtils;
+import android.view.MotionEvent;
+
+import com.flyzebra.flyui.bean.CellBean;
+import com.flyzebra.flyui.bean.RecvBean;
+import com.flyzebra.flyui.utils.ByteUtil;
+import com.flyzebra.flyui.utils.FlyLog;
+import com.flyzebra.flyui.utils.RtlUtil;
+import com.flyzebra.flyui.view.base.BaseLayoutCellView;
+import com.flyzebra.flyui.view.pageview.SimplePageView;
+
+/**
+ * Author FlyZebra
+ * 2019/4/2 16:15
+ * Describ:
+ **/
+public class PageCellView extends BaseLayoutCellView {
+    private boolean show = true;
+    private Handler sHander = new Handler(Looper.getMainLooper());
+    private Runnable hideMenuTask = new Runnable() {
+        @Override
+        public void run() {
+            FlyLog.d("hide Menu Task run");
+            if (show) {
+                goAnimtor(false, 0);
+            }
+        }
+    };
+
+    public PageCellView(Context context) {
+        super(context);
+    }
+
+    @Override
+    public boolean verify(CellBean cellBean) {
+        return mCellBean != null && mCellBean.pages != null && !mCellBean.pages.isEmpty();
+    }
+
+    @Override
+    public void init(CellBean cellBean) {
+        SimplePageView simplePageView = new SimplePageView(getContext());
+        addView(simplePageView);
+        simplePageView.setPageBean(mCellBean.pages.get(0));
+
+        try {
+            setBackgroundColor(Color.parseColor(mCellBean.backColor));
+            if (mCellBean.recv.recvId.equals("400201")) {
+                goAnimtor(false, 0);
+            }
+        } catch (Exception e) {
+            FlyLog.d("error! parseColor exception!" + e.toString());
+        }
+    }
+
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (show && mCellBean.recv.recvId.equals("400201")) {
+            sHander.removeCallbacks(hideMenuTask);
+            sHander.postDelayed(hideMenuTask, 5000);
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        sHander.removeCallbacksAndMessages(null);
+        super.onDetachedFromWindow();
+    }
+
+    @Override
+    public boolean recvEvent(byte[] key) {
+        if (mCellBean == null) return false;
+        RecvBean recvBean = mCellBean.recv;
+        if (recvBean != null && !TextUtils.isEmpty(recvBean.recvId)) {
+            if (recvBean.recvId.equals(ByteUtil.bytes2HexString(key))) {
+                switch (recvBean.recvId) {
+                    case "400201":
+                        goAnimtor(!show, 300);
+                        break;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    private void goAnimtor(final boolean isShow, long during) {
+        show = isShow;
+        FlyLog.d("isShow=" + isShow);
+        if (isShow) {
+            sHander.removeCallbacks(hideMenuTask);
+            sHander.postDelayed(hideMenuTask, 5000);
+        } else {
+            sHander.removeCallbacks(hideMenuTask);
+        }
+        boolean isRtl = RtlUtil.isRtl();
+        animate().translationX(isShow ? 0 : (isRtl ? -(mCellBean.width) : (mCellBean.width))
+        ).setDuration(during).start();
+    }
+}
