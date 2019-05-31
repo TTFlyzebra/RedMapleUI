@@ -156,11 +156,17 @@ public class ThemeView extends FrameLayout implements ITheme {
             }
         }
 
-//        if (cellBean.cellpage != null && cellBean.cellpage.cellList != null) {
-//            for (CellBean subCellBean : cellBean.cellpage.cellList) {
-//                convertCellBeanPix(subCellBean, 0, 0, 0, 0);
-//            }
-//        }
+        if (cellBean.pages != null && !cellBean.pages.isEmpty()) {
+            for (PageBean pageBean : cellBean.pages) {
+                pageBean.width = (int) (pageBean.width * screenScacle);
+                pageBean.height = (int) (pageBean.height * screenScacle);
+                if(pageBean.cellList!=null){
+                    for(CellBean pageCellBean:pageBean.cellList){
+                        convertCellBeanPix(pageCellBean, 0, 0, 0, 0);
+                    }
+                }
+            }
+        }
     }
 
     private void upView() {

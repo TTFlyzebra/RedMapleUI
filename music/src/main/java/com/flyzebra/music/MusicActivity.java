@@ -181,7 +181,7 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
         for (StorageInfo storageInfo : storageList) {
             if (TextUtils.isEmpty(storageInfo.mPath)) break;
             Map<String, Object> map = new HashMap<>();
-            map.put("100403", storageInfo.mDescription);
+            map.put("100403", TextUtils.isEmpty(storageInfo.mDescription)?storageInfo.mPath:storageInfo.mDescription);
             map.put("100402", storageInfo.mPath);
             String imageKey;
             list.add(map);
