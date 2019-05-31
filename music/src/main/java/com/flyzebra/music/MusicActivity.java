@@ -8,7 +8,6 @@ import android.text.TextUtils;
 
 import com.flyzebra.flyui.Flyui;
 import com.flyzebra.flyui.event.FlyEvent;
-import com.flyzebra.flyui.event.FlyEventKey;
 import com.flyzebra.flyui.event.IFlyEvent;
 import com.flyzebra.flyui.utils.ByteUtil;
 import com.flyzebra.flyui.utils.FlyLog;
@@ -71,7 +70,7 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
     @Override
     public void notifyPathChange(String path) {
         FlyLog.d("notifyPathChange path=%s", path);
-        FlyEvent.sendEvent("10FF05", path);
+        FlyEvent.sendEvent("100402", path);
         if (isStop) return;
         if (!musicPlayer.getPlayUrl().startsWith(path)) {
             musicPlayer.destory();
@@ -178,24 +177,16 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
 //        if (storageList != null) {
 //            FlyEvent.sendEvent(FlyEventKey.SUM_STORE, "存储器\n(" + storageList.size() + ")");
 //        }
-        List<Map<Integer, Object>> list = new ArrayList<>();
+        List<Map<String, Object>> list = new ArrayList<>();
         for (StorageInfo storageInfo : storageList) {
             if (TextUtils.isEmpty(storageInfo.mPath)) break;
-            Map<Integer, Object> map = new HashMap<>();
-            map.put(FlyEventKey.STORE_NAME, storageInfo.mDescription);
-            map.put(FlyEventKey.STORE_URL, storageInfo.mPath);
+            Map<String, Object> map = new HashMap<>();
+            map.put("100403", storageInfo.mDescription);
+            map.put("100402", storageInfo.mPath);
             String imageKey;
-            if (storageInfo.mPath.equals("/storage")) {
-                imageKey = "DISK_ALL";
-            } else if (storageInfo.mPath.startsWith("/storage/emulated")) {
-                imageKey = "DISK_HD";
-            } else {
-                imageKey = "DISK_USB";
-            }
-            map.put(FlyEventKey.RES_URL, imageKey);
             list.add(map);
         }
-        FlyEvent.sendEvent("10FF01", list);
+        FlyEvent.sendEvent("100401", list);
     }
 
     private void notifyCurrentMusic() {

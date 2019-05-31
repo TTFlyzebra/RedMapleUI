@@ -30,7 +30,7 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener {
     private int childWidth = 0;
     private int childHeight = 0;
     private int[][] states = new int[][]{{android.R.attr.state_enabled}, {}};
-    private int[] colors = new int[]{0xFFFFFFFF, 0xFF0000FF};
+    private int[] colors = new int[]{0xFFFFFFFF, 0xFF0370E5};
     private ColorStateList colorStateList;
     private OnItemClickListener onItemClickListener;
     private int orientation = LinearLayout.VERTICAL;

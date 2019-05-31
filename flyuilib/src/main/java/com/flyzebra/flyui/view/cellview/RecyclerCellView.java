@@ -198,6 +198,23 @@ public class RecyclerCellView extends BaseRecyclerCellView {
                         FlyLog.e(e.toString());
                     }
                 }
+
+                if (cellBean.celltype == CellType.TYPE_IMAGE_TEXT) {
+                    if (cellBean.recv == null || cellBean.recv.keyId == null)
+                        continue;
+                    try {
+                        int key = Integer.valueOf(cellBean.recv.keyId, 16);
+                        ImageTextCellView imgtx = holder.imgtxs.get(key);
+                        if (imgtx != null) {
+                            imgtx.setDrawable(mList.get(position).get(cellBean.recv.keyId) + "");
+                            imgtx.setSelected(isSelect);
+                        } else {
+                            FlyLog.e("find by id empty");
+                        }
+                    } catch (Exception e) {
+                        FlyLog.e(e.toString());
+                    }
+                }
             }
         }
 
@@ -207,6 +224,7 @@ public class RecyclerCellView extends BaseRecyclerCellView {
         Hashtable<Integer, TextView> texts = new Hashtable<>();
         Hashtable<Integer, ImageView> images = new Hashtable<>();
         Hashtable<Integer, AnimtorCellView> anims = new Hashtable<>();
+        Hashtable<Integer, ImageTextCellView> imgtxs = new Hashtable<>();
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -236,6 +254,22 @@ public class RecyclerCellView extends BaseRecyclerCellView {
                         AnimtorCellView anim = itemView.findViewById(key);
                         if (anim != null) {
                             anims.put(key, anim);
+                        } else {
+                            FlyLog.e("find by id empty");
+                        }
+                    } catch (Exception e) {
+                        FlyLog.e(e.toString());
+                    }
+                }
+
+                if (cellBean.celltype == CellType.TYPE_IMAGE_TEXT) {
+                    if (cellBean.recv == null || cellBean.recv.keyId == null)
+                        continue;
+                    try {
+                        int key = Integer.valueOf(cellBean.recv.keyId, 16);
+                        ImageTextCellView imgtx = itemView.findViewById(key);
+                        if (imgtx != null) {
+                            imgtxs.put(key, imgtx);
                         } else {
                             FlyLog.e("find by id empty");
                         }
