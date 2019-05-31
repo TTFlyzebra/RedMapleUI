@@ -41,21 +41,27 @@ public interface CellType {
      * 可根据条件变化的控件
      */
     int TYPE_LISTVIEW = 9;
-
     /**
      * 动画控件
      */
     int TYPE_ANIMTOR = 10;
 
 
+
     int TYPE_FRAGMENT= 11;
+
+
 
     int TYPE_PAGE = 12;
 
-    int TYPE_FRAGMENT_NAV = 14 ;
+
+
+    int TYPE_FRAGMENT_NAV = 13 ;
+
 
 
     int TYPE_GROUP_LIST = 15 ;
+
 
 
     int TYPE_IMAGE_RES = 99 ;

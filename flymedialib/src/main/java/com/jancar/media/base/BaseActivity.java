@@ -34,7 +34,7 @@ import java.util.List;
 
 public class BaseActivity extends AppCompatActivity implements IUsbMediaListener, IStorageListener {
     protected IMediaScan usbMediaScan = MediaScan.getInstance();
-    public static final String DEF_PATH = "/storage/emulated/0";
+    public static final String DEF_PATH = "/storage";
     public static String currenPath = DEF_PATH;
     protected static boolean isStop = false;
     public static int StorageNum;

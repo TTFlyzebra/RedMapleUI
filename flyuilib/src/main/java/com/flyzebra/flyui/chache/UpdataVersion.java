@@ -354,12 +354,14 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
             }
         }
 
-//        if(cellBean.pages!=null) {
-//            addDownImageUrl(cellBean.cellpage.imageurl);
-//            for (CellBean pageCellBean : cellBean.cellpage.cellList) {
-//                addCellImageUrls(pageCellBean);
-//            }
-//         }
+        if(cellBean.pages!=null) {
+            for(PageBean pageBean:cellBean.pages){
+                for (CellBean pageCellBean : pageBean.cellList) {
+                    addCellImageUrls(pageCellBean);
+                }
+            }
+
+         }
     }
 
     private void addSaveFileNames(CellBean cellBean) {
@@ -373,12 +375,15 @@ public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
                 addSaveFileNames(subCell);
             }
         }
-//        if(cellBean.cellpage!=null) {
-//            addDownImageUrl(cellBean.cellpage.imageurl);
-//            for (CellBean pageCellBean : cellBean.cellpage.cellList) {
-//                addSaveFileNames(pageCellBean);
-//            }
-//        }
+
+        if(cellBean.pages!=null) {
+            for(PageBean pageBean:cellBean.pages){
+                for (CellBean pageCellBean : pageBean.cellList) {
+                    addSaveFileNames(pageCellBean);
+                }
+            }
+
+        }
     }
 
     private void addDownImageUrl(String imageurl) {

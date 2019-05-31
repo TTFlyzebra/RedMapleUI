@@ -11,10 +11,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.flyzebra.flyui.R;
-import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.TextBean;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.utils.RtlUtil;
+
+import java.util.List;
 
 
 public class FlyTabView extends FrameLayout implements View.OnClickListener {
@@ -57,12 +58,12 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener {
         this.orientation = orientation;
     }
 
-    public void setTitles(CellBean mCellBean) {
+    public void setTitles(List<TextBean> textBeans) {
         removeAllViews();
-        if (mCellBean == null || mCellBean.subCells == null || mCellBean.subCells.isEmpty()) return;
-        textViews = new TextView[mCellBean.texts.size()];
+        if (textBeans == null  || textBeans.isEmpty()) return;
+        textViews = new TextView[textBeans.size()];
         for (int i = 0; i < textViews.length; i++) {
-            TextBean textBean = mCellBean.texts.get(i);
+            TextBean textBean = textBeans.get(i);
             LayoutParams lp = new LayoutParams(childWidth, height);
             lp.setMarginStart(i * childWidth);
             textViews[i] = new TextView(context);

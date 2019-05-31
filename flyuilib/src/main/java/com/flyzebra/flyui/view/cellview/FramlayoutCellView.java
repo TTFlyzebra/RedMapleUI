@@ -20,7 +20,7 @@ import com.flyzebra.flyui.view.pageview.SimplePageView;
  * 2019/4/2 16:15
  * Describ:
  **/
-public class PageCellView extends BaseLayoutCellView {
+public class FramlayoutCellView extends BaseLayoutCellView {
     private boolean show = true;
     private Handler sHander = new Handler(Looper.getMainLooper());
     private Runnable hideMenuTask = new Runnable() {
@@ -28,12 +28,12 @@ public class PageCellView extends BaseLayoutCellView {
         public void run() {
             FlyLog.d("hide Menu Task run");
             if (show) {
-                goAnimtor(false, 0);
+                goAnimtor(false, 300);
             }
         }
     };
 
-    public PageCellView(Context context) {
+    public FramlayoutCellView(Context context) {
         super(context);
     }
 

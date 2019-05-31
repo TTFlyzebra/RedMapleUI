@@ -2,6 +2,8 @@ package com.flyzebra.music;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.text.TextUtils;
 
 import com.flyzebra.flyui.Flyui;
@@ -10,6 +12,7 @@ import com.flyzebra.flyui.event.FlyEventKey;
 import com.flyzebra.flyui.event.IFlyEvent;
 import com.flyzebra.flyui.utils.ByteUtil;
 import com.flyzebra.flyui.utils.FlyLog;
+import com.flyzebra.flyui.utils.SPUtil;
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Music;
 import com.jancar.media.data.StorageInfo;
@@ -35,6 +38,13 @@ import java.util.Map;
  * Describ:
  **/
 public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlayerListener {
+    private static final HandlerThread sWorkerThread = new HandlerThread("flyui-music");
+
+    static {
+        sWorkerThread.start();
+    }
+
+    private static final Handler tHandler = new Handler(sWorkerThread.getLooper());
     public Flyui flyui;
     protected IMusicPlayer musicPlayer = MusicPlayer.getInstance();
     public List<Music> musicList = new ArrayList<>();
@@ -42,6 +52,7 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SPUtil.set(this,"SAVA_PATH","/storage");
         flyui = new Flyui(this);
         flyui.onCreate();
         musicPlayer.addListener(this);
@@ -53,6 +64,7 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
         flyui.onDestroy();
         musicPlayer.removeListener(this);
         musicPlayer.destory();
+        tHandler.removeCallbacksAndMessages(null);
         super.onDestroy();
     }
 
@@ -417,7 +429,7 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
     }
 
     private void notifyMp3Bitmap(final String url) {
-        new Thread(new Runnable() {
+        tHandler.post(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -433,6 +445,6 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
                     FlyLog.e(e.toString());
                 }
             }
-        }).start();
+        });
     }
 }

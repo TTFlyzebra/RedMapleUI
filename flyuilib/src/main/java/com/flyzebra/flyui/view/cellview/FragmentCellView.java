@@ -33,10 +33,24 @@ public class FragmentCellView extends BaseLayoutCellView {
 
     @Override
     public void init(CellBean cellBean) {
-        setId(Integer.valueOf(mCellBean.recv.keyId));
         try {
-            recvEvent(ByteUtil.hexString2Bytes(cellBean.recv.recvId));
-            setBackgroundColor(Color.parseColor(mCellBean.backColor));
+            if (mCellBean.recv != null && !TextUtils.isEmpty(mCellBean.recv.keyId)) {
+                setId(Integer.valueOf(mCellBean.recv.keyId));
+            }
+        } catch (Exception e) {
+            FlyLog.e(e.toString());
+        }
+        try {
+            if (mCellBean.recv != null && !TextUtils.isEmpty(mCellBean.recv.recvId)) {
+                recvEvent(ByteUtil.hexString2Bytes(mCellBean.recv.recvId));
+            }
+        } catch (Exception e) {
+            FlyLog.e(e.toString());
+        }
+        try {
+            if (!TextUtils.isEmpty(mCellBean.backColor)) {
+                setBackgroundColor(Color.parseColor(mCellBean.backColor));
+            }
         } catch (Exception e) {
             FlyLog.e("error! parseColor exception!" + e.toString());
         }
@@ -78,12 +92,12 @@ public class FragmentCellView extends BaseLayoutCellView {
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
     public void replaceFragment(int i) {
-        removeAllViews();
         if (i < 0 || i > mCellBean.pages.size()) return;
         final PageBean pageBean = mCellBean.pages.get(i);
         mHandler.post(new Runnable() {
             @Override
             public void run() {
+                removeAllViews();
                 SimplePageView view = new SimplePageView(getContext());
                 view.setPageBean(pageBean);
                 addView(view);

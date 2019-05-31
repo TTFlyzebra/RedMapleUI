@@ -52,7 +52,10 @@ public class CellViewFactory {
                 iCellView = new FragmentCellView(context);
                 return iCellView;
             case CellType.TYPE_PAGE:
-                iCellView = new PageCellView(context);
+                iCellView = new FramlayoutCellView(context);
+                return iCellView;
+            case CellType.TYPE_FRAGMENT_NAV:
+                iCellView = new FragmentNavCellView(context);
                 return iCellView;
             case CellType.TYPE_APP_NORMAL:
             default:
