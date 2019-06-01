@@ -25,6 +25,7 @@ public class ImageTextCellView extends BaseImageCellView {
     private String[] contents;
     private boolean loadFinish = false;
     private Map<String, Drawable> drawables = new Hashtable<>();
+    private String setContentKey;
 
     public ImageTextCellView(Context context) {
         super(context);
@@ -44,10 +45,19 @@ public class ImageTextCellView extends BaseImageCellView {
             if (cellBean.recv != null && !TextUtils.isEmpty(cellBean.recv.keyId)) {
                 setId(Integer.valueOf(cellBean.recv.keyId, 16));
             }
-            contents = cellBean.recv.visibleContent.split("#");
         } catch (Exception e) {
             FlyLog.e(e.toString());
         }
+
+        try {
+            if (cellBean.recv != null && !TextUtils.isEmpty(cellBean.recv.visibleContent)) {
+                contents = cellBean.recv.visibleContent.split("#");
+                setContentKey = contents[0];
+            }
+        } catch (Exception e) {
+            FlyLog.e(e.toString());
+        }
+
         try {
             if (mCellBean.recv != null && !TextUtils.isEmpty(mCellBean.recv.recvId)) {
                 recvEvent(ByteUtil.hexString2Bytes(mCellBean.recv.recvId));
@@ -61,8 +71,10 @@ public class ImageTextCellView extends BaseImageCellView {
     public void loadingRes(CellBean cellBean) {
         drawables.clear();
         loadFinish = false;
-        for (int i = 0; i < contents.length; i++) {
-            loadDrawable(i);
+        if(contents!=null) {
+            for (int i = 0; i < contents.length; i++) {
+                loadDrawable(i);
+            }
         }
     }
 
@@ -82,7 +94,7 @@ public class ImageTextCellView extends BaseImageCellView {
                         if (drawables.size() == contents.length) {
                             loadFinish = true;
                             FlyLog.d("loadFinish");
-                            upDrawable();
+                            setContentDrawable(setContentKey);
                             if (mCellBean.recv != null && !TextUtils.isEmpty(mCellBean.recv.recvId)) {
                                 recvEvent(ByteUtil.hexString2Bytes(mCellBean.recv.recvId));
                             }
@@ -110,11 +122,20 @@ public class ImageTextCellView extends BaseImageCellView {
         }
         try {
             Object obj = FlyEvent.getValue(key);
-            if (obj instanceof String && loadFinish) {
-                for (String str : contents) {
-                    if (((String) obj).contains(str)) {
-                        setImageDrawable(drawables.get(str));
-                        break;
+            if(loadFinish) {
+                if (obj instanceof String) {
+                    for (String str : contents) {
+                        if (((String) obj).contains(str)) {
+                            setContentDrawable(str);
+                            break;
+                        }
+                    }
+                }else if(obj instanceof byte[]){
+                    for (String str : contents) {
+                        if (ByteUtil.bytes2HexString((byte[]) obj).contains(str)) {
+                            setContentDrawable(str);
+                            break;
+                        }
                     }
                 }
             }
@@ -125,40 +146,33 @@ public class ImageTextCellView extends BaseImageCellView {
         return false;
     }
 
-    private String key;
-
-    public void setDrawable(String s) {
-        FlyLog.d("setDrawable");
-        key = s;
-        upDrawable();
-    }
-
-    private void upDrawable() {
-        FlyLog.d("upDrawable");
+    public void setContentDrawable(String mapKey) {
+        FlyLog.d("setContentDrawable mapkey=%s",mapKey);
         try {
-            if (!TextUtils.isEmpty(key)) {
+            if (!TextUtils.isEmpty(mapKey)&&drawables.get(mapKey)==null) {
                 for (String str : contents) {
-                    if (key.contains(str)) {
-                        setImageDrawable(drawables.get(str));
+                    if (mapKey.contains(str)) {
+                        mapKey = str;
                         break;
                     }
                 }
             }
+            setContentKey = mapKey;
+            setImageDrawable(drawables.get(setContentKey));
         } catch (Exception e) {
             FlyLog.e(e.toString());
         }
     }
 
+
     @Override
-    public void setSelected(boolean selected) {
-        super.setSelected(selected);
+    public void setSelectStyle(boolean isSelect) {
         if (mCellBean != null) {
-            if (selected) {
+            if (isSelect) {
                 setColorFilter(Color.parseColor(mCellBean.filterColor));
             } else {
                 clearColorFilter();
             }
         }
     }
-
 }

@@ -89,8 +89,7 @@ public class AnimtorCellView extends BaseImageCellView {
     }
 
     @Override
-    public void setSelected(boolean selected) {
-        super.setSelected(selected);
-        setVisibility(selected ? VISIBLE : GONE);
+    public void setSelectStyle(boolean isSelect) {
+        setVisibility(isSelect ? VISIBLE : GONE);
     }
 }

@@ -45,6 +45,11 @@ public interface ICell {
     void onClick();
 
     /**
+     * 执行点击事件
+     */
+    void setSelectStyle(boolean isSelect);
+
+    /**
      * 绑定设置镜像图片
      * @param viewGroup
      */

@@ -3,28 +3,19 @@ package com.flyzebra.flyui.view.cellview;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import com.flyzebra.flyui.bean.CellBean;
+import com.flyzebra.flyui.view.base.BaseLayoutCellView;
 
-public class SimpleLayoutCellView extends FrameLayout implements ICell, View.OnClickListener {
-    private CellBean mCellBean;
+public class SimpleLayoutCellView extends BaseLayoutCellView implements ICell, View.OnClickListener {
 
     public SimpleLayoutCellView(Context context) {
         super(context);
     }
 
     @Override
-    public void setCellBean(CellBean cellBean) {
-        this.mCellBean = cellBean;
-        verify(cellBean);
-    }
-
-    @Override
     public boolean verify(CellBean cellBean) {
-        if(cellBean==null) return false;
-        loadingRes(cellBean);
-        return true;
+       return mCellBean!=null;
     }
 
     @Override

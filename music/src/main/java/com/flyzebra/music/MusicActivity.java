@@ -38,11 +38,9 @@ import java.util.Map;
  **/
 public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlayerListener {
     private static final HandlerThread sWorkerThread = new HandlerThread("flyui-music");
-
     static {
         sWorkerThread.start();
     }
-
     private static final Handler tHandler = new Handler(sWorkerThread.getLooper());
     public Flyui flyui;
     protected IMusicPlayer musicPlayer = MusicPlayer.getInstance();
@@ -51,7 +49,7 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SPUtil.set(this,"SAVA_PATH","/storage");
+        SPUtil.set(this, "SAVA_PATH", "/storage");
         flyui = new Flyui(this);
         flyui.onCreate();
         musicPlayer.addListener(this);
@@ -181,7 +179,7 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
         for (StorageInfo storageInfo : storageList) {
             if (TextUtils.isEmpty(storageInfo.mPath)) break;
             Map<String, Object> map = new HashMap<>();
-            map.put("100403", TextUtils.isEmpty(storageInfo.mDescription)?storageInfo.mPath:storageInfo.mDescription);
+            map.put("100403", TextUtils.isEmpty(storageInfo.mDescription) ? storageInfo.mPath : storageInfo.mDescription);
             map.put("100402", storageInfo.mPath);
             String imageKey;
             list.add(map);
@@ -364,6 +362,7 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
                     Map<String, Object> map2 = new Hashtable<>();
                     map2.put("100221", music.url);
                     map2.put("100222", music.name);
+                    map2.put("100223", music.artist);
                     map2.put("10FF02", 1);
                     listFolder.add(map2);
                 }
@@ -423,18 +422,31 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
         tHandler.post(new Runnable() {
             @Override
             public void run() {
+                byte[] imageBytes = null;
                 try {
                     if (url.toLowerCase().endsWith(".mp3")) {
                         FlyLog.d("start get id3 info url=%s", url);
                         Mp3File mp3file = new Mp3File(url);
-                        if (mp3file.hasId3v2Tag()) {
-                            ID3v2 id3v2Tag = mp3file.getId3v2Tag();
-                            FlyEvent.sendEvent("100227", id3v2Tag.getAlbumImage());
+                        /**
+                         * 音乐文件大于30M不解析
+                         */
+                        if (mp3file.getLength() < 30 * 1024 * 1024) {
+                            if (mp3file.hasId3v2Tag()) {
+                                ID3v2 id3v2Tag = mp3file.getId3v2Tag();
+                                imageBytes = id3v2Tag.getAlbumImage();
+                            }
                         }
                     }
                 } catch (Exception e) {
                     FlyLog.e(e.toString());
                 }
+                final byte[] finalImageBytes = imageBytes;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        FlyEvent.sendEvent("100227", finalImageBytes);
+                    }
+                });
             }
         });
     }

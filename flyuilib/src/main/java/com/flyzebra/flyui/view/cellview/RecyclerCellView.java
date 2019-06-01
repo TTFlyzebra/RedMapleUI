@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.flyzebra.flyui.bean.CellBean;
-import com.flyzebra.flyui.bean.RecvBean;
 import com.flyzebra.flyui.bean.TextBean;
 import com.flyzebra.flyui.event.FlyEvent;
 import com.flyzebra.flyui.module.RecycleViewDivider;
@@ -46,9 +45,9 @@ public class RecyclerCellView extends BaseRecyclerCellView {
 
     @Override
     public void init(CellBean cellBean) {
-        int num = mCellBean.width / mCellBean.pages.get(0).width;
-        if (num > 1) {
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), num);
+        int column = mCellBean.width / mCellBean.pages.get(0).width;
+        if (column > 1) {
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), column);
             setLayoutManager(gridLayoutManager);
         } else {
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -59,15 +58,20 @@ public class RecyclerCellView extends BaseRecyclerCellView {
         setAdapter(adapter);
 
         try {
-            setBackgroundColor(Color.parseColor(mCellBean.backColor));
+            if (!TextUtils.isEmpty(mCellBean.backColor)) {
+                setBackgroundColor(Color.parseColor(mCellBean.backColor));
+            }
         } catch (Exception e) {
             FlyLog.d("error! parseColor exception!" + e.toString());
         }
 
-        recvEvent(ByteUtil.hexString2Bytes(mCellBean.recv.recvId));
-        RecvBean recvBean = mCellBean.pages.get(0).recv;
-        if (recvBean != null && !TextUtils.isEmpty(recvBean.recvId)) {
-            recvEvent(ByteUtil.hexString2Bytes(recvBean.recvId));
+        if (mCellBean.recv != null) {
+            if(mCellBean.recv.recvId!=null){
+                recvEvent(ByteUtil.hexString2Bytes(mCellBean.recv.recvId));
+            }
+            if(mCellBean.recv.keyId!=null){
+                recvEvent(ByteUtil.hexString2Bytes(mCellBean.recv.keyId));
+            }
         }
     }
 
@@ -85,12 +89,12 @@ public class RecyclerCellView extends BaseRecyclerCellView {
 
     @Override
     public boolean recvEvent(byte[] key) {
-        if (mCellBean == null) return false;
+        if (mCellBean == null || key==null) return false;
         String strkey = ByteUtil.bytes2HexString(key);
         if (TextUtils.isEmpty(strkey)) return false;
         if (mCellBean.recv != null && !TextUtils.isEmpty(mCellBean.recv.recvId)) {
-            Object obj = FlyEvent.getValue(key);
             if (strkey.equals(mCellBean.recv.recvId)) {
+                Object obj = FlyEvent.getValue(key);
                 if (obj instanceof List) {
                     mList.clear();
                     try {
@@ -103,14 +107,13 @@ public class RecyclerCellView extends BaseRecyclerCellView {
             }
         }
 
-        RecvBean recvBean = mCellBean.pages.get(0).recv;
-        if (recvBean != null && !TextUtils.isEmpty(recvBean.recvId)) {
-            if (strkey.equals(recvBean.recvId)) {
-                Object obj = FlyEvent.getValue(recvBean.recvId);
+        if (mCellBean.recv != null && !TextUtils.isEmpty(mCellBean.recv.keyId)) {
+            if (strkey.equals(mCellBean.recv.keyId)) {
+                Object obj = FlyEvent.getValue(mCellBean.recv.keyId);
                 if (obj instanceof String) {
                     itemKey = (String) obj;
                     for (int i = 0; i < mList.size(); i++) {
-                        if (itemKey.equals(mList.get(i).get(recvBean.recvId))) {
+                        if (itemKey.equals(mList.get(i).get(mCellBean.recv.keyId))) {
                             getLayoutManager().scrollToPosition(i);
                             break;
                         }
@@ -119,6 +122,7 @@ public class RecyclerCellView extends BaseRecyclerCellView {
                 }
             }
         }
+
         return false;
     }
 
@@ -147,21 +151,26 @@ public class RecyclerCellView extends BaseRecyclerCellView {
         @SuppressLint("SetTextI18n")
         @Override
         public void onBindViewHolder(ViewHolder holder, final int position) {
-            Object mainKey = mList.get(position).get(mCellBean.pages.get(0).recv.keyId);
-            boolean isSelect = mainKey != null && mainKey.equals(RecyclerCellView.this.itemKey);
             holder.itemView.setTag(position);
+            Object mainKey = "main key";
+            if(mCellBean.recv!=null&&!TextUtils.isEmpty(mCellBean.recv.keyId)){
+                mainKey = mList.get(position).get(mCellBean.recv.keyId);
+            }
+
             holder.itemView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     try {
                         String sendKey = mCellBean.pages.get(0).send.eventId;
-                        Object sendObj = mList.get((Integer) v.getTag()).get(mCellBean.pages.get(0).recv.keyId);
+                        Object sendObj = mList.get((Integer) v.getTag()).get(mCellBean.recv.keyId);
                         FlyEvent.sendEvent(sendKey, sendObj);
                     } catch (Exception e) {
                         FlyLog.e(e.toString());
                     }
                 }
             });
+
+            boolean isSelect = mainKey != null && mainKey.equals(itemKey);
             holder.itemView.setEnabled(!isSelect);
 
             for (CellBean cellBean : mCellBean.pages.get(0).cellList) {
@@ -206,7 +215,7 @@ public class RecyclerCellView extends BaseRecyclerCellView {
                         int key = Integer.valueOf(cellBean.recv.keyId, 16);
                         ImageTextCellView imgtx = holder.imgtxs.get(key);
                         if (imgtx != null) {
-                            imgtx.setDrawable(mList.get(position).get(cellBean.recv.keyId) + "");
+                            imgtx.setContentDrawable(mList.get(position).get(cellBean.recv.keyId) + "");
                             imgtx.setSelected(isSelect);
                         } else {
                             FlyLog.e("find by id empty");

@@ -3,13 +3,9 @@ package com.flyzebra.flyui.view.cellview;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
@@ -24,12 +20,10 @@ import com.flyzebra.flyui.event.FlyEvent;
 import com.flyzebra.flyui.utils.ByteUtil;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.base.BaseImageCellView;
-import com.flyzebra.flyui.view.base.BaseViewFunc;
 import com.flyzebra.flyui.view.customview.MirrorView;
 
-public class SimpleImageCellView extends BaseImageCellView implements View.OnTouchListener, View.OnClickListener {
+public class SimpleImageCellView extends BaseImageCellView  {
     private MirrorView mirrorView;
-    private Handler mHandler = new Handler();
     private Bitmap mBitmap;
 
     public SimpleImageCellView(Context context) {
@@ -47,10 +41,6 @@ public class SimpleImageCellView extends BaseImageCellView implements View.OnTou
     @Override
     public void init(CellBean cellBean) {
         setScaleType(mCellBean.images.get(0).getScaleType());
-        if (mCellBean.send != null) {
-            setOnClickListener(this);
-            setOnTouchListener(this);
-        }
     }
 
     @Override
@@ -89,14 +79,6 @@ public class SimpleImageCellView extends BaseImageCellView implements View.OnTou
                 });
     }
 
-    /**
-     * 启动优先级，包名+类名>Action>包名
-     */
-    @Override
-    public void onClick() {
-        BaseViewFunc.onClick(getContext(),mCellBean.send);
-    }
-
     @Override
     public void bindMirrorView(ViewGroup viewGroup, ViewGroup.LayoutParams lpMirror) {
         MirrorView mirrorView = new MirrorView(getContext());
@@ -106,48 +88,7 @@ public class SimpleImageCellView extends BaseImageCellView implements View.OnTou
         this.mirrorView = mirrorView;
     }
 
-    private Runnable show = new Runnable() {
-        @Override
-        public void run() {
-            focusChange(false);
-        }
-    };
 
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                focusChange(true);
-                break;
-            case MotionEvent.ACTION_MOVE:
-                focusChange(isTouchPointInView(v, (int) event.getRawX(), (int) event.getRawY()));
-                break;
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL:
-                focusChange(false);
-                break;
-        }
-        return false;
-    }
-
-    private void focusChange(boolean flag) {
-        if (flag) {
-            try {
-                setColorFilter(Color.parseColor(mCellBean.filterColor));
-            } catch (Exception e) {
-                setColorFilter(0x3FFFFFFF);
-            }
-            mHandler.removeCallbacks(show);
-            mHandler.postDelayed(show, 300);
-        } else {
-            clearColorFilter();
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        onClick();
-    }
 
     @Override
     protected void onAttachedToWindow() {
@@ -164,21 +105,6 @@ public class SimpleImageCellView extends BaseImageCellView implements View.OnTou
         super.onDetachedFromWindow();
     }
 
-    private boolean isTouchPointInView(View view, int x, int y) {
-        if (view == null) {
-            return false;
-        }
-        int[] location = new int[2];
-        view.getLocationOnScreen(location);
-        int left = location[0];
-        int top = location[1];
-        int right = left + view.getMeasuredWidth();
-        int bottom = top + view.getMeasuredHeight();
-        if (y >= top && y <= bottom && x >= left && x <= right) {
-            return true;
-        }
-        return false;
-    }
 
     @Override
     public boolean recvEvent(byte[] key) {
@@ -191,8 +117,6 @@ public class SimpleImageCellView extends BaseImageCellView implements View.OnTou
             return false;
         }
         switch (imageBean.recv.recvId) {
-            case "100201":
-                break;
             case "100227":
                 final byte[] imageBytes = (byte[]) FlyEvent.getValue(imageBean.recv.recvId);
                 FlyLog.d("handle 100227 imageBytes=" + imageBytes);

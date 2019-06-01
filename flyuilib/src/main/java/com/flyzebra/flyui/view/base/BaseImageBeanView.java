@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.view.MotionEvent;
@@ -29,6 +30,13 @@ public class BaseImageBeanView extends ShapeImageView implements IFlyEvent, View
     private ImageBean mImageBean;
     private Handler mHandler = new Handler(Looper.getMainLooper());
     public Bitmap mBitmap = null;
+    private static final HandlerThread sWorkerThread = new HandlerThread("flyui-baseimagebean");
+
+    static {
+        sWorkerThread.start();
+    }
+
+    private static final Handler tHandler = new Handler(sWorkerThread.getLooper());
 
     public BaseImageBeanView(Context context) {
         super(context);
@@ -98,6 +106,7 @@ public class BaseImageBeanView extends ShapeImageView implements IFlyEvent, View
     protected void onDetachedFromWindow() {
         FlyLog.v("onDetachedFromWindow");
         mHandler.removeCallbacksAndMessages(null);
+        tHandler.removeCallbacksAndMessages(null);
         FlyEvent.unregister(this);
         super.onDetachedFromWindow();
     }
@@ -128,8 +137,6 @@ public class BaseImageBeanView extends ShapeImageView implements IFlyEvent, View
             return false;
         }
         switch (mImageBean.recv.recvId) {
-            case "100201":
-                break;
             //接受到了图片内容
             case "100227":
                 final byte[] imageBytes = (byte[]) FlyEvent.getValue(mImageBean.recv.recvId);
@@ -138,7 +145,7 @@ public class BaseImageBeanView extends ShapeImageView implements IFlyEvent, View
                     mBitmap = null;
                     setDefImageBitmap();
                 } else {
-                    new Thread(new Runnable() {
+                    tHandler.post(new Runnable() {
                         @Override
                         public void run() {
                             try {
@@ -158,7 +165,7 @@ public class BaseImageBeanView extends ShapeImageView implements IFlyEvent, View
                                 }
                             });
                         }
-                    }).start();
+                    });
                 }
                 break;
 
@@ -168,11 +175,14 @@ public class BaseImageBeanView extends ShapeImageView implements IFlyEvent, View
 
     private void setDefImageBitmap() {
         if (mImageBean == null || TextUtils.isEmpty(mImageBean.url)) return;
-        Glide.with(getContext()).load(UpdataVersion.getNativeFilePath(mImageBean.url)).diskCacheStrategy(DiskCacheStrategy.NONE).into(this);
+        Glide.with(getContext())
+                .load(UpdataVersion.getNativeFilePath(mImageBean.url))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(this);
     }
 
     @Override
     public void onClick(View v) {
-        BaseViewFunc.onClick(getContext(),mImageBean.send);
+        BaseViewFunc.onClick(getContext(), mImageBean.send);
     }
 }

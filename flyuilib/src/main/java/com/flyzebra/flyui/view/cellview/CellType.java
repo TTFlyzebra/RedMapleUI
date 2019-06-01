@@ -60,7 +60,7 @@ public interface CellType {
 
 
 
-    int TYPE_GROUP_LIST = 15 ;
+    int TYPE_GROUP_LIST = 14 ;
 
 
 

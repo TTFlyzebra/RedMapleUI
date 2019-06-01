@@ -73,6 +73,17 @@ public abstract class BaseView extends View implements IFlyEvent, ICell {
     }
 
     @Override
+    public void setSelected(boolean selected) {
+        super.setSelected(selected);
+        setSelectStyle(selected);
+    }
+
+    @Override
+    public void setSelectStyle(boolean isSelect) {
+
+    }
+
+    @Override
     public void bindMirrorView(ViewGroup viewGroup, ViewGroup.LayoutParams lpMirror) {
 
     }
