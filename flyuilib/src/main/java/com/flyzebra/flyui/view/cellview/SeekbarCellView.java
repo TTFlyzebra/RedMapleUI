@@ -86,7 +86,10 @@ public class SeekbarCellView extends BaseLayoutCellView implements SeekBar.OnSee
 
     @Override
     public void loadingRes(CellBean cellBean) {
-        Glide.with(getContext()).load(mCellBean.images.get(0).url).into(new CustomTarget<Drawable>() {
+        Glide.with(getContext())
+                .load(mCellBean.images.get(0).url)
+                .override(mCellBean.images.get(0).width,mCellBean.images.get(0).height)
+                .into(new CustomTarget<Drawable>() {
             @Override
             public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                 draw1 = resource;
@@ -98,7 +101,10 @@ public class SeekbarCellView extends BaseLayoutCellView implements SeekBar.OnSee
 
             }
         });
-        Glide.with(getContext()).load(mCellBean.images.get(1).url).into(new CustomTarget<Drawable>() {
+        Glide.with(getContext())
+                .load(mCellBean.images.get(1).url)
+                .override(mCellBean.images.get(1).width,mCellBean.images.get(1).height)
+                .into(new CustomTarget<Drawable>() {
             @Override
             public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                 draw2 = resource;
@@ -111,7 +117,10 @@ public class SeekbarCellView extends BaseLayoutCellView implements SeekBar.OnSee
             }
 
         });
-        Glide.with(getContext()).load(mCellBean.images.get(2).url).into(new CustomTarget<Drawable>() {
+        Glide.with(getContext())
+                .load(mCellBean.images.get(2).url)
+                .override(mCellBean.images.get(2).width,mCellBean.images.get(2).height)
+                .into(new CustomTarget<Drawable>() {
             @Override
             public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                 draw3 = resource;
