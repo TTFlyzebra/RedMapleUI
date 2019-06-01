@@ -49,12 +49,19 @@ public class FramlayoutCellView extends BaseLayoutCellView {
         simplePageView.setPageBean(mCellBean.pages.get(0));
 
         try {
-            setBackgroundColor(Color.parseColor(mCellBean.backColor));
+            if(!TextUtils.isEmpty(mCellBean.backColor)){
+                setBackgroundColor(Color.parseColor(mCellBean.backColor));
+            }
+        } catch (Exception e) {
+            FlyLog.d("error! parseColor exception!" + e.toString());
+        }
+
+        try {
             if (mCellBean.recv.recvId.equals("400201")) {
                 goAnimtor(false, 0);
             }
         } catch (Exception e) {
-            FlyLog.d("error! parseColor exception!" + e.toString());
+            FlyLog.e(e.toString());
         }
     }
 
