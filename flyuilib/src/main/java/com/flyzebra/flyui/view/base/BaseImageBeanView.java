@@ -45,11 +45,26 @@ public class BaseImageBeanView extends ShapeImageView implements IFlyEvent, View
     public void setmImageBean(final ImageBean imageBean) {
         if (imageBean == null) return;
         mImageBean = imageBean;
+
         setScaleType(imageBean.getScaleType());
         setShapeType(imageBean.shapeType);
         if (mImageBean != null && mImageBean.send != null) {
             setOnClickListener(this);
             setOnTouchListener(this);
+        }
+
+        if (imageBean.recv != null) {
+            if (!TextUtils.isEmpty(imageBean.recv.recvId)) {
+                recvEvent(ByteUtil.hexString2Bytes(imageBean.recv.recvId));
+            }
+
+            if (!TextUtils.isEmpty(imageBean.recv.keyId)) {
+                try {
+                    setId(Integer.valueOf(imageBean.recv.keyId, 16));
+                } catch (Exception e) {
+                    FlyLog.e(e.toString());
+                }
+            }
         }
     }
 
@@ -96,10 +111,6 @@ public class BaseImageBeanView extends ShapeImageView implements IFlyEvent, View
         FlyLog.v("onAttachedToWindow");
         super.onAttachedToWindow();
         FlyEvent.register(this);
-        if (mImageBean == null || mImageBean.recv == null || mImageBean.recv.recvId == null) {
-            return;
-        }
-        recvEvent(ByteUtil.hexString2Bytes(mImageBean.recv.recvId));
     }
 
     @Override
@@ -184,5 +195,21 @@ public class BaseImageBeanView extends ShapeImageView implements IFlyEvent, View
     @Override
     public void onClick(View v) {
         BaseViewFunc.onClick(getContext(), mImageBean.send);
+    }
+
+    @Override
+    public void setSelected(boolean selected) {
+        super.setSelected(selected);
+        if (mImageBean != null&&!TextUtils.isEmpty(mImageBean.filterColor)) {
+            try {
+                if(selected){
+                    setColorFilter(Color.parseColor(mImageBean.filterColor));
+                }else{
+                    clearColorFilter();
+                }
+            } catch (Exception e) {
+                FlyLog.e(e.toString());
+            }
+        }
     }
 }

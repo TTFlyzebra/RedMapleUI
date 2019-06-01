@@ -90,7 +90,7 @@ public class BaseTextBeanView extends FlyTextView implements IFlyEvent {
     @Override
     public void setSelected(boolean selected) {
         super.setSelected(selected);
-        if (textBean != null) {
+        if (textBean != null &&!TextUtils.isEmpty(textBean.textFilter)) {
             try {
                 setTextColor(Color.parseColor(selected ? textBean.textFilter : textBean.textColor));
             } catch (Exception e) {

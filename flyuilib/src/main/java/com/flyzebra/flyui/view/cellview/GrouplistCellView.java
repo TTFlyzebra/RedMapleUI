@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.flyzebra.flyui.bean.CellBean;
+import com.flyzebra.flyui.bean.ImageBean;
 import com.flyzebra.flyui.bean.PageBean;
 import com.flyzebra.flyui.bean.TextBean;
 import com.flyzebra.flyui.event.FlyEvent;
@@ -219,11 +220,11 @@ public class GrouplistCellView extends BaseRecyclerCellView {
             int type = (Integer) mShowList.get(position).get("10FF02");
             final PageBean pageBean = mCellBean.pages.get(type);
             holder.itemView.setTag(position);
-            Object mainKey = "main key";
-            if (mCellBean.recv != null && !TextUtils.isEmpty(mCellBean.recv.keyId)) {
-                mainKey = mShowList.get(position).get(mCellBean.recv.keyId);
+            boolean isSelect = false;
+            Object select = mShowList.get(position).get("select");
+            if(select instanceof Boolean){
+                isSelect = (boolean) mShowList.get(position).get("select");
             }
-            boolean isSelect = mainKey != null && mainKey.equals(itemKey);
             holder.itemView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -281,6 +282,25 @@ public class GrouplistCellView extends BaseRecyclerCellView {
                         }
                     }
                 }
+
+                if (cellBean.images != null && !cellBean.images.isEmpty()) {
+                    for (ImageBean imageBean : cellBean.images) {
+                        if (imageBean.recv == null || imageBean.recv.keyId == null)
+                            continue;
+                        try {
+                            int key = Integer.valueOf(imageBean.recv.keyId, 16);
+                            ImageView imageView = holder.images.get(key);
+                            if (imageView != null) {
+                                imageView.setSelected(isSelect);
+                            } else {
+                                FlyLog.e("find by id empty");
+                            }
+                        } catch (Exception e) {
+                            FlyLog.e(e.toString());
+                        }
+                    }
+                }
+
                 if (cellBean.celltype == CellType.TYPE_ANIMTOR) {
                     if (cellBean.recv == null || cellBean.recv.keyId == null)
                         continue;
@@ -304,13 +324,13 @@ public class GrouplistCellView extends BaseRecyclerCellView {
                         int key = Integer.valueOf(cellBean.recv.keyId, 16);
                         ImageTextCellView imgtx = holder.imgtxs.get(key);
                         if (imgtx != null) {
-                            if("10FFF3".equals(cellBean.recv.keyId)) {
+                            if (type == 0 && "10FFF3".equals(cellBean.recv.keyId)) {
                                 boolean isOpen = mShowList.get(position).equals(mShowMap);
                                 imgtx.setContentDrawable(isOpen ? "open" : "close");
-                            }else {
+                            } else {
                                 imgtx.setContentDrawable(mShowList.get(position).get(cellBean.recv.keyId) + "");
-                                imgtx.setSelected(isSelect);
                             }
+                            imgtx.setSelected(isSelect);
                         } else {
                             FlyLog.e("find by id empty");
                         }
@@ -363,6 +383,25 @@ public class GrouplistCellView extends BaseRecyclerCellView {
                             }
                         }
                     }
+
+                    if (cellBean.images != null && !cellBean.images.isEmpty()) {
+                        for (ImageBean imageBean : cellBean.images) {
+                            if (imageBean.recv == null || imageBean.recv.keyId == null)
+                                continue;
+                            try {
+                                int key = Integer.valueOf(imageBean.recv.keyId, 16);
+                                ImageView imageView = itemView.findViewById(key);
+                                if (imageView != null) {
+                                    images.put(key, imageView);
+                                } else {
+                                    FlyLog.d("find by id empty");
+                                }
+                            } catch (Exception e) {
+                                FlyLog.e(e.toString());
+                            }
+                        }
+                    }
+
                     if (cellBean.celltype == CellType.TYPE_ANIMTOR) {
                         if (cellBean.recv == null || cellBean.recv.keyId == null)
                             continue;
