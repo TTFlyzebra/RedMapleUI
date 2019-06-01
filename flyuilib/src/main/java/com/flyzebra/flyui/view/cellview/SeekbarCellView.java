@@ -191,6 +191,7 @@ public class SeekbarCellView extends BaseLayoutCellView implements SeekBar.OnSee
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-
+        int pos = seekBar.getProgress();
+        FlyEvent.sendEvent("200306",pos);
     }
 }

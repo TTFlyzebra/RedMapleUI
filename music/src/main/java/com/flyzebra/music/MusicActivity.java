@@ -53,7 +53,6 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
         flyui = new Flyui(this);
         flyui.onCreate();
         musicPlayer.addListener(this);
-//        FlyEvent.sendEvent(FlyEventKey.CHANGE_PAGER_WITH_RESID, "music_fm01");
     }
 
     @Override
@@ -172,9 +171,9 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
     @Override
     public void storageList(List<StorageInfo> storageList) {
         super.storageList(storageList);
-//        if (storageList != null) {
-//            FlyEvent.sendEvent(FlyEventKey.SUM_STORE, "存储器\n(" + storageList.size() + ")");
-//        }
+        if (storageList != null) {
+            FlyEvent.sendEvent("40030200", "存储器\n(" + storageList.size() + ")");
+        }
         List<Map<String, Object>> list = new ArrayList<>();
         for (StorageInfo storageInfo : storageList) {
             if (TextUtils.isEmpty(storageInfo.mPath)) break;
@@ -225,7 +224,7 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
             map.put("100223", music.artist);
             listSingle.add(map);
         }
-//        FlyEvent.sendEvent(FlyEventKey.MUSIC_SUM, "单曲\n(" + listSingle.size() + ")");
+        FlyEvent.sendEvent("40030201", "单曲\n(" + listSingle.size() + ")");
         FlyEvent.sendEvent("100229", listSingle);
 
 
@@ -249,9 +248,9 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
             }
             mFolderHashMap.get(path).add(music);
         }
-//        FlyEvent.sendEvent(FlyEventKey.MUSIC_SUM_ARTIST, "歌手\n(" + mArtistHashMap.size() + ")");
-//        FlyEvent.sendEvent(FlyEventKey.MUSIC_SUM_ALBUM, "专辑\n(" + mAlbumHashMap.size() + ")");
-//        FlyEvent.sendEvent(FlyEventKey.MUSIC_SUM_FOLDER, "文件夹\n(" + mFolderHashMap.size() + ")");
+        FlyEvent.sendEvent("40030202", "歌手\n(" + mArtistHashMap.size() + ")");
+        FlyEvent.sendEvent("40030203", "专辑\n(" + mAlbumHashMap.size() + ")");
+        FlyEvent.sendEvent("40030204", "文件夹\n(" + mFolderHashMap.size() + ")");
 
         //歌手列表
         List<String> artistGroupList = new ArrayList<>(mArtistHashMap.keySet());
@@ -388,7 +387,7 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
             case "200306":
                 obj = FlyEvent.getValue(key);
                 if (obj instanceof Integer) {
-                    musicPlayer.seekTo((int) obj);
+                    musicPlayer.seekTo((int) obj*1000);
                 }
                 break;
             case "300101":
