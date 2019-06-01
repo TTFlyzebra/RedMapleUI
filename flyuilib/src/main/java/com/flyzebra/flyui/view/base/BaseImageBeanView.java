@@ -58,6 +58,10 @@ public class BaseImageBeanView extends ShapeImageView implements IFlyEvent, View
                 recvEvent(ByteUtil.hexString2Bytes(imageBean.recv.recvId));
             }
 
+            if (!TextUtils.isEmpty(imageBean.recv.animId)) {
+                recvEvent(ByteUtil.hexString2Bytes(imageBean.recv.animId));
+            }
+
             if (!TextUtils.isEmpty(imageBean.recv.keyId)) {
                 try {
                     setId(Integer.valueOf(imageBean.recv.keyId, 16));
@@ -141,45 +145,59 @@ public class BaseImageBeanView extends ShapeImageView implements IFlyEvent, View
 
     @Override
     public boolean recvEvent(byte[] key) {
-        if (mImageBean == null || mImageBean.recv == null || mImageBean.recv.recvId == null) {
-            return false;
-        }
-        if (!mImageBean.recv.recvId.equals(ByteUtil.bytes2HexString(key))) {
-            return false;
-        }
-        switch (mImageBean.recv.recvId) {
-            //接受到了图片内容
-            case "100227":
-                final byte[] imageBytes = (byte[]) FlyEvent.getValue(mImageBean.recv.recvId);
-                FlyLog.d("handle 100227 imageBytes=" + imageBytes);
-                if (imageBytes == null) {
-                    mBitmap = null;
-                    setDefImageBitmap();
-                } else {
-                    tHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                mBitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-                            } catch (Exception e) {
-                                FlyLog.e(e.toString());
-                                return;
-                            }
-                            if (mBitmap == null) return;
-                            mHandler.post(new Runnable() {
+        try {
+            if (mImageBean == null || mImageBean.recv == null) {
+                return false;
+            }
+            if (mImageBean.recv.recvId!=null&&mImageBean.recv.recvId.equals(ByteUtil.bytes2HexString(key))) {
+                switch (mImageBean.recv.recvId) {
+                    //接受到了图片内容
+                    case "100227":
+                        final byte[] imageBytes = (byte[]) FlyEvent.getValue(mImageBean.recv.recvId);
+                        FlyLog.d("handle 100227 imageBytes=" + imageBytes);
+                        if (imageBytes == null) {
+                            mBitmap = null;
+                            setDefImageBitmap();
+                        } else {
+                            tHandler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (mBitmap != null) {
-                                        setImageBitmap(mBitmap);
+                                    try {
+                                        mBitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+                                    } catch (Exception e) {
+                                        FlyLog.e(e.toString());
+                                        return;
                                     }
-                                    FlyLog.d("handle 100227 finish; bitmap=" + mBitmap);
+                                    if (mBitmap == null) return;
+                                    mHandler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (mBitmap != null) {
+                                                setImageBitmap(mBitmap);
+                                            }
+                                            FlyLog.d("handle 100227 finish; bitmap=" + mBitmap);
+                                        }
+                                    });
                                 }
                             });
                         }
-                    });
-                }
-                break;
+                        break;
 
+                }
+            }
+
+            if (mImageBean.recv.animId!=null&&mImageBean.recv.animId.equals(ByteUtil.bytes2HexString(key))) {
+                Object obj = FlyEvent.getValue(key);
+                if(obj instanceof byte[]){
+                    if(mImageBean.recv.startAnim!=null&&mImageBean.recv.startAnim.contains(ByteUtil.bytes2HexString((byte[]) obj))){
+                        setAnimatePlaying(true);
+                    }else{
+                        setAnimatePlaying(false);
+                    }
+                }
+            }
+        }catch (Exception e){
+            FlyLog.e(e.toString());
         }
         return false;
     }
