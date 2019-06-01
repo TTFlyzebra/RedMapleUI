@@ -33,6 +33,7 @@ public class FramlayoutCellView extends BaseLayoutCellView {
         }
     };
 
+
     public FramlayoutCellView(Context context) {
         super(context);
     }
@@ -49,7 +50,7 @@ public class FramlayoutCellView extends BaseLayoutCellView {
         simplePageView.setPageBean(mCellBean.pages.get(0));
 
         try {
-            if(!TextUtils.isEmpty(mCellBean.backColor)){
+            if (!TextUtils.isEmpty(mCellBean.backColor)) {
                 setBackgroundColor(Color.parseColor(mCellBean.backColor));
             }
         } catch (Exception e) {
@@ -108,7 +109,11 @@ public class FramlayoutCellView extends BaseLayoutCellView {
             sHander.removeCallbacks(hideMenuTask);
         }
         boolean isRtl = RtlUtil.isRtl();
-        animate().translationX(isShow ? 0 : (isRtl ? -(mCellBean.width) : (mCellBean.width))
+        int adjust = 0;
+        if (mCellBean.texts != null && mCellBean.texts.size() > 0) {
+            adjust = mCellBean.texts.get(0).left;
+        }
+        animate().translationX(isShow ? 0 : (isRtl ? -(mCellBean.width + adjust) : (mCellBean.width + adjust))
         ).setDuration(during).start();
     }
 }
