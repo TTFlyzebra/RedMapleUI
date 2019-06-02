@@ -18,7 +18,7 @@ import com.flyzebra.flyui.view.customview.FlyTextView;
  * Describ:
  **/
 public class BaseTextBeanView extends FlyTextView implements IFlyEvent {
-    private TextBean textBean;
+    private TextBean mTextBean;
 
     public BaseTextBeanView(Context context) {
         super(context);
@@ -37,9 +37,16 @@ public class BaseTextBeanView extends FlyTextView implements IFlyEvent {
     }
 
     public void setTextBean(TextBean textBean) {
-        this.textBean = textBean;
         if (textBean == null) return;
-        setSelected(false);
+        mTextBean = textBean;
+        if (TextUtils.isEmpty(textBean.textColor)) {
+            textBean.textColor = "#FFFFFF";
+        }
+        try{
+            setTextColor(Color.parseColor(textBean.textColor));
+        }catch (Exception e){
+            FlyLog.e(e.toString());
+        }
         setTextSize(TypedValue.COMPLEX_UNIT_PX, textBean.textSize);
         setGravity(textBean.getGravity());
         if (textBean.textLines <= 0) {
@@ -68,11 +75,11 @@ public class BaseTextBeanView extends FlyTextView implements IFlyEvent {
 
     @Override
     public boolean recvEvent(byte[] key) {
-        if (textBean == null || textBean.recv == null || textBean.recv.recvId == null) {
+        if (mTextBean == null || mTextBean.recv == null || mTextBean.recv.recvId == null) {
             return false;
         }
         String strKey = ByteUtil.bytes2HexString(key);
-        if (!textBean.recv.recvId.equals(strKey)) {
+        if (!mTextBean.recv.recvId.equals(strKey)) {
             return false;
         }
         switch (strKey) {
@@ -90,9 +97,9 @@ public class BaseTextBeanView extends FlyTextView implements IFlyEvent {
     @Override
     public void setSelected(boolean selected) {
         super.setSelected(selected);
-        if (textBean != null &&!TextUtils.isEmpty(textBean.textFilter)) {
+        if (mTextBean != null && !TextUtils.isEmpty(mTextBean.textFilter)) {
             try {
-                setTextColor(Color.parseColor(selected ? textBean.textFilter : textBean.textColor));
+                setTextColor(Color.parseColor(selected ? mTextBean.textFilter : mTextBean.textColor));
             } catch (Exception e) {
                 setTextColor(0xFFFFFFFF);
                 FlyLog.e(e.toString());

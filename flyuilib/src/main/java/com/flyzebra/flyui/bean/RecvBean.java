@@ -12,6 +12,9 @@ public class RecvBean implements Parcelable {
     public String recvId;
     public String visibleContent;
     public String disVisibleContent;
+    public String animId;
+    public String startAnim;
+    public String animType;
 
     public String keyId;
 

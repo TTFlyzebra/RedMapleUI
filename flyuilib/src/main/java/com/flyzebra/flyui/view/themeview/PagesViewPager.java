@@ -15,6 +15,7 @@ import com.flyzebra.flyui.event.FlyEvent;
 import com.flyzebra.flyui.event.IFlyEvent;
 import com.flyzebra.flyui.utils.ByteUtil;
 import com.flyzebra.flyui.utils.FlyLog;
+import com.flyzebra.flyui.view.pageview.IPage;
 import com.flyzebra.flyui.view.pageview.SimplePageView;
 
 import java.util.ArrayList;
@@ -132,12 +133,12 @@ public class PagesViewPager extends ViewPager implements IFlyEvent {
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            SimplePageView simplePageView = new SimplePageView(getContext());
-            simplePageView.setTag(position);
-            simplePageView.showMirror(themeBean.isMirror != 0);
-            simplePageView.setPageBean(pageList.get(position));
-            container.addView(simplePageView);
-            return simplePageView;
+            IPage pageView = getNewPageView(getContext());
+            ((View) pageView).setTag(position);
+            pageView.showMirror(themeBean.isMirror != 0);
+            pageView.setPageBean(pageList.get(position));
+            container.addView((View) pageView);
+            return pageView;
         }
 
         @Override
@@ -171,6 +172,10 @@ public class PagesViewPager extends ViewPager implements IFlyEvent {
             }
         }
 
+    }
+
+    protected IPage getNewPageView(Context context) {
+        return new SimplePageView(context);
     }
 
 

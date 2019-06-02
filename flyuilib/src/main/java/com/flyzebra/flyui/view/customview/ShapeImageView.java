@@ -195,6 +195,7 @@ public class ShapeImageView extends FlyImageView {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        rotationAnimator.start();
         if (animatePlaying) {
             rotationAnimator.resume();
         } else {

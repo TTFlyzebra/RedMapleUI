@@ -18,6 +18,7 @@ import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.pageanimtor.PageTransformerCube;
 import com.flyzebra.flyui.view.pageanimtor.PageTransformerPage;
 import com.flyzebra.flyui.view.pageview.SimplePageView;
+import com.flyzebra.flyuitv.view.themeview.PagesViewPagerTV;
 
 /**
  * Author FlyZebra
@@ -173,7 +174,7 @@ public class ThemeView extends FrameLayout implements ITheme {
         if (mThemeBean.pageList != null && !mThemeBean.pageList.isEmpty()) {
             switch (mThemeBean.themeType) {
                 default:
-                    pagesView = new PagesViewPager(mContext);
+                    pagesView = new PagesViewPagerTV(mContext);
 
             }
             LayoutParams lp = new LayoutParams(mThemeBean.right - mThemeBean.left, mThemeBean.bottom - mThemeBean.top);
