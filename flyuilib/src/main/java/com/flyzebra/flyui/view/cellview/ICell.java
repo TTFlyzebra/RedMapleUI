@@ -13,20 +13,17 @@ public interface ICell {
      */
     void setCellBean(CellBean cellBean);
 
-
     /**
      * 校验CellBean数据是否完整
      * @param cellBean
      */
     boolean verify(CellBean cellBean);
 
-
     /**
      * 加载所需资源到内存
      * @param cellBean
      */
     void loadingRes(CellBean cellBean);
-
 
     /**
      * 创建View

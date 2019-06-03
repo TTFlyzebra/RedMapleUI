@@ -396,14 +396,6 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
                     musicPlayer.play((String) obj);
                 }
                 break;
-            case "400200":
-                byte flag = 0;
-                obj = FlyEvent.getValue(key);
-                if (obj instanceof Integer) {
-                    flag = ((int) obj) == 0 ? (byte) 1 : 0;
-                }
-                FlyEvent.sendEvent(key, new byte[]{flag});
-                break;
             case "200305":
                 musicPlayer.switchLoopStatus();
                 break;

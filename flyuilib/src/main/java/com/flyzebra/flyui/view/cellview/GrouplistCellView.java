@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.flyzebra.flyui.bean.CellBean;
 import com.flyzebra.flyui.bean.ImageBean;
 import com.flyzebra.flyui.bean.PageBean;
@@ -222,7 +223,7 @@ public class GrouplistCellView extends BaseRecyclerCellView {
             holder.itemView.setTag(position);
             boolean isSelect = false;
             Object select = mShowList.get(position).get("select");
-            if(select instanceof Boolean){
+            if (select instanceof Boolean) {
                 isSelect = (boolean) mShowList.get(position).get("select");
             }
             holder.itemView.setOnClickListener(new OnClickListener() {
@@ -285,18 +286,26 @@ public class GrouplistCellView extends BaseRecyclerCellView {
 
                 if (cellBean.images != null && !cellBean.images.isEmpty()) {
                     for (ImageBean imageBean : cellBean.images) {
-                        if (imageBean.recv == null || imageBean.recv.keyId == null)
-                            continue;
-                        try {
-                            int key = Integer.valueOf(imageBean.recv.keyId, 16);
-                            ImageView imageView = holder.images.get(key);
-                            if (imageView != null) {
-                                imageView.setSelected(isSelect);
-                            } else {
-                                FlyLog.e("find by id empty");
+                        if (imageBean.recv != null && imageBean.recv.keyId != null) {
+                            try {
+                                int key = Integer.valueOf(imageBean.recv.keyId, 16);
+                                ImageView imageView = holder.images.get(key);
+                                if (imageView != null) {
+                                    if(imageBean.recv.recvId!=null){
+                                        Object obj = mShowList.get(position).get(imageBean.recv.recvId);
+                                        if(obj instanceof String){
+                                            Glide.with(getContext()).load(obj).into(imageView);
+                                        }
+
+                                    }
+                                    imageView.setSelected(isSelect);
+                                } else {
+                                    FlyLog.e("find by id empty");
+                                }
+
+                            } catch (Exception e) {
+                                FlyLog.e(e.toString());
                             }
-                        } catch (Exception e) {
-                            FlyLog.e(e.toString());
                         }
                     }
                 }
@@ -349,7 +358,8 @@ public class GrouplistCellView extends BaseRecyclerCellView {
             gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
-                    return maxColumn;
+                    int type = (int) mShowList.get(position).get("10FF02");
+                    return maxColumn / (mCellBean.width / mCellBean.pages.get(type).width);
                 }
             });
         }
