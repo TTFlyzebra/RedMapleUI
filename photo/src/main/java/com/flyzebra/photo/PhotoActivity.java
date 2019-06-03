@@ -8,7 +8,6 @@ import com.bumptech.glide.Glide;
 import com.flyzebra.flyui.Flyui;
 import com.flyzebra.flyui.event.FlyEvent;
 import com.flyzebra.flyui.event.FlyEventKey;
-import com.flyzebra.flyui.event.IFlyEvent;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.FloderImage;
@@ -27,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class PhotoActivity extends BaseActivity implements IFlyEvent {
+public class PhotoActivity extends BaseActivity {
     public Flyui flyui;
     private ArrayList<Image> imageList = new ArrayList<>();
     private List<FloderImage> mAllList = new ArrayList<>();
@@ -42,7 +41,7 @@ public class PhotoActivity extends BaseActivity implements IFlyEvent {
         imageView = findViewById(R.id.imageview);
         flyui = new Flyui(this);
         flyui.onCreate();
-        FlyEvent.handleAction(FlyEventKey.CHANGE_PAGER_WITH_RESID,"music_fm01");
+        FlyEvent.sendEvent(FlyEventKey.CHANGE_PAGER_WITH_RESID,"music_fm01");
     }
 
     @Override
@@ -64,7 +63,7 @@ public class PhotoActivity extends BaseActivity implements IFlyEvent {
             case FlyEventKey.KEY_URL:
                 obj = FlyEvent.getValue(FlyEventKey.KEY_URL);
                 if(obj instanceof String){
-                    FlyEvent.handleAction(FlyEventKey.IMAGE_URL, obj);
+                    FlyEvent.sendEvent(FlyEventKey.IMAGE_URL, obj);
                 }
                 break;
             case FlyEventKey.IMAGE_URL:
@@ -82,7 +81,7 @@ public class PhotoActivity extends BaseActivity implements IFlyEvent {
                 if (obj instanceof Integer) {
                     flag = ((int) obj) == 0 ? 1 : 0;
                 }
-                FlyEvent.handleAction(FlyEventKey.MSG_MENU_STATUS, flag);
+                FlyEvent.sendEvent(FlyEventKey.MSG_MENU_STATUS, flag);
                 break;
             case FlyEventKey.KEY_STORE:
                 obj = FlyEvent.getValue(FlyEventKey.KEY_STORE);
@@ -97,13 +96,13 @@ public class PhotoActivity extends BaseActivity implements IFlyEvent {
     @Override
     public void notifyPathChange(String path) {
         FlyLog.d("notifyPathChange path=%s", path);
-        FlyEvent.handleAction(FlyEventKey.STORE_URL,path);
+        FlyEvent.sendEvent(FlyEventKey.STORE_URL,path);
         if (isStop) return;
         mAllList.clear();
         mHashSet.clear();
         mAdapterList.clear();
         imageList.clear();
-        FlyEvent.handleAction(FlyEventKey.IMAGE_LIST, new ArrayList<>());
+        FlyEvent.sendEvent(FlyEventKey.IMAGE_LIST, new ArrayList<>());
         super.notifyPathChange(path);
     }
 
@@ -127,7 +126,7 @@ public class PhotoActivity extends BaseActivity implements IFlyEvent {
             map.put(FlyEventKey.RES_URL, imageKey);
             list.add(map);
         }
-        FlyEvent.handleAction(FlyEventKey.STORE_LIST, list);
+        FlyEvent.sendEvent(FlyEventKey.STORE_LIST, list);
     }
 
     @Override
@@ -157,7 +156,7 @@ public class PhotoActivity extends BaseActivity implements IFlyEvent {
             listSingle.add(map);
         }
 //        FlyAction.sendEvent(ActionKey.MUSIC_SUM, "单曲\n(" + listSingle.size() + ")");
-        FlyEvent.handleAction(FlyEventKey.IMAGE_LIST, listSingle);
+        FlyEvent.sendEvent(FlyEventKey.IMAGE_LIST, listSingle);
 
 
         //列表分类
@@ -212,7 +211,7 @@ public class PhotoActivity extends BaseActivity implements IFlyEvent {
                 }
             }
         }
-        FlyEvent.handleAction(FlyEventKey.IMAGE_LIST_FOLDER, listFolder);
+        FlyEvent.sendEvent(FlyEventKey.IMAGE_LIST_FOLDER, listFolder);
         FlyLog.d("notifyMusicList end use time =" + (System.currentTimeMillis() - time) + "ms");
     }
 

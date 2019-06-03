@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import com.flyzebra.flyui.Flyui;
 import com.flyzebra.flyui.event.FlyEvent;
 import com.flyzebra.flyui.event.FlyEventKey;
-import com.flyzebra.flyui.event.IFlyEvent;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.StorageInfo;
@@ -19,7 +18,7 @@ import java.util.Map;
 
 import tcking.github.com.giraffeplayer.IjkVideoView;
 
-public class VideoActivity extends BaseActivity implements IFlyEvent {
+public class VideoActivity extends BaseActivity  {
     public Flyui flyui;
     public IjkVideoView ijkVideoView;
     private ArrayList<Video> videoList = new ArrayList<>();
@@ -31,7 +30,7 @@ public class VideoActivity extends BaseActivity implements IFlyEvent {
         flyui = new Flyui(this);
         flyui.onCreate();
         ijkVideoView = findViewById(R.id.video_play);
-        FlyEvent.handleAction(FlyEventKey.CHANGE_PAGER_WITH_RESID,"music_fm01");
+        FlyEvent.sendEvent(FlyEventKey.CHANGE_PAGER_WITH_RESID,"music_fm01");
     }
 
     @Override
@@ -61,7 +60,7 @@ public class VideoActivity extends BaseActivity implements IFlyEvent {
                 if(obj instanceof String){
                     ijkVideoView.setVideoPath((String) obj);
                     ijkVideoView.start();
-                    FlyEvent.handleAction(FlyEventKey.VIDEO_URL, obj);
+                    FlyEvent.sendEvent(FlyEventKey.VIDEO_URL, obj);
                 }
                 break;
             case FlyEventKey.KEY_MENU:
@@ -70,7 +69,7 @@ public class VideoActivity extends BaseActivity implements IFlyEvent {
                 if (obj instanceof Integer) {
                     flag = ((int) obj) == 0 ? 1 : 0;
                 }
-                FlyEvent.handleAction(FlyEventKey.MSG_MENU_STATUS, flag);
+                FlyEvent.sendEvent(FlyEventKey.MSG_MENU_STATUS, flag);
                 break;
             case FlyEventKey.KEY_LOOP:
                 break;
@@ -87,10 +86,10 @@ public class VideoActivity extends BaseActivity implements IFlyEvent {
     @Override
     public void notifyPathChange(String path) {
         FlyLog.d("notifyPathChange path=%s", path);
-        FlyEvent.handleAction(FlyEventKey.STORE_URL,path);
+        FlyEvent.sendEvent(FlyEventKey.STORE_URL,path);
         if (isStop) return;
         videoList.clear();
-        FlyEvent.handleAction(FlyEventKey.VIDEO_LIST, new ArrayList<>());
+        FlyEvent.sendEvent(FlyEventKey.VIDEO_LIST, new ArrayList<>());
         super.notifyPathChange(path);
     }
 
@@ -114,7 +113,7 @@ public class VideoActivity extends BaseActivity implements IFlyEvent {
             map.put(FlyEventKey.RES_URL, imageKey);
             list.add(map);
         }
-        FlyEvent.handleAction(FlyEventKey.STORE_LIST, list);
+        FlyEvent.sendEvent(FlyEventKey.STORE_LIST, list);
     }
 
     @Override
@@ -135,7 +134,7 @@ public class VideoActivity extends BaseActivity implements IFlyEvent {
                 map.put(FlyEventKey.VIDEO_URL, video.url);
                 list.add(map);
             }
-            FlyEvent.handleAction(FlyEventKey.VIDEO_LIST, list);
+            FlyEvent.sendEvent(FlyEventKey.VIDEO_LIST, list);
         }catch (Exception e){
             FlyLog.e(e.toString());
         }
