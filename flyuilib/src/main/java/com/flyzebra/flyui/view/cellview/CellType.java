@@ -64,5 +64,9 @@ public interface CellType {
 
 
 
+    int TYPE_LRCVIEW = 15 ;
+
+
+
     int TYPE_IMAGE_RES = 99 ;
 }

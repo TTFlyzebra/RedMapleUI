@@ -422,6 +422,7 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
             @Override
             public void run() {
                 byte[] imageBytes = null;
+                String lyrics = "";
                 try {
                     if (url.toLowerCase().endsWith(".mp3")) {
                         FlyLog.d("start get id3 info url=%s", url);
@@ -433,6 +434,7 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
                             if (mp3file.hasId3v2Tag()) {
                                 ID3v2 id3v2Tag = mp3file.getId3v2Tag();
                                 imageBytes = id3v2Tag.getAlbumImage();
+                                lyrics = TextUtils.isEmpty(id3v2Tag.getLyrics()) ? "" : id3v2Tag.getLyrics();
                             }
                         }
                     }
@@ -440,9 +442,14 @@ public class MusicActivity extends BaseActivity implements IFlyEvent, IMusicPlay
                     FlyLog.e(e.toString());
                 }
                 final byte[] finalImageBytes = imageBytes;
+                if (TextUtils.isEmpty(lyrics)) {
+                    lyrics = StringTools.getlrcByPath(url);
+                }
+                final String finalLyrics = lyrics;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        FlyEvent.sendEvent("100233", finalLyrics);
                         FlyEvent.sendEvent("100227", finalImageBytes);
                     }
                 });

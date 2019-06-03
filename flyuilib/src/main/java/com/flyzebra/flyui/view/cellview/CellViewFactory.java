@@ -60,6 +60,10 @@ public class CellViewFactory {
             case CellType.TYPE_GROUP_LIST:
                 iCellView = new GrouplistCellView(context);
                 return iCellView;
+
+            case CellType.TYPE_LRCVIEW:
+                iCellView = new LrcViewCellView(context);
+                return iCellView;
             case CellType.TYPE_APP_NORMAL:
             default:
 //                boolean isText = cellBean.texts != null && cellBean.texts.size() == 1;
