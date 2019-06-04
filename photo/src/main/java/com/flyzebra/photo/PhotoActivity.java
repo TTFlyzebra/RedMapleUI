@@ -1,13 +1,21 @@
 package com.flyzebra.photo;
 
 import android.os.Bundle;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.flyzebra.flyui.Flyui;
 import com.flyzebra.flyui.event.FlyEvent;
 import com.flyzebra.flyui.event.IFlyEvent;
 import com.flyzebra.flyui.utils.ByteUtil;
 import com.flyzebra.flyui.utils.FlyLog;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Image;
 import com.jancar.media.data.Music;
@@ -19,13 +27,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 public class PhotoActivity extends BaseActivity implements IFlyEvent {
     public Flyui flyui;
     private ArrayList<Image> imageList = new ArrayList<>();
+    private Hashtable<Integer, Integer> imageResIDs = new Hashtable<>();
+    private MyPageAdapter pageAdapter;
+    private ViewPager viewPager;
+    public int currentItem = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +47,29 @@ public class PhotoActivity extends BaseActivity implements IFlyEvent {
         setContentView(R.layout.activity_main);
         flyui = new Flyui(this);
         flyui.onCreate();
+        pageAdapter = new MyPageAdapter();
+        viewPager = findViewById(R.id.viewpager);
+        viewPager.setAdapter(pageAdapter);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                FlyLog.d("current item ="+position);
+                currentItem = position;
+                FlyEvent.sendEvent("100502",imageList.get(currentItem).url);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
     }
 
     @Override
@@ -41,12 +78,27 @@ public class PhotoActivity extends BaseActivity implements IFlyEvent {
         super.onDestroy();
     }
 
+    private void onPlayFore(boolean isLoop) {
+        if (imageList == null || imageList.isEmpty()) {
+            return;
+        }
+        viewPager.setCurrentItem(isLoop ? (currentItem + imageList.size() - 1) % imageList.size() : Math.max(0, currentItem - 1));
+    }
+
+    private void onPlayNext(boolean isLoop) {
+        if (imageList == null || imageList.isEmpty()) {
+            return;
+        }
+        viewPager.setCurrentItem(isLoop ? (currentItem + 1) % imageList.size() : Math.min(imageList.size() - 1, currentItem + 1));
+    }
+
     @Override
     public void notifyPathChange(String path) {
         FlyLog.d("notifyPathChange path=%s", path);
         FlyEvent.sendEvent("100402", path);
         if (isStop) return;
         imageList.clear();
+        pageAdapter.notifyDataSetChanged();
         FlyEvent.sendEvent("100501", new ArrayList<>());
         super.notifyPathChange(path);
     }
@@ -58,12 +110,12 @@ public class PhotoActivity extends BaseActivity implements IFlyEvent {
             FlyEvent.sendEvent("40030200", "存储器\n(" + storageList.size() + ")");
         }
         List<Map<String, Object>> list = new ArrayList<>();
+        assert storageList != null;
         for (StorageInfo storageInfo : storageList) {
             if (TextUtils.isEmpty(storageInfo.mPath)) break;
             Map<String, Object> map = new HashMap<>();
             map.put("100403", TextUtils.isEmpty(storageInfo.mDescription) ? storageInfo.mPath : storageInfo.mDescription);
             map.put("100402", storageInfo.mPath);
-            String imageKey;
             list.add(map);
         }
         FlyEvent.sendEvent("100401", list);
@@ -75,10 +127,12 @@ public class PhotoActivity extends BaseActivity implements IFlyEvent {
             if (isStop) return;
             if (!imageUrlList.isEmpty()) {
                 imageList.addAll(imageUrlList);
+                pageAdapter.notifyDataSetChanged();
+
             }
             notifyImageList();
 
-        }catch (Exception e){
+        } catch (Exception e) {
             FlyLog.e(e.toString());
         }
         super.imageUrlList(imageUrlList);
@@ -87,7 +141,7 @@ public class PhotoActivity extends BaseActivity implements IFlyEvent {
     @Override
     public void musicID3UrlList(List<Music> musicUrlList) {
         super.musicID3UrlList(musicUrlList);
-        if(!imageList.isEmpty()){
+        if (!imageList.isEmpty()) {
             FlyEvent.sendEvent("100502", imageList.get(0).url);
         }
     }
@@ -104,7 +158,7 @@ public class PhotoActivity extends BaseActivity implements IFlyEvent {
             map.put("F00502", image.url);
             listSingle.add(map);
         }
-//        FlyAction.sendEvent(ActionKey.MUSIC_SUM, "单曲\n(" + listSingle.size() + ")");
+        FlyEvent.sendEvent("40030201", "图片\n(" + listSingle.size() + ")");
         FlyEvent.sendEvent("100501", listSingle);
 
 
@@ -117,7 +171,8 @@ public class PhotoActivity extends BaseActivity implements IFlyEvent {
             }
             mFolderHashMap.get(path).add(image);
         }
-//        FlyAction.sendEvent(ActionKey.MUSIC_SUM_FOLDER, "文件夹\n(" + mFolderHashMap.size() + ")");
+
+        FlyEvent.sendEvent("40030202", "文件夹\n(" + mFolderHashMap.size() + ")");
 
         //文件夹列表
         List<String> folderGroupList = new ArrayList<>(mFolderHashMap.keySet());
@@ -173,10 +228,21 @@ public class PhotoActivity extends BaseActivity implements IFlyEvent {
             case "200301":
                 break;
             case "200303":
+                onPlayNext(false);
                 break;
             case "200302":
+                onPlayFore(false);
                 break;
             case "300103":
+                obj = FlyEvent.getValue(key);
+                if (obj instanceof String) {
+                    for(int i=0;i<imageList.size();i++){
+                        if(obj.equals(imageList.get(i).url)){
+                            viewPager.setCurrentItem(i);
+                            break;
+                        }
+                    }
+                }
                 break;
             case "300104":
                 obj = FlyEvent.getValue(key);
@@ -186,6 +252,73 @@ public class PhotoActivity extends BaseActivity implements IFlyEvent {
                 break;
         }
         return false;
+    }
+
+    private class MyPageAdapter extends PagerAdapter {
+        private HashSet<PhotoView> viewSet = new HashSet<>();
+
+        private View.OnClickListener photoOnClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                } catch (Exception e) {
+                    FlyLog.e(e.toString());
+                }
+            }
+        };
+
+        @Override
+        public int getCount() {
+            return imageList == null ? 0 : imageList.size();
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view == object;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            PhotoView photoView = (PhotoView) object;
+            photoView.recycle();
+            viewSet.add(photoView);
+            container.removeView(photoView);
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            com.jancar.media.utils.FlyLog.d("set size=%d", viewSet.size());
+            PhotoView photoView = null;
+            Iterator it = viewSet.iterator();
+            if (it.hasNext()) {
+                photoView = (PhotoView) it.next();
+                viewSet.remove(photoView);
+            } else {
+                photoView = new PhotoView(PhotoActivity.this);
+            }
+            photoView.setOnClickListener(photoOnClickListener);
+            imageResIDs.put(position, View.generateViewId());
+            photoView.setId(imageResIDs.get(position));
+            photoView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            photoView.setZoomable(true);
+            Glide.with(PhotoActivity.this)
+                    .load(imageList.get(position).url)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .error(R.drawable.media_image_error)
+                    .into(photoView);
+            try {
+                container.addView(photoView);
+            } catch (Exception e) {
+                com.jancar.media.utils.FlyLog.e(e.toString());
+            }
+            return photoView;
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
+
     }
 
 }
