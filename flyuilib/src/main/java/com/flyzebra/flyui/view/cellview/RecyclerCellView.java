@@ -12,7 +12,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.flyzebra.flyui.bean.CellBean;
+import com.flyzebra.flyui.bean.ImageBean;
 import com.flyzebra.flyui.bean.TextBean;
 import com.flyzebra.flyui.event.FlyEvent;
 import com.flyzebra.flyui.module.RecycleViewDivider;
@@ -192,6 +194,34 @@ public class RecyclerCellView extends BaseRecyclerCellView {
                         }
                     }
                 }
+
+
+                if (cellBean.images != null && !cellBean.images.isEmpty()) {
+                    for (ImageBean imageBean : cellBean.images) {
+                        if (imageBean.recv != null && imageBean.recv.keyId != null) {
+                            try {
+                                int key = Integer.valueOf(imageBean.recv.keyId, 16);
+                                ImageView imageView = holder.images.get(key);
+                                if (imageView != null) {
+                                    if(imageBean.recv.recvId!=null){
+                                        Object obj = mList.get(position).get(imageBean.recv.recvId);
+                                        if(obj instanceof String){
+                                            Glide.with(getContext()).load(obj).into(imageView);
+                                        }
+
+                                    }
+                                    imageView.setSelected(isSelect);
+                                } else {
+                                    FlyLog.e("find by id empty");
+                                }
+
+                            } catch (Exception e) {
+                                FlyLog.e(e.toString());
+                            }
+                        }
+                    }
+                }
+
                 if (cellBean.celltype == CellType.TYPE_ANIMTOR) {
                     if (cellBean.recv == null || cellBean.recv.keyId == null)
                         continue;
@@ -255,6 +285,25 @@ public class RecyclerCellView extends BaseRecyclerCellView {
                         }
                     }
                 }
+
+                if (cellBean.images != null && !cellBean.images.isEmpty()) {
+                    for (ImageBean imageBean : cellBean.images) {
+                        if (imageBean.recv == null || imageBean.recv.keyId == null)
+                            continue;
+                        try {
+                            int key = Integer.valueOf(imageBean.recv.keyId, 16);
+                            ImageView imageView = itemView.findViewById(key);
+                            if (imageView != null) {
+                                images.put(key, imageView);
+                            } else {
+                                FlyLog.d("find by id empty");
+                            }
+                        } catch (Exception e) {
+                            FlyLog.e(e.toString());
+                        }
+                    }
+                }
+
                 if (cellBean.celltype == CellType.TYPE_ANIMTOR) {
                     if (cellBean.recv == null || cellBean.recv.keyId == null)
                         continue;

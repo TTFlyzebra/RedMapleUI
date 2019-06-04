@@ -2,7 +2,6 @@ package com.flyzebra.photo;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.widget.ImageView;
 
 import com.flyzebra.flyui.Flyui;
 import com.flyzebra.flyui.event.FlyEvent;
@@ -27,13 +26,11 @@ import java.util.Map;
 public class PhotoActivity extends BaseActivity implements IFlyEvent {
     public Flyui flyui;
     private ArrayList<Image> imageList = new ArrayList<>();
-    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        imageView = findViewById(R.id.imageview);
         flyui = new Flyui(this);
         flyui.onCreate();
     }
@@ -104,6 +101,7 @@ public class PhotoActivity extends BaseActivity implements IFlyEvent {
             Map<String, Object> map = new Hashtable<>();
             map.put("100503", StringTools.getNameByPath(image.url));
             map.put("100502", image.url);
+            map.put("F00502", image.url);
             listSingle.add(map);
         }
 //        FlyAction.sendEvent(ActionKey.MUSIC_SUM, "单曲\n(" + listSingle.size() + ")");

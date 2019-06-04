@@ -30,7 +30,6 @@ public class VideoActivity extends BaseActivity  {
         flyui = new Flyui(this);
         flyui.onCreate();
         ijkVideoView = findViewById(R.id.video_play);
-        FlyEvent.sendEvent(FlyEventKey.CHANGE_PAGER_WITH_RESID,"music_fm01");
     }
 
     @Override
