@@ -115,7 +115,7 @@ public class VideoActivity extends BaseActivity implements IFlyEvent {
                 map.put(FlyEventKey.VIDEO_URL, video.url);
                 list.add(map);
             }
-            notifyImageList();
+            notifyVideoList();
         }catch (Exception e){
             FlyLog.e(e.toString());
         }
@@ -123,20 +123,20 @@ public class VideoActivity extends BaseActivity implements IFlyEvent {
     }
 
 
-    private void notifyImageList() {
+    private void notifyVideoList() {
         long time = System.currentTimeMillis();
-        com.flyzebra.flyui.utils.FlyLog.d("notifyImageList start");
+        com.flyzebra.flyui.utils.FlyLog.d("notifyVideoList start");
         //单曲列表
         List<Map<String, Object>> listSingle = new ArrayList<>();
         for (Video video : videoList) {
             Map<String, Object> map = new Hashtable<>();
-            map.put("100503", StringTools.getNameByPath(video.url));
-            map.put("100502", video.url);
-            map.put("F00502", video.url);
+            map.put("100603", StringTools.getNameByPath(video.url));
+            map.put("100602", video.url);
+            map.put("F00602", video.url);
             listSingle.add(map);
         }
-        FlyEvent.sendEvent("40030201", "图片\n(" + listSingle.size() + ")");
-        FlyEvent.sendEvent("100501", listSingle);
+        FlyEvent.sendEvent("40030201", "视频\n(" + listSingle.size() + ")");
+        FlyEvent.sendEvent("100601", listSingle);
 
 
         //列表分类
@@ -176,26 +176,26 @@ public class VideoActivity extends BaseActivity implements IFlyEvent {
                     String pathName = last > 0 ? path.substring(last + 1, path.length()) : path;
                     String pathPath = last > 0 ? path.substring(0, last) : path;
                     Map<String, Object> map1 = new Hashtable<>();
-                    map1.put("100502", list.get(0).url);
-                    map1.put("100503", StringTools.getNameByPath(url));
+                    map1.put("100602", list.get(0).url);
+                    map1.put("100603", StringTools.getNameByPath(url));
                     map1.put("10FF03", pathName);
                     map1.put("10FF04", pathPath);
-                    map1.put("10FFF1", "(" + list.size() + "首)");
+                    map1.put("10FFF1", "(" + list.size() + "集)");
                     map1.put("10FF02", 0);
                     listFolder.add(map1);
                 }
                 for (Video video : list) {
                     Map<String, Object> map2 = new Hashtable<>();
-                    map2.put("100502", video.url);
-                    map2.put("F00502", video.url);
-                    map2.put("100503", StringTools.getNameByPath(video.url));
+                    map2.put("100602", video.url);
+                    map2.put("F00602", video.url);
+                    map2.put("100603", StringTools.getNameByPath(video.url));
                     map2.put("10FF02", 1);
                     listFolder.add(map2);
                 }
             }
         }
         FlyEvent.sendEvent("100232", listFolder);
-        FlyLog.d("notifyImageList end use time =" + (System.currentTimeMillis() - time) + "ms");
+        FlyLog.d("notifyVideoList end use time =" + (System.currentTimeMillis() - time) + "ms");
     }
 
 }

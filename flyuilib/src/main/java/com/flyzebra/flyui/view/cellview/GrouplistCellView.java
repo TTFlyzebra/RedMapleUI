@@ -125,6 +125,7 @@ public class GrouplistCellView extends BaseRecyclerCellView {
                 mAllList.clear();
                 try {
                     mAllList.addAll((Collection<? extends Map<String, Object>>) obj);
+                    scrollToKeyCurrent();
                 } catch (Exception e) {
                     FlyLog.e(e.toString());
                 }
@@ -152,8 +153,6 @@ public class GrouplistCellView extends BaseRecyclerCellView {
     private void scrollToKeyCurrent() {
         if (mCellBean == null || mCellBean.pages == null || mCellBean.pages.isEmpty() || mAllList == null || mAllList.isEmpty())
             return;
-
-        if (!(itemKey instanceof String)) return;
 
         int num = 0;
         for (int i = mAllList.size() - 1; i >= 0; i--) {
