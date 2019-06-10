@@ -105,8 +105,8 @@ public class FragmentCellView extends BaseLayoutCellView {
         });
 //        try {
 //            FragmentTransaction ft = ((Activity) getContext()).getFragmentManager().beginTransaction();
-//            Fragment fragment = CellFragment.newInstance(cellBean);
-//            ft.replace(resID, fragment).commit();
+//            Fragment fragment = CellFragment.newInstance(pageBean);
+//            ft.replace(Integer.valueOf(mCellBean.recv.keyId), fragment).commit();
 //        } catch (Exception e) {
 //            FlyLog.e(e.toString());
 //        }
