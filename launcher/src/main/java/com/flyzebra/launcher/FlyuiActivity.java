@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.flyzebra.flyui.GlideApp;
@@ -119,6 +120,7 @@ public class FlyuiActivity extends Activity implements IFlyEvent, IUpdataVersion
     }
 
     private void upView(ThemeBean themeBean) {
+        Glide.get(this).clearMemory();
         this.themeName = themeBean.themeName;
         SPUtil.set(this, "themeName", themeName);
         FlyEvent.unregisterAll();

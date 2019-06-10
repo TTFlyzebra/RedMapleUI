@@ -5,6 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.List;
+import java.util.Queue;
 
 public class CellBean implements Parcelable{
     public int cellId;
@@ -23,6 +24,16 @@ public class CellBean implements Parcelable{
     public List<PageBean> pages;
     public List<CellBean> subCells;
     public String remark;
+    public boolean isFoucus;
+
+    public int left;
+    public int right;
+    public int up;
+    public int down;
+    public Queue<Integer> lefts;
+    public Queue<Integer> rights;
+    public Queue<Integer> ups;
+    public Queue<Integer> downs;
 
     protected CellBean(Parcel in) {
         cellId = in.readInt();
