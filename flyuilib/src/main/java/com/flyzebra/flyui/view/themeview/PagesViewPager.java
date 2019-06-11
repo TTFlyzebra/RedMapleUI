@@ -1,5 +1,6 @@
 package com.flyzebra.flyui.view.themeview;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -23,7 +24,7 @@ import java.util.List;
 
 public class PagesViewPager extends ViewPager implements IFlyEvent {
     private List<PageBean> pageList = new ArrayList<>();
-    private ThemeBean themeBean;
+    private ThemeBean mThemeBean;
     private MyPgaeAdapter myPgaeAdapter = new MyPgaeAdapter();
 
     public PagesViewPager(Context context) {
@@ -58,7 +59,7 @@ public class PagesViewPager extends ViewPager implements IFlyEvent {
         if (themeBean == null || themeBean.pageList == null || themeBean.pageList.isEmpty()) {
             return;
         }
-        this.themeBean = themeBean;
+        this.mThemeBean = themeBean;
         List<PageBean> mPageBeanList = themeBean.pageList;
 
         pageList.clear();
@@ -73,15 +74,6 @@ public class PagesViewPager extends ViewPager implements IFlyEvent {
             myPgaeAdapter.notifyDataSetChanged();
         }
 
-    }
-
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if (GV.viewPage_scoller) {
-            return super.onInterceptTouchEvent(ev);
-        } else {
-            return false;
-        }
     }
 
     public void selectPage(int page) {
@@ -101,7 +93,7 @@ public class PagesViewPager extends ViewPager implements IFlyEvent {
                     byte[] data = ByteUtil.hexString2Bytes((String) obj);
                     if (data.length > 1) {
                         int page = data[0];
-                        setCurrentItem(page,false);
+                        setCurrentItem(page, false);
                     }
                 }
                 break;
@@ -135,7 +127,7 @@ public class PagesViewPager extends ViewPager implements IFlyEvent {
         public Object instantiateItem(ViewGroup container, int position) {
             IPage pageView = getNewPageView(getContext());
             ((View) pageView).setTag(position);
-            pageView.showMirror(themeBean.isMirror != 0);
+            pageView.showMirror(mThemeBean.isMirror != 0);
             pageView.setPageBean(pageList.get(position));
             container.addView((View) pageView);
             return pageView;
@@ -178,5 +170,45 @@ public class PagesViewPager extends ViewPager implements IFlyEvent {
         return new SimplePageView(context);
     }
 
+    //垂直ViewPager
+    private MotionEvent swapTouchEvent(MotionEvent event) {
+        float width = getWidth();
+        float height = getHeight();
+        event.setLocation((event.getY() / height) * width, (event.getX() / width) * height);
+        return event;
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        if (GV.viewPage_scoller) {
+            if (mThemeBean != null) {
+                switch (mThemeBean.animType) {
+                    case 3:
+                        return super.onInterceptTouchEvent(swapTouchEvent(MotionEvent.obtain(event)));
+                    default:
+                        return super.onInterceptTouchEvent(event);
+                }
+            } else {
+                return super.onInterceptTouchEvent(event);
+            }
+        } else {
+            return false;
+        }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        if (mThemeBean != null) {
+            switch (mThemeBean.animType) {
+                case 3:
+                    return super.onTouchEvent(swapTouchEvent(MotionEvent.obtain(ev)));
+                default:
+                    return super.onTouchEvent(ev);
+            }
+        } else {
+            return super.onTouchEvent(ev);
+        }
+    }
 
 }

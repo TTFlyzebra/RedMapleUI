@@ -17,6 +17,7 @@ import com.flyzebra.flyui.bean.ThemeBean;
 import com.flyzebra.flyui.utils.FlyLog;
 import com.flyzebra.flyui.view.pageanimtor.PageTransformerCube;
 import com.flyzebra.flyui.view.pageanimtor.PageTransformerPage;
+import com.flyzebra.flyui.view.pageanimtor.VerticalTransformerCube;
 import com.flyzebra.flyui.view.pageview.SimplePageView;
 
 /**
@@ -186,6 +187,9 @@ public class ThemeView extends FrameLayout implements ITheme {
                     break;
                 case 2:
                     pagesView.setPageTransformer(true, new PageTransformerPage());
+                    break;
+                case 3:
+                    pagesView.setPageTransformer(true, new VerticalTransformerCube());
                     break;
                 default:
                     pagesView.setPageTransformer(true, null);

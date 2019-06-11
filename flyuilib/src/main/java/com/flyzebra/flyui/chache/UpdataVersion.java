@@ -32,6 +32,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 版本更新 *
+ * 功能：
+ *      1、从后台接口获取Json数据，并下载Json中指定的图片资源。
+ *      2、将Json数据和图片资源缓存到本地
+ *      3、可从assets中读取并解析数据。
  * Created by FlyZebra on 2016/6/21.
  */
 public class UpdataVersion implements IUpdataVersion, IUpDataVersionError {
