@@ -11,7 +11,7 @@ import com.flyzebra.flyui.utils.FlyLog;
  * 2019/6/11 17:00
  * Describ:
  **/
-public class VerticalTransformerCube implements ViewPager.PageTransformer {
+public class VerticalTransformerCube2 implements ViewPager.PageTransformer {
     @Override
     public void transformPage(@NonNull View view, float position) {
         FlyLog.d("%d:position="+position,view.getTag());
@@ -35,7 +35,7 @@ public class VerticalTransformerCube implements ViewPager.PageTransformer {
             view.setAlpha(0);
         }
 
-        float rotation = 45f * position;
+        float rotation = -45f * position;
         if (position >= 0) {
             view.setPivotY(0);
         } else {
