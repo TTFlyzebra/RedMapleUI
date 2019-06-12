@@ -11,7 +11,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -32,9 +31,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimpleCellView extends BaseLayoutCellView implements View.OnTouchListener, View.OnClickListener {
-    protected List<ImageView> imageViewList = new ArrayList<>();
+    protected List<BaseImageBeanView> imageViewList = new ArrayList<>();
     private MirrorView mirrorView;
-    protected List<TextView> textViewList = new ArrayList<>();
+    protected List<BaseTextBeanView> textViewList = new ArrayList<>();
     protected Handler mHandler = new Handler();
 
     public SimpleCellView(Context context) {
@@ -54,7 +53,7 @@ public class SimpleCellView extends BaseLayoutCellView implements View.OnTouchLi
 
         if (mCellBean.images != null) {
             for (ImageBean imageBean : mCellBean.images) {
-                ImageView imageView = new BaseImageBeanView(getContext());
+                BaseImageBeanView imageView = new BaseImageBeanView(getContext());
                 ((BaseImageBeanView) imageView).setmImageBean(imageBean);
                 int width = (mCellBean.width - imageBean.right) - imageBean.left;
                 int height = (mCellBean.height - imageBean.bottom) - imageBean.top;
@@ -68,7 +67,7 @@ public class SimpleCellView extends BaseLayoutCellView implements View.OnTouchLi
 
         if (mCellBean.texts != null) {
             for (TextBean textBean : mCellBean.texts) {
-                TextView textView = new BaseTextBeanView(getContext());
+                BaseTextBeanView textView = new BaseTextBeanView(getContext());
                 ((BaseTextBeanView) textView).setTextBean(textBean);
                 int width = (mCellBean.width - textBean.right) - textBean.left;
                 int height = (mCellBean.height - textBean.bottom) - textBean.top;
@@ -85,11 +84,11 @@ public class SimpleCellView extends BaseLayoutCellView implements View.OnTouchLi
             setOnTouchListener(this);
         }
 
-        try{
-            if(!TextUtils.isEmpty(mCellBean.backColor)){
+        try {
+            if (!TextUtils.isEmpty(mCellBean.backColor)) {
                 setBackgroundColor(Color.parseColor(mCellBean.backColor));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             FlyLog.e(e.toString());
         }
     }
@@ -132,7 +131,7 @@ public class SimpleCellView extends BaseLayoutCellView implements View.OnTouchLi
      */
     @Override
     public void onClick() {
-        BaseViewFunc.onClick(getContext(),mCellBean.send);
+        BaseViewFunc.onClick(getContext(), mCellBean.send);
     }
 
     @Override
@@ -169,20 +168,52 @@ public class SimpleCellView extends BaseLayoutCellView implements View.OnTouchLi
     }
 
     private void focusChange(boolean flag) {
-        if (flag) {
-            for (ImageView imageView : imageViewList) {
-                try {
-                    imageView.setColorFilter(Color.parseColor(mCellBean.filterColor));
-                } catch (Exception e) {
-                    imageView.setColorFilter(0x3FFFFFFF);
+        for (int i = 0; i < imageViewList.size(); i++) {
+            if (mCellBean.subCells != null && !mCellBean.subCells.isEmpty() && mCellBean.subCells.get(0).images != null && mCellBean.subCells.get(0).images.size() == mCellBean.images.size()) {
+                String imageurl = flag ? mCellBean.subCells.get(0).images.get(i).url : mCellBean.images.get(i).url;
+                final ImageView imageView = imageViewList.get(i);
+                Glide.with(getContext())
+                        .asBitmap()
+                        .load(UpdataVersion.getNativeFilePath(imageurl))
+                        .override(mCellBean.images.get(i).width, mCellBean.images.get(i).height)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .centerInside()
+                        .into(new BitmapImageViewTarget(imageView) {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                imageView.setImageBitmap(resource);
+                                if (mirrorView != null) {
+                                    setDrawingCacheEnabled(true);
+                                    Bitmap bmp = getDrawingCache();
+                                    if (bmp == null) {
+                                        measure(MeasureSpec.makeMeasureSpec(mCellBean.width, MeasureSpec.EXACTLY),
+                                                MeasureSpec.makeMeasureSpec(mCellBean.height, MeasureSpec.EXACTLY));
+                                        layout(0, 0, getMeasuredWidth(), getMeasuredHeight());
+                                        buildDrawingCache();
+                                        bmp = getDrawingCache();
+                                    }
+                                    mirrorView.showImage(bmp);
+                                }
+                            }
+                        });
+            } else {
+                if (flag) {
+                    try {
+                        imageViewList.get(i).setColorFilter(Color.parseColor(mCellBean.filterColor));
+                    } catch (Exception e) {
+                        imageViewList.get(i).setColorFilter(0x3FFFFFFF);
+                    }
+                } else {
+                    imageViewList.get(i).clearColorFilter();
                 }
             }
+        }
+        for (BaseTextBeanView textView : textViewList) {
+            textView.setSelected(flag);
+        }
+        if (flag) {
             mHandler.removeCallbacks(show);
             mHandler.postDelayed(show, 300);
-        } else {
-            for (ImageView imageView : imageViewList) {
-                imageView.clearColorFilter();
-            }
         }
     }
 
