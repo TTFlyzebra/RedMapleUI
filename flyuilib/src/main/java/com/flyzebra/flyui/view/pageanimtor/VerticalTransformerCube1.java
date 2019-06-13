@@ -11,7 +11,7 @@ import com.flyzebra.flyui.utils.FlyLog;
  * 2019/6/11 17:00
  * Describ:
  **/
-public class VerticalTransformerCube implements ViewPager.PageTransformer {
+public class VerticalTransformerCube1 implements ViewPager.PageTransformer {
     @Override
     public void transformPage(@NonNull View view, float position) {
         FlyLog.d("%d:position="+position,view.getTag());

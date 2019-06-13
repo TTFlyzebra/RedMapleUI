@@ -184,6 +184,8 @@ public class PagesViewPager extends ViewPager implements IFlyEvent {
             if (mThemeBean != null) {
                 switch (mThemeBean.animType) {
                     case 3:
+                    case 4:
+                    case 5:
                         return super.onInterceptTouchEvent(swapTouchEvent(MotionEvent.obtain(event)));
                     default:
                         return super.onInterceptTouchEvent(event);
@@ -202,6 +204,8 @@ public class PagesViewPager extends ViewPager implements IFlyEvent {
         if (mThemeBean != null) {
             switch (mThemeBean.animType) {
                 case 3:
+                case 4:
+                case 5:
                     return super.onTouchEvent(swapTouchEvent(MotionEvent.obtain(ev)));
                 default:
                     return super.onTouchEvent(ev);

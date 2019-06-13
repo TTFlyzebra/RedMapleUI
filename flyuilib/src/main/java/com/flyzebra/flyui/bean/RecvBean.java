@@ -15,7 +15,6 @@ public class RecvBean implements Parcelable {
     public String animId;
     public String startAnim;
     public String animType;
-
     public String keyId;
 
     protected RecvBean(Parcel in) {
