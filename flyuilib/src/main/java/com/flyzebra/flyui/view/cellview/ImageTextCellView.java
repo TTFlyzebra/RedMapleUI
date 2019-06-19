@@ -132,7 +132,7 @@ public class ImageTextCellView extends BaseImageCellView {
                     }
                 }else if(obj instanceof byte[]){
                     for (String str : contents) {
-                        if (ByteUtil.bytes2HexString((byte[]) obj).contains(str)) {
+                        if (ByteUtil.bytes2HexString((byte[]) obj).startsWith(str)) {
                             setContentDrawable(str);
                             break;
                         }
