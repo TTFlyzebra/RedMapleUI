@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主机： localhost
--- 生成日期： 2019-06-12 08:05:37
+-- 生成日期： 2019-06-24 00:44:16
 -- 服务器版本： 5.5.62
 -- PHP 版本： 7.3.0
 
@@ -89,25 +89,25 @@ INSERT INTO `fly_cases` (`casesId`, `casesTitle`, `imageurl`, `casesText`, `stat
 --
 
 CREATE TABLE `fly_cell` (
-  `cellId` int(11) NOT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `themeId` int(11) NOT NULL,
-  `celltypeId` int(11) NOT NULL,
-  `resId` int(11) DEFAULT NULL,
-  `width` int(11) NOT NULL,
-  `height` int(11) NOT NULL,
-  `backColor` varchar(9) DEFAULT NULL,
-  `filterColor` varchar(9) DEFAULT NULL,
-  `recv` varchar(1024) DEFAULT NULL,
-  `send` varchar(1024) DEFAULT NULL,
-  `texts` text,
-  `images` text,
-  `pages` text,
-  `remark` text,
-  `status` int(11) NOT NULL DEFAULT '1',
-  `userid` int(11) NOT NULL,
-  `uptime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `ip` varchar(15) NOT NULL
+  `cellId` int(11) NOT NULL COMMENT '主键，自动递增',
+  `description` varchar(255) DEFAULT NULL COMMENT '描述，方便查找搜索',
+  `themeId` int(11) NOT NULL COMMENT '关联模块ID',
+  `celltypeId` int(11) NOT NULL COMMENT '关联组件类型ID',
+  `resId` int(11) DEFAULT NULL COMMENT '资源ID标识',
+  `width` int(11) NOT NULL COMMENT '组件宽度',
+  `height` int(11) NOT NULL COMMENT '组件高度',
+  `backColor` varchar(9) DEFAULT NULL COMMENT '组件背景颜色',
+  `filterColor` varchar(9) DEFAULT NULL COMMENT '组件过滤颜色',
+  `recv` varchar(1024) DEFAULT NULL COMMENT '接收事件(JSON)',
+  `send` varchar(1024) DEFAULT NULL COMMENT '发送事件(JSON)',
+  `texts` text COMMENT '包含文本(JSON)',
+  `images` text COMMENT '包含图片(JSON)',
+  `pages` text COMMENT '包含页面(JSON)',
+  `remark` text COMMENT '备注',
+  `status` int(11) NOT NULL DEFAULT '1' COMMENT '数据状态',
+  `userid` int(11) NOT NULL COMMENT '用户ID',
+  `uptime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `ip` varchar(15) NOT NULL COMMENT 'IP地址'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -116,7 +116,7 @@ CREATE TABLE `fly_cell` (
 
 INSERT INTO `fly_cell` (`cellId`, `description`, `themeId`, `celltypeId`, `resId`, `width`, `height`, `backColor`, `filterColor`, `recv`, `send`, `texts`, `images`, `pages`, `remark`, `status`, `userid`, `uptime`, `ip`) VALUES
 (15, '导航', 5, 1, 0, 212, 317, '', '', '', '{\"packName\":\"com.flyzebra.music\"}', '[{\"text\":\"{\\\"en\\\":\\\"Navigate\\\",\\\"zh_rCN\\\":\\\"\\u5bfc\\u822a\\\",\\\"zh_rTW\\\":\\\"\\u822a\\u884c\\\",\\\"ru\\\":\\\"\\u0443\\u043f\\u0440\\u0430\\u0432\\u043b\\u044f\\u0442\\u044c\\\",\\\"el\\\":\\\"\\u03c0\\u03bb\\u03bf\\u03b7\\u03b3\\u03b7\\u03b8\\u03b5\\u03af\\u03c4\\u03b5\\\",\\\"pl\\\":\\\"nawigowa\\u0107\\\",\\\"tr\\\":\\\"gezinme\\\",\\\"ar\\\":\\\"\\u0627\\u0644\\u062a\\u0646\\u0642\\u0644\\\",\\\"fa\\\":\\\"\\u062d\\u0631\\u06a9\\u062a\\\",\\\"ro\\\":\\\"Naviga\\u021bi\\\",\\\"fr\\\":\\\"naviguer\\\",\\\"hu\\\":\\\"navig\\u00e1lni\\\",\\\"it\\\":\\\"navigare\\\",\\\"th\\\":\\\"\\u0e19\\u0e33\\u0e17\\u0e32\\u0e07\\\",\\\"de\\\":\\\"navigieren\\\",\\\"uk\\\":\\\"\\u0443\\u043f\\u0440\\u0430\\u0432\\u043b\\u044f\\u0442\\u0438\\\",\\\"es\\\":\\\"Navegue\\\",\\\"pt\\\":\\\"navegar\\\"}\",\"textSize\":24,\"textLines\":2,\"textLines\":2,\"textColor\":\"\",\"textFilter\":\"\",\"left\":0,\"top\":237,\"right\":0,\"bottom\":0,\"gravity\":0,\"recv\":null,\"send\":null}]', '[{\"width\":212,\"height\":317,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/c8\\/6018220c4ee22e77fc786d0f426418.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-05-18 05:32:57', '192.168.1.119'),
-(16, '收音机', 5, 1, 0, 212, 317, '', '', '', '{\"packName\":\"com.jancar.radios\",\"className\":\"com.jancar.radio.RadioActivity\"}', '[{\"text\":\"{\\\"zh_rCN\\\":\\\"\\u6536\\u97f3\\u673a\\\"}\",\"textSize\":24,\"textLines\":2,\"textColor\":\"\",\"textFilter\":\"\",\"left\":0,\"top\":237,\"right\":0,\"bottom\":0,\"gravity\":0,\"recv\":null,\"send\":null}]', '[{\"width\":212,\"height\":317,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/0f\\/87821bfe4d2ceed787c0b7f4520ae3.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-05-21 01:19:26', '192.168.1.119'),
+(16, '收音机', 5, 1, 0, 212, 317, '', '', '', '{\"packName\":\"com.jancar.radios\",\"className\":\"com.jancar.radio.RadioActivity\"}', '[{\"text\":\"{\\\"zh_rCN\\\":\\\"\\u6536\\u97f3\\u673a\\\"}\",\"textSize\":24,\"textLines\":2,\"textColor\":\"\",\"textFilter\":\"\",\"left\":0,\"top\":237,\"right\":0,\"bottom\":0,\"gravity\":0,\"recv\":null,\"send\":null}]', '[{\"width\":212,\"height\":317,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/0f\\/87821bfe4d2ceed787c0b7f4520ae3.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-06-12 08:12:14', '192.168.1.119'),
 (17, '电话', 5, 1, NULL, 212, 317, NULL, NULL, NULL, '{\"packName\":\"com.jancar.bluetooth.phone\",\"className\":\"com.jancar.bluetooth.phone.view.MainActivity\"}', '[{\"textSize\":24,\"textLines\":2,\"text\":\"{\\\"zh_rCN\\\":\\\"\\\\u7535\\\\u8bdd\\\"}\",\"textColor\":\"\",\"left\":0,\"top\":237,\"right\":0,\"bottom\":0,\"gravity\":0}]', '[{\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/b4\\/5f3074145ee304968b55d10c9d1ed4.png\",\"width\":212,\"height\":317,\"left\":0,\"top\":0,\"right\":0,\"bottom\":0}]', NULL, '', 1, 6, '2019-05-18 05:32:57', '192.168.1.119'),
 (18, '手机互连', 5, 1, NULL, 212, 317, NULL, NULL, NULL, '{\"packName\":\"net.easyconn\",\"className\":\"net.easyconn.WelcomeActivity\"}', '[{\"textSize\":24,\"textLines\":2,\"text\":\"{\\\"zh_rCN\\\":\\\"\\\\u624b\\\\u673a\\\\u4e92\\\\u8fde\\\"}\",\"textColor\":\"\",\"left\":0,\"top\":237,\"right\":0,\"bottom\":0,\"gravity\":0}]', '[{\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/ef\\/260b41ec0675e60869569b84fd52bb.png\",\"width\":212,\"height\":317,\"left\":0,\"top\":0,\"right\":0,\"bottom\":0}]', NULL, '', 1, 6, '2019-05-21 01:15:15', '192.168.1.119'),
 (19, '视频', 5, 1, NULL, 212, 317, NULL, NULL, NULL, '{\"packName\":\"com.flyzebra.video\",\"className\":\"\"}', '[{\"textSize\":24,\"textLines\":2,\"text\":\"{\\\"zh_rCN\\\":\\\"\\\\u89c6\\\\u9891\\\"}\",\"textColor\":\"\",\"left\":0,\"top\":237,\"right\":0,\"bottom\":0,\"gravity\":0}]', '[{\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/7b\\/34563bd1049ce673e11625742926d3.png\",\"width\":212,\"height\":317,\"left\":0,\"top\":0,\"right\":0,\"bottom\":0}]', NULL, '', 1, 6, '2019-05-18 05:32:57', '192.168.1.119'),
@@ -230,7 +230,7 @@ INSERT INTO `fly_cell` (`cellId`, `description`, `themeId`, `celltypeId`, `resId
 (179, '音乐播放控制菜单', 23, 5, 0, 1024, 140, '#1FFFFFFF', '', '', '', '[]', '[{\"width\":70,\"height\":70,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/c9\\/053f789020f8ec5a1bc5c6f1b29ffc.png\",\"filterColor\":\"#0000FF\",\"left\":212,\"top\":40,\"right\":612,\"bottom\":0,\"scaleType\":2,\"shapeType\":0,\"recv\":null,\"send\":\"{\\\"eventId\\\":\\\"200302\\\"}\"},{\"width\":70,\"height\":70,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/c6\\/4ce7ee99e6e6140f51f89b1342a44f.png\",\"filterColor\":\"#0000FF\",\"left\":412,\"top\":40,\"right\":412,\"bottom\":0,\"scaleType\":2,\"shapeType\":0,\"recv\":\"{\\\"recvId\\\":\\\"100225\\\",\\\"visibleContent\\\":\\\"01\\\"}\",\"send\":\"{\\\"eventId\\\":\\\"200301\\\"}\"},{\"width\":70,\"height\":70,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/b1\\/f9f68894e1bae11adbc45e6b9fe4c6.png\",\"filterColor\":\"#0000FF\",\"left\":412,\"top\":40,\"right\":412,\"bottom\":0,\"scaleType\":2,\"shapeType\":0,\"recv\":\"{\\\"recvId\\\":\\\"100225\\\",\\\"disVisibleContent\\\":\\\"01\\\"}\",\"send\":\"{\\\"eventId\\\":\\\"200301\\\"}\"},{\"width\":70,\"height\":70,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/1c\\/074ad5ac72f40801305eb6892b4d5a.png\",\"filterColor\":\"#0000FF\",\"left\":612,\"top\":40,\"right\":212,\"bottom\":0,\"scaleType\":2,\"shapeType\":0,\"recv\":null,\"send\":\"{\\\"eventId\\\":\\\"200303\\\"}\"},{\"width\":70,\"height\":70,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/f3\\/a71de0541c95ca0b79a6f49f04f599.png\",\"filterColor\":\"#0000FF\",\"left\":924,\"top\":40,\"right\":0,\"bottom\":0,\"scaleType\":2,\"shapeType\":0,\"recv\":null,\"send\":\"{\\\"eventId\\\":\\\"400201\\\"}\"}]', '[]', '', 1, 6, '2019-05-30 09:59:21', '192.168.1.119'),
 (180, '音乐播放进度条', 23, 8, 0, 1024, 30, '', '', '', '', '[{\"text\":\"{\\\"zh_rCN\\\":\\\"00:00:00\\\"}\",\"textSize\":20,\"textLines\":1,\"textColor\":\"#FFFFFF\",\"textFilter\":\"\",\"left\":0,\"top\":0,\"right\":924,\"bottom\":0,\"gravity\":4,\"recv\":null,\"send\":null},{\"text\":\"{\\\"zh_rCN\\\":\\\"00:00:00\\\"}\",\"textSize\":20,\"textLines\":1,\"textColor\":\"#FFFFFF\",\"textFilter\":\"\",\"left\":924,\"top\":0,\"right\":0,\"bottom\":0,\"gravity\":3,\"recv\":null,\"send\":null}]', '[{\"width\":834,\"height\":30,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/53\\/b885c882235c7f8edc7955ee6d6f62.png\",\"filterColor\":\"\",\"left\":100,\"top\":0,\"right\":100,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null},{\"width\":834,\"height\":30,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/3a\\/ae054b61ba605d138e2441fba386af.png\",\"filterColor\":\"\",\"left\":100,\"top\":0,\"right\":100,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null},{\"width\":30,\"height\":30,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/29\\/c02cf2f567e013837e4da21b01e29a.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-05-28 09:08:33', '192.168.1.119'),
 (181, '音乐播放列表', 23, 43, 0, 400, 400, '', '', '', '', '[]', '[]', '[]', '', 0, 6, '2019-05-29 00:53:26', '192.168.1.119'),
-(182, 'new_AP9轮播图片', 5, 42, 0, 1024, 600, '', '', '', '', '[{\"text\":\"{\\\"zh_rCN\\\":\\\"\\u5e94\\u7528\\\"}\",\"textSize\":28,\"textLines\":1,\"textColor\":\"#FFFFFF\",\"textFilter\":\"\",\"left\":0,\"top\":250,\"right\":0,\"bottom\":0,\"gravity\":0,\"recv\":null,\"send\":null},{\"text\":\"{\\\"zh_rCN\\\":\\\"\\u5bfc\\u822a\\\"}\",\"textSize\":28,\"textLines\":1,\"textColor\":\"#FFFFFF\",\"textFilter\":\"\",\"left\":0,\"top\":250,\"right\":0,\"bottom\":0,\"gravity\":0,\"recv\":null,\"send\":null},{\"text\":\"{\\\"zh_rCN\\\":\\\"\\u6536\\u97f3\\u673a\\\"}\",\"textSize\":28,\"textLines\":1,\"textColor\":\"#FFFFFF\",\"textFilter\":\"\",\"left\":0,\"top\":250,\"right\":0,\"bottom\":0,\"gravity\":0,\"recv\":null,\"send\":null},{\"text\":\"{\\\"zh_rCN\\\":\\\"\\u7535\\u8bdd\\\"}\",\"textSize\":28,\"textLines\":1,\"textColor\":\"#FFFFFF\",\"textFilter\":\"\",\"left\":0,\"top\":250,\"right\":0,\"bottom\":0,\"gravity\":0,\"recv\":null,\"send\":null},{\"text\":\"{\\\"zh_rCN\\\":\\\"\\u624b\\u673a\\u4e92\\u8fde\\\"}\",\"textSize\":28,\"textLines\":1,\"textColor\":\"#FFFFFF\",\"textFilter\":\"\",\"left\":0,\"top\":250,\"right\":0,\"bottom\":0,\"gravity\":0,\"recv\":null,\"send\":null}]', '[{\"width\":160,\"height\":280,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/17\\/59b5938e8bf8a11b5ff72d19b20c05.png\",\"filterColor\":\"#3F0000FF\",\"left\":0,\"top\":160,\"right\":864,\"bottom\":160,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":\"{\\\"packName\\\":\\\"com.android.launcher3\\\"}\"},{\"width\":180,\"height\":315,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/c9\\/70b1864d18a5dd69ea13e4117a1348.png\",\"filterColor\":\"#3F0000FF\",\"left\":238,\"top\":135,\"right\":606,\"bottom\":130,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":\"{\\\"packName\\\":\\\"com.autonavi.amapauto\\\"}\"},{\"width\":200,\"height\":350,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/24\\/e0deed3b33bf5e9953857ed386708b.png\",\"filterColor\":\"#3F0000FF\",\"left\":412,\"top\":115,\"right\":412,\"bottom\":135,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":\"{\\\"packName\\\":\\\"com.jancar.radios\\\"}\"},{\"width\":180,\"height\":315,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/27\\/253e2db79ecb9ece67d6b228264481.png\",\"filterColor\":\"#3F0000FF\",\"left\":606,\"top\":135,\"right\":238,\"bottom\":130,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":\"{\\\"packName\\\":\\\"com.jancar.bluetooth.phone\\\"}\"},{\"width\":160,\"height\":280,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/5f\\/ff9a22f80939605c4c5eaa6d0a2f80.png\",\"filterColor\":\"#3F0000FF\",\"left\":782,\"top\":160,\"right\":82,\"bottom\":160,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":\"{\\\"packName\\\":\\\"net.easyconn\\\"}\"}]', '[]', '', 1, 6, '2019-06-06 08:23:37', '192.168.1.119'),
+(182, 'new_AP9轮播图片', 5, 42, 0, 1024, 600, '', '', '', '', '[{\"text\":\"{\\\"zh_rCN\\\":\\\"\\u5e94\\u7528\\\"}\",\"textSize\":28,\"textLines\":1,\"textColor\":\"#FFFFFF\",\"textFilter\":\"\",\"left\":0,\"top\":250,\"right\":0,\"bottom\":0,\"gravity\":0,\"recv\":null,\"send\":null},{\"text\":\"{\\\"zh_rCN\\\":\\\"\\u5bfc\\u822a\\\"}\",\"textSize\":28,\"textLines\":1,\"textColor\":\"#FFFFFF\",\"textFilter\":\"\",\"left\":0,\"top\":250,\"right\":0,\"bottom\":0,\"gravity\":0,\"recv\":null,\"send\":null},{\"text\":\"{\\\"zh_rCN\\\":\\\"\\u6536\\u97f3\\u673a\\\"}\",\"textSize\":28,\"textLines\":1,\"textColor\":\"#FFFFFF\",\"textFilter\":\"\",\"left\":0,\"top\":250,\"right\":0,\"bottom\":0,\"gravity\":0,\"recv\":null,\"send\":null},{\"text\":\"{\\\"zh_rCN\\\":\\\"\\u7535\\u8bdd\\\"}\",\"textSize\":28,\"textLines\":1,\"textColor\":\"#FFFFFF\",\"textFilter\":\"\",\"left\":0,\"top\":250,\"right\":0,\"bottom\":0,\"gravity\":0,\"recv\":null,\"send\":null},{\"text\":\"{\\\"zh_rCN\\\":\\\"\\u624b\\u673a\\u4e92\\u8fde\\\"}\",\"textSize\":28,\"textLines\":1,\"textColor\":\"#FFFFFF\",\"textFilter\":\"\",\"left\":0,\"top\":250,\"right\":0,\"bottom\":0,\"gravity\":0,\"recv\":null,\"send\":null}]', '[{\"width\":160,\"height\":280,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/17\\/59b5938e8bf8a11b5ff72d19b20c05.png\",\"filterColor\":\"#3F0000FF\",\"left\":82,\"top\":160,\"right\":782,\"bottom\":160,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":\"{\\\"packName\\\":\\\"com.android.launcher3\\\"}\"},{\"width\":180,\"height\":315,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/c9\\/70b1864d18a5dd69ea13e4117a1348.png\",\"filterColor\":\"#3F0000FF\",\"left\":238,\"top\":135,\"right\":606,\"bottom\":130,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":\"{\\\"packName\\\":\\\"com.autonavi.amapauto\\\"}\"},{\"width\":200,\"height\":350,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/24\\/e0deed3b33bf5e9953857ed386708b.png\",\"filterColor\":\"#3F0000FF\",\"left\":412,\"top\":115,\"right\":412,\"bottom\":135,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":\"{\\\"packName\\\":\\\"com.jancar.radios\\\"}\"},{\"width\":180,\"height\":315,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/27\\/253e2db79ecb9ece67d6b228264481.png\",\"filterColor\":\"#3F0000FF\",\"left\":606,\"top\":135,\"right\":238,\"bottom\":130,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":\"{\\\"packName\\\":\\\"com.jancar.bluetooth.phone\\\"}\"},{\"width\":160,\"height\":280,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/5f\\/ff9a22f80939605c4c5eaa6d0a2f80.png\",\"filterColor\":\"#3F0000FF\",\"left\":782,\"top\":160,\"right\":82,\"bottom\":160,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":\"{\\\"packName\\\":\\\"net.easyconn\\\"}\"}]', '[]', '', 1, 6, '2019-06-17 02:23:48', '192.168.1.119'),
 (184, '播放歌曲动画', 23, 45, 0, 33, 33, '', '', '{\"keyId\":\"000001\"}', '', '[]', '[{\"width\":33,\"height\":33,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/2c\\/62546be1ddc6ad70312c228c38c384.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null},{\"width\":33,\"height\":33,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/8f\\/b128f7f55e43c7f00e2aa5947a9ee2.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null},{\"width\":33,\"height\":33,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/a0\\/33ee0aa838682d369ead6110100ea8.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null},{\"width\":33,\"height\":33,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/6c\\/678f3faa815e48ba2b76733ba09834.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-05-30 07:56:40', '192.168.1.119'),
 (185, '单曲列表ITEM', 23, 1, 0, 374, 50, '', '', '', '', '[{\"text\":\"{\\\"zh_rCN\\\":\\\"\\u6b4c\\u66f2\\\"}\",\"textSize\":24,\"textLines\":1,\"textColor\":\"#FFFFFF\",\"textFilter\":\"#FF0370E5\",\"left\":0,\"top\":0,\"right\":100,\"bottom\":0,\"gravity\":3,\"recv\":\"{\\\"keyId\\\":\\\"100222\\\"}\",\"send\":null},{\"text\":\"{\\\"zh_rCN\\\":\\\"\\u672a\\u77e5\\u827a\\u672f\\u5bb6\\\"}\",\"textSize\":24,\"textLines\":1,\"textColor\":\"#FFFFFF\",\"textFilter\":\"#FF0370E5\",\"left\":274,\"top\":0,\"right\":0,\"bottom\":0,\"gravity\":0,\"recv\":\"{\\\"keyId\\\":\\\"100223\\\"}\",\"send\":null}]', '[]', '[]', '', 1, 6, '2019-06-01 02:32:17', '192.168.1.119'),
 (186, '列表艺术家', 23, 1, 0, 100, 50, '', '', '', '', '[{\"text\":\"{\\\"zh_rCN\\\":\\\"\\u6b4c\\u624b\\\"}\",\"textSize\":24,\"textLines\":1,\"textColor\":\"#FFFFFF\",\"textFilter\":\"#FF0370E5\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"gravity\":0,\"recv\":\"{\\\"keyId\\\":\\\"100223\\\"}\",\"send\":null}]', '[]', '[]', '', 1, 6, '2019-05-30 08:26:13', '192.168.1.119'),
@@ -269,11 +269,11 @@ INSERT INTO `fly_cell` (`cellId`, `description`, `themeId`, `celltypeId`, `resId
 (218, '视频ITEM', 25, 1, 0, 120, 150, '', '', '', '', '[{\"text\":null,\"textSize\":20,\"textLines\":1,\"textColor\":\"#FFFFFF\",\"textFilter\":\"#FF0370E5\",\"left\":0,\"top\":120,\"right\":0,\"bottom\":0,\"gravity\":0,\"recv\":\"{\\\"keyId\\\":\\\"100603\\\"}\",\"send\":null}]', '[{\"width\":120,\"height\":120,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/a4\\/2f2e05fa4f5af997c196c396da49e3.png\",\"filterColor\":\"\",\"left\":6,\"top\":6,\"right\":6,\"bottom\":36,\"scaleType\":1,\"shapeType\":0,\"recv\":\"{\\\"recvId\\\":\\\"F00602\\\",\\\"keyId\\\":\\\"F00602\\\"}\",\"send\":null},{\"width\":120,\"height\":120,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/13\\/3abb651ffeb522be1006ae5f4a6943.png\",\"filterColor\":\"#FF0370E5\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":30,\"scaleType\":0,\"shapeType\":0,\"recv\":\"{\\\"keyId\\\":\\\"121212\\\"}\",\"send\":null}]', '[]', '', 1, 6, '2019-06-05 01:52:34', '192.168.1.119'),
 (219, '视频分页导航', 25, 48, 0, 100, 400, '#EA313131', '', '', '', '[{\"text\":\"{\\\"zh_rCN\\\":\\\"\\u5b58\\u50a8\\u5668\\\"}\",\"textSize\":24,\"textLines\":2,\"textColor\":\"#FFFFFF\",\"textFilter\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"gravity\":0,\"recv\":\"{\\\"recvId\\\":\\\"40030200\\\"}\",\"send\":\"{\\\"eventId\\\":\\\"400302\\\",\\\"eventContent\\\":\\\"00\\\"}\"},{\"text\":\"{\\\"zh_rCN\\\":\\\"\\u89c6\\u9891\\\"}\",\"textSize\":24,\"textLines\":2,\"textColor\":\"#FFFFFF\",\"textFilter\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"gravity\":0,\"recv\":\"{\\\"recvId\\\":\\\"40030201\\\"}\",\"send\":\"{\\\"eventId\\\":\\\"400302\\\",\\\"eventContent\\\":\\\"01\\\"}\"},{\"text\":\"{\\\"zh_rCN\\\":\\\"\\u6587\\u4ef6\\u5939\\\"}\",\"textSize\":24,\"textLines\":2,\"textColor\":\"#FFFFFF\",\"textFilter\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"gravity\":0,\"recv\":\"{\\\"recvId\\\":\\\"40030202\\\"}\",\"send\":\"{\\\"eventId\\\":\\\"400302\\\",\\\"eventContent\\\":\\\"02\\\"}\"}]', '[]', '[]', '', 1, 6, '2019-06-05 01:18:47', '192.168.1.119'),
 (220, '视频列表', 25, 43, 0, 424, 400, '', '', '{\"recvId\":\"100601\",\"keyId\":\"100602\"}', '', '[]', '[]', '[{\"pageId\":47,\"width\":120,\"height\":120,\"backColor\":\"\",\"recv\":null,\"send\":null}]', '', 1, 6, '2019-06-05 01:45:03', '192.168.1.119'),
-(221, '分页导航', 26, 2, 0, 116, 480, '', '', '{\"recvId\":\"400301\",\"visibleContent\":\"01#02#03#04\"}', '', '[]', '[{\"width\":116,\"height\":480,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/ef\\/c657ab35a6cf382150277300d191dd.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null},{\"width\":116,\"height\":480,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/2b\\/585b2856a902307ba34abe335cfb24.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null},{\"width\":116,\"height\":480,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/0e\\/535aeb755e0f9ebd63692c5b984852.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null},{\"width\":116,\"height\":480,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/9b\\/9040a21b3900ea9852cbc9d2b62c12.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-06-12 05:47:00', '192.168.1.119'),
+(221, '分页导航', 26, 2, 0, 116, 480, '', '', '{\"recvId\":\"400301\",\"visibleContent\":\"01#03#02#04\"}', '', '[]', '[{\"width\":116,\"height\":480,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/ef\\/c657ab35a6cf382150277300d191dd.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null},{\"width\":116,\"height\":480,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/2b\\/585b2856a902307ba34abe335cfb24.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null},{\"width\":116,\"height\":480,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/0e\\/535aeb755e0f9ebd63692c5b984852.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null},{\"width\":116,\"height\":480,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/9b\\/9040a21b3900ea9852cbc9d2b62c12.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-06-19 02:47:26', '192.168.1.119'),
 (222, '分页导航背景', 26, 1, 0, 292, 480, '', '', '', '', '[]', '[{\"width\":292,\"height\":480,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/f6\\/21ac3fd1910a8bcbc584481162ee28.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-06-12 05:50:29', '192.168.1.119'),
 (223, '返回', 26, 1, 0, 102, 60, '', '', '', '{\"className\":\"3\"}', '[]', '[{\"width\":102,\"height\":60,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/b1\\/d5193a67c4565014cf5d9513e96241.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-06-12 08:02:53', '192.168.1.119'),
 (224, '设置', 26, 1, 0, 102, 60, '', '', '', '{\"packName\":\"com.jancar.settingss\"}', '[]', '[{\"width\":102,\"height\":60,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/9d\\/ec831f1891ebcbfe9c42ebe37b0d40.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-06-12 08:02:27', '192.168.1.119'),
-(225, 'APA日期控件', 26, 4, 0, 200, 240, '', '', '', '', '[{\"text\":\"{\\\"zh_rCN\\\":\\\"18:00\\\"}\",\"textSize\":48,\"textLines\":1,\"textColor\":\"#FFFFFF\",\"textFilter\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":120,\"gravity\":0,\"recv\":\"{\\\"recvId\\\":\\\"100101\\\"}\",\"send\":null},{\"text\":\"{\\\"zh_rCN\\\":\\\"2019-01-01\\\"}\",\"textSize\":24,\"textLines\":1,\"textColor\":\"#FFFFFF\",\"textFilter\":\"\",\"left\":0,\"top\":120,\"right\":0,\"bottom\":0,\"gravity\":0,\"recv\":\"{\\\"recvId\\\":\\\"100103\\\"}\",\"send\":null},{\"text\":\"{\\\"zh_rCN\\\":\\\"\\u661f\\u671f\\u4e00\\\"}\",\"textSize\":24,\"textLines\":1,\"textColor\":\"#FFFFFF\",\"textFilter\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"gravity\":0,\"recv\":\"{\\\"recvId\\\":\\\"100102\\\"}\",\"send\":null},{\"text\":\"{\\\"zh_rCN\\\":\\\"\\u4e0b\\u5348\\\"}\",\"textSize\":12,\"textLines\":1,\"textColor\":\"#FFFFFF\",\"textFilter\":\"\",\"left\":10,\"top\":0,\"right\":10,\"bottom\":200,\"gravity\":1,\"recv\":\"{\\\"recvId\\\":\\\"100104\\\"}\",\"send\":null}]', '[]', '[]', '', 1, 6, '2019-06-12 06:11:37', '192.168.1.119'),
+(225, 'APA日期控件', 26, 4, 0, 200, 480, '', '', '', '', '[{\"text\":\"{\\\"zh_rCN\\\":\\\"18:00\\\"}\",\"textSize\":48,\"textLines\":1,\"textColor\":\"#FFFFFF\",\"textFilter\":\"\",\"left\":0,\"top\":300,\"right\":0,\"bottom\":0,\"gravity\":0,\"recv\":\"{\\\"recvId\\\":\\\"100101\\\"}\",\"send\":null},{\"text\":\"{\\\"zh_rCN\\\":\\\"\\u661f\\u671f\\u4e00\\\"}\",\"textSize\":24,\"textLines\":1,\"textColor\":\"#FFFFFF\",\"textFilter\":\"\",\"left\":0,\"top\":60,\"right\":0,\"bottom\":380,\"gravity\":0,\"recv\":\"{\\\"recvId\\\":\\\"100103\\\"}\",\"send\":null},{\"text\":\"{\\\"zh_rCN\\\":\\\"2019-01-01\\\"}\",\"textSize\":24,\"textLines\":1,\"textColor\":\"#FFFFFF\",\"textFilter\":\"\",\"left\":0,\"top\":90,\"right\":0,\"bottom\":340,\"gravity\":0,\"recv\":\"{\\\"recvId\\\":\\\"100102\\\"}\",\"send\":null},{\"text\":\"{\\\"zh_rCN\\\":\\\"\\u4e0b\\u5348\\\"}\",\"textSize\":12,\"textLines\":1,\"textColor\":\"#FFFFFF\",\"textFilter\":\"\",\"left\":30,\"top\":60,\"right\":30,\"bottom\":400,\"gravity\":1,\"recv\":\"{\\\"recvId\\\":\\\"100104\\\"}\",\"send\":null}]', '[]', '[]', '', 1, 6, '2019-06-14 00:47:35', '192.168.1.119'),
 (226, '收音机', 26, 1, 0, 526, 70, '', '', '', '{\"packName\":\"com.jancar.radios\"}', '[{\"text\":\"{\\\"zh_rCN\\\":\\\"\\u6536\\u97f3\\u673a\\\"}\",\"textSize\":24,\"textLines\":1,\"textColor\":\"#000000\",\"textFilter\":\"#FFFFFF\",\"left\":276,\"top\":0,\"right\":0,\"bottom\":0,\"gravity\":3,\"recv\":null,\"send\":null}]', '[{\"width\":526,\"height\":70,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/83\\/8212c65c73dfc16806754bfe56b29f.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-06-12 08:04:28', '192.168.1.119'),
 (227, '导航', 26, 1, 0, 526, 70, '', '', '', '{\"className\":\"3\"}', '[{\"text\":\"{\\\"zh_rCN\\\":\\\"\\u5bfc\\u822a\\\"}\",\"textSize\":24,\"textLines\":1,\"textColor\":\"#000000\",\"textFilter\":\"#FFFFFF\",\"left\":276,\"top\":0,\"right\":0,\"bottom\":0,\"gravity\":3,\"recv\":null,\"send\":null}]', '[{\"width\":526,\"height\":70,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/99\\/f3d8c8d31939856f70d66209a05c45.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-06-12 08:04:22', '192.168.1.119'),
 (228, '电话', 26, 1, 0, 526, 70, '', '', '', '{\"className\":\"3\"}', '[{\"text\":\"{\\\"zh_rCN\\\":\\\"\\u7535\\u8bdd\\\"}\",\"textSize\":24,\"textLines\":1,\"textColor\":\"#000000\",\"textFilter\":\"#FFFFFF\",\"left\":276,\"top\":0,\"right\":0,\"bottom\":0,\"gravity\":3,\"recv\":null,\"send\":null}]', '[{\"width\":526,\"height\":70,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/b6\\/a6e6965068f1218699346b3b78ac4a.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-06-12 08:04:17', '192.168.1.119'),
@@ -284,7 +284,10 @@ INSERT INTO `fly_cell` (`cellId`, `description`, `themeId`, `celltypeId`, `resId
 (233, '蓝牙音乐', 26, 1, 0, 526, 70, '', '', '', '{\"packName\":\"2\"}', '[{\"text\":\"{\\\"zh_rCN\\\":\\\"\\u84dd\\u7259\\u97f3\\u4e50\\\"}\",\"textSize\":24,\"textLines\":1,\"textColor\":\"#000000\",\"textFilter\":\"#FFFFFF\",\"left\":276,\"top\":0,\"right\":0,\"bottom\":0,\"gravity\":3,\"recv\":null,\"send\":null}]', '[{\"width\":526,\"height\":70,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/67\\/17fa0bd0dcd3f3f6e109986f4c4de7.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-06-12 08:03:43', '192.168.1.119'),
 (234, 'AUX', 26, 1, 0, 526, 70, '', '', '', '{\"packName\":\"1\"}', '[{\"text\":\"{\\\"zh_rCN\\\":\\\"AUX\\\"}\",\"textSize\":24,\"textLines\":1,\"textColor\":\"#000000\",\"textFilter\":\"#FFFFFF\",\"left\":276,\"top\":0,\"right\":0,\"bottom\":0,\"gravity\":3,\"recv\":null,\"send\":null}]', '[{\"width\":526,\"height\":70,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/a7\\/31e8af88f6c6f5b5543cb031779fc4.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-06-12 08:03:36', '192.168.1.119'),
 (235, '应用', 26, 1, 0, 526, 70, '', '', '', '{\"packName\":\"com.android.launcher3\"}', '[{\"text\":\"{\\\"zh_rCN\\\":\\\"\\u5e94\\u7528\\\"}\",\"textSize\":24,\"textLines\":1,\"textColor\":\"#000000\",\"textFilter\":\"#FFFFFF\",\"left\":276,\"top\":0,\"right\":0,\"bottom\":0,\"gravity\":3,\"recv\":null,\"send\":null}]', '[{\"width\":526,\"height\":70,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/d0\\/698c994b2478d3e66c303b4029b864.png\",\"filterColor\":\"#7F000000\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-06-12 07:32:44', '192.168.1.119'),
-(236, '', 26, 1, 0, 526, 70, '', '', '', '', '[{\"text\":\"{\\\"zh_rCN\\\":\\\"WELCOME  TO SKODA\\\"}\",\"textSize\":40,\"textLines\":1,\"textColor\":\"#FFFFFF\",\"textFilter\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"gravity\":0,\"recv\":null,\"send\":null}]', '[]', '[]', '', 1, 6, '2019-06-12 06:48:20', '192.168.1.119');
+(236, '', 26, 1, 0, 526, 70, '', '', '', '', '[{\"text\":\"{\\\"zh_rCN\\\":\\\"WELCOME  TO  VW\\\"}\",\"textSize\":40,\"textLines\":1,\"textColor\":\"#FFFFFF\",\"textFilter\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"gravity\":0,\"recv\":null,\"send\":null}]', '[]', '[]', '', 1, 6, '2019-06-13 09:55:24', '192.168.1.119'),
+(237, '', 26, 1, 0, 196, 206, '', '', '', '', '[]', '[{\"width\":196,\"height\":206,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/6a\\/5548b0f46b5734fecff1f87fd06ee1.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-06-14 00:43:48', '192.168.1.119'),
+(238, '设置', 26, 1, 0, 526, 70, '', '', '', '{\"packName\":\"com.android.setttings\"}', '[{\"text\":\"{\\\"zh_rCN\\\":\\\"\\u8bbe\\u7f6e\\\"}\",\"textSize\":24,\"textLines\":1,\"textColor\":\"#000000\",\"textFilter\":\"#FFFFFF\",\"left\":276,\"top\":0,\"right\":0,\"bottom\":0,\"gravity\":3,\"recv\":null,\"send\":null}]', '[{\"width\":526,\"height\":70,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/fe\\/53f6ae6a03a50e1c5ff8c74d8505b1.png\",\"filterColor\":\"#7F000000\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-06-13 09:54:25', '192.168.1.119'),
+(239, 'new_设置', 26, 1, 0, 526, 70, '', '', '', '{\"packName\":\"com.android.setttings\"}', '[{\"text\":\"{\\\"zh_rCN\\\":\\\"\\u8bbe\\u7f6e\\\"}\",\"textSize\":24,\"textLines\":1,\"textColor\":\"#000000\",\"textFilter\":\"#FFFFFF\",\"left\":276,\"top\":0,\"right\":0,\"bottom\":0,\"gravity\":3,\"recv\":null,\"send\":null}]', '[{\"width\":526,\"height\":70,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/fe\\/53f6ae6a03a50e1c5ff8c74d8505b1.png\",\"filterColor\":\"#7F000000\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-06-13 09:54:25', '192.168.1.119');
 
 -- --------------------------------------------------------
 
@@ -293,13 +296,13 @@ INSERT INTO `fly_cell` (`cellId`, `description`, `themeId`, `celltypeId`, `resId
 --
 
 CREATE TABLE `fly_cellpage` (
-  `pageId` int(11) NOT NULL,
-  `cellId` int(11) NOT NULL,
-  `subcellId` int(11) NOT NULL,
-  `status` int(11) NOT NULL DEFAULT '1',
-  `userid` int(11) NOT NULL,
-  `ip` varchar(16) NOT NULL,
-  `edittime` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP
+  `pageId` int(11) NOT NULL COMMENT '主键，自动递增',
+  `cellId` int(11) NOT NULL COMMENT '关联组件ID',
+  `subcellId` int(11) NOT NULL COMMENT '关联子组件ＩＤ',
+  `status` int(11) NOT NULL DEFAULT '1' COMMENT '数据状态',
+  `userid` int(11) NOT NULL COMMENT '用户ID',
+  `ip` varchar(16) NOT NULL COMMENT 'IP地址',
+  `edittime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -356,7 +359,8 @@ INSERT INTO `fly_cellpage` (`pageId`, `cellId`, `subcellId`, `status`, `userid`,
 (47, 220, 0, 1, 6, '192.168.1.119', '0000-00-00 00:00:00'),
 (48, 214, 0, 1, 6, '192.168.1.119', '0000-00-00 00:00:00'),
 (49, 213, 0, 1, 6, '192.168.1.119', '0000-00-00 00:00:00'),
-(50, 213, 0, 1, 6, '192.168.1.119', '0000-00-00 00:00:00');
+(50, 213, 0, 1, 6, '192.168.1.119', '0000-00-00 00:00:00'),
+(51, -1, 0, 1, 6, '192.168.1.119', '2019-06-21 07:41:33');
 
 -- --------------------------------------------------------
 
@@ -365,13 +369,13 @@ INSERT INTO `fly_cellpage` (`pageId`, `cellId`, `subcellId`, `status`, `userid`,
 --
 
 CREATE TABLE `fly_cellpagecell` (
-  `id` int(11) NOT NULL,
-  `pageId` int(11) NOT NULL,
-  `cellId` int(11) NOT NULL,
-  `x` int(11) NOT NULL,
-  `y` int(11) NOT NULL,
-  `width` int(11) NOT NULL,
-  `height` int(11) NOT NULL
+  `id` int(11) NOT NULL COMMENT '主键，自动递增',
+  `pageId` int(11) NOT NULL COMMENT '关联页面ＩＤ',
+  `cellId` int(11) NOT NULL COMMENT '关联组件ＩＤ',
+  `x` int(11) NOT NULL COMMENT 'ｘ坐标',
+  `y` int(11) NOT NULL COMMENT 'ｙ坐标',
+  `width` int(11) NOT NULL COMMENT '宽度',
+  `height` int(11) NOT NULL COMMENT '高度'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -446,18 +450,18 @@ INSERT INTO `fly_cellpagecell` (`id`, `pageId`, `cellId`, `x`, `y`, `width`, `he
 --
 
 CREATE TABLE `fly_celltype` (
-  `celltypeId` int(11) NOT NULL,
-  `celltype` int(11) NOT NULL DEFAULT '0',
-  `celltypeName` varchar(255) NOT NULL,
-  `imageurl` varchar(255) NOT NULL,
-  `html` text NOT NULL,
-  `description` text NOT NULL,
-  `extend` varchar(255) DEFAULT NULL,
-  `remark` text,
-  `status` int(11) NOT NULL DEFAULT '1',
-  `edittime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `userid` int(11) NOT NULL,
-  `ip` varchar(16) NOT NULL
+  `celltypeId` int(11) NOT NULL COMMENT '主键，自动递增',
+  `celltype` int(11) NOT NULL DEFAULT '0' COMMENT '组件类型标识',
+  `celltypeName` varchar(255) NOT NULL COMMENT '组件类型名称',
+  `imageurl` varchar(255) NOT NULL COMMENT '组件类型图片展示',
+  `html` text NOT NULL COMMENT '可生成组件html代码',
+  `description` text NOT NULL COMMENT '组件创建说明等内容',
+  `extend` varchar(255) DEFAULT NULL COMMENT '扩展选项',
+  `remark` text COMMENT '备注',
+  `status` int(11) NOT NULL DEFAULT '1' COMMENT '数据状态',
+  `edittime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `userid` int(11) NOT NULL COMMENT '用户ＩＤ',
+  `ip` varchar(16) NOT NULL COMMENT 'ＩＰ地址'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -550,18 +554,18 @@ INSERT INTO `fly_news` (`newsId`, `newsTitle`, `newsSort`, `imageurl1`, `imageur
 --
 
 CREATE TABLE `fly_page` (
-  `pageId` int(11) NOT NULL,
-  `pageName` varchar(255) NOT NULL,
-  `themeId` int(11) NOT NULL,
-  `imageurl` varchar(255) DEFAULT NULL,
-  `backcolor` varchar(9) DEFAULT NULL,
-  `width` int(11) NOT NULL,
-  `height` int(11) NOT NULL,
-  `status` int(11) NOT NULL DEFAULT '1',
-  `remark` text,
-  `edittime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `userid` int(11) NOT NULL,
-  `ip` varchar(16) NOT NULL
+  `pageId` int(11) NOT NULL COMMENT '主键，自动递增',
+  `pageName` varchar(255) NOT NULL COMMENT '页面名称',
+  `themeId` int(11) NOT NULL COMMENT '关联模板ID',
+  `imageurl` varchar(255) DEFAULT NULL COMMENT '页面背景图片地址',
+  `backcolor` varchar(9) DEFAULT NULL COMMENT '页面背景颜色',
+  `width` int(11) NOT NULL COMMENT '宽度',
+  `height` int(11) NOT NULL COMMENT '高度',
+  `status` int(11) NOT NULL DEFAULT '1' COMMENT '数据状态',
+  `remark` text COMMENT '备注',
+  `edittime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `userid` int(11) NOT NULL COMMENT '用户ＩＤ',
+  `ip` varchar(16) NOT NULL COMMENT 'ＩＰ地址'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -599,13 +603,13 @@ INSERT INTO `fly_page` (`pageId`, `pageName`, `themeId`, `imageurl`, `backcolor`
 --
 
 CREATE TABLE `fly_pagecell` (
-  `id` int(11) NOT NULL,
-  `pageId` int(11) NOT NULL,
-  `cellId` int(11) NOT NULL,
-  `x` int(11) NOT NULL,
-  `y` int(11) NOT NULL,
-  `width` int(11) NOT NULL,
-  `height` int(11) NOT NULL
+  `id` int(11) NOT NULL COMMENT '主键，自动递增',
+  `pageId` int(11) NOT NULL COMMENT '关联页面ＩＤ',
+  `cellId` int(11) NOT NULL COMMENT '关联组件ＩＤ',
+  `x` int(11) NOT NULL COMMENT 'ｘ坐标',
+  `y` int(11) NOT NULL COMMENT 'ｙ坐标',
+  `width` int(11) NOT NULL COMMENT '宽度',
+  `height` int(11) NOT NULL COMMENT '高度'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -793,9 +797,6 @@ INSERT INTO `fly_pagecell` (`id`, `pageId`, `cellId`, `x`, `y`, `width`, `height
 (3319, 52, 212, 0, 460, 1024, 140),
 (3321, 53, 215, 500, 60, 524, 400),
 (3322, 53, 216, 0, 460, 1024, 140),
-(3393, 56, 235, 233, 55, 526, 70),
-(3394, 56, 234, 233, 130, 526, 70),
-(3395, 56, 236, 233, 218, 526, 70),
 (3401, 54, 226, 233, 55, 526, 70),
 (3402, 54, 227, 233, 130, 526, 70),
 (3403, 54, 229, 233, 380, 526, 70),
@@ -805,7 +806,11 @@ INSERT INTO `fly_pagecell` (`id`, `pageId`, `cellId`, `x`, `y`, `width`, `height
 (3407, 55, 231, 233, 130, 526, 70),
 (3408, 55, 232, 233, 305, 526, 70),
 (3409, 55, 233, 233, 380, 526, 70),
-(3410, 55, 236, 233, 218, 526, 70);
+(3410, 55, 236, 233, 218, 526, 70),
+(3419, 56, 235, 233, 55, 526, 70),
+(3420, 56, 234, 233, 130, 526, 70),
+(3421, 56, 236, 233, 218, 526, 70),
+(3422, 56, 238, 233, 305, 526, 70);
 
 -- --------------------------------------------------------
 
@@ -1167,26 +1172,26 @@ INSERT INTO `fly_role_permission` (`id`, `role_id`, `permission_id`) VALUES
 --
 
 CREATE TABLE `fly_subcell` (
-  `subcellId` int(11) NOT NULL,
-  `cellId` int(11) NOT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `themeId` int(11) NOT NULL,
-  `celltypeId` int(11) NOT NULL,
-  `resId` int(11) DEFAULT NULL,
-  `width` int(11) NOT NULL,
-  `height` int(11) NOT NULL,
-  `backColor` varchar(9) DEFAULT NULL,
-  `filterColor` varchar(9) DEFAULT NULL,
-  `recv` varchar(1024) DEFAULT NULL,
-  `send` varchar(1024) DEFAULT NULL,
-  `texts` text,
-  `images` text,
-  `pages` text,
-  `remark` text,
-  `status` int(11) NOT NULL DEFAULT '1',
-  `userid` int(11) NOT NULL,
-  `uptime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `ip` varchar(15) NOT NULL
+  `subcellId` int(11) NOT NULL COMMENT '主键，自动递增',
+  `cellId` int(11) NOT NULL COMMENT '关联组件ID',
+  `description` varchar(255) DEFAULT NULL COMMENT '组件描述，方便查找搜索',
+  `themeId` int(11) NOT NULL COMMENT '关联模板ID',
+  `celltypeId` int(11) NOT NULL COMMENT '组件类型',
+  `resId` int(11) DEFAULT NULL COMMENT '资源ＩＤ',
+  `width` int(11) NOT NULL COMMENT '宽度',
+  `height` int(11) NOT NULL COMMENT '高度',
+  `backColor` varchar(9) DEFAULT NULL COMMENT '背景颜色',
+  `filterColor` varchar(9) DEFAULT NULL COMMENT '过滤颜色',
+  `recv` varchar(1024) DEFAULT NULL COMMENT '接收数据（ＪＳＯＮ）',
+  `send` varchar(1024) DEFAULT NULL COMMENT '发送数据（ＪＳＯＮ）',
+  `texts` text COMMENT '包含文字（ＪＳＯＮ）',
+  `images` text COMMENT '包含图片（ＪＳＯＮ）',
+  `pages` text COMMENT '包含页面（ＪＳＯＮ）',
+  `remark` text COMMENT '备注',
+  `status` int(11) NOT NULL DEFAULT '1' COMMENT '数据状态',
+  `userid` int(11) NOT NULL COMMENT '用户ID',
+  `uptime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `ip` varchar(15) NOT NULL COMMENT 'ＩＰ地址'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1194,11 +1199,8 @@ CREATE TABLE `fly_subcell` (
 --
 
 INSERT INTO `fly_subcell` (`subcellId`, `cellId`, `description`, `themeId`, `celltypeId`, `resId`, `width`, `height`, `backColor`, `filterColor`, `recv`, `send`, `texts`, `images`, `pages`, `remark`, `status`, `userid`, `uptime`, `ip`) VALUES
-(1, 16, '', 5, 1, 0, 120, 120, '', '', '{\"recvId\":\"100201\",\"disVisibleContent\":\"02\"}', '', '[{\"text\":null,\"textSize\":24,\"textLines\":1,\"textColor\":\"#FFFFFF\",\"textFilter\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"gravity\":0,\"recv\":null,\"send\":null}]', '[{\"width\":120,\"height\":120,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/a3\\/0cf078155fbd1c0ce0101cb549a762.png\",\"filterColor\":\"\",\"left\":46,\"top\":72,\"right\":46,\"bottom\":129,\"scaleType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-05-20 08:11:41', '192.168.1.119'),
-(3, 16, '', 5, 23, 0, 473, 44, '', '', '{\"recvId\":\"100201\",\"visibleContent\":\"02\"}', '', '[{\"text\":null,\"textSize\":24,\"textLines\":1,\"textColor\":\"#FFFFFF\",\"textFilter\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"gravity\":0,\"recv\":\"{\\\"recvId\\\":\\\"100212\\\"}\",\"send\":null}]', '[{\"width\":473,\"height\":44,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/e9\\/aba6b567ce5857b83583b611751a79.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-05-20 08:11:19', '192.168.1.119'),
-(4, 16, '', 5, 26, 0, 55, 32, '', '', '{\"recvId\":\"100201\",\"visibleContent\":\"02\"}', '', '[]', '[{\"width\":55,\"height\":32,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/ec\\/517d877783a69c79e61e2e28aab344.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"recv\":\"{\\\"recvId\\\":\\\"100211\\\",\\\"recvContent\\\":\\\"00#01#02\\\"}\",\"send\":null},{\"width\":55,\"height\":32,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/a8\\/e2f8655dd0fba7fc24a5c070e58fe8.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"recv\":\"{\\\"recvId\\\":\\\"100211\\\",\\\"recvContent\\\":\\\"03#04\\\"}\",\"send\":null},{\"width\":75,\"height\":32,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/4c\\/8645c08ae50bdfc50b3809e8aa8fbd.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"recv\":\"{\\\"recvId\\\":\\\"100201\\\",\\\"recvContent\\\":\\\"00#01#02\\\"}\",\"send\":null},{\"width\":75,\"height\":32,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/86\\/e15dcd630643121ca2efb2858fc90c.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"recv\":\"{\\\"recvId\\\":\\\"100201\\\",\\\"recvContent\\\":\\\"03#04\\\"}\",\"send\":null}]', '[]', '', 1, 6, '2019-05-20 08:11:19', '192.168.1.119'),
 (5, 163, '', 5, 1, 0, 0, 0, '', '', '', '', '[]', '[{\"width\":0,\"height\":0,\"url\":\"\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-05-27 05:51:33', '192.168.1.119'),
-(6, 235, '', 1, 1, 0, 526, 70, '', '', '', '', '[]', '[{\"width\":526,\"height\":70,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/98\\/f09b5a6f0f15797f266508be5459a3.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-06-12 07:42:49', '192.168.1.119'),
+(6, 235, '', 1, 1, 0, 526, 70, '', '', '', '', '[]', '[{\"width\":526,\"height\":70,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/b2\\/e5856d0fe6336f7488ab94d194acd4.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-06-13 07:58:02', '192.168.1.119'),
 (7, 226, '', 1, 1, 0, 526, 70, '', '', '', '', '[]', '[{\"width\":526,\"height\":70,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/98\\/f09b5a6f0f15797f266508be5459a3.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-06-12 07:57:53', '192.168.1.119'),
 (8, 227, '', 1, 1, 0, 526, 70, '', '', '', '', '[]', '[{\"width\":526,\"height\":70,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/74\\/e98d8b0c4a87f3e3a863222d98550a.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-06-12 07:58:06', '192.168.1.119'),
 (9, 228, '', 1, 1, 0, 526, 70, '', '', '', '', '[]', '[{\"width\":526,\"height\":70,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/6e\\/c9fa4a6732c452d1642efe7526135e.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-06-12 07:58:18', '192.168.1.119'),
@@ -1209,7 +1211,8 @@ INSERT INTO `fly_subcell` (`subcellId`, `cellId`, `description`, `themeId`, `cel
 (14, 233, '', 1, 1, 0, 526, 70, '', '', '', '', '[]', '[{\"width\":526,\"height\":70,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/0b\\/597ff5bfe00493199311cd483727be.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-06-12 07:59:21', '192.168.1.119'),
 (15, 234, '', 1, 1, 0, 526, 70, '', '', '', '', '[]', '[{\"width\":526,\"height\":70,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/54\\/203fac7e3e12060f18376ea216a9ae.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-06-12 07:59:32', '192.168.1.119'),
 (16, 224, '', 1, 1, 0, 102, 60, '', '', '', '', '[]', '[{\"width\":102,\"height\":60,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/f6\\/ce1d679d5956b4a9c5d94e9a1f8ef0.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-06-12 08:02:09', '192.168.1.119'),
-(18, 223, '', 1, 1, 0, 102, 60, '', '', '', '', '[]', '[{\"width\":102,\"height\":60,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/04\\/6c8102096c054ded4c8d603e132179.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-06-12 08:02:54', '192.168.1.119');
+(18, 223, '', 1, 1, 0, 102, 60, '', '', '', '', '[]', '[{\"width\":102,\"height\":60,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/04\\/6c8102096c054ded4c8d603e132179.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-06-12 08:02:54', '192.168.1.119'),
+(21, 238, '', 1, 1, 0, 526, 70, '', '', '', '', '[]', '[{\"width\":526,\"height\":70,\"url\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/e8\\/dc62ebddac54599bd10e5192b06163.png\",\"filterColor\":\"\",\"left\":0,\"top\":0,\"right\":0,\"bottom\":0,\"scaleType\":0,\"shapeType\":0,\"recv\":null,\"send\":null}]', '[]', '', 1, 6, '2019-06-13 09:54:26', '192.168.1.119');
 
 -- --------------------------------------------------------
 
@@ -1218,25 +1221,25 @@ INSERT INTO `fly_subcell` (`subcellId`, `cellId`, `description`, `themeId`, `cel
 --
 
 CREATE TABLE `fly_theme` (
-  `themeId` int(11) NOT NULL,
-  `themeName` varchar(255) NOT NULL,
-  `themeType` int(11) NOT NULL DEFAULT '0',
-  `screenWidth` int(11) NOT NULL,
-  `screenHeight` int(11) NOT NULL,
-  `left` int(11) NOT NULL DEFAULT '0',
-  `top` int(11) NOT NULL DEFAULT '0',
-  `right` int(11) NOT NULL DEFAULT '0',
-  `bottom` int(11) NOT NULL DEFAULT '0',
-  `imageurl` varchar(255) DEFAULT NULL,
-  `exampleurl` varchar(1024) DEFAULT NULL,
-  `backcolor` varchar(9) DEFAULT NULL,
-  `isMirror` tinyint(1) NOT NULL,
-  `animType` int(11) NOT NULL,
-  `status` int(11) NOT NULL DEFAULT '1',
-  `remark` text,
-  `edittime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `userid` int(11) NOT NULL,
-  `ip` varchar(20) NOT NULL
+  `themeId` int(11) NOT NULL COMMENT '主键，自动递增',
+  `themeName` varchar(255) NOT NULL COMMENT '模板名称',
+  `themeType` int(11) NOT NULL DEFAULT '0' COMMENT '模板类型',
+  `screenWidth` int(11) NOT NULL COMMENT '屏幕宽度',
+  `screenHeight` int(11) NOT NULL COMMENT '屏幕高度',
+  `left` int(11) NOT NULL DEFAULT '0' COMMENT '左边间距',
+  `top` int(11) NOT NULL DEFAULT '0' COMMENT '顶部间距',
+  `right` int(11) NOT NULL DEFAULT '0' COMMENT '右边间距',
+  `bottom` int(11) NOT NULL DEFAULT '0' COMMENT '底部间距',
+  `imageurl` varchar(255) DEFAULT NULL COMMENT '背景图片地址',
+  `exampleurl` varchar(1024) DEFAULT NULL COMMENT '模板展示图片地址',
+  `backcolor` varchar(9) DEFAULT NULL COMMENT '背景颜色',
+  `isMirror` tinyint(1) NOT NULL COMMENT '子控件是否显示镜像',
+  `animType` int(11) NOT NULL COMMENT '页面切换动画',
+  `status` int(11) NOT NULL DEFAULT '1' COMMENT '数据状态',
+  `remark` text COMMENT '备注',
+  `edittime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `userid` int(11) NOT NULL COMMENT '用户ＩＤ',
+  `ip` varchar(20) NOT NULL COMMENT 'ＩＰ地址'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1245,19 +1248,19 @@ CREATE TABLE `fly_theme` (
 
 INSERT INTO `fly_theme` (`themeId`, `themeName`, `themeType`, `screenWidth`, `screenHeight`, `left`, `top`, `right`, `bottom`, `imageurl`, `exampleurl`, `backcolor`, `isMirror`, `animType`, `status`, `remark`, `edittime`, `userid`, `ip`) VALUES
 (1, 'TEST', 0, 1024, 600, 0, 0, 0, 0, 'http://192.168.1.119:801/uiweb/uploads/ab/28e5638d06162e861e06623f205887.png', 'http://192.168.1.119:801/uiweb/uploads/ab/28e5638d06162e861e06623f205887.png', '', 0, 0, 1, '', '2019-05-28 01:24:25', 6, '192.168.1.119'),
-(5, 'Launcher-AP1', 0, 1024, 600, 0, 0, 1024, 600, 'http://192.168.1.119:801/uiweb/uploads/5d/2f2c0d98a61327de56237b6f6da25c.png', 'http://192.168.1.119:801/uiweb/uploads/82/d522d13cc3cc511587dbeafb9c9d3e.png', '', 1, 3, 1, '', '2019-06-11 09:36:09', 6, '192.168.1.119'),
+(5, 'Launcher-AP1', 0, 1024, 600, 0, 0, 1024, 600, 'http://192.168.1.119:801/uiweb/uploads/5d/2f2c0d98a61327de56237b6f6da25c.png', 'http://192.168.1.119:801/uiweb/uploads/82/d522d13cc3cc511587dbeafb9c9d3e.png', '', 1, 1, 1, '', '2019-06-17 02:41:25', 6, '192.168.1.119'),
 (6, 'Launcher-AP2', 0, 1024, 600, 0, 0, 0, 0, 'http://192.168.1.119:801/uiweb/uploads/5d/2f2c0d98a61327de56237b6f6da25c.png', 'http://192.168.1.119:801/uiweb/uploads/ae/821f0e4be5205eaac49ffbbdc9de59.png', '', 0, 0, 1, '', '2019-06-11 09:54:25', 6, '192.168.1.119'),
-(7, 'Launcher-AP3', 0, 1024, 600, 0, 0, 1024, 600, 'http://192.168.1.119:801/uiweb/uploads/f8/fc65ab56c952ebccd91be18b9a2d06.png', 'http://192.168.1.119:801/uiweb/uploads/65/580a5dc97c7ef0e6593fdc93d6f484.png', '', 1, 3, 1, '', '2019-06-11 09:54:30', 6, '192.168.1.119'),
+(7, 'Launcher-AP3', 0, 1024, 600, 0, 0, 1024, 600, 'http://192.168.1.119:801/uiweb/uploads/f8/fc65ab56c952ebccd91be18b9a2d06.png', 'http://192.168.1.119:801/uiweb/uploads/65/580a5dc97c7ef0e6593fdc93d6f484.png', '', 1, 1, 1, '', '2019-06-17 02:41:31', 6, '192.168.1.119'),
 (12, 'Launcher-AP4', 0, 1024, 600, 0, 0, 1024, 600, 'http://192.168.1.119:801/uiweb/uploads/cf/a58b71a904c624fea7c85c670eba4a.png', 'http://192.168.1.119:801/uiweb/uploads/c9/dcb1202c2b78ffd528100492520875.png', '', 0, 0, 1, '', '2019-05-27 08:00:19', 6, '192.168.1.119'),
 (13, 'Launcher-AP5', 0, 1024, 600, 296, 0, 1024, 600, 'http://192.168.1.119:801/uiweb/uploads/2f/e2f98c6ff84f553cc7c7079b721ad1.png', 'http://192.168.1.119:801/uiweb/uploads/dd/b5de46782680c61408d1f636a6071b.png', '', 0, 2, 1, '', '2019-05-27 08:00:33', 6, '192.168.1.119'),
 (14, 'Launcher-AP6', 0, 1024, 600, 0, 0, 1024, 600, 'http://192.168.1.119:801/uiweb/uploads/d3/b3bb3a1a9a2ae08b6585c8512d769b.png', 'http://192.168.1.119:801/uiweb/uploads/3b/5179a874a1801a6ce396748b34dada.png', '', 0, 0, 1, '', '2019-05-27 08:00:51', 6, '192.168.1.119'),
 (18, 'Launcher-AP7', 0, 1024, 600, 0, 0, 0, 0, 'http://192.168.1.119:801/uiweb/uploads/42/e1f50a04f3daaa87b24d9883631db4.png', 'http://192.168.1.119:801/uiweb/uploads/56/074b95be1f77e433c4ba41203a21fc.png', '', 0, 1, 1, '', '2019-05-27 08:01:06', 6, '192.168.1.119'),
 (19, 'Launcher-AP8', 0, 1024, 600, 0, 0, 0, 0, 'http://192.168.1.119:801/uiweb/uploads/b5/59862e979e64f7f54db8d27ad7ea81.png', 'http://192.168.1.119:801/uiweb/uploads/57/8e8c6520a478538e222bc128117a1b.png', '', 0, 0, 1, '', '2019-05-27 08:01:18', 6, '192.168.1.119'),
-(20, 'Launcher-AP9', 0, 1024, 600, 0, 0, 0, 0, 'http://192.168.1.119:801/uiweb/uploads/5d/2f2c0d98a61327de56237b6f6da25c.png', 'http://192.168.1.119:801/uiweb/uploads/ab/28e5638d06162e861e06623f205887.png', '', 0, 1, 1, '', '2019-05-28 01:29:26', 6, '192.168.1.119'),
+(20, 'Launcher-AP9', 0, 1024, 600, 0, 0, 0, 0, 'http://192.168.1.119:801/uiweb/uploads/5d/2f2c0d98a61327de56237b6f6da25c.png', 'http://192.168.1.119:801/uiweb/uploads/c4/2d9a6784290bc820e72ae90ce7865d.png', '', 0, 1, 1, '', '2019-06-17 02:39:22', 6, '192.168.1.119'),
 (23, 'Music-AP1', 0, 1024, 600, 0, 0, 0, 0, 'http://192.168.1.119:801/uiweb/uploads/80/f3c8538b73e67ef1fb92d01aa14e35.png', '', '', 0, 0, 1, '', '2019-06-03 03:27:16', 6, '192.168.1.119'),
 (24, 'Photo-AP1', 0, 1024, 600, 0, 0, 0, 0, '', '', '', 0, 0, 1, '', '2019-06-03 08:29:57', 6, '192.168.1.119'),
 (25, 'Video-AP1', 0, 1024, 600, 0, 0, 0, 0, '', '', '', 0, 0, 1, '', '2019-06-05 00:26:36', 6, '192.168.1.119'),
-(26, 'Launcher-APA', 0, 800, 480, 0, 0, 0, 0, 'http://192.168.1.119:801/uiweb/uploads/68/a5e32276b452a617db111e261fed96.png', 'http://192.168.1.119:801/uiweb/uploads/d2/180b6539db47e6e8609786444356c1.png', '', 0, 3, 1, '', '2019-06-12 05:56:16', 6, '192.168.1.119');
+(26, 'Launcher-APA', 0, 800, 480, 0, 0, 0, 0, 'http://192.168.1.119:801/uiweb/uploads/d5/3f2745a83a7f4ea7278568652b21d7.png', 'http://192.168.1.119:801/uiweb/uploads/d8/c1c2437852ea84238fe05bbd28c287.png', '', 0, 3, 1, '', '2019-06-17 02:40:26', 6, '192.168.1.119');
 
 -- --------------------------------------------------------
 
@@ -1266,9 +1269,9 @@ INSERT INTO `fly_theme` (`themeId`, `themeName`, `themeType`, `screenWidth`, `sc
 --
 
 CREATE TABLE `fly_themepage` (
-  `id` int(11) NOT NULL,
-  `themeId` int(11) NOT NULL,
-  `pageId` int(11) NOT NULL
+  `id` int(11) NOT NULL COMMENT '主键，自动递增',
+  `themeId` int(11) NOT NULL COMMENT '关联模板ＩＤ',
+  `pageId` int(11) NOT NULL COMMENT '关联页面ＩＤ'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1285,9 +1288,6 @@ INSERT INTO `fly_themepage` (`id`, `themeId`, `pageId`) VALUES
 (140, 15, 28),
 (155, 16, 35),
 (179, 17, 39),
-(276, 5, 5),
-(277, 5, 6),
-(278, 5, 7),
 (333, 19, 46),
 (384, 18, 45),
 (391, 22, 49),
@@ -1298,9 +1298,18 @@ INSERT INTO `fly_themepage` (`id`, `themeId`, `pageId`) VALUES
 (400, 20, 51),
 (402, 24, 52),
 (403, 25, 53),
-(404, 26, 54),
-(405, 26, 55),
-(406, 26, 56);
+(411, 26, 54),
+(412, 26, 56),
+(413, 26, 55),
+(414, 5, 5),
+(415, 5, 6),
+(416, 5, 7),
+(417, 5, 8),
+(418, 5, 9),
+(419, 5, 11),
+(420, 5, 12),
+(421, 5, 13),
+(422, 5, 14);
 
 -- --------------------------------------------------------
 
@@ -1309,13 +1318,13 @@ INSERT INTO `fly_themepage` (`id`, `themeId`, `pageId`) VALUES
 --
 
 CREATE TABLE `fly_themetopcell` (
-  `id` int(11) NOT NULL,
-  `pageId` int(11) NOT NULL,
-  `cellId` int(11) NOT NULL,
-  `x` int(11) NOT NULL,
-  `y` int(11) NOT NULL,
-  `width` int(11) NOT NULL,
-  `height` int(11) NOT NULL
+  `id` int(11) NOT NULL COMMENT '主键，自动递增',
+  `pageId` int(11) NOT NULL COMMENT '关联页面ＩＤ',
+  `cellId` int(11) NOT NULL COMMENT '关联组件ＩＤ',
+  `x` int(11) NOT NULL COMMENT 'ｘ坐标',
+  `y` int(11) NOT NULL COMMENT 'ｙ坐标',
+  `width` int(11) NOT NULL COMMENT '宽度',
+  `height` int(11) NOT NULL COMMENT '高度'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1331,12 +1340,12 @@ INSERT INTO `fly_themetopcell` (`id`, `pageId`, `cellId`, `x`, `y`, `width`, `he
 (26, 6, 167, 59, 420, 106, 168),
 (27, 6, 169, 659, 420, 106, 168),
 (28, 6, 170, 859, 420, 106, 168),
-(31, 5, 78, 0, 560, 1024, 16),
-(62, 26, 222, 0, 0, 292, 480),
-(63, 26, 221, 163, 0, 116, 480),
-(64, 26, 224, 46, 384, 102, 60),
-(65, 26, 223, 46, 60, 102, 60),
-(66, 26, 225, -4, 140, 200, 240);
+(73, 26, 222, 0, 0, 292, 480),
+(74, 26, 221, 163, 0, 116, 480),
+(75, 26, 237, 5, 135, 196, 206),
+(76, 26, 225, 0, 0, 200, 480),
+(77, 5, 78, 0, 560, 1024, 16),
+(78, 5, 237, 403, 144, 196, 206);
 
 -- --------------------------------------------------------
 
@@ -1372,14 +1381,84 @@ INSERT INTO `fly_user` (`id`, `user_name`, `password`, `mobile`, `email`, `last_
 --
 
 CREATE TABLE `fly_user_log` (
-  `id` int(11) NOT NULL,
-  `userid` int(11) NOT NULL,
-  `event` varchar(255) NOT NULL,
-  `tableName` text NOT NULL,
-  `data` text NOT NULL,
-  `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `ip` varchar(20) NOT NULL
+  `id` int(11) NOT NULL COMMENT '主键，自动递增',
+  `userid` int(11) NOT NULL COMMENT '用户ＩＤ',
+  `event` varchar(255) NOT NULL COMMENT '事件',
+  `tableName` text NOT NULL COMMENT '表名',
+  `data` text NOT NULL COMMENT '数据',
+  `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `ip` varchar(20) NOT NULL COMMENT 'ＩＰ地址'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- 转存表中的数据 `fly_user_log`
+--
+
+INSERT INTO `fly_user_log` (`id`, `userid`, `event`, `tableName`, `data`, `createtime`, `ip`) VALUES
+(1, 6, 'del', 'subcell', '3', '2019-06-12 08:12:14', '192.168.1.119'),
+(2, 6, 'edit', 'cell', '{\"cellId\":\"16\",\"description\":\"\\u6536\\u97f3\\u673a\",\"themeId\":5,\"celltypeId\":1,\"resId\":0,\"width\":212,\"height\":317,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"\",\"send\":\"{\\\"packName\\\":\\\"com.jancar.radios\\\",\\\"className\\\":\\\"com.jancar.radio.RadioActivity\\\"}\",\"texts\":\"[{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"\\\\u6536\\\\u97f3\\\\u673a\\\\\\\"}\\\",\\\"textSize\\\":24,\\\"textLines\\\":2,\\\"textColor\\\":\\\"\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":237,\\\"right\\\":0,\\\"bottom\\\":0,\\\"gravity\\\":0,\\\"recv\\\":null,\\\"send\\\":null}]\",\"images\":\"[{\\\"width\\\":212,\\\"height\\\":317,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/0f\\\\\\/87821bfe4d2ceed787c0b7f4520ae3.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null}]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\"}', '2019-06-12 08:12:14', '192.168.1.119'),
+(3, 6, 'login', '', '', '2019-06-13 02:13:40', '192.168.1.119'),
+(4, 6, 'login', '', '', '2019-06-13 07:30:56', '192.168.1.119'),
+(5, 6, 'edit', 'theme', '{\"themeName\":\"Launcher-AP1\",\"isMirror\":\"1\",\"animType\":\"1\",\"imageurl\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/5d\\/2f2c0d98a61327de56237b6f6da25c.png\",\"exampleurl\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/82\\/d522d13cc3cc511587dbeafb9c9d3e.png\",\"screenWidth\":\"1024\",\"screenHeight\":\"600\",\"backcolor\":\"\",\"left\":\"0\",\"top\":\"0\",\"right\":\"1024\",\"bottom\":\"600\",\"remark\":\"\",\"themeId\":\"5\",\"ip\":\"192.168.1.119\",\"userid\":6}', '2019-06-13 07:38:30', '192.168.1.119'),
+(6, 6, 'login', '', '', '2019-06-13 07:56:09', '192.168.1.119'),
+(7, 6, 'edit', 'subcell', '{\"cellId\":\"235\",\"subcellId\":\"6\",\"description\":\"\",\"themeId\":1,\"celltypeId\":1,\"resId\":0,\"width\":526,\"height\":70,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"\",\"send\":\"\",\"texts\":\"[]\",\"images\":\"[{\\\"width\\\":526,\\\"height\\\":70,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/b2\\\\\\/e5856d0fe6336f7488ab94d194acd4.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null}]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\"}', '2019-06-13 07:58:02', '192.168.1.119'),
+(8, 6, 'edit', 'cell', '{\"cellId\":\"235\",\"description\":\"\\u5e94\\u7528\",\"themeId\":26,\"celltypeId\":1,\"resId\":0,\"width\":526,\"height\":70,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"\",\"send\":\"{\\\"packName\\\":\\\"com.android.launcher3\\\"}\",\"texts\":\"[{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"\\\\u5e94\\\\u7528\\\\\\\"}\\\",\\\"textSize\\\":24,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#000000\\\",\\\"textFilter\\\":\\\"#FFFFFF\\\",\\\"left\\\":276,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"gravity\\\":3,\\\"recv\\\":null,\\\"send\\\":null}]\",\"images\":\"[{\\\"width\\\":526,\\\"height\\\":70,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/d0\\\\\\/698c994b2478d3e66c303b4029b864.png\\\",\\\"filterColor\\\":\\\"#7F000000\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null}]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\"}', '2019-06-13 07:58:03', '192.168.1.119'),
+(9, 6, 'edit', 'theme', '{\"themeName\":\"Launcher-APA\",\"isMirror\":\"0\",\"animType\":\"3\",\"imageurl\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/d5\\/3f2745a83a7f4ea7278568652b21d7.png\",\"exampleurl\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/d2\\/180b6539db47e6e8609786444356c1.png\",\"screenWidth\":\"800\",\"screenHeight\":\"480\",\"backcolor\":\"\",\"left\":\"0\",\"top\":\"0\",\"right\":\"0\",\"bottom\":\"0\",\"remark\":\"\",\"themeId\":\"26\",\"ip\":\"192.168.1.119\",\"userid\":6}', '2019-06-13 09:51:31', '192.168.1.119'),
+(10, 6, 'add', 'cell', '{\"description\":\"\",\"themeId\":1,\"celltypeId\":1,\"resId\":0,\"width\":196,\"height\":206,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"\",\"send\":\"\",\"texts\":\"[]\",\"images\":\"[{\\\"width\\\":196,\\\"height\\\":206,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/6a\\\\\\/5548b0f46b5734fecff1f87fd06ee1.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null}]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\",\"cellId\":\"237\"}', '2019-06-13 09:51:55', '192.168.1.119'),
+(11, 6, 'add', 'subcell', '{\"description\":\"\",\"themeId\":1,\"celltypeId\":1,\"resId\":0,\"width\":526,\"height\":70,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"\",\"send\":\"\",\"texts\":\"[]\",\"images\":\"[{\\\"width\\\":526,\\\"height\\\":70,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/e8\\\\\\/dc62ebddac54599bd10e5192b06163.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null}]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\",\"cellId\":\"238\"}', '2019-06-13 09:54:18', '192.168.1.119'),
+(12, 6, 'edit', 'cell', '{\"cellId\":\"238\",\"description\":\"\\u8bbe\\u7f6e\",\"themeId\":26,\"celltypeId\":1,\"resId\":0,\"width\":526,\"height\":70,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"\",\"send\":\"{\\\"packName\\\":\\\"com.android.launcher3\\\"}\",\"texts\":\"[{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"\\\\u8bbe\\\\u7f6e\\\\\\\"}\\\",\\\"textSize\\\":24,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#000000\\\",\\\"textFilter\\\":\\\"#FFFFFF\\\",\\\"left\\\":276,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"gravity\\\":3,\\\"recv\\\":null,\\\"send\\\":null}]\",\"images\":\"[{\\\"width\\\":526,\\\"height\\\":70,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/fe\\\\\\/53f6ae6a03a50e1c5ff8c74d8505b1.png\\\",\\\"filterColor\\\":\\\"#7F000000\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null}]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\"}', '2019-06-13 09:54:18', '192.168.1.119'),
+(13, 6, 'del', 'subcell', '19', '2019-06-13 09:54:25', '192.168.1.119'),
+(14, 6, 'add', 'subcell', '{\"description\":\"\",\"themeId\":1,\"celltypeId\":1,\"resId\":0,\"width\":526,\"height\":70,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"\",\"send\":\"\",\"texts\":\"[]\",\"images\":\"[{\\\"width\\\":526,\\\"height\\\":70,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/e8\\\\\\/dc62ebddac54599bd10e5192b06163.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null}]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\",\"cellId\":\"238\"}', '2019-06-13 09:54:25', '192.168.1.119'),
+(15, 6, 'edit', 'cell', '{\"cellId\":\"238\",\"description\":\"\\u8bbe\\u7f6e\",\"themeId\":26,\"celltypeId\":1,\"resId\":0,\"width\":526,\"height\":70,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"\",\"send\":\"{\\\"packName\\\":\\\"com.android.setttings\\\"}\",\"texts\":\"[{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"\\\\u8bbe\\\\u7f6e\\\\\\\"}\\\",\\\"textSize\\\":24,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#000000\\\",\\\"textFilter\\\":\\\"#FFFFFF\\\",\\\"left\\\":276,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"gravity\\\":3,\\\"recv\\\":null,\\\"send\\\":null}]\",\"images\":\"[{\\\"width\\\":526,\\\"height\\\":70,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/fe\\\\\\/53f6ae6a03a50e1c5ff8c74d8505b1.png\\\",\\\"filterColor\\\":\\\"#7F000000\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null}]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\"}', '2019-06-13 09:54:25', '192.168.1.119'),
+(16, 6, 'del', 'subcell', '20', '2019-06-13 09:54:26', '192.168.1.119'),
+(17, 6, 'add', 'subcell', '{\"description\":\"\",\"themeId\":1,\"celltypeId\":1,\"resId\":0,\"width\":526,\"height\":70,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"\",\"send\":\"\",\"texts\":\"[]\",\"images\":\"[{\\\"width\\\":526,\\\"height\\\":70,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/e8\\\\\\/dc62ebddac54599bd10e5192b06163.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null}]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\",\"cellId\":\"238\"}', '2019-06-13 09:54:26', '192.168.1.119'),
+(18, 6, 'edit', 'cell', '{\"cellId\":\"238\",\"description\":\"\\u8bbe\\u7f6e\",\"themeId\":26,\"celltypeId\":1,\"resId\":0,\"width\":526,\"height\":70,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"\",\"send\":\"{\\\"packName\\\":\\\"com.android.setttings\\\"}\",\"texts\":\"[{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"\\\\u8bbe\\\\u7f6e\\\\\\\"}\\\",\\\"textSize\\\":24,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#000000\\\",\\\"textFilter\\\":\\\"#FFFFFF\\\",\\\"left\\\":276,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"gravity\\\":3,\\\"recv\\\":null,\\\"send\\\":null}]\",\"images\":\"[{\\\"width\\\":526,\\\"height\\\":70,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/fe\\\\\\/53f6ae6a03a50e1c5ff8c74d8505b1.png\\\",\\\"filterColor\\\":\\\"#7F000000\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null}]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\"}', '2019-06-13 09:54:26', '192.168.1.119'),
+(19, 6, 'error', 'subcell', '0', '2019-06-13 09:55:24', '192.168.1.119'),
+(20, 6, 'edit', 'cell', '{\"cellId\":\"236\",\"description\":\"\",\"themeId\":26,\"celltypeId\":1,\"resId\":0,\"width\":526,\"height\":70,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"\",\"send\":\"\",\"texts\":\"[{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"WELCOME  TO  VW\\\\\\\"}\\\",\\\"textSize\\\":40,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"gravity\\\":0,\\\"recv\\\":null,\\\"send\\\":null}]\",\"images\":\"[]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\"}', '2019-06-13 09:55:24', '192.168.1.119'),
+(21, 6, 'error', 'subcell', '0', '2019-06-13 09:55:26', '192.168.1.119'),
+(22, 6, 'edit', 'cell', '{\"cellId\":\"236\",\"description\":\"\",\"themeId\":26,\"celltypeId\":1,\"resId\":0,\"width\":526,\"height\":70,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"\",\"send\":\"\",\"texts\":\"[{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"WELCOME  TO  VW\\\\\\\"}\\\",\\\"textSize\\\":40,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"gravity\\\":0,\\\"recv\\\":null,\\\"send\\\":null}]\",\"images\":\"[]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\"}', '2019-06-13 09:55:26', '192.168.1.119'),
+(23, 6, 'error', 'subcell', '0', '2019-06-13 09:58:31', '192.168.1.119'),
+(24, 6, 'edit', 'cell', '{\"cellId\":\"225\",\"description\":\"APA\\u65e5\\u671f\\u63a7\\u4ef6\",\"themeId\":26,\"celltypeId\":4,\"resId\":0,\"width\":200,\"height\":480,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"\",\"send\":\"\",\"texts\":\"[{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"18:00\\\\\\\"}\\\",\\\"textSize\\\":48,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":300,\\\"right\\\":0,\\\"bottom\\\":0,\\\"gravity\\\":0,\\\"recv\\\":\\\"{\\\\\\\"recvId\\\\\\\":\\\\\\\"100101\\\\\\\"}\\\",\\\"send\\\":null},{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"2019-01-01\\\\\\\"}\\\",\\\"textSize\\\":24,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":100,\\\"right\\\":0,\\\"bottom\\\":280,\\\"gravity\\\":0,\\\"recv\\\":\\\"{\\\\\\\"recvId\\\\\\\":\\\\\\\"100103\\\\\\\"}\\\",\\\"send\\\":null},{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"\\\\u661f\\\\u671f\\\\u4e00\\\\\\\"}\\\",\\\"textSize\\\":24,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":50,\\\"right\\\":0,\\\"bottom\\\":280,\\\"gravity\\\":0,\\\"recv\\\":\\\"{\\\\\\\"recvId\\\\\\\":\\\\\\\"100102\\\\\\\"}\\\",\\\"send\\\":null},{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"\\\\u4e0b\\\\u5348\\\\\\\"}\\\",\\\"textSize\\\":12,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":10,\\\"top\\\":0,\\\"right\\\":10,\\\"bottom\\\":380,\\\"gravity\\\":1,\\\"recv\\\":\\\"{\\\\\\\"recvId\\\\\\\":\\\\\\\"100104\\\\\\\"}\\\",\\\"send\\\":null}]\",\"images\":\"[]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\"}', '2019-06-13 09:58:31', '192.168.1.119'),
+(25, 6, 'error', 'subcell', '0', '2019-06-13 09:59:59', '192.168.1.119'),
+(26, 6, 'edit', 'cell', '{\"cellId\":\"225\",\"description\":\"APA\\u65e5\\u671f\\u63a7\\u4ef6\",\"themeId\":26,\"celltypeId\":4,\"resId\":0,\"width\":200,\"height\":480,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"\",\"send\":\"\",\"texts\":\"[{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"18:00\\\\\\\"}\\\",\\\"textSize\\\":48,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":300,\\\"right\\\":0,\\\"bottom\\\":0,\\\"gravity\\\":0,\\\"recv\\\":\\\"{\\\\\\\"recvId\\\\\\\":\\\\\\\"100101\\\\\\\"}\\\",\\\"send\\\":null},{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"2019-01-01\\\\\\\"}\\\",\\\"textSize\\\":24,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":50,\\\"right\\\":0,\\\"bottom\\\":330,\\\"gravity\\\":0,\\\"recv\\\":\\\"{\\\\\\\"recvId\\\\\\\":\\\\\\\"100103\\\\\\\"}\\\",\\\"send\\\":null},{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"\\\\u661f\\\\u671f\\\\u4e00\\\\\\\"}\\\",\\\"textSize\\\":24,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":430,\\\"gravity\\\":0,\\\"recv\\\":\\\"{\\\\\\\"recvId\\\\\\\":\\\\\\\"100102\\\\\\\"}\\\",\\\"send\\\":null},{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"\\\\u4e0b\\\\u5348\\\\\\\"}\\\",\\\"textSize\\\":12,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":10,\\\"top\\\":0,\\\"right\\\":10,\\\"bottom\\\":380,\\\"gravity\\\":1,\\\"recv\\\":\\\"{\\\\\\\"recvId\\\\\\\":\\\\\\\"100104\\\\\\\"}\\\",\\\"send\\\":null}]\",\"images\":\"[]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\"}', '2019-06-13 09:59:59', '192.168.1.119'),
+(27, 6, 'login', '', '', '2019-06-14 00:43:27', '192.168.1.119'),
+(28, 6, 'error', 'subcell', '0', '2019-06-14 00:43:48', '192.168.1.119'),
+(29, 6, 'edit', 'cell', '{\"cellId\":\"237\",\"description\":\"\",\"themeId\":26,\"celltypeId\":1,\"resId\":0,\"width\":196,\"height\":206,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"\",\"send\":\"\",\"texts\":\"[]\",\"images\":\"[{\\\"width\\\":196,\\\"height\\\":206,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/6a\\\\\\/5548b0f46b5734fecff1f87fd06ee1.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null}]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\"}', '2019-06-14 00:43:48', '192.168.1.119'),
+(30, 6, 'error', 'subcell', '0', '2019-06-14 00:46:12', '192.168.1.119'),
+(31, 6, 'edit', 'cell', '{\"cellId\":\"225\",\"description\":\"APA\\u65e5\\u671f\\u63a7\\u4ef6\",\"themeId\":26,\"celltypeId\":4,\"resId\":0,\"width\":200,\"height\":480,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"\",\"send\":\"\",\"texts\":\"[{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"18:00\\\\\\\"}\\\",\\\"textSize\\\":48,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":300,\\\"right\\\":0,\\\"bottom\\\":0,\\\"gravity\\\":0,\\\"recv\\\":\\\"{\\\\\\\"recvId\\\\\\\":\\\\\\\"100101\\\\\\\"}\\\",\\\"send\\\":null},{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"\\\\u661f\\\\u671f\\\\u4e00\\\\\\\"}\\\",\\\"textSize\\\":24,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":60,\\\"right\\\":0,\\\"bottom\\\":380,\\\"gravity\\\":0,\\\"recv\\\":\\\"{\\\\\\\"recvId\\\\\\\":\\\\\\\"100103\\\\\\\"}\\\",\\\"send\\\":null},{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"\\\\u661f\\\\u671f\\\\u4e00\\\\\\\"}\\\",\\\"textSize\\\":24,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":430,\\\"gravity\\\":0,\\\"recv\\\":\\\"{\\\\\\\"recvId\\\\\\\":\\\\\\\"100102\\\\\\\"}\\\",\\\"send\\\":null},{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"\\\\u4e0b\\\\u5348\\\\\\\"}\\\",\\\"textSize\\\":12,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":30,\\\"top\\\":70,\\\"right\\\":30,\\\"bottom\\\":380,\\\"gravity\\\":1,\\\"recv\\\":\\\"{\\\\\\\"recvId\\\\\\\":\\\\\\\"100104\\\\\\\"}\\\",\\\"send\\\":null}]\",\"images\":\"[]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\"}', '2019-06-14 00:46:14', '192.168.1.119'),
+(32, 6, 'error', 'subcell', '0', '2019-06-14 00:46:20', '192.168.1.119'),
+(33, 6, 'edit', 'cell', '{\"cellId\":\"225\",\"description\":\"APA\\u65e5\\u671f\\u63a7\\u4ef6\",\"themeId\":26,\"celltypeId\":4,\"resId\":0,\"width\":200,\"height\":480,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"\",\"send\":\"\",\"texts\":\"[{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"18:00\\\\\\\"}\\\",\\\"textSize\\\":48,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":300,\\\"right\\\":0,\\\"bottom\\\":0,\\\"gravity\\\":0,\\\"recv\\\":\\\"{\\\\\\\"recvId\\\\\\\":\\\\\\\"100101\\\\\\\"}\\\",\\\"send\\\":null},{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"\\\\u661f\\\\u671f\\\\u4e00\\\\\\\"}\\\",\\\"textSize\\\":24,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":60,\\\"right\\\":0,\\\"bottom\\\":380,\\\"gravity\\\":0,\\\"recv\\\":\\\"{\\\\\\\"recvId\\\\\\\":\\\\\\\"100103\\\\\\\"}\\\",\\\"send\\\":null},{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"2019-01-01\\\\\\\"}\\\",\\\"textSize\\\":24,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":430,\\\"gravity\\\":0,\\\"recv\\\":\\\"{\\\\\\\"recvId\\\\\\\":\\\\\\\"100102\\\\\\\"}\\\",\\\"send\\\":null},{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"\\\\u4e0b\\\\u5348\\\\\\\"}\\\",\\\"textSize\\\":12,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":30,\\\"top\\\":70,\\\"right\\\":30,\\\"bottom\\\":380,\\\"gravity\\\":1,\\\"recv\\\":\\\"{\\\\\\\"recvId\\\\\\\":\\\\\\\"100104\\\\\\\"}\\\",\\\"send\\\":null}]\",\"images\":\"[]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\"}', '2019-06-14 00:46:20', '192.168.1.119'),
+(34, 6, 'error', 'subcell', '0', '2019-06-14 00:46:44', '192.168.1.119'),
+(35, 6, 'edit', 'cell', '{\"cellId\":\"225\",\"description\":\"APA\\u65e5\\u671f\\u63a7\\u4ef6\",\"themeId\":26,\"celltypeId\":4,\"resId\":0,\"width\":200,\"height\":480,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"\",\"send\":\"\",\"texts\":\"[{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"18:00\\\\\\\"}\\\",\\\"textSize\\\":48,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":300,\\\"right\\\":0,\\\"bottom\\\":0,\\\"gravity\\\":0,\\\"recv\\\":\\\"{\\\\\\\"recvId\\\\\\\":\\\\\\\"100101\\\\\\\"}\\\",\\\"send\\\":null},{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"\\\\u661f\\\\u671f\\\\u4e00\\\\\\\"}\\\",\\\"textSize\\\":24,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":60,\\\"right\\\":0,\\\"bottom\\\":380,\\\"gravity\\\":0,\\\"recv\\\":\\\"{\\\\\\\"recvId\\\\\\\":\\\\\\\"100103\\\\\\\"}\\\",\\\"send\\\":null},{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"2019-01-01\\\\\\\"}\\\",\\\"textSize\\\":24,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":100,\\\"right\\\":0,\\\"bottom\\\":330,\\\"gravity\\\":0,\\\"recv\\\":\\\"{\\\\\\\"recvId\\\\\\\":\\\\\\\"100102\\\\\\\"}\\\",\\\"send\\\":null},{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"\\\\u4e0b\\\\u5348\\\\\\\"}\\\",\\\"textSize\\\":12,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":30,\\\"top\\\":70,\\\"right\\\":30,\\\"bottom\\\":380,\\\"gravity\\\":1,\\\"recv\\\":\\\"{\\\\\\\"recvId\\\\\\\":\\\\\\\"100104\\\\\\\"}\\\",\\\"send\\\":null}]\",\"images\":\"[]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\"}', '2019-06-14 00:46:45', '192.168.1.119'),
+(36, 6, 'error', 'subcell', '0', '2019-06-14 00:47:35', '192.168.1.119'),
+(37, 6, 'edit', 'cell', '{\"cellId\":\"225\",\"description\":\"APA\\u65e5\\u671f\\u63a7\\u4ef6\",\"themeId\":26,\"celltypeId\":4,\"resId\":0,\"width\":200,\"height\":480,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"\",\"send\":\"\",\"texts\":\"[{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"18:00\\\\\\\"}\\\",\\\"textSize\\\":48,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":300,\\\"right\\\":0,\\\"bottom\\\":0,\\\"gravity\\\":0,\\\"recv\\\":\\\"{\\\\\\\"recvId\\\\\\\":\\\\\\\"100101\\\\\\\"}\\\",\\\"send\\\":null},{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"\\\\u661f\\\\u671f\\\\u4e00\\\\\\\"}\\\",\\\"textSize\\\":24,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":60,\\\"right\\\":0,\\\"bottom\\\":380,\\\"gravity\\\":0,\\\"recv\\\":\\\"{\\\\\\\"recvId\\\\\\\":\\\\\\\"100103\\\\\\\"}\\\",\\\"send\\\":null},{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"2019-01-01\\\\\\\"}\\\",\\\"textSize\\\":24,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":90,\\\"right\\\":0,\\\"bottom\\\":340,\\\"gravity\\\":0,\\\"recv\\\":\\\"{\\\\\\\"recvId\\\\\\\":\\\\\\\"100102\\\\\\\"}\\\",\\\"send\\\":null},{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"\\\\u4e0b\\\\u5348\\\\\\\"}\\\",\\\"textSize\\\":12,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":30,\\\"top\\\":60,\\\"right\\\":30,\\\"bottom\\\":400,\\\"gravity\\\":1,\\\"recv\\\":\\\"{\\\\\\\"recvId\\\\\\\":\\\\\\\"100104\\\\\\\"}\\\",\\\"send\\\":null}]\",\"images\":\"[]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\"}', '2019-06-14 00:47:35', '192.168.1.119'),
+(38, 6, 'edit', 'theme', '{\"themeName\":\"Launcher-AP1\",\"isMirror\":\"1\",\"animType\":\"3\",\"imageurl\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/5d\\/2f2c0d98a61327de56237b6f6da25c.png\",\"exampleurl\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/82\\/d522d13cc3cc511587dbeafb9c9d3e.png\",\"screenWidth\":\"1024\",\"screenHeight\":\"600\",\"backcolor\":\"\",\"left\":\"0\",\"top\":\"0\",\"right\":\"1024\",\"bottom\":\"600\",\"remark\":\"\",\"themeId\":\"5\",\"ip\":\"192.168.1.119\",\"userid\":6}', '2019-06-14 09:08:22', '192.168.1.119'),
+(39, 6, 'login', '', '', '2019-06-17 02:23:08', '192.168.1.119'),
+(40, 6, 'error', 'subcell', '0', '2019-06-17 02:23:48', '192.168.1.119'),
+(41, 6, 'edit', 'cell', '{\"cellId\":\"182\",\"description\":\"new_AP9\\u8f6e\\u64ad\\u56fe\\u7247\",\"themeId\":5,\"celltypeId\":42,\"resId\":0,\"width\":1024,\"height\":600,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"\",\"send\":\"\",\"texts\":\"[{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"\\\\u5e94\\\\u7528\\\\\\\"}\\\",\\\"textSize\\\":28,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":250,\\\"right\\\":0,\\\"bottom\\\":0,\\\"gravity\\\":0,\\\"recv\\\":null,\\\"send\\\":null},{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"\\\\u5bfc\\\\u822a\\\\\\\"}\\\",\\\"textSize\\\":28,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":250,\\\"right\\\":0,\\\"bottom\\\":0,\\\"gravity\\\":0,\\\"recv\\\":null,\\\"send\\\":null},{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"\\\\u6536\\\\u97f3\\\\u673a\\\\\\\"}\\\",\\\"textSize\\\":28,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":250,\\\"right\\\":0,\\\"bottom\\\":0,\\\"gravity\\\":0,\\\"recv\\\":null,\\\"send\\\":null},{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"\\\\u7535\\\\u8bdd\\\\\\\"}\\\",\\\"textSize\\\":28,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":250,\\\"right\\\":0,\\\"bottom\\\":0,\\\"gravity\\\":0,\\\"recv\\\":null,\\\"send\\\":null},{\\\"text\\\":\\\"{\\\\\\\"zh_rCN\\\\\\\":\\\\\\\"\\\\u624b\\\\u673a\\\\u4e92\\\\u8fde\\\\\\\"}\\\",\\\"textSize\\\":28,\\\"textLines\\\":1,\\\"textColor\\\":\\\"#FFFFFF\\\",\\\"textFilter\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":250,\\\"right\\\":0,\\\"bottom\\\":0,\\\"gravity\\\":0,\\\"recv\\\":null,\\\"send\\\":null}]\",\"images\":\"[{\\\"width\\\":160,\\\"height\\\":280,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/17\\\\\\/59b5938e8bf8a11b5ff72d19b20c05.png\\\",\\\"filterColor\\\":\\\"#3F0000FF\\\",\\\"left\\\":82,\\\"top\\\":160,\\\"right\\\":782,\\\"bottom\\\":160,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":\\\"{\\\\\\\"packName\\\\\\\":\\\\\\\"com.android.launcher3\\\\\\\"}\\\"},{\\\"width\\\":180,\\\"height\\\":315,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/c9\\\\\\/70b1864d18a5dd69ea13e4117a1348.png\\\",\\\"filterColor\\\":\\\"#3F0000FF\\\",\\\"left\\\":238,\\\"top\\\":135,\\\"right\\\":606,\\\"bottom\\\":130,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":\\\"{\\\\\\\"packName\\\\\\\":\\\\\\\"com.autonavi.amapauto\\\\\\\"}\\\"},{\\\"width\\\":200,\\\"height\\\":350,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/24\\\\\\/e0deed3b33bf5e9953857ed386708b.png\\\",\\\"filterColor\\\":\\\"#3F0000FF\\\",\\\"left\\\":412,\\\"top\\\":115,\\\"right\\\":412,\\\"bottom\\\":135,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":\\\"{\\\\\\\"packName\\\\\\\":\\\\\\\"com.jancar.radios\\\\\\\"}\\\"},{\\\"width\\\":180,\\\"height\\\":315,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/27\\\\\\/253e2db79ecb9ece67d6b228264481.png\\\",\\\"filterColor\\\":\\\"#3F0000FF\\\",\\\"left\\\":606,\\\"top\\\":135,\\\"right\\\":238,\\\"bottom\\\":130,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":\\\"{\\\\\\\"packName\\\\\\\":\\\\\\\"com.jancar.bluetooth.phone\\\\\\\"}\\\"},{\\\"width\\\":160,\\\"height\\\":280,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/5f\\\\\\/ff9a22f80939605c4c5eaa6d0a2f80.png\\\",\\\"filterColor\\\":\\\"#3F0000FF\\\",\\\"left\\\":782,\\\"top\\\":160,\\\"right\\\":82,\\\"bottom\\\":160,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":\\\"{\\\\\\\"packName\\\\\\\":\\\\\\\"net.easyconn\\\\\\\"}\\\"}]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\"}', '2019-06-17 02:23:48', '192.168.1.119'),
+(42, 6, 'login', '', '', '2019-06-17 02:38:51', '192.168.1.119'),
+(43, 6, 'edit', 'theme', '{\"themeName\":\"Launcher-AP9\",\"isMirror\":\"0\",\"animType\":\"1\",\"imageurl\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/5d\\/2f2c0d98a61327de56237b6f6da25c.png\",\"exampleurl\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/c4\\/2d9a6784290bc820e72ae90ce7865d.png\",\"screenWidth\":\"1024\",\"screenHeight\":\"600\",\"backcolor\":\"\",\"left\":\"0\",\"top\":\"0\",\"right\":\"0\",\"bottom\":\"0\",\"remark\":\"\",\"themeId\":\"20\",\"ip\":\"192.168.1.119\",\"userid\":6}', '2019-06-17 02:39:22', '192.168.1.119'),
+(44, 6, 'edit', 'theme', '{\"themeName\":\"Launcher-APA\",\"isMirror\":\"0\",\"animType\":\"3\",\"imageurl\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/d5\\/3f2745a83a7f4ea7278568652b21d7.png\",\"exampleurl\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/d8\\/c1c2437852ea84238fe05bbd28c287.png\",\"screenWidth\":\"800\",\"screenHeight\":\"480\",\"backcolor\":\"\",\"left\":\"0\",\"top\":\"0\",\"right\":\"0\",\"bottom\":\"0\",\"remark\":\"\",\"themeId\":\"26\",\"ip\":\"192.168.1.119\",\"userid\":6}', '2019-06-17 02:40:26', '192.168.1.119'),
+(45, 6, 'edit', 'theme', '{\"themeName\":\"Launcher-AP1\",\"isMirror\":\"1\",\"animType\":\"1\",\"imageurl\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/5d\\/2f2c0d98a61327de56237b6f6da25c.png\",\"exampleurl\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/82\\/d522d13cc3cc511587dbeafb9c9d3e.png\",\"screenWidth\":\"1024\",\"screenHeight\":\"600\",\"backcolor\":\"\",\"left\":\"0\",\"top\":\"0\",\"right\":\"1024\",\"bottom\":\"600\",\"remark\":\"\",\"themeId\":\"5\",\"ip\":\"192.168.1.119\",\"userid\":6}', '2019-06-17 02:41:25', '192.168.1.119'),
+(46, 6, 'edit', 'theme', '{\"themeName\":\"Launcher-AP3\",\"isMirror\":\"1\",\"animType\":\"1\",\"imageurl\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/f8\\/fc65ab56c952ebccd91be18b9a2d06.png\",\"exampleurl\":\"http:\\/\\/192.168.1.119:801\\/uiweb\\/uploads\\/65\\/580a5dc97c7ef0e6593fdc93d6f484.png\",\"screenWidth\":\"1024\",\"screenHeight\":\"600\",\"backcolor\":\"\",\"left\":\"0\",\"top\":\"0\",\"right\":\"1024\",\"bottom\":\"600\",\"remark\":\"\",\"themeId\":\"7\",\"ip\":\"192.168.1.119\",\"userid\":6}', '2019-06-17 02:41:31', '192.168.1.119'),
+(47, 6, 'error', 'subcell', '0', '2019-06-19 02:40:25', '192.168.1.119'),
+(48, 6, 'edit', 'cell', '{\"cellId\":\"221\",\"description\":\"\\u5206\\u9875\\u5bfc\\u822a\",\"themeId\":26,\"celltypeId\":2,\"resId\":0,\"width\":116,\"height\":480,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"{\\\"recvId\\\":\\\"400301\\\",\\\"visibleContent\\\":\\\"01#03#02#04\\\"}\",\"send\":\"\",\"texts\":\"[]\",\"images\":\"[{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/ef\\\\\\/c657ab35a6cf382150277300d191dd.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null},{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/2b\\\\\\/585b2856a902307ba34abe335cfb24.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null},{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/0e\\\\\\/535aeb755e0f9ebd63692c5b984852.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null},{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/9b\\\\\\/9040a21b3900ea9852cbc9d2b62c12.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null}]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\"}', '2019-06-19 02:40:25', '192.168.1.119'),
+(49, 6, 'error', 'subcell', '0', '2019-06-19 02:40:26', '192.168.1.119'),
+(50, 6, 'edit', 'cell', '{\"cellId\":\"221\",\"description\":\"\\u5206\\u9875\\u5bfc\\u822a\",\"themeId\":26,\"celltypeId\":2,\"resId\":0,\"width\":116,\"height\":480,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"{\\\"recvId\\\":\\\"400301\\\",\\\"visibleContent\\\":\\\"01#03#02#04\\\"}\",\"send\":\"\",\"texts\":\"[]\",\"images\":\"[{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/ef\\\\\\/c657ab35a6cf382150277300d191dd.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null},{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/2b\\\\\\/585b2856a902307ba34abe335cfb24.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null},{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/0e\\\\\\/535aeb755e0f9ebd63692c5b984852.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null},{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/9b\\\\\\/9040a21b3900ea9852cbc9d2b62c12.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null}]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\"}', '2019-06-19 02:40:26', '192.168.1.119'),
+(51, 6, 'error', 'subcell', '0', '2019-06-19 02:41:51', '192.168.1.119'),
+(52, 6, 'edit', 'cell', '{\"cellId\":\"221\",\"description\":\"\\u5206\\u9875\\u5bfc\\u822a\",\"themeId\":26,\"celltypeId\":2,\"resId\":0,\"width\":116,\"height\":480,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"{\\\"recvId\\\":\\\"400301\\\",\\\"visibleContent\\\":\\\"01#03#02#04\\\"}\",\"send\":\"\",\"texts\":\"[]\",\"images\":\"[{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/ef\\\\\\/c657ab35a6cf382150277300d191dd.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null},{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/2b\\\\\\/585b2856a902307ba34abe335cfb24.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null},{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/0e\\\\\\/535aeb755e0f9ebd63692c5b984852.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null},{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/9b\\\\\\/9040a21b3900ea9852cbc9d2b62c12.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null}]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\"}', '2019-06-19 02:41:51', '192.168.1.119'),
+(53, 6, 'error', 'subcell', '0', '2019-06-19 02:41:52', '192.168.1.119'),
+(54, 6, 'edit', 'cell', '{\"cellId\":\"221\",\"description\":\"\\u5206\\u9875\\u5bfc\\u822a\",\"themeId\":26,\"celltypeId\":2,\"resId\":0,\"width\":116,\"height\":480,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"{\\\"recvId\\\":\\\"400301\\\",\\\"visibleContent\\\":\\\"01#03#02#04\\\"}\",\"send\":\"\",\"texts\":\"[]\",\"images\":\"[{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/ef\\\\\\/c657ab35a6cf382150277300d191dd.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null},{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/2b\\\\\\/585b2856a902307ba34abe335cfb24.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null},{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/0e\\\\\\/535aeb755e0f9ebd63692c5b984852.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null},{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/9b\\\\\\/9040a21b3900ea9852cbc9d2b62c12.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null}]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\"}', '2019-06-19 02:41:52', '192.168.1.119'),
+(55, 6, 'error', 'subcell', '0', '2019-06-19 02:44:52', '192.168.1.119'),
+(56, 6, 'edit', 'cell', '{\"cellId\":\"221\",\"description\":\"\\u5206\\u9875\\u5bfc\\u822a\",\"themeId\":26,\"celltypeId\":2,\"resId\":0,\"width\":116,\"height\":480,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"{\\\"recvId\\\":\\\"400301\\\",\\\"visibleContent\\\":\\\"01#02#03#04\\\"}\",\"send\":\"\",\"texts\":\"[]\",\"images\":\"[{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/ef\\\\\\/c657ab35a6cf382150277300d191dd.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null},{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/2b\\\\\\/585b2856a902307ba34abe335cfb24.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null},{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/0e\\\\\\/535aeb755e0f9ebd63692c5b984852.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null},{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/9b\\\\\\/9040a21b3900ea9852cbc9d2b62c12.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null}]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\"}', '2019-06-19 02:44:52', '192.168.1.119'),
+(57, 6, 'error', 'subcell', '0', '2019-06-19 02:44:53', '192.168.1.119'),
+(58, 6, 'edit', 'cell', '{\"cellId\":\"221\",\"description\":\"\\u5206\\u9875\\u5bfc\\u822a\",\"themeId\":26,\"celltypeId\":2,\"resId\":0,\"width\":116,\"height\":480,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"{\\\"recvId\\\":\\\"400301\\\",\\\"visibleContent\\\":\\\"01#02#03#04\\\"}\",\"send\":\"\",\"texts\":\"[]\",\"images\":\"[{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/ef\\\\\\/c657ab35a6cf382150277300d191dd.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null},{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/2b\\\\\\/585b2856a902307ba34abe335cfb24.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null},{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/0e\\\\\\/535aeb755e0f9ebd63692c5b984852.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null},{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/9b\\\\\\/9040a21b3900ea9852cbc9d2b62c12.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null}]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\"}', '2019-06-19 02:44:53', '192.168.1.119'),
+(59, 6, 'error', 'subcell', '0', '2019-06-19 02:47:26', '192.168.1.119'),
+(60, 6, 'edit', 'cell', '{\"cellId\":\"221\",\"description\":\"\\u5206\\u9875\\u5bfc\\u822a\",\"themeId\":26,\"celltypeId\":2,\"resId\":0,\"width\":116,\"height\":480,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"{\\\"recvId\\\":\\\"400301\\\",\\\"visibleContent\\\":\\\"01#03#02#04\\\"}\",\"send\":\"\",\"texts\":\"[]\",\"images\":\"[{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/ef\\\\\\/c657ab35a6cf382150277300d191dd.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null},{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/2b\\\\\\/585b2856a902307ba34abe335cfb24.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null},{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/0e\\\\\\/535aeb755e0f9ebd63692c5b984852.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null},{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/9b\\\\\\/9040a21b3900ea9852cbc9d2b62c12.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null}]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\"}', '2019-06-19 02:47:26', '192.168.1.119'),
+(61, 6, 'error', 'subcell', '0', '2019-06-19 02:47:33', '192.168.1.119'),
+(62, 6, 'edit', 'cell', '{\"cellId\":\"221\",\"description\":\"\\u5206\\u9875\\u5bfc\\u822a\",\"themeId\":26,\"celltypeId\":2,\"resId\":0,\"width\":116,\"height\":480,\"backColor\":\"\",\"filterColor\":\"\",\"recv\":\"{\\\"recvId\\\":\\\"400301\\\",\\\"visibleContent\\\":\\\"01#03#02#04\\\"}\",\"send\":\"\",\"texts\":\"[]\",\"images\":\"[{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/ef\\\\\\/c657ab35a6cf382150277300d191dd.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null},{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/2b\\\\\\/585b2856a902307ba34abe335cfb24.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null},{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/0e\\\\\\/535aeb755e0f9ebd63692c5b984852.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null},{\\\"width\\\":116,\\\"height\\\":480,\\\"url\\\":\\\"http:\\\\\\/\\\\\\/192.168.1.119:801\\\\\\/uiweb\\\\\\/uploads\\\\\\/9b\\\\\\/9040a21b3900ea9852cbc9d2b62c12.png\\\",\\\"filterColor\\\":\\\"\\\",\\\"left\\\":0,\\\"top\\\":0,\\\"right\\\":0,\\\"bottom\\\":0,\\\"scaleType\\\":0,\\\"shapeType\\\":0,\\\"recv\\\":null,\\\"send\\\":null}]\",\"pages\":\"[]\",\"remark\":\"\",\"userid\":6,\"ip\":\"192.168.1.119\"}', '2019-06-19 02:47:33', '192.168.1.119'),
+(63, 6, 'login', '', '', '2019-06-21 06:58:50', '192.168.1.119'),
+(64, 6, 'add', 'cellpage', '{\"cellId\":\"-1\",\"subcellId\":\"0\",\"ip\":\"192.168.1.119\",\"userid\":6,\"cellpageId\":\"51\"}', '2019-06-21 07:41:33', '192.168.1.119');
 
 -- --------------------------------------------------------
 
@@ -1592,25 +1671,25 @@ ALTER TABLE `fly_cases`
 -- 使用表AUTO_INCREMENT `fly_cell`
 --
 ALTER TABLE `fly_cell`
-  MODIFY `cellId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=237;
+  MODIFY `cellId` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键，自动递增', AUTO_INCREMENT=240;
 
 --
 -- 使用表AUTO_INCREMENT `fly_cellpage`
 --
 ALTER TABLE `fly_cellpage`
-  MODIFY `pageId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `pageId` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键，自动递增', AUTO_INCREMENT=52;
 
 --
 -- 使用表AUTO_INCREMENT `fly_cellpagecell`
 --
 ALTER TABLE `fly_cellpagecell`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=211;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键，自动递增', AUTO_INCREMENT=211;
 
 --
 -- 使用表AUTO_INCREMENT `fly_celltype`
 --
 ALTER TABLE `fly_celltype`
-  MODIFY `celltypeId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `celltypeId` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键，自动递增', AUTO_INCREMENT=51;
 
 --
 -- 使用表AUTO_INCREMENT `fly_history`
@@ -1628,13 +1707,13 @@ ALTER TABLE `fly_news`
 -- 使用表AUTO_INCREMENT `fly_page`
 --
 ALTER TABLE `fly_page`
-  MODIFY `pageId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `pageId` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键，自动递增', AUTO_INCREMENT=57;
 
 --
 -- 使用表AUTO_INCREMENT `fly_pagecell`
 --
 ALTER TABLE `fly_pagecell`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3411;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键，自动递增', AUTO_INCREMENT=3423;
 
 --
 -- 使用表AUTO_INCREMENT `fly_permission`
@@ -1670,25 +1749,25 @@ ALTER TABLE `fly_role_permission`
 -- 使用表AUTO_INCREMENT `fly_subcell`
 --
 ALTER TABLE `fly_subcell`
-  MODIFY `subcellId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `subcellId` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键，自动递增', AUTO_INCREMENT=22;
 
 --
 -- 使用表AUTO_INCREMENT `fly_theme`
 --
 ALTER TABLE `fly_theme`
-  MODIFY `themeId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `themeId` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键，自动递增', AUTO_INCREMENT=27;
 
 --
 -- 使用表AUTO_INCREMENT `fly_themepage`
 --
 ALTER TABLE `fly_themepage`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=407;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键，自动递增', AUTO_INCREMENT=423;
 
 --
 -- 使用表AUTO_INCREMENT `fly_themetopcell`
 --
 ALTER TABLE `fly_themetopcell`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键，自动递增', AUTO_INCREMENT=79;
 
 --
 -- 使用表AUTO_INCREMENT `fly_user`
@@ -1700,7 +1779,7 @@ ALTER TABLE `fly_user`
 -- 使用表AUTO_INCREMENT `fly_user_log`
 --
 ALTER TABLE `fly_user_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键，自动递增', AUTO_INCREMENT=65;
 
 --
 -- 使用表AUTO_INCREMENT `fly_user_role`

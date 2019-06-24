@@ -7,7 +7,6 @@ import com.flyzebra.flyui.utils.FlyLog;
 import com.jancar.media.model.mediascan.MediaScan;
 import com.jancar.media.model.musicplayer.MusicPlayer;
 import com.jancar.media.model.storage.Storage;
-import com.squareup.leakcanary.LeakCanary;
 
 import java.lang.reflect.Field;
 
@@ -21,7 +20,7 @@ public class MyApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        LeakCanary.install(this);
+//        LeakCanary.install(this);
         MediaScan.getInstance().init(getApplicationContext());
         MusicPlayer.getInstance().init(getApplicationContext());
         Storage.getInstance().init(getApplicationContext());
