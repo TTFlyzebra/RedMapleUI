@@ -83,9 +83,9 @@ public class DateCellView extends SimpleCellView {
     private String getFormat(TextBean textBean, int i) {
         boolean bTime24 = false;
         try{
-            bTime24 = Settings.System.getString(getContext().getContentResolver(), Settings.System.TIME_12_24).equals("24");
+//            bTime24 = Settings.System.getString(getContext().getContentResolver(), Settings.System.TIME_12_24).equals("24");
         }catch (Exception e){
-            FlyLog.e(e.toString());
+            FlyLog.d(e.toString());
         }
         if (textBean.recv == null) {
             return i < 3 ? DATE_FORMAT[i] : "";

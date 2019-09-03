@@ -32,7 +32,7 @@ import com.flyzebra.launcher.mediainfo.MediaInfo;
  * 2019/3/20 10:55
  * Describ:
  **/
-public class FlyuiActivity extends Activity implements IFlyEvent, IUpdataVersion.CheckCacheResult, IUpdataVersion.UpResult {
+public class FlyuiActivity extends Activity implements IFlyEvent, IUpdataVersion.CheckCacheResult,IUpdataVersion.UpResult {
 
     private ThemeView mThemeView;
     public IUpdataVersion iUpDataVersion;
@@ -57,7 +57,7 @@ public class FlyuiActivity extends Activity implements IFlyEvent, IUpdataVersion
 
     private void openByIntent(Intent intent) {
         String themeName = (String) SPUtil.get(this, "themeName", "Launcher-AP1");
-        String url = SysproUtil.get(FlyuiActivity.this, SysproUtil.Property.URL_BASE, "http://192.168.1.119:801/uiweb");
+        String url = SysproUtil.get(FlyuiActivity.this, SysproUtil.Property.URL_BASE, "http://192.168.1.88/uiweb");
         String token = "1234567890";
         String ApiTheme = "/api/app?type=%s&themeName=%s&version=%s";
         String type = AppUtil.getApplicationName(this);

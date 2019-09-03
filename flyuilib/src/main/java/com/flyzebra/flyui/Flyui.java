@@ -40,7 +40,7 @@ public class Flyui implements IUpdataVersion.CheckCacheResult, IUpdataVersion.Up
         iDiskCache = new DiskCache().init(activity);
         iUpDataVersion = new UpdataVersion(activity.getApplicationContext(), iDiskCache);
         String token = "1234567890";
-        String ApiUrl = "http://192.168.1.119:801/uiweb";
+        String ApiUrl = "http://192.168.1.88/uiweb";
         String ApiTheme = "/api/app?type=%s&themeName=%s&version=%s";
         String type=AppUtil.getApplicationName(activity);
         String themeName="";

@@ -11,7 +11,7 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HttpService {
-    public static String API_BASE_URL = "http://192.168.1.119:801/uiweb/";
+    public static String API_BASE_URL = "http://192.168.1.88/uiweb/";
     private static final int DEFAULT_TIMEOUT = 10;
     private Api mNetService;
     private static boolean isWork = false;

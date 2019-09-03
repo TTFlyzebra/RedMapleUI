@@ -35,7 +35,7 @@ public class VerticalTransformerCube1 implements ViewPager.PageTransformer {
             view.setAlpha(0);
         }
 
-        float rotation = 45f * position;
+        float rotation = 15f * position;
         if (position >= 0) {
             view.setPivotY(0);
         } else {

@@ -37,7 +37,6 @@ public class Adapater extends RecyclerView.Adapter<Adapater.ViewHolder> {
     public Adapater(Context context, List<ThemeBean> list) {
         mContext = context;
         mList = list;
-
     }
 
     @Override
